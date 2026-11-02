@@ -28,8 +28,8 @@ import { startSessionRecording, stopSessionRecording, takePendingRecordingBlob }
 import { sharedStreamIsLive } from './liveCameraBus';
 import { useLiveCamera } from './useLiveCamera';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
-import LiveGiftOverlay from './LiveGiftOverlay';
-import LiveGiftShop from './LiveGiftShop';
+import LiveGiftPortal from './LiveGiftPortal';
+import { openLiveGiftShop } from './liveGifts';
 
 const LIVE_SRC = '/live/session-viewer.html';
 
@@ -62,7 +62,6 @@ export default function LiveViewerExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [goLiveOpen, setGoLiveOpen] = useState(false);
   const [showTheater, setShowTheater] = useState(false);
-  const [giftShopOpen, setGiftShopOpen] = useState(false);
   const [tick, setTick] = useState(0);
   const [endSheet, setEndSheet] = useState<BroadcastState | null>(null);
   const [savedRecId, setSavedRecId] = useState<string | null>(null);
@@ -423,7 +422,7 @@ export default function LiveViewerExperience() {
                   <button
                     type="button"
                     className="h-10 px-4 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
-                    onClick={() => setGiftShopOpen(true)}
+                    onClick={() => openLiveGiftShop({ fromName: localHost ? 'Host' : 'Viewer' })}
                   >
                     🎁 Gift
                   </button>
@@ -561,7 +560,7 @@ export default function LiveViewerExperience() {
                 <button
                   type="button"
                   className="h-9 px-3 rounded-xl bg-[#FE2C55] text-white text-[12px] font-bold shadow-[0_2px_12px_rgba(254,44,85,0.4)]"
-                  onClick={() => setGiftShopOpen(true)}
+                  onClick={() => openLiveGiftShop({ fromName: localHost ? 'Host' : 'Viewer' })}
                 >
                   🎁 Gift
                 </button>
@@ -721,12 +720,7 @@ export default function LiveViewerExperience() {
         allowUpload
       />
 
-      <LiveGiftOverlay />
-      <LiveGiftShop
-        open={giftShopOpen}
-        onClose={() => setGiftShopOpen(false)}
-        fromName={localHost ? 'Host' : 'Viewer'}
-      />
+      <LiveGiftPortal />
 
       <GoLivePicker
         open={goLiveOpen}

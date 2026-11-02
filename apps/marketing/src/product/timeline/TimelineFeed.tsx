@@ -10,7 +10,10 @@ import {
 } from '../demo/testLab';
 import FeedLiveNowStage from '../live/FeedLiveNowStage';
 import GoLivePicker, { type GoLivePick } from '../live/GoLivePicker';
+import LiveGiftPortal from '../live/LiveGiftPortal';
 import LiveHostJoinInbox from '../live/LiveHostJoinInbox';
+import { focusLiveChat, openLiveGiftShop, readMfcWallet } from '../live/liveGifts';
+import { getOrCreateGuestIdentity } from '../live/liveGuests';
 import { fetchRemoteLive, publishRemoteLiveMusic } from '../live/liveRemote';
 import { isLiveAudioPublishing, setLiveMusicBed, startLiveAudioOnlyPublish } from '../live/liveAudioRelay';
 import { sharedStreamIsLive } from '../live/liveCameraBus';
@@ -254,7 +257,7 @@ export default function TimelineFeed() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [liked, setLiked] = useState<Set<string>>(new Set());
   const [followed, setFollowed] = useState<Set<string>>(new Set());
-  const [wallet, setWallet] = useState(1247);
+  const [wallet, setWallet] = useState(() => readMfcWallet());
   const [musicDrawerOpen, setMusicDrawerOpen] = useState(false);
   const [activeCardForMusic, setActiveCardForMusic] = useState<string | null>(null);
   const [activeMusicTab, setActiveMusicTab] = useState<MusicSource>('Jamendo');
@@ -290,6 +293,14 @@ export default function TimelineFeed() {
     setToast(msg);
     window.setTimeout(() => setToast(null), 2000);
   };
+
+  // Keep header MFC balance in sync with gift shop wallet
+  useEffect(() => {
+    const sync = () => setWallet(readMfcWallet());
+    sync();
+    window.addEventListener('myface-mfc-wallet', sync);
+    return () => window.removeEventListener('myface-mfc-wallet', sync);
+  }, []);
 
   // ?live=1 from Watch Live — pin For You + scroll to live card (stay on feed)
   useEffect(() => {
@@ -643,14 +654,10 @@ export default function TimelineFeed() {
     if (!activeCardForMusic || !selectedMusicPreview) return;
     setCards(prev=>prev.map(c=> c.id===activeCardForMusic ? {...c, music: selectedMusicPreview} : c));
     setMusicDrawerOpen(false);
-    // While hosting live, push BGM to remote viewers + play/mix on host
-    const hostingLive =
-      sharedStreamIsLive() ||
-      isLiveAudioPublishing() ||
-      isLiveMediaSourceActive() ||
-      activeCardForMusic === 'live-now-host' ||
-      Boolean(liveBroadcast?.live);
-    if (hostingLive) {
+    // Only the device actually hosting may push BGM to the room
+    const hostingHere =
+      sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
+    if (hostingHere) {
       const playableUrl =
         selectedMusicPreview.objectUrl &&
         (/^https?:\/\//i.test(selectedMusicPreview.objectUrl) ||
@@ -666,6 +673,8 @@ export default function TimelineFeed() {
         else setLiveMusicBed(null);
         flashToast(`BGM · ${selectedMusicPreview.title}`);
       }
+    } else if (activeCardForMusic === 'live-now-host' || Boolean(liveBroadcast?.live)) {
+      flashToast('Music saved · only host can change live BGM');
     }
     try {
       await callAPI('records.create',{collection:'music_picks', value:{cardId:activeCardForMusic, music:selectedMusicPreview, at:Date.now()}, idempotency_key:`music-${activeCardForMusic}`});
@@ -680,13 +689,23 @@ export default function TimelineFeed() {
     }
   };
 
-  const sendGift = (cardId: string) => {
-    if (wallet < 10) return;
-    setWallet(w=>w-10);
-    setGiftBurst(cardId);
-    setGiftRainActive(cardId);
-    setTimeout(()=>setGiftBurst(null), 1000);
-    setTimeout(()=>setGiftRainActive(null), 3000);
+  const openGiftForCard = (cardId: string) => {
+    const who = getOrCreateGuestIdentity().name;
+    openLiveGiftShop({ fromName: who, cardId });
+  };
+
+  const onPortalGiftSent = (gift: { coins: number; emoji: string; name: string }, meta: { cardId?: string }) => {
+    setWallet(readMfcWallet());
+    const id = meta.cardId;
+    if (!id) return;
+    setGiftBurst(id);
+    setGiftRainActive(id);
+    setCards((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, gifts: (c.gifts || 0) + 1 } : c)),
+    );
+    window.setTimeout(() => setGiftBurst(null), 1000);
+    window.setTimeout(() => setGiftRainActive(null), 3000);
+    flashToast(`Sent ${gift.emoji} ${gift.name}`);
   };
 
   const catchGift = (e: MouseEvent) => {
@@ -845,6 +864,7 @@ export default function TimelineFeed() {
 
   return (
     <div data-safe-area-inset-root className="timeline-root relative h-dvh w-full bg-[#050505] text-white overflow-hidden" style={{boxSizing:'border-box'}}>
+      <LiveGiftPortal onSent={onPortalGiftSent} />
       {/* Background glows (desktop only — mobile is full-bleed video) */}
       <div className="pointer-events-none fixed inset-0 z-0 hidden lg:block">
         <div className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full blur-[120px] opacity-20" style={{background:'radial-gradient(circle,#8FFF4A 0%, transparent 70%)'}}/>
@@ -903,9 +923,17 @@ export default function TimelineFeed() {
                 <div className="h-4 w-4 rounded-full m-gradient flex items-center justify-center text-[8px] font-black text-black">M</div>
                 <span className="mono text-[11px] font-bold">{wallet}</span>
               </div>
-              <button type="button" className="h-8 w-8 rounded-full bg-black/25 border border-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/10 transition relative" aria-label="Gifts">
+              <button
+                type="button"
+                className="h-8 w-8 rounded-full bg-black/25 border border-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/10 transition relative"
+                aria-label="Gifts"
+                onClick={() => {
+                  const live = cards.find((c) => c.type === 'liveNow' && c.id === cards[currentIndex]?.id) || cards.find((c) => c.type === 'liveNow');
+                  openGiftForCard(live?.id || cards[currentIndex]?.id || 'live-now-host');
+                }}
+              >
                 <span className="text-[14px]">🎁</span>
-                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full m-gradient flex items-center justify-center text-[8px] font-black text-black">3</span>
+                <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full m-gradient flex items-center justify-center text-[8px] font-black text-black">+</span>
               </button>
               <div className="hidden lg:flex items-center gap-2 ml-1">
                 <label className="flex items-center gap-1.5 rounded-full px-2.5 py-1 mono text-[10px] cursor-pointer bg-black/25 border border-white/10">
@@ -1200,6 +1228,7 @@ export default function TimelineFeed() {
                         isHost={sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive()}
                         mode={card.liveMode || 'video'}
                         viewers={card.viewers}
+                        cardId={card.id}
                       />
                     )}
 
@@ -1238,8 +1267,21 @@ export default function TimelineFeed() {
                   >
                     {[
                       {k:'like', label: `${(card.likes/1000).toFixed(1)}K`, active: liked.has(card.id), action:()=>toggleLike(card.id), Icon: liked.has(card.id) ? IconHeartFill : IconHeart},
-                      {k:'comment', label:`${card.comments}`, active:false, action:()=>setActionSheet({ kind: 'comment', card }), Icon: IconComment},
-                      {k:'gift', label:`${card.gifts}`, active:false, action:()=>sendGift(card.id), Icon: IconGift},
+                      {
+                        k:'comment',
+                        label:`${card.comments}`,
+                        active:false,
+                        action:() => {
+                          if (card.type === 'liveNow') {
+                            focusLiveChat();
+                            flashToast('Live chat');
+                            return;
+                          }
+                          setActionSheet({ kind: 'comment', card });
+                        },
+                        Icon: IconComment,
+                      },
+                      {k:'gift', label:`${card.gifts}`, active:false, action:()=>openGiftForCard(card.id), Icon: IconGift},
                       {
                         k:'share',
                         label:'Share',
@@ -1254,14 +1296,43 @@ export default function TimelineFeed() {
                         Icon: IconShare,
                       },
                       ...(card.type === 'liveNow'
-                        ? [{k:'music', label:'Music', active:false, action:()=>openMusicDrawer(card.id), Icon: IconMusic as typeof IconHeart}]
+                        ? [
+                            {
+                              k: 'follow',
+                              label: followed.has(card.maker.id) ? 'Following' : 'Follow',
+                              active: followed.has(card.maker.id),
+                              action: () => void toggleFollow(card.maker.id),
+                              Icon: IconHeart as typeof IconHeart,
+                            },
+                            {
+                              k: 'music',
+                              label: 'Music',
+                              active: false,
+                              action: () => {
+                                const hostingHere =
+                                  sharedStreamIsLive() ||
+                                  isLiveAudioPublishing() ||
+                                  isLiveMediaSourceActive();
+                                if (!hostingHere) {
+                                  flashToast('Only host can change live BGM');
+                                  return;
+                                }
+                                openMusicDrawer(card.id);
+                              },
+                              Icon: IconMusic as typeof IconHeart,
+                            },
+                          ]
                         : []),
                       {k:'book', label:'Book', active:false, action:()=>setActionSheet({ kind: 'book', card }), Icon: IconBook},
                       {k:'shop', label:'Shop', active:false, action:()=>setActionSheet({ kind: 'shop', card }), Icon: IconShop},
                     ].map(btn=>(
                       <button key={btn.k} type="button" onClick={(e)=>{e.stopPropagation(); btn.action();}} className="flex flex-col items-center gap-1">
                         <div className={`${btn.active ? CRM_ICON_BTN_ACTIVE : CRM_ICON_BTN} ${likedAnimationIds.has(card.id) && btn.k==='like' ? 'animate-pulse' : ''}`}>
-                          <btn.Icon size={18} />
+                          {btn.k === 'follow' ? (
+                            <span className="text-[11px] font-black">{followed.has(card.maker.id) ? '✓' : '+'}</span>
+                          ) : (
+                            <btn.Icon size={18} />
+                          )}
                         </div>
                         <span className="mono text-[10px] font-bold text-white/80 drop-shadow">{btn.label}</span>
                       </button>
@@ -1370,7 +1441,7 @@ export default function TimelineFeed() {
                       {[
                         {label:`♥ ${card.likes}`, active:liked.has(card.id), run:()=>toggleLike(card.id)},
                         {label:`💬 ${card.comments}`, run:()=>setActionSheet({ kind:'comment', card })},
-                        {label:`👑 Gift`, run:()=>sendGift(card.id)},
+                        {label:`👑 Gift`, run:()=>openGiftForCard(card.id)},
                         {
                           label: `↗ Share`,
                           run: () => {

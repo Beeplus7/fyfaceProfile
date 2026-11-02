@@ -83,6 +83,10 @@ export function getLiveGift(id: string): LiveGift | undefined {
 
 const WALLET_KEY = 'myface.mfc.wallet';
 export const LIVE_GIFT_EVENT = 'myface-live-gift';
+/** Open TikTok-style gift sheet from any feed / live chrome control. */
+export const LIVE_GIFT_SHOP_OPEN = 'myface-open-gift-shop';
+/** Focus live chat composer (Comment on live card). */
+export const LIVE_CHAT_FOCUS = 'myface-focus-live-chat';
 
 export function readMfcWallet(fallback = 1247): number {
   try {
@@ -104,6 +108,21 @@ export type LiveGiftSendPayload = {
   at: number;
 };
 
+export type LiveGiftShopOpenDetail = {
+  fromName?: string;
+  /** Optional card id for rain FX / gift count bump on feed */
+  cardId?: string;
+};
+
 export function broadcastLiveGift(payload: LiveGiftSendPayload) {
   window.dispatchEvent(new CustomEvent(LIVE_GIFT_EVENT, { detail: payload }));
+}
+
+/** Opens the shared LiveGiftPortal shop (mounted on feed / live pages). */
+export function openLiveGiftShop(detail: LiveGiftShopOpenDetail = {}) {
+  window.dispatchEvent(new CustomEvent(LIVE_GIFT_SHOP_OPEN, { detail }));
+}
+
+export function focusLiveChat() {
+  window.dispatchEvent(new Event(LIVE_CHAT_FOCUS));
 }

@@ -34,9 +34,7 @@ import {
 import { liveGuestVideoConstraints, liveMicConstraints } from './liveQuality';
 import { fetchLiveChat, sendLiveChat, type LiveChatMessage } from './liveChat';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
-import LiveGiftOverlay from './LiveGiftOverlay';
-import LiveGiftShop from './LiveGiftShop';
-import type { LiveGift } from './liveGifts';
+import { LIVE_CHAT_FOCUS, openLiveGiftShop } from './liveGifts';
 
 type Props = {
   title: string;
@@ -47,6 +45,8 @@ type Props = {
   viewers?: number;
   /** True when this device owns the camera stream; false for phone viewing PC host */
   isHost?: boolean;
+  /** Feed card id — passed into gift shop for rain / counts */
+  cardId?: string;
 };
 
 const BADGE_TOP = { top: 'calc(var(--feed-chrome-h, 72px) + 8px)' } as const;
@@ -151,10 +151,12 @@ export default function FeedLiveNowStage({
   mode,
   viewers = 144,
   isHost = false,
+  cardId,
 }: Props) {
   const { videoRef, status, error, facing, switching, startCamera, switchCamera } = useLiveCamera();
   const guestCamRef = useRef<HTMLVideoElement | null>(null);
   const guestStreamRef = useRef<MediaStream | null>(null);
+  const chatInputRef = useRef<HTMLInputElement | null>(null);
   const [guestFacing, setGuestFacing] = useState<'user' | 'environment'>('user');
   const [guestSwitching, setGuestSwitching] = useState(false);
   const videoMode = mode !== 'audio';
@@ -178,7 +180,6 @@ export default function FeedLiveNowStage({
   const [chat, setChat] = useState<LiveChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [viewerCount, setViewerCount] = useState(viewers);
-  const [giftShopOpen, setGiftShopOpen] = useState(false);
   const audioViewer = useRef<ReturnType<typeof createLiveAudioViewer> | null>(null);
   const guestAudioViewers = useRef<Map<string, ReturnType<typeof createSlotAudioViewer>>>(new Map());
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -434,28 +435,39 @@ export default function FeedLiveNowStage({
 
   const chatWho = isHost ? makerName || 'Host' : identity.name;
 
-  const onGiftSent = (gift: LiveGift) => {
-    const line = `sent ${gift.emoji} ${gift.name}`;
-    void sendLiveChat(chatWho, line).then((s) => {
-      if (s.messages.length) setChat(s.messages);
-    });
-    setChat((prev) => [
-      ...prev.slice(-40),
-      { id: `gift_${Date.now()}`, who: chatWho, text: line, ts: Date.now() },
-    ]);
+  const openGift = () => {
+    if (!watching && !isHost) startWatching();
+    openLiveGiftShop({ fromName: chatWho, cardId });
   };
 
-  const giftLayer = (
-    <>
-      <LiveGiftOverlay />
-      <LiveGiftShop
-        open={giftShopOpen}
-        onClose={() => setGiftShopOpen(false)}
-        fromName={chatWho}
-        onSent={onGiftSent}
-      />
-    </>
-  );
+  // Comment icon on feed → focus live chat composer
+  useEffect(() => {
+    const onFocus = () => {
+      if (!watching && !isHost) startWatching();
+      window.setTimeout(() => chatInputRef.current?.focus(), 80);
+    };
+    window.addEventListener(LIVE_CHAT_FOCUS, onFocus);
+    return () => window.removeEventListener(LIVE_CHAT_FOCUS, onFocus);
+  }, [watching, isHost]);
+
+  // Gift sends from portal → echo into live chat
+  useEffect(() => {
+    const onGift = (ev: Event) => {
+      const detail = (ev as CustomEvent<{ gift?: { emoji: string; name: string }; fromName?: string }>).detail;
+      if (!detail?.gift) return;
+      const who = detail.fromName || chatWho;
+      const line = `sent ${detail.gift.emoji} ${detail.gift.name}`;
+      setChat((prev) => [
+        ...prev.slice(-40),
+        { id: `gift_${Date.now()}`, who, text: line, ts: Date.now() },
+      ]);
+      void sendLiveChat(who, line).then((s) => {
+        if (s.messages.length) setChat(s.messages);
+      });
+    };
+    window.addEventListener('myface-live-gift', onGift);
+    return () => window.removeEventListener('myface-live-gift', onGift);
+  }, [chatWho]);
 
   const sendChat = () => {
     const text = draft.trim();
@@ -801,6 +813,7 @@ export default function FeedLiveNowStage({
           onKeyDown={(e) => {
             if (e.key === 'Enter') sendChat();
           }}
+          ref={chatInputRef}
           placeholder={isHost ? 'Host chat…' : `Chat as ${identity.name}…`}
           className="flex-1 h-11 rounded-full border border-white/15 bg-black/65 px-4 text-[13px] outline-none backdrop-blur-md"
         />
@@ -892,14 +905,13 @@ export default function FeedLiveNowStage({
             className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
             onClick={(e) => {
               e.stopPropagation();
-              setGiftShopOpen(true);
+              openGift();
             }}
           >
             🎁 Gift
           </button>
         </div>
         {chatComposer}
-        {giftLayer}
       </div>
     );
   }
@@ -972,34 +984,58 @@ export default function FeedLiveNowStage({
           ))}
         </div>
         {!watching ? (
-          <button
-            type="button"
-            className="mt-6 h-11 px-6 rounded-full bg-white text-black font-bold text-[13px]"
-            onClick={(e) => {
-              e.stopPropagation();
-              startWatching();
-            }}
-          >
-            Join audio live
-          </button>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+            <button
+              type="button"
+              className="h-11 px-6 rounded-full bg-white text-black font-bold text-[13px]"
+              onClick={(e) => {
+                e.stopPropagation();
+                startWatching();
+              }}
+            >
+              Join audio live
+            </button>
+            <button
+              type="button"
+              className="h-11 px-5 rounded-full bg-[#FE2C55] text-white font-bold text-[13px]"
+              onClick={(e) => {
+                e.stopPropagation();
+                openGift();
+              }}
+            >
+              🎁 Gift
+            </button>
+          </div>
         ) : (
           <div className="mt-6 flex flex-col items-center gap-3">
             <div className="mono text-[11px] text-[#8FFF4A] font-bold">Listening on feed · {viewerCount}</div>
-            <button
-              type="button"
-              className="h-9 px-4 rounded-full bg-black/55 border border-white/15 mono text-[11px] font-bold"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSoundOn((v) => {
-                  const next = !v;
-                  audioViewer.current?.setMuted(!next);
-                  if (next) audioViewer.current?.unlock();
-                  return next;
-                });
-              }}
-            >
-              {soundOn ? 'Sound on' : 'Muted'}
-            </button>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <button
+                type="button"
+                className="h-9 px-4 rounded-full bg-black/55 border border-white/15 mono text-[11px] font-bold"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSoundOn((v) => {
+                    const next = !v;
+                    audioViewer.current?.setMuted(!next);
+                    if (next) audioViewer.current?.unlock();
+                    return next;
+                  });
+                }}
+              >
+                {soundOn ? 'Sound on' : 'Muted'}
+              </button>
+              <button
+                type="button"
+                className="h-9 px-4 rounded-full bg-[#FE2C55] text-white font-bold text-[12px]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openGift();
+                }}
+              >
+                🎁 Gift
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -1103,17 +1139,29 @@ export default function FeedLiveNowStage({
           >
             Watch Live
           </button>
-          <button
-            type="button"
-            disabled={joinBusy || guestState.guests.length >= 3}
-            className="mt-3 h-11 px-7 rounded-full bg-[#8FFF4A] text-black font-bold text-[13px] disabled:opacity-50"
-            onClick={(e) => {
-              e.stopPropagation();
-              void onRequestJoin();
-            }}
-          >
-            {guestState.guests.length >= 3 ? 'Live full' : amPending ? 'Waiting for host…' : 'Request to join'}
-          </button>
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+            <button
+              type="button"
+              disabled={joinBusy || guestState.guests.length >= 3}
+              className="h-11 px-7 rounded-full bg-[#8FFF4A] text-black font-bold text-[13px] disabled:opacity-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                void onRequestJoin();
+              }}
+            >
+              {guestState.guests.length >= 3 ? 'Live full' : amPending ? 'Waiting for host…' : 'Request to join'}
+            </button>
+            <button
+              type="button"
+              className="h-11 px-5 rounded-full bg-[#FE2C55] text-white font-bold text-[13px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
+              onClick={(e) => {
+                e.stopPropagation();
+                openGift();
+              }}
+            >
+              🎁 Gift
+            </button>
+          </div>
           {joinError ? (
             <div className="mt-2 max-w-xs rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
               {joinError}
@@ -1206,7 +1254,7 @@ export default function FeedLiveNowStage({
             <button
               type="button"
               className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
-              onClick={() => setGiftShopOpen(true)}
+              onClick={() => openGift()}
             >
               🎁 Gift
             </button>
@@ -1214,7 +1262,6 @@ export default function FeedLiveNowStage({
           {chatComposer}
         </>
       )}
-      {giftLayer}
     </div>
   );
 }
