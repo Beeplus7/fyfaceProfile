@@ -472,24 +472,41 @@ export default function TimelineFeed() {
     };
   }, [liveBroadcast]);
 
-  // Intersection observer autoplay
-  useEffect(()=>{
-    const obs = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        const id = (entry.target as HTMLElement).dataset.cardid;
-        if (!id) return;
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          setCurrentIndex(parseInt(id.split('-')[1]||'0'));
-          setIsPlayingMap(prev=>({...prev, [id]: true}));
-        } else {
-          setIsPlayingMap(prev=>({...prev, [id]: false}));
-        }
-      });
-    },{threshold:[0.5,0.7]});
-    Object.values(cardRefs.current).forEach(el=> el && obs.observe(el));
-    return ()=> obs.disconnect();
-  },[cards]);
+  const feedCardH = useRef(0);
+  const touchingRef = useRef(false);
+  const indexRef = useRef(0);
+  const hadLiveCardRef = useRef(false);
 
+  useEffect(() => {
+    indexRef.current = currentIndex;
+  }, [currentIndex]);
+
+  // Intersection observer autoplay — index from data-index, not brittle id parse
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const node = entry.target as HTMLElement;
+          const id = node.dataset.cardid;
+          if (!id) return;
+          if (entry.isIntersecting && entry.intersectionRatio > 0.55) {
+            const raw = node.dataset.index;
+            const idx = raw != null ? Number(raw) : NaN;
+            if (Number.isFinite(idx)) {
+              indexRef.current = idx;
+              setCurrentIndex(idx);
+            }
+            setIsPlayingMap((prev) => ({ ...prev, [id]: true }));
+          } else {
+            setIsPlayingMap((prev) => ({ ...prev, [id]: false }));
+          }
+        });
+      },
+      { threshold: [0.55, 0.75], root: timelineRef.current },
+    );
+    Object.values(cardRefs.current).forEach((el) => el && obs.observe(el));
+    return () => obs.disconnect();
+  }, [cards, topTab, feedSearch, liveBroadcast?.live, publishedRecs, userPosts]);
 
   // Arrow keys up/down
   useEffect(() => {
@@ -508,19 +525,21 @@ export default function TimelineFeed() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [lowMotion, musicDrawerOpen]);
-
-  const snapScrollTimer = useRef<number | null>(null);
-  const feedCardH = useRef(0);
+  }, [musicDrawerOpen]);
 
   /** Keep card height locked to scroller pixels — %/svh drifts on iOS chrome. */
-  const syncFeedCardHeight = () => {
+  const syncFeedCardHeight = (opts?: { preserveIndex?: boolean }) => {
     const el = timelineRef.current;
     if (!el) return;
     const h = Math.round(el.clientHeight);
-    if (h > 0 && h !== feedCardH.current) {
-      feedCardH.current = h;
-      el.style.setProperty('--feed-card-h', `${h}px`);
+    if (h <= 0) return;
+    const prev = feedCardH.current;
+    if (h === prev) return;
+    feedCardH.current = h;
+    el.style.setProperty('--feed-card-h', `${h}px`);
+    // On chrome show/hide: keep the same card — don't re-round mid-gesture
+    if (opts?.preserveIndex && prev > 0 && !touchingRef.current) {
+      el.scrollTop = indexRef.current * h;
     }
   };
 
@@ -543,54 +562,76 @@ export default function TimelineFeed() {
     };
   }, [liveBroadcast?.live, topTab]);
 
-  /** Force land on a full card after fling (iOS often stops mid-card). */
-  const snapToNearestCard = () => {
+  /**
+   * Soft mid-card rescue ONLY after scroll settles — never on touchend / every 60ms.
+   * CSS snap does the main work; this only fixes rare hung mid-card stops.
+   */
+  const softCorrectMidCard = () => {
+    if (touchingRef.current) return;
     const el = timelineRef.current;
     if (!el) return;
-    syncFeedCardHeight();
     const h = feedCardH.current || el.clientHeight || 1;
-    const maxIdx = Math.max(0, Math.round(el.scrollHeight / h) - 1);
-    const idx = Math.max(0, Math.min(Math.round(el.scrollTop / h), maxIdx));
-    const target = idx * h;
-    if (Math.abs(el.scrollTop - target) > 1) {
+    const pos = el.scrollTop / h;
+    const nearest = Math.round(pos);
+    const frac = Math.abs(pos - nearest);
+    if (frac < 0.12) {
+      setCurrentIndex(Math.max(0, nearest));
+      return;
+    }
+    const target = nearest * h;
+    if (Math.abs(el.scrollTop - target) > 2) {
       el.scrollTo({ top: target, behavior: 'auto' });
     }
-    setCurrentIndex(idx);
+    setCurrentIndex(Math.max(0, nearest));
   };
 
   useEffect(() => {
     const el = timelineRef.current;
     if (!el) return;
     syncFeedCardHeight();
+
     const ro = new ResizeObserver(() => {
-      syncFeedCardHeight();
-      snapToNearestCard();
+      syncFeedCardHeight({ preserveIndex: true });
     });
     ro.observe(el);
-    const onEnd = () => snapToNearestCard();
-    el.addEventListener('scrollend', onEnd);
-    el.addEventListener('touchend', onEnd, { passive: true });
-    window.addEventListener('orientationchange', onEnd);
+
+    const onTouchStart = () => {
+      touchingRef.current = true;
+    };
+    const onTouchEnd = () => {
+      touchingRef.current = false;
+    };
+    const onScrollEnd = () => softCorrectMidCard();
+    const onOrient = () => {
+      window.setTimeout(() => syncFeedCardHeight({ preserveIndex: true }), 120);
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    el.addEventListener('scrollend', onScrollEnd);
+    window.addEventListener('orientationchange', onOrient);
+
     return () => {
       ro.disconnect();
-      el.removeEventListener('scrollend', onEnd);
-      el.removeEventListener('touchend', onEnd);
-      window.removeEventListener('orientationchange', onEnd);
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('touchcancel', onTouchEnd);
+      el.removeEventListener('scrollend', onScrollEnd);
+      window.removeEventListener('orientationchange', onOrient);
     };
   }, []);
 
-  // Infinite scroll near bottom + debounce snap
+  // Track index from scroll — do NOT force scrollTo (CSS snap owns the motion)
   const handleScroll = () => {
     const el = timelineRef.current;
     if (!el) return;
-    if (snapScrollTimer.current) window.clearTimeout(snapScrollTimer.current);
-    snapScrollTimer.current = window.setTimeout(() => {
-      snapToNearestCard();
-      snapScrollTimer.current = null;
-    }, 60);
-
-    // Template feed is fixed at 50 slots — no demo infinite scroll
-    if (loadingMore) return;
+    const h = feedCardH.current || el.clientHeight || 1;
+    const idx = Math.max(0, Math.round(el.scrollTop / h));
+    if (idx !== indexRef.current) {
+      indexRef.current = idx;
+      setCurrentIndex(idx);
+    }
   };
 
   const toggleLike = async (cardId: string) => {
@@ -815,6 +856,28 @@ export default function TimelineFeed() {
     return [liveNowCard, ...next.filter((c) => c.id !== liveNowCard.id)];
   }, [cards, topTab, followed, feedSearch, liveNowCard, publishedRecs, userPosts]);
 
+  // When LIVE card appears/disappears at top, keep the same post under the finger
+  const livePinned = Boolean(visibleCards[0]?.type === 'liveNow');
+  useEffect(() => {
+    const el = timelineRef.current;
+    if (!el) return;
+    const h = feedCardH.current || el.clientHeight || 0;
+    if (!h) {
+      hadLiveCardRef.current = livePinned;
+      return;
+    }
+    if (livePinned && !hadLiveCardRef.current) {
+      el.scrollTop += h;
+      indexRef.current += 1;
+      setCurrentIndex(indexRef.current);
+    } else if (!livePinned && hadLiveCardRef.current) {
+      el.scrollTop = Math.max(0, el.scrollTop - h);
+      indexRef.current = Math.max(0, indexRef.current - 1);
+      setCurrentIndex(indexRef.current);
+    }
+    hadLiveCardRef.current = livePinned;
+  }, [livePinned]);
+
   const selectTopTab = (tab: string) => {
     setTopTab(tab);
     setCurrentIndex(0);
@@ -863,7 +926,7 @@ export default function TimelineFeed() {
   };
 
   return (
-    <div data-safe-area-inset-root className="timeline-root relative h-dvh w-full bg-[#050505] text-white overflow-hidden" style={{boxSizing:'border-box'}}>
+    <div data-safe-area-inset-root className="timeline-root relative h-dvh max-h-dvh w-full bg-[#050505] text-white overflow-hidden" style={{ boxSizing: 'border-box' }}>
       <LiveGiftPortal onSent={onPortalGiftSent} />
       {/* Background glows (desktop only — mobile is full-bleed video) */}
       <div className="pointer-events-none fixed inset-0 z-0 hidden lg:block">
@@ -1144,10 +1207,11 @@ export default function TimelineFeed() {
                   </div>
                 </div>
               ) : null}
-              {visibleCards.map(card=>(
+              {visibleCards.map((card, cardIndex)=>(
                 <div
                   key={card.id}
                   data-cardid={card.id}
+                  data-index={cardIndex}
                   ref={el=>{ cardRefs.current[card.id]=el; }}
                   className="feed-card relative w-full snap-start flex flex-col justify-end bg-black overflow-hidden"
                   onClick={catchGift}

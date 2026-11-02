@@ -795,7 +795,7 @@ export default function FeedLiveNowStage({
           </button>
         </div>
       ) : null}
-      <div className="max-h-[18svh] overflow-y-auto space-y-1.5 pr-1">
+      <div className="live-chat-scroll max-h-[18svh] overflow-y-auto space-y-1.5 pr-1 overscroll-contain">
         {chat.slice(-16).map((c) => (
           <div
             key={c.id}

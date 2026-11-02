@@ -1,10 +1,12 @@
-/* Timeline feed — TikTok-style full-bleed snap column */
+/* Timeline feed — TikTok-style full-bleed snap column (CSS snap only; no JS fight) */
 
 .timeline-root {
   --glow: 0 0 32px rgba(143, 255, 74, 0.22), 0 0 64px rgba(26, 124, 255, 0.14);
+  --feed-chrome-h: 72px;
   overflow: hidden;
-  height: 100dvh;
-  height: 100svh;
+  /* One height source — avoid dvh+svh thrash that resizes mid-scroll */
+  height: 100%;
+  max-height: 100dvh;
 }
 
 .snap-y-mandatory,
@@ -19,17 +21,18 @@
 .timeline-root .snap-start,
 .timeline-root .feed-card {
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  /* normal = allow fling past a card with enough velocity; always felt glued/nagging */
+  scroll-snap-stop: normal;
 }
 
 .timeline-root,
-.timeline-root * {
+.timeline-root .feed-scroller {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
 .timeline-root::-webkit-scrollbar,
-.timeline-root *::-webkit-scrollbar {
+.timeline-root .feed-scroller::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
   display: none !important;
@@ -37,19 +40,12 @@
 }
 
 .timeline-root .feed-scroller {
-  scrollbar-width: none;
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-}
-
-.timeline-root .feed-scroller::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
 }
 
 /*
@@ -64,7 +60,7 @@
   width: 100%;
   box-sizing: border-box;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
+  scroll-snap-stop: normal;
 }
 
 .timeline-root .feed-column {
@@ -77,16 +73,19 @@
   min-height: 0;
 }
 
-.timeline-root {
-  --feed-chrome-h: 72px;
-}
-
 .timeline-root .feed-top-overlay {
   pointer-events: none;
 }
 
 .timeline-root .feed-top-overlay .pointer-events-auto {
   pointer-events: auto;
+}
+
+/* Nested live chat must not chain scroll into the snap column */
+.timeline-root .live-chat-scroll {
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (min-width: 1024px) {
