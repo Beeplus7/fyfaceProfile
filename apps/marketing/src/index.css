@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+@import 'tailwindcss';
+
+:root {
+  --bg: #050505;
+  --bg-2: #0a0a0a;
+  --bg-3: #121212;
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-2: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #ffffff;
+  --text-dim: rgba(255, 255, 255, 0.62);
+  --lime: #8fff4a;
+  --teal: #00e5c0;
+  --blue: #00bfff;
+  --yellow: #ffe600;
+  --orange: #ff8a00;
+  --gradient-m: linear-gradient(
+    102deg,
+    #8fff4a 0%,
+    #00e5c0 25%,
+    #00bfff 50%,
+    #ffe600 75%,
+    #ff8a00 100%
+  );
+  --gradient-m-soft: linear-gradient(
+    102deg,
+    rgba(143, 255, 74, 0.9) 0%,
+    rgba(0, 229, 192, 0.9) 25%,
+    rgba(0, 191, 255, 0.9) 50%,
+    rgba(255, 230, 0, 0.9) 75%,
+    rgba(255, 138, 0, 0.9) 100%
+  );
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #050505;
+  }
+}
+
+* {
+  font-family:
+    'Instrument Sans',
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+h1,
+h2,
+.display {
+  font-family: 'Poppins', 'Instrument Sans', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.gradient-text-m {
+  background: var(--gradient-m);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-bg-m {
+  background: var(--gradient-m);
+}
+
+.glass {
+  background: rgba(18, 18, 18, 0.72);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(24, 24, 24, 0.88);
+  backdrop-filter: blur(32px) saturate(1.6);
+  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glow-m {
+  background: radial-gradient(
+    60% 60% at 50% 50%,
+    rgba(143, 255, 74, 0.28) 0%,
+    rgba(0, 229, 192, 0.18) 22%,
+    rgba(0, 191, 255, 0.12) 45%,
+    rgba(255, 230, 0, 0.1) 70%,
+    rgba(255, 138, 0, 0.08) 85%,
+    transparent 100%
+  );
+  filter: blur(48px);
+}
+
+@keyframes dropIn {
+  0% {
+    transform: translateY(-48px) scale(0.96);
+    opacity: 0;
+    filter: blur(8px);
+  }
+  60% {
+    transform: translateY(6px) scale(1.02);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseLive {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.55;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.coming-soon-ribbon {
+  position: absolute;
+  top: 8px;
+  right: -28px;
+  transform: rotate(28deg);
+  background: #111;
+  color: white;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding: 3px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-transform: uppercase;
+}
+
+.card-drop {
+  animation: dropIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.float-slow {
+  animation: floatY 3.6s ease-in-out infinite;
+}
+.float-slow-2 {
+  animation: floatY 4.2s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+.float-slow-3 {
+  animation: floatY 3.9s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  overscroll-behavior: none;
+  margin: 0;
+}
+
+.app-shell {
+  min-height: 100dvh;
+  overflow-x: clip;
+  padding-bottom: calc(var(--safe-area-inset-bottom) + 0px);
+}
+
+.app-shell--with-mobile-nav {
+  padding-bottom: calc(72px + var(--safe-area-inset-bottom));
+}
+
+/* Explanatory Companion Guide (Face+Profile+Explanatory+Companion) */
+.mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.perspective-2000 {
+  perspective: 2000px;
+}
+/* Book sits on light paper — force ink black (site body text is white for dark OS) */
+#myface-page-flip-book {
+  color: #0a0a0a;
+  -webkit-text-fill-color: #0a0a0a;
+}
+#myface-page-flip-book .text-white,
+#myface-page-flip-book [class*='text-white'] {
+  -webkit-text-fill-color: #ffffff;
+}
+#myface-page-flip-book [style*='color: transparent'],
+#myface-page-flip-book [style*='color:transparent'] {
+  -webkit-text-fill-color: transparent;
+}
+.paper {
+  color: #0a0a0a;
+  -webkit-text-fill-color: #0a0a0a;
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(26, 124, 255, 0.06), transparent),
+    radial-gradient(800px 400px at 80% 100%, rgba(255, 230, 0, 0.06), transparent),
+    linear-gradient(180deg, #FFFEFB 0%, #FDFCF8 100%);
+}
+.paper-dark {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(143, 255, 74, 0.08), transparent),
+    radial-gradient(800px 400px at 80% 100%, rgba(0, 229, 192, 0.08), transparent),
+    #0e0e0e;
+}
+
+/* Arcade / Ad Revenue Coin scorecard */
+.font-display {
+  font-family: 'Poppins', 'Instrument Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.m-gradient {
+  background: linear-gradient(90deg, #8fff4a 0%, #00e5cf 25%, #1a7cff 50%, #ffe600 75%, #ff8a00 100%);
+}
+.m-gradient-border {
+  position: relative;
+}
+.m-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(90deg, #8fff4a, #00e5cf, #1a7cff, #ffe600, #ff8a00);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}

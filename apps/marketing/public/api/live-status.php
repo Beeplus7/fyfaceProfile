@@ -1,0 +1,70 @@
+<?php
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Cache-Control: no-store');
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
+
+$file = '/var/lib/myface/live-status.json';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+  if (!is_file($file)) { echo json_encode(['live' => false]); exit; }
+  $raw = file_get_contents($file);
+  echo $raw !== false && $raw !== '' ? $raw : json_encode(['live' => false]);
+  exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $body = file_get_contents('php://input');
+  $data = json_decode($body ?: '[]', true);
+  if (!is_array($data)) { http_response_code(400); echo json_encode(['error' => 'bad json']); exit; }
+  $live = !empty($data['live']);
+  if (!$live) {
+    @unlink($file);
+    // End live → clear multi-guest roster + guest frames/audio + chat
+    @unlink('/var/lib/myface/live-guests.json');
+    @unlink('/var/lib/myface/live-chat.json');
+    foreach (array('g1', 'g2', 'g3') as $s) {
+      @unlink('/var/lib/myface/live-frame-' . $s . '.jpg');
+      @unlink('/var/lib/myface/live-frame-' . $s . '.json');
+      @unlink('/var/lib/myface/live-audio-' . $s . '.bin');
+      @unlink('/var/lib/myface/live-audio-' . $s . '.json');
+    }
+    echo json_encode(['live' => false, 'ok' => true]);
+    exit;
+  }
+  $payload = array(
+    'live' => true,
+    'title' => isset($data['title']) ? (string)$data['title'] : 'Video Live · OL1',
+    'viewers' => isset($data['viewers']) ? (int)$data['viewers'] : 12,
+    'startedAt' => isset($data['startedAt']) ? (string)$data['startedAt'] : gmdate('c'),
+    'mode' => (isset($data['mode']) && $data['mode'] === 'audio') ? 'audio' : 'video',
+    'makerId' => isset($data['makerId']) ? (string)$data['makerId'] : 'ayo',
+    'updatedAt' => gmdate('c'),
+    'hasAudio' => !empty($data['hasAudio']),
+  );
+  // Sync live BGM so phones can play the same track (YouTube / Jamendo URL)
+  if (isset($data['music']) && is_array($data['music'])) {
+    $m = $data['music'];
+    $music = array();
+    if (!empty($m['title'])) $music['title'] = substr((string)$m['title'], 0, 120);
+    if (!empty($m['artist'])) $music['artist'] = substr((string)$m['artist'], 0, 120);
+    if (!empty($m['source'])) $music['source'] = substr((string)$m['source'], 0, 40);
+    if (!empty($m['youtubeId'])) $music['youtubeId'] = substr((string)$m['youtubeId'], 0, 32);
+    if (!empty($m['jamendoId'])) $music['jamendoId'] = substr((string)$m['jamendoId'], 0, 32);
+    if (!empty($m['previewUrl']) && preg_match('#^https?://#i', (string)$m['previewUrl'])) {
+      $music['previewUrl'] = substr((string)$m['previewUrl'], 0, 500);
+    }
+    if (!empty($music)) $payload['music'] = $music;
+  } elseif (array_key_exists('music', $data) && ($data['music'] === null || $data['music'] === false)) {
+    // explicit clear
+  }
+  if (!is_dir('/var/lib/myface')) { @mkdir('/var/lib/myface', 0775, true); }
+  file_put_contents($file, json_encode($payload), LOCK_EX);
+  echo json_encode($payload);
+  exit;
+}
+
+http_response_code(405);
+echo json_encode(['error' => 'method']);

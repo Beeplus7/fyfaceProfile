@@ -1,17 +1,20 @@
 {
   "expo": {
-    "name": "myface",
+    "name": "MyFace",
     "slug": "myface",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "myface",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.myface.app"
     },
     "android": {
+      "package": "com.myface.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#050505",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -19,7 +22,17 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-web-browser"
+    ],
+    "extra": {
+      "supabaseUrl": "https://jyckmajjbvydgsvnmeaj.supabase.co",
+      "appUrl": "https://myfaceprofile.aikova.co.uk"
     }
   }
 }
