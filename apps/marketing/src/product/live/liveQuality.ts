@@ -54,26 +54,39 @@ export function liveFrameIntervalMs(role: 'host' | 'guest' = 'host'): { fast: nu
   return role === 'guest' ? { fast: 75, slow: 120 } : { fast: 55, slow: 95 };
 }
 
-/** WAV encode rate for speech + music beds */
+/** WAV encode rate for speech + music beds (keep high for group clarity). */
 export function liveAudioTargetRate(): number {
   const net = liveNetClass();
-  if (net === 'low') return 24000;
-  if (net === 'mid') return 32000;
+  if (net === 'low') return 32000;
+  if (net === 'mid') return 44100;
   return 48000;
 }
 
-export function liveAudioChunkSec(): number {
+/**
+ * Chunk length — longer under multi-guest = fewer POSTs / fewer dropped pending WAVs.
+ * @param guestCount active guest slots on the call (0 = host-only)
+ */
+export function liveAudioChunkSec(guestCount = 0): number {
   const net = liveNetClass();
-  if (net === 'low') return 0.35;
-  return 0.22;
+  const multi = guestCount >= 1;
+  if (net === 'low') return multi ? 0.38 : 0.32;
+  if (net === 'mid') return multi ? 0.32 : 0.26;
+  return multi ? 0.28 : 0.22;
 }
 
-/** getUserMedia video constraints for guests in split live */
+/** Viewer poll interval — slightly slower when many slots to reduce decode thrash. */
+export function liveAudioPollMs(guestCount = 0): number {
+  if (guestCount >= 2) return 160;
+  if (guestCount >= 1) return 150;
+  return 130;
+}
+
+/** getUserMedia video constraints for guests in split live — portrait-friendly. */
 export function liveGuestVideoConstraints(): MediaTrackConstraints {
   const net = liveNetClass();
   if (net === 'low') {
     return {
-      facingMode: 'user',
+      facingMode: { ideal: 'user' },
       width: { ideal: 640 },
       height: { ideal: 960 },
       frameRate: { ideal: 24, max: 24 },
@@ -81,24 +94,30 @@ export function liveGuestVideoConstraints(): MediaTrackConstraints {
   }
   if (net === 'mid') {
     return {
-      facingMode: 'user',
-      width: { ideal: 960 },
+      facingMode: { ideal: 'user' },
+      width: { ideal: 720 },
       height: { ideal: 1280 },
       frameRate: { ideal: 28, max: 30 },
     };
   }
   return {
-    facingMode: 'user',
-    width: { ideal: 1280 },
-    height: { ideal: 720 },
+    facingMode: { ideal: 'user' },
+    width: { ideal: 720 },
+    height: { ideal: 1280 },
     frameRate: { ideal: 30, max: 30 },
   };
 }
 
-export function liveMicConstraints(): MediaTrackConstraints | boolean {
+/**
+ * Mic constraints for group live.
+ * Always keep AEC; enable NS on mid/low OR when multi-guest (overlapping mics).
+ */
+export function liveMicConstraints(opts?: { multiGuest?: boolean }): MediaTrackConstraints {
+  const net = liveNetClass();
+  const multi = Boolean(opts?.multiGuest);
   return {
     echoCancellation: true,
-    noiseSuppression: true,
+    noiseSuppression: multi || net !== 'high',
     autoGainControl: true,
     channelCount: { ideal: 1 },
     sampleRate: { ideal: 48000 },

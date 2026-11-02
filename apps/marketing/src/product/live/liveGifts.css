@@ -1,0 +1,136 @@
+/* TikTok-style live gift animations + shop chrome */
+
+@keyframes lg-float-up {
+  0% { transform: translateY(40vh) scale(0.4); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translateY(-55vh) scale(1.15); opacity: 0; }
+}
+
+@keyframes lg-burst {
+  0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
+  35% { transform: scale(1.35) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); opacity: 0; }
+}
+
+@keyframes lg-rain {
+  0% { transform: translateY(-12vh) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translateY(95vh) rotate(28deg); opacity: 0; }
+}
+
+@keyframes lg-rocket {
+  0% { transform: translate(10vw, 55vh) rotate(-35deg) scale(0.5); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(55vw, -40vh) rotate(-10deg) scale(1.4); opacity: 0; }
+}
+
+@keyframes lg-orbit {
+  0% { transform: rotate(0deg) translateX(0) scale(0.6); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: rotate(360deg) translateX(42vw) scale(1.1); opacity: 0; }
+}
+
+@keyframes lg-stampede {
+  0% { transform: translateX(-30vw) scale(0.7); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(110vw) scale(1.2); opacity: 0; }
+}
+
+@keyframes lg-spin {
+  0% { transform: scale(0.3) rotate(0deg); opacity: 0; }
+  40% { transform: scale(1.4) rotate(220deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 0; }
+}
+
+@keyframes lg-combo-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.12); filter: brightness(1.25); }
+}
+
+@keyframes lg-banner-in {
+  0% { transform: translateX(-120%); opacity: 0; }
+  14% { transform: translateX(0); opacity: 1; }
+  78% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+
+@keyframes lg-tile-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes lg-sheet-up {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes lg-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(254, 44, 85, 0.85), 0 0 18px rgba(254, 44, 85, 0.35); }
+  50% { box-shadow: 0 0 0 1.5px rgba(254, 44, 85, 1), 0 0 28px rgba(254, 44, 85, 0.55); }
+}
+
+@keyframes lg-icon-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes lg-send-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.lg-float { animation: lg-float-up 2.4s ease-out forwards; }
+.lg-burst { animation: lg-burst 1.6s ease-out forwards; }
+.lg-rain { animation: lg-rain 2.2s linear forwards; }
+.lg-rocket { animation: lg-rocket 2.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.lg-orbit { animation: lg-orbit 2.6s ease-in-out forwards; }
+.lg-stampede { animation: lg-stampede 2s ease-in-out forwards; }
+.lg-spin { animation: lg-spin 1.7s ease-out forwards; }
+.lg-combo-hero {
+  animation: lg-burst 2.2s ease-out forwards, lg-combo-pulse 0.55s ease-in-out 3;
+}
+.lg-banner { animation: lg-banner-in 2.8s ease-in-out forwards; }
+.lg-tile-press:active { animation: lg-tile-pop 0.22s ease; }
+
+.lg-sheet {
+  animation: lg-sheet-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.lg-tile-active {
+  animation: lg-glow-pulse 1.6s ease-in-out infinite;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lg-tile-active .lg-tile-emoji {
+  animation: lg-icon-bob 1.4s ease-in-out infinite;
+}
+
+.lg-send-pill {
+  animation: lg-send-in 0.18s ease-out both;
+}
+
+.lg-shop-scroll::-webkit-scrollbar { display: none; }
+.lg-shop-scroll { scrollbar-width: none; }
+
+.lg-coin {
+  display: inline-grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, #ffe566, #ffb800 55%, #e08900);
+  box-shadow: inset 0 0 0 1.5px #f5c842, 0 0 0 0.5px #a65f00;
+  color: #7a4200;
+  font-size: 7px;
+  font-weight: 900;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lg-coin-lg {
+  width: 18px;
+  height: 18px;
+  font-size: 9px;
+  box-shadow: inset 0 0 0 2px #f5c842, 0 0 0 0.5px #a65f00;
+}

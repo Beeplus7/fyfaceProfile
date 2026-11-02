@@ -24,6 +24,7 @@ type Props = {
 export default function LiveHostJoinInbox({ active = true, className = '' }: Props) {
   const [state, setState] = useState<LiveGuestsState>({ pending: [], guests: [] });
   const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
     if (!active) return;
@@ -33,7 +34,7 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
       if (!cancelled) setState(next);
     };
     void tick();
-    const id = window.setInterval(() => void tick(), 900);
+    const id = window.setInterval(() => void tick(), 700);
     return () => {
       cancelled = true;
       window.clearInterval(id);
@@ -41,12 +42,39 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
   }, [active]);
 
   if (!active) return null;
-  if (!state.pending.length && !state.guests.length) return null;
+  if (!state.pending.length && !state.guests.length && !err) return null;
 
   const onApprove = async (p: LiveGuestPending) => {
     setBusy(p.id);
+    setErr(null);
+    // Optimistic: move pending → guests locally so Accept feels instant
+    setState((prev) => ({
+      ...prev,
+      pending: prev.pending.filter((x) => x.id !== p.id),
+      guests: prev.guests.some((g) => g.id === p.id)
+        ? prev.guests
+        : [
+            ...prev.guests,
+            {
+              id: p.id,
+              name: p.name,
+              avatar: p.avatar,
+              slot: `g${Math.min(3, prev.guests.length + 1)}` as 'g1' | 'g2' | 'g3',
+              heartbeat: Date.now(),
+            },
+          ],
+    }));
     try {
-      setState(await approveGuest(p.id, { name: p.name, avatar: p.avatar }));
+      const next = await approveGuest(p.id, { name: p.name, avatar: p.avatar });
+      if (!next.ok) {
+        setErr(next.error === 'full' ? 'Live is full (3 guests)' : next.error || 'Accept failed — try again');
+        setState(await fetchLiveGuests());
+        return;
+      }
+      setState(next);
+    } catch {
+      setErr('Accept failed — check connection');
+      setState(await fetchLiveGuests());
     } finally {
       setBusy(null);
     }
@@ -54,8 +82,12 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
 
   const onDeny = async (id: string) => {
     setBusy(id);
+    setErr(null);
+    setState((prev) => ({ ...prev, pending: prev.pending.filter((x) => x.id !== id) }));
     try {
-      setState(await denyGuest(id));
+      const next = await denyGuest(id);
+      if (next.ok) setState(next);
+      else setState(await fetchLiveGuests());
     } finally {
       setBusy(null);
     }
@@ -63,12 +95,15 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
 
   const onKick = async (g: LiveGuestActive) => {
     setBusy(g.id);
+    setErr(null);
     try {
       if (g.slot) {
         stopSlotFramePublish(String(g.slot));
         stopSlotAudioPublish(String(g.slot));
       }
-      setState(await kickGuest(g.id));
+      const next = await kickGuest(g.id);
+      if (next.ok) setState(next);
+      else setState(await fetchLiveGuests());
     } finally {
       setBusy(null);
     }
@@ -80,6 +115,15 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
       style={{ zIndex: 80 }}
       onClick={(e) => e.stopPropagation()}
     >
+      {err ? (
+        <div className="mb-2 rounded-xl border border-red-400/40 bg-red-500/20 px-3 py-2 mono text-[11px] font-bold text-red-100">
+          {err}
+          <button type="button" className="ml-2 underline" onClick={() => setErr(null)}>
+            dismiss
+          </button>
+        </div>
+      ) : null}
+
       {state.pending.length > 0 ? (
         <div className="space-y-2 mb-2">
           {state.pending.slice(0, 4).map((p) => (
@@ -100,7 +144,7 @@ export default function LiveHostJoinInbox({ active = true, className = '' }: Pro
                 className="h-9 px-3.5 rounded-full bg-[#8FFF4A] text-black font-bold text-[12px] disabled:opacity-50"
                 onClick={() => void onApprove(p)}
               >
-                Accept
+                {busy === p.id ? '…' : 'Accept'}
               </button>
               <button
                 type="button"

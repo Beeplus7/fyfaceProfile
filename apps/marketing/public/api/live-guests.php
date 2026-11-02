@@ -17,7 +17,7 @@ $dir = '/var/lib/myface';
 $file = $dir . '/live-guests.json';
 $MAX_GUESTS = 3;
 $SLOTS = array('g1', 'g2', 'g3');
-$GUEST_STALE_MS = 45000;   // active guest heartbeat window
+$GUEST_STALE_MS = 120000;  // active guest heartbeat window (was 45s — Safari/background tabs prune too aggressively)
 $PENDING_TTL_MS = 300000;  // pending join request lives 5 minutes
 
 function empty_state() {
@@ -125,11 +125,14 @@ function prune_stale($state, $guestStaleMs, $pendingTtlMs) {
  */
 function locked_load($file, $dir) {
   if (!is_dir($dir)) { @mkdir($dir, 0775, true); }
-  $fh = fopen($file, 'c+');
+  $fh = @fopen($file, 'c+');
   if ($fh === false) {
     return array(null, empty_state());
   }
-  flock($fh, LOCK_EX);
+  if (!flock($fh, LOCK_EX)) {
+    fclose($fh);
+    return array(null, empty_state());
+  }
   rewind($fh);
   $raw = stream_get_contents($fh);
   $data = ($raw !== false && $raw !== '') ? json_decode($raw, true) : null;
@@ -137,16 +140,24 @@ function locked_load($file, $dir) {
 }
 
 function locked_save($fh, $state) {
-  if (!$fh) return $state;
+  if (!$fh) return false;
   $state['updatedAt'] = gmdate('c');
   $json = json_encode($state);
+  if ($json === false) $json = '{"pending":[],"guests":[],"updatedAt":"' . gmdate('c') . '"}';
   ftruncate($fh, 0);
   rewind($fh);
-  fwrite($fh, $json !== false ? $json : '{"pending":[],"guests":[]}');
+  $n = fwrite($fh, $json);
   fflush($fh);
   flock($fh, LOCK_UN);
   fclose($fh);
-  return $state;
+  return $n !== false;
+}
+
+function fail_storage($fh = null) {
+  if ($fh) locked_release($fh);
+  http_response_code(500);
+  echo json_encode(['error' => 'storage', 'pending' => [], 'guests' => []]);
+  exit;
 }
 
 function locked_release($fh) {
@@ -158,9 +169,10 @@ function locked_release($fh) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   global $GUEST_STALE_MS, $PENDING_TTL_MS, $file, $dir;
   list($fh, $state) = locked_load($file, $dir);
+  if (!$fh) { fail_storage(null); }
   list($state, $changed) = prune_stale($state, $GUEST_STALE_MS, $PENDING_TTL_MS);
   if ($changed) {
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
   } else {
     locked_release($fh);
   }
@@ -176,12 +188,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $action = isset($data['action']) ? (string)$data['action'] : '';
   list($fh, $state) = locked_load($file, $dir);
+  if (!$fh) { fail_storage(null); }
   list($state, $_changed) = prune_stale($state, $GUEST_STALE_MS, $PENDING_TTL_MS);
 
   if ($action === 'clear' || $action === 'reset') {
     clear_all_guest_frames();
     $state = empty_state();
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -199,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($state['guests'] as $g) {
       if (($g['id'] ?? '') === $id) {
-        locked_save($fh, $state);
+        if (!locked_save($fh, $state)) fail_storage(null);
         echo json_encode($state);
         exit;
       }
@@ -219,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$found) {
       if (count($state['guests']) >= $MAX_GUESTS) {
-        locked_save($fh, $state);
+        if (!locked_save($fh, $state)) fail_storage(null);
         http_response_code(409);
         echo json_encode(['error' => 'full', 'pending' => $state['pending'], 'guests' => $state['guests'], 'updatedAt' => $state['updatedAt']]);
         exit;
@@ -231,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'ts' => now_ms(),
       );
     }
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -241,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $state['pending'] = array_values(array_filter($state['pending'], function ($p) use ($id) {
       return ($p['id'] ?? '') !== $id;
     }));
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -255,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       exit;
     }
     if (count($state['guests']) >= $MAX_GUESTS) {
-      locked_save($fh, $state);
+      if (!locked_save($fh, $state)) fail_storage(null);
       http_response_code(409);
       echo json_encode(['error' => 'full', 'pending' => $state['pending'], 'guests' => $state['guests'], 'updatedAt' => $state['updatedAt']]);
       exit;
@@ -276,14 +289,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($state['guests'] as $g) {
       if (($g['id'] ?? '') === $id) {
         $state['pending'] = $rest;
-        locked_save($fh, $state);
+        if (!locked_save($fh, $state)) fail_storage(null);
         echo json_encode($state);
         exit;
       }
     }
     $slot = find_free_slot($state['guests'], $SLOTS);
     if (!$slot) {
-      locked_save($fh, $state);
+      if (!locked_save($fh, $state)) fail_storage(null);
       http_response_code(409);
       echo json_encode(['error' => 'full', 'pending' => $state['pending'], 'guests' => $state['guests'], 'updatedAt' => $state['updatedAt']]);
       exit;
@@ -297,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       'joinedAt' => gmdate('c'),
       'heartbeat' => now_ms(),
     );
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -307,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $state['pending'] = array_values(array_filter($state['pending'], function ($p) use ($id) {
       return ($p['id'] ?? '') !== $id;
     }));
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -326,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $state['pending'] = array_values(array_filter($state['pending'], function ($p) use ($id) {
       return ($p['id'] ?? '') !== $id;
     }));
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }
@@ -356,12 +369,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       unset($p);
     }
     if (!$found) {
-      locked_save($fh, $state);
+      if (!locked_save($fh, $state)) fail_storage(null);
       http_response_code(404);
       echo json_encode(['error' => 'not-guest', 'pending' => $state['pending'], 'guests' => $state['guests'], 'updatedAt' => $state['updatedAt']]);
       exit;
     }
-    locked_save($fh, $state);
+    if (!locked_save($fh, $state)) fail_storage(null);
     echo json_encode($state);
     exit;
   }

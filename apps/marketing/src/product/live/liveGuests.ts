@@ -28,8 +28,25 @@ export type LiveGuestsState = {
   guests: LiveGuestActive[];
 };
 
+export type LiveGuestsResult = LiveGuestsState & {
+  ok: boolean;
+  error?: string;
+};
+
 function emptyState(): LiveGuestsState {
   return { pending: [], guests: [] };
+}
+
+/** Last good roster — never wipe UI to empty on a failed fetch/post. */
+let lastGood: LiveGuestsState = emptyState();
+
+function remember(state: LiveGuestsState): LiveGuestsState {
+  lastGood = {
+    updatedAt: state.updatedAt,
+    pending: Array.isArray(state.pending) ? state.pending : [],
+    guests: Array.isArray(state.guests) ? state.guests : [],
+  };
+  return lastGood;
 }
 
 export function getOrCreateGuestIdentity(): { id: string; name: string; avatar: string } {
@@ -75,15 +92,15 @@ export function setGuestDisplayName(name: string) {
 export async function fetchLiveGuests(): Promise<LiveGuestsState> {
   try {
     const res = await fetch(GUESTS_URL, { cache: 'no-store' });
-    if (!res.ok) return emptyState();
+    if (!res.ok) return lastGood;
     const data = (await res.json()) as LiveGuestsState;
-    return {
+    return remember({
       updatedAt: data.updatedAt,
       pending: Array.isArray(data.pending) ? data.pending : [],
       guests: Array.isArray(data.guests) ? data.guests : [],
-    };
+    });
   } catch {
-    return emptyState();
+    return lastGood;
   }
 }
 
@@ -97,7 +114,7 @@ function normalizeState(data: Partial<LiveGuestsState> | null | undefined): Live
   };
 }
 
-async function postAction(body: Record<string, unknown>): Promise<LiveGuestsState> {
+async function postAction(body: Record<string, unknown>): Promise<LiveGuestsResult> {
   try {
     const res = await fetch(GUESTS_URL, {
       method: 'POST',
@@ -108,13 +125,39 @@ async function postAction(body: Record<string, unknown>): Promise<LiveGuestsStat
     const data = (await res.json().catch(() => null)) as
       | (LiveGuestsState & { state?: LiveGuestsState; error?: string })
       | null;
+
     const direct = normalizeState(data);
-    if (direct) return direct;
     const nested = normalizeState(data?.state);
-    if (nested) return nested;
-    return fetchLiveGuests();
-  } catch {
-    return emptyState();
+    const state = direct || nested;
+
+    if (state) {
+      remember(state);
+      if (!res.ok) {
+        return {
+          ...state,
+          ok: false,
+          error: data?.error || `http-${res.status}`,
+        };
+      }
+      return { ...state, ok: true };
+    }
+
+    if (!res.ok) {
+      return {
+        ...lastGood,
+        ok: false,
+        error: data?.error || `http-${res.status}`,
+      };
+    }
+
+    const refreshed = await fetchLiveGuests();
+    return { ...refreshed, ok: true };
+  } catch (e) {
+    return {
+      ...lastGood,
+      ok: false,
+      error: e instanceof Error ? e.message : 'network',
+    };
   }
 }
 

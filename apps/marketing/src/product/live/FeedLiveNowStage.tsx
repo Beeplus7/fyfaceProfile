@@ -34,6 +34,9 @@ import {
 import { liveGuestVideoConstraints, liveMicConstraints } from './liveQuality';
 import { fetchLiveChat, sendLiveChat, type LiveChatMessage } from './liveChat';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
+import LiveGiftOverlay from './LiveGiftOverlay';
+import LiveGiftShop from './LiveGiftShop';
+import type { LiveGift } from './liveGifts';
 
 type Props = {
   title: string;
@@ -166,11 +169,16 @@ export default function FeedLiveNowStage({
   const [liveMusic, setLiveMusic] = useState<LiveMusicPayload | null>(null);
   const [guestState, setGuestState] = useState<LiveGuestsState>({ pending: [], guests: [] });
   const [joinBusy, setJoinBusy] = useState(false);
+  const [joinError, setJoinError] = useState<string | null>(null);
   const [guestCamError, setGuestCamError] = useState<string | null>(null);
   const [guestStreamTick, setGuestStreamTick] = useState(0);
+  /** Set on Request tap so we can auto-open cam after Accept (user-gesture chain). */
+  const mayAutoJoinRef = useRef(false);
+  const prevGuestSlotRef = useRef<string | null>(null);
   const [chat, setChat] = useState<LiveChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [viewerCount, setViewerCount] = useState(viewers);
+  const [giftShopOpen, setGiftShopOpen] = useState(false);
   const audioViewer = useRef<ReturnType<typeof createLiveAudioViewer> | null>(null);
   const guestAudioViewers = useRef<Map<string, ReturnType<typeof createSlotAudioViewer>>>(new Map());
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -187,7 +195,7 @@ export default function FeedLiveNowStage({
     }
   }, [videoMode, isHost, startCamera]);
 
-  // Guest roster poll (host + viewers)
+  // Guest roster poll (host + viewers) — faster while waiting / in split
   useEffect(() => {
     let cancelled = false;
     const tick = async () => {
@@ -195,12 +203,13 @@ export default function FeedLiveNowStage({
       if (!cancelled) setGuestState(next);
     };
     void tick();
-    const id = window.setInterval(() => void tick(), 900);
+    const ms = amPending || amGuest || multi ? 600 : 900;
+    const id = window.setInterval(() => void tick(), ms);
     return () => {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, []);
+  }, [amPending, amGuest, multi]);
 
   // Shared live chat poll
   useEffect(() => {
@@ -267,11 +276,21 @@ export default function FeedLiveNowStage({
   useEffect(() => {
     if (isHost) return;
     if (!amPending && !myRole.guest?.slot) return;
-    void heartbeatGuest(identity.id, identity.name);
-    const hb = window.setInterval(() => {
+    const beat = () => {
       void heartbeatGuest(identity.id, identity.name);
-    }, 2500);
-    return () => window.clearInterval(hb);
+    };
+    beat();
+    const hb = window.setInterval(beat, 2000);
+    const onVis = () => {
+      if (document.visibilityState === 'visible') beat();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    window.addEventListener('pageshow', beat);
+    return () => {
+      window.clearInterval(hb);
+      document.removeEventListener('visibilitychange', onVis);
+      window.removeEventListener('pageshow', beat);
+    };
   }, [isHost, amPending, myRole.guest?.slot, myRole.guest?.id, identity.id, identity.name]);
 
   // Tear down guest AV only when leaving the slot (not on every render)
@@ -308,9 +327,10 @@ export default function FeedLiveNowStage({
     }
     if (!wantAudio) return;
 
+    const guestCount = guestState.guests.length;
     for (const slot of slots) {
       if (guestAudioViewers.current.has(slot)) continue;
-      const viewer = createSlotAudioViewer(slot);
+      const viewer = createSlotAudioViewer(slot, guestCount);
       guestAudioViewers.current.set(slot, viewer);
       viewer.unlock();
       viewer.setMuted(!soundOn);
@@ -414,6 +434,29 @@ export default function FeedLiveNowStage({
 
   const chatWho = isHost ? makerName || 'Host' : identity.name;
 
+  const onGiftSent = (gift: LiveGift) => {
+    const line = `sent ${gift.emoji} ${gift.name}`;
+    void sendLiveChat(chatWho, line).then((s) => {
+      if (s.messages.length) setChat(s.messages);
+    });
+    setChat((prev) => [
+      ...prev.slice(-40),
+      { id: `gift_${Date.now()}`, who: chatWho, text: line, ts: Date.now() },
+    ]);
+  };
+
+  const giftLayer = (
+    <>
+      <LiveGiftOverlay />
+      <LiveGiftShop
+        open={giftShopOpen}
+        onClose={() => setGiftShopOpen(false)}
+        fromName={chatWho}
+        onSent={onGiftSent}
+      />
+    </>
+  );
+
   const sendChat = () => {
     const text = draft.trim();
     if (!text) return;
@@ -440,10 +483,14 @@ export default function FeedLiveNowStage({
     setWatching(true);
     try {
       let stream: MediaStream | null = null;
+      const multiMic = liveMicConstraints({ multiGuest: true });
+      // Prefer mic+cam together; only drop audio as last resorts
       const attempts: MediaStreamConstraints[] = [
-        { video: liveGuestVideoConstraints(), audio: liveMicConstraints() },
+        { video: liveGuestVideoConstraints(), audio: multiMic },
         { video: liveGuestVideoConstraints(), audio: true },
+        { video: { facingMode: { ideal: 'user' }, width: { ideal: 640 }, height: { ideal: 960 } }, audio: multiMic },
         { video: { facingMode: 'user' }, audio: true },
+        { video: true, audio: true },
         { video: { facingMode: 'user' }, audio: false },
         { video: true, audio: false },
       ];
@@ -471,10 +518,16 @@ export default function FeedLiveNowStage({
         void guestCamRef.current.play().catch(() => undefined);
       }
       startSlotFramePublish(slot, stream, guestCamRef.current);
-      void startSlotAudioPublish(slot, stream);
+      const audioOk = await startSlotAudioPublish(slot, stream, {
+        guestCount: Math.max(1, guestState.guests.length),
+      });
+      if (!audioOk) {
+        setGuestCamError('Camera on · mic failed — tap again to retry mic');
+      }
       setGuestStreamTick((t) => t + 1);
       void heartbeatGuest(identity.id, identity.name);
       void sendLiveChat('System', `${identity.name} joined the live`).then((s) => setChat(s.messages));
+      mayAutoJoinRef.current = false;
     } catch (err) {
       const name = err instanceof DOMException ? err.name : 'Error';
       setGuestCamError(`Camera failed (${name}). Tap to retry.`);
@@ -483,11 +536,49 @@ export default function FeedLiveNowStage({
     }
   };
 
+  // After Accept: auto-prompt camera if user recently tapped Request (gesture-friendly)
+  useEffect(() => {
+    const slot = myRole.guest?.slot ? String(myRole.guest.slot) : null;
+    const prev = prevGuestSlotRef.current;
+    prevGuestSlotRef.current = slot;
+    if (!slot || slot === prev) return;
+    if (guestStreamRef.current) return;
+    if (!mayAutoJoinRef.current) return;
+    void enableGuestCamera();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on slot grant
+  }, [myRole.guest?.slot]);
+
   const onRequestJoin = async () => {
     setJoinBusy(true);
+    setJoinError(null);
+    mayAutoJoinRef.current = true;
     try {
       if (!watching) startWatching();
+      // Optimistic pending so UI doesn't flash empty on slow network
+      setGuestState((prev) => {
+        if (prev.pending.some((p) => p.id === identity.id) || prev.guests.some((g) => g.id === identity.id)) {
+          return prev;
+        }
+        return {
+          ...prev,
+          pending: [
+            ...prev.pending,
+            { id: identity.id, name: identity.name, avatar: identity.avatar, ts: Date.now() },
+          ],
+        };
+      });
       const next = await requestJoinLive(identity);
+      if (!next.ok) {
+        setJoinError(
+          next.error === 'full'
+            ? 'Live is full — try again later'
+            : next.error === 'storage'
+              ? 'Join server busy — tap Request again'
+              : `Join failed (${next.error || 'network'}) — tap again`,
+        );
+        setGuestState(await fetchLiveGuests());
+        return;
+      }
       setGuestState(next);
       void sendLiveChat(identity.name, 'requested to join live ✋').then((s) => setChat(s.messages));
     } finally {
@@ -497,9 +588,12 @@ export default function FeedLiveNowStage({
 
   const onCancelJoin = async () => {
     setJoinBusy(true);
+    setJoinError(null);
+    mayAutoJoinRef.current = false;
     try {
       const next = await cancelJoinRequest(identity.id);
-      setGuestState(next);
+      if (next.ok) setGuestState(next);
+      else setGuestState(await fetchLiveGuests());
     } finally {
       setJoinBusy(false);
     }
@@ -507,6 +601,7 @@ export default function FeedLiveNowStage({
 
   const onLeaveGuest = async () => {
     setJoinBusy(true);
+    mayAutoJoinRef.current = false;
     try {
       if (myRole.guest?.slot) {
         const slot = String(myRole.guest.slot);
@@ -516,7 +611,8 @@ export default function FeedLiveNowStage({
       guestStreamRef.current?.getTracks().forEach((t) => t.stop());
       guestStreamRef.current = null;
       const next = await leaveGuestLive(identity.id);
-      setGuestState(next);
+      if (next.ok) setGuestState(next);
+      else setGuestState(await fetchLiveGuests());
     } finally {
       setJoinBusy(false);
     }
@@ -787,7 +883,23 @@ export default function FeedLiveNowStage({
         >
           <LiveHostJoinInbox active />
         </div>
+        <div
+          className="absolute right-3 z-[43] pointer-events-auto"
+          style={{ bottom: 'calc(100px + 28svh)' }}
+        >
+          <button
+            type="button"
+            className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
+            onClick={(e) => {
+              e.stopPropagation();
+              setGiftShopOpen(true);
+            }}
+          >
+            🎁 Gift
+          </button>
+        </div>
         {chatComposer}
+        {giftLayer}
       </div>
     );
   }
@@ -1002,6 +1114,11 @@ export default function FeedLiveNowStage({
           >
             {guestState.guests.length >= 3 ? 'Live full' : amPending ? 'Waiting for host…' : 'Request to join'}
           </button>
+          {joinError ? (
+            <div className="mt-2 max-w-xs rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
+              {joinError}
+            </div>
+          ) : null}
           <Link
             to="/app/maker/ayo"
             className="mt-3 mono text-[11px] text-[#8FFF4A] font-bold"
@@ -1042,6 +1159,11 @@ export default function FeedLiveNowStage({
             style={{ bottom: guestNeedsCam ? 'calc(100px + 42svh)' : 'calc(100px + 28svh)' }}
             onClick={(e) => e.stopPropagation()}
           >
+            {joinError ? (
+              <div className="w-full rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
+                {joinError}
+              </div>
+            ) : null}
             {!amGuest && !amPending ? (
               <button
                 type="button"
@@ -1083,17 +1205,16 @@ export default function FeedLiveNowStage({
             ) : null}
             <button
               type="button"
-              className="h-10 px-3 rounded-full bg-[#FFE600] text-black font-bold text-[12px]"
-              onClick={() => {
-                void sendLiveChat(chatWho, 'sent Crown 👑').then((s) => setChat(s.messages));
-              }}
+              className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
+              onClick={() => setGiftShopOpen(true)}
             >
-              Gift
+              🎁 Gift
             </button>
           </div>
           {chatComposer}
         </>
       )}
+      {giftLayer}
     </div>
   );
 }

@@ -1,56 +1,27 @@
 /**
- * Guest-slot WAV audio publish + viewer (parallel to host /api/live-audio).
+ * Guest-slot WAV audio publish + gapless viewer (parallel to host /api/live-audio).
+ * Group polish: short pending queue, NS mic, longer chunks, checked POSTs.
  */
 
-import { liveAudioChunkSec, liveAudioTargetRate, liveMicConstraints } from './liveQuality';
+import {
+  liveAudioChunkSec,
+  liveAudioPollMs,
+  liveAudioTargetRate,
+  liveMicConstraints,
+} from './liveQuality';
+import {
+  createGaplessWavViewer,
+  downsamplePcm,
+  encodeWav,
+  softNormalize,
+} from './livePcmAudio';
 
 const AUDIO_URL = '/api/live-audio';
+const MAX_PENDING = 3;
 
 function slotUrl(slot: string, qs = '') {
   const s = encodeURIComponent(slot);
   return qs ? `${AUDIO_URL}?slot=${s}&${qs}` : `${AUDIO_URL}?slot=${s}`;
-}
-
-function encodeWav(samples: Float32Array, sampleRate: number): Blob {
-  const buffer = new ArrayBuffer(44 + samples.length * 2);
-  const view = new DataView(buffer);
-  const write = (o: number, str: string) => {
-    for (let i = 0; i < str.length; i++) view.setUint8(o + i, str.charCodeAt(i));
-  };
-  write(0, 'RIFF');
-  view.setUint32(4, 36 + samples.length * 2, true);
-  write(8, 'WAVE');
-  write(12, 'fmt ');
-  view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);
-  view.setUint16(22, 1, true);
-  view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * 2, true);
-  view.setUint16(32, 2, true);
-  view.setUint16(34, 16, true);
-  write(36, 'data');
-  view.setUint32(40, samples.length * 2, true);
-  let offset = 44;
-  for (let i = 0; i < samples.length; i++) {
-    const s = Math.max(-1, Math.min(1, samples[i]!));
-    view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-    offset += 2;
-  }
-  return new Blob([buffer], { type: 'audio/wav' });
-}
-
-function softNormalize(samples: Float32Array): Float32Array {
-  let peak = 0;
-  for (let i = 0; i < samples.length; i++) peak = Math.max(peak, Math.abs(samples[i]!));
-  if (peak < 0.0008) return samples;
-  const gain = Math.min(4.2, 0.75 / peak);
-  if (gain <= 1.02) return samples;
-  const out = new Float32Array(samples.length);
-  for (let i = 0; i < samples.length; i++) {
-    const v = samples[i]! * gain;
-    out[i] = v > 0.95 ? 0.95 : v < -0.95 ? -0.95 : v;
-  }
-  return out;
 }
 
 type SlotAudioPub = {
@@ -62,8 +33,13 @@ type SlotAudioPub = {
   ownMic: boolean;
   seq: number;
   inFlight: boolean;
+  /** Queue up to MAX_PENDING so multi-guest load doesn't drop every other chunk */
+  pendingQueue: Blob[];
   pcm: Float32Array[];
   pcmSamples: number;
+  lastOkAt: number;
+  lastErr: string | null;
+  guestCount: number;
 };
 
 const pubs = new Map<string, SlotAudioPub>();
@@ -80,8 +56,12 @@ function ensure(slot: string): SlotAudioPub {
       ownMic: false,
       seq: 0,
       inFlight: false,
+      pendingQueue: [],
       pcm: [],
       pcmSamples: 0,
+      lastOkAt: 0,
+      lastErr: null,
+      guestCount: 1,
     };
     pubs.set(slot, p);
   }
@@ -89,11 +69,16 @@ function ensure(slot: string): SlotAudioPub {
 }
 
 async function postWav(p: SlotAudioPub, blob: Blob) {
-  if (!p.publishing || blob.size < 100 || p.inFlight) return;
+  if (!p.publishing || blob.size < 100) return;
+  if (p.inFlight) {
+    p.pendingQueue.push(blob);
+    while (p.pendingQueue.length > MAX_PENDING) p.pendingQueue.shift();
+    return;
+  }
   p.inFlight = true;
   p.seq += 1;
   try {
-    await fetch(slotUrl(p.slot), {
+    const res = await fetch(slotUrl(p.slot), {
       method: 'POST',
       body: blob,
       headers: {
@@ -103,10 +88,20 @@ async function postWav(p: SlotAudioPub, blob: Blob) {
       },
       cache: 'no-store',
     });
-  } catch {
-    /* ignore */
+    if (!res.ok) {
+      p.lastErr = `http-${res.status}`;
+    } else {
+      p.lastOkAt = Date.now();
+      p.lastErr = null;
+    }
+  } catch (e) {
+    p.lastErr = e instanceof Error ? e.message : 'push-fail';
   } finally {
     p.inFlight = false;
+    if (p.pendingQueue.length && p.publishing) {
+      const next = p.pendingQueue.shift()!;
+      void postWav(p, next);
+    }
   }
 }
 
@@ -128,20 +123,27 @@ function teardown(p: SlotAudioPub) {
   p.ownMic = false;
   p.pcm = [];
   p.pcmSamples = 0;
+  p.pendingQueue = [];
 }
 
 /** Publish guest mic (from existing stream or fresh getUserMedia) to a slot. */
-export async function startSlotAudioPublish(slot: string, stream?: MediaStream | null) {
+export async function startSlotAudioPublish(
+  slot: string,
+  stream?: MediaStream | null,
+  opts?: { guestCount?: number },
+) {
   stopSlotAudioPublish(slot);
   const p = ensure(slot);
   p.publishing = true;
   p.seq = 0;
+  p.guestCount = Math.max(1, opts?.guestCount ?? 1);
+  p.lastErr = null;
 
   let mic = stream?.getAudioTracks().some((t) => t.readyState === 'live') ? stream! : null;
   if (!mic) {
     try {
       mic = await navigator.mediaDevices.getUserMedia({
-        audio: liveMicConstraints(),
+        audio: liveMicConstraints({ multiGuest: true }),
         video: false,
       });
       p.ownMic = true;
@@ -168,12 +170,14 @@ export async function startSlotAudioPublish(slot: string, stream?: MediaStream |
   if (p.ctx.state === 'suspended') void p.ctx.resume();
 
   const target = liveAudioTargetRate();
-  const chunkSec = liveAudioChunkSec();
+  const chunkSec = liveAudioChunkSec(p.guestCount);
   const need = Math.max(1, Math.floor(target * chunkSec));
   const rate = p.ctx.sampleRate || target;
+  let lastOutRate = target;
   const src = p.ctx.createMediaStreamSource(new MediaStream(tracks));
   const bus = p.ctx.createGain();
-  bus.gain.value = 1.15;
+  // Slight boost so guest voice sits with host after softNormalize
+  bus.gain.value = 1.12;
   const silent = p.ctx.createGain();
   silent.gain.value = 0;
   const processor = p.ctx.createScriptProcessor(4096, 1, 1);
@@ -181,28 +185,22 @@ export async function startSlotAudioPublish(slot: string, stream?: MediaStream |
 
   processor.onaudioprocess = (ev) => {
     if (!p.publishing) return;
+    if (p.ctx?.state === 'suspended') void p.ctx.resume();
     const input = ev.inputBuffer.getChannelData(0);
-    const step = Math.max(1, Math.round(rate / target));
-    const outRate = Math.round(rate / step);
-    const reduced = new Float32Array(Math.ceil(input.length / step));
-    for (let i = 0, j = 0; i < input.length; i += step, j++) reduced[j] = input[i]!;
+    const { samples: reduced, outRate } = downsamplePcm(input, rate, target);
+    lastOutRate = outRate;
     p.pcm.push(reduced);
     p.pcmSamples += reduced.length;
     if (p.pcmSamples >= need) {
-      const merged = softNormalize(
-        (() => {
-          const out = new Float32Array(p.pcmSamples);
-          let o = 0;
-          for (const c of p.pcm) {
-            out.set(c, o);
-            o += c.length;
-          }
-          return out;
-        })(),
-      );
+      const out = new Float32Array(p.pcmSamples);
+      let o = 0;
+      for (const c of p.pcm) {
+        out.set(c, o);
+        o += c.length;
+      }
       p.pcm = [];
       p.pcmSamples = 0;
-      void postWav(p, encodeWav(merged, outRate));
+      void postWav(p, encodeWav(softNormalize(out), lastOutRate));
     }
   };
 
@@ -226,84 +224,18 @@ export function stopAllSlotAudioPublish() {
   for (const slot of [...pubs.keys()]) stopSlotAudioPublish(slot);
 }
 
-/** Viewer for one guest audio slot. */
-export function createSlotAudioViewer(slot: string) {
-  let stopped = false;
-  let lastSeq = 0;
-  let timer: number | null = null;
-  let current: HTMLAudioElement | null = null;
-  let unlocked = false;
-  let muted = false;
+export function slotAudioPublishStats(slot: string) {
+  const p = pubs.get(slot);
+  if (!p) return null;
+  return { lastOkAt: p.lastOkAt, lastErr: p.lastErr, publishing: p.publishing };
+}
 
-  const unlock = () => {
-    unlocked = true;
-  };
-
-  const tick = async () => {
-    if (stopped || !unlocked || muted) return;
-    try {
-      const metaRes = await fetch(slotUrl(slot, 'meta=1'), { cache: 'no-store' });
-      if (!metaRes.ok) return;
-      const meta = (await metaRes.json()) as { live?: boolean; seq?: number };
-      if (!meta.live || !meta.seq || meta.seq === lastSeq) return;
-      lastSeq = meta.seq;
-      const res = await fetch(slotUrl(slot, `t=${meta.seq}`), { cache: 'no-store' });
-      if (!res.ok) return;
-      const blob = await res.blob();
-      if (blob.size < 100) return;
-      const obj = URL.createObjectURL(blob);
-      const el = new Audio();
-      el.setAttribute('playsinline', 'true');
-      el.src = obj;
-      el.volume = muted ? 0 : 0.95;
-      el.onended = () => URL.revokeObjectURL(obj);
-      el.onerror = () => URL.revokeObjectURL(obj);
-      try {
-        await el.play();
-        if (current) {
-          try {
-            current.pause();
-            if (current.src.startsWith('blob:')) URL.revokeObjectURL(current.src);
-          } catch {
-            /* ignore */
-          }
-        }
-        current = el;
-      } catch {
-        URL.revokeObjectURL(obj);
-      }
-    } catch {
-      /* ignore */
-    }
-  };
-
-  return {
-    unlock,
-    setMuted(next: boolean) {
-      muted = next;
-      if (current) current.volume = muted ? 0 : 0.95;
-    },
-    start() {
-      stopped = false;
-      if (timer) window.clearInterval(timer);
-      void tick();
-      timer = window.setInterval(() => void tick(), 260);
-    },
-    stop() {
-      stopped = true;
-      if (timer) {
-        window.clearInterval(timer);
-        timer = null;
-      }
-      if (current) {
-        try {
-          current.pause();
-          if (current.src.startsWith('blob:')) URL.revokeObjectURL(current.src);
-        } catch {
-          /* ignore */
-        }
-        current = null;
-      }
-    },
-  };
+/** Viewer for one guest audio slot — gapless Web Audio scheduling. */
+export function createSlotAudioViewer(slot: string, guestCount = 1) {
+  return createGaplessWavViewer({
+    metaUrl: slotUrl(slot, 'meta=1'),
+    audioUrl: (seq) => slotUrl(slot, `t=${seq}`),
+    pollMs: liveAudioPollMs(guestCount),
+    volume: 1,
+  });
 }

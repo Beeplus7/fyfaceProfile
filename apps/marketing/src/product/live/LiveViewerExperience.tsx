@@ -28,6 +28,8 @@ import { startSessionRecording, stopSessionRecording, takePendingRecordingBlob }
 import { sharedStreamIsLive } from './liveCameraBus';
 import { useLiveCamera } from './useLiveCamera';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
+import LiveGiftOverlay from './LiveGiftOverlay';
+import LiveGiftShop from './LiveGiftShop';
 
 const LIVE_SRC = '/live/session-viewer.html';
 
@@ -60,6 +62,7 @@ export default function LiveViewerExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [goLiveOpen, setGoLiveOpen] = useState(false);
   const [showTheater, setShowTheater] = useState(false);
+  const [giftShopOpen, setGiftShopOpen] = useState(false);
   const [tick, setTick] = useState(0);
   const [endSheet, setEndSheet] = useState<BroadcastState | null>(null);
   const [savedRecId, setSavedRecId] = useState<string | null>(null);
@@ -419,10 +422,17 @@ export default function LiveViewerExperience() {
                   </Link>
                   <button
                     type="button"
+                    className="h-10 px-4 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
+                    onClick={() => setGiftShopOpen(true)}
+                  >
+                    🎁 Gift
+                  </button>
+                  <button
+                    type="button"
                     className="h-10 px-4 rounded-full border border-white/20 bg-black/50 font-semibold text-[12px]"
                     onClick={() => setShowTheater((v) => !v)}
                   >
-                    {showTheater ? 'Hide gifts' : 'Gift rain'}
+                    {showTheater ? 'Hide theater' : 'Gift theater'}
                   </button>
                 </div>
               </div>
@@ -548,6 +558,13 @@ export default function LiveViewerExperience() {
                     Enable camera
                   </button>
                 )}
+                <button
+                  type="button"
+                  className="h-9 px-3 rounded-xl bg-[#FE2C55] text-white text-[12px] font-bold shadow-[0_2px_12px_rgba(254,44,85,0.4)]"
+                  onClick={() => setGiftShopOpen(true)}
+                >
+                  🎁 Gift
+                </button>
                 <button type="button" className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold" onClick={() => setShowTheater((v) => !v)}>
                   {showTheater ? 'Hide theater' : 'Gift theater'}
                 </button>
@@ -702,6 +719,13 @@ export default function LiveViewerExperience() {
         onSave={save}
         contextLabel="live session"
         allowUpload
+      />
+
+      <LiveGiftOverlay />
+      <LiveGiftShop
+        open={giftShopOpen}
+        onClose={() => setGiftShopOpen(false)}
+        fromName={localHost ? 'Host' : 'Viewer'}
       />
 
       <GoLivePicker

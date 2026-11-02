@@ -76,7 +76,7 @@ if ($method === 'GET') {
     $m = json_decode((string) file_get_contents($meta), true);
     $age = isset($m['ts']) ? ((int) round(microtime(true) * 1000) - (int) $m['ts']) : 999999;
     echo json_encode([
-      'live' => is_file($file) && $age < 4000,
+      'live' => is_file($file) && $age < 6000,
       'ageMs' => $age,
       'seq' => $m['seq'] ?? null,
       'mime' => $m['mime'] ?? 'audio/wav',
@@ -95,7 +95,7 @@ if ($method === 'GET') {
   }
   $m = json_decode((string) file_get_contents($meta), true);
   $age = isset($m['ts']) ? ((int) round(microtime(true) * 1000) - (int) $m['ts']) : 0;
-  if ($age > 5000) {
+  if ($age > 7000) {
     http_response_code(404);
     header('Content-Type: application/json');
     echo json_encode(['error' => 'stale', 'ageMs' => $age, 'slot' => $slotKey]);
