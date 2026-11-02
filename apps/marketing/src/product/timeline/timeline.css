@@ -4,9 +4,11 @@
   --glow: 0 0 32px rgba(143, 255, 74, 0.22), 0 0 64px rgba(26, 124, 255, 0.14);
   --feed-chrome-h: 72px;
   overflow: hidden;
-  /* One height source — avoid dvh+svh thrash that resizes mid-scroll */
-  height: 100%;
-  max-height: 100dvh;
+  /* Must be viewport-sized — height:100% collapses when parent (#root) has no explicit height */
+  height: 100dvh;
+  height: 100svh;
+  min-height: 100dvh;
+  min-height: 100svh;
 }
 
 .snap-y-mandatory,
@@ -53,10 +55,10 @@
   Never use 100svh/100dvh here — browser chrome leaves you hung mid-card.
 */
 .timeline-root .feed-card {
-  flex: 0 0 var(--feed-card-h, 100%);
-  height: var(--feed-card-h, 100%);
-  min-height: var(--feed-card-h, 100%);
-  max-height: var(--feed-card-h, 100%);
+  flex: 0 0 var(--feed-card-h, 100svh);
+  height: var(--feed-card-h, 100svh);
+  min-height: var(--feed-card-h, 100svh);
+  max-height: var(--feed-card-h, 100svh);
   width: 100%;
   box-sizing: border-box;
   scroll-snap-align: start;
