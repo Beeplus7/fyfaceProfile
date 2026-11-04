@@ -6,8 +6,9 @@ import { switchStreamCamera, useLiveCamera } from './useLiveCamera';
 import { getSharedLiveStream, sharedStreamIsLive } from './liveCameraBus';
 import { liveFrameSrc, remoteFrameIsLive } from './liveFrameRelay';
 import { createLiveAudioViewer } from './liveAudioRelay';
-import { getLiveMediaElement, isLiveMediaSourceActive } from './liveMediaSource';
+import { getLiveMediaElement, isLiveMediaSourceActive, stopLiveMediaSource } from './liveMediaSource';
 import { fetchRemoteLive, type LiveMusicPayload } from './liveRemote';
+import { stopSessionRecording } from './liveSessionRecorder';
 import {
   cancelJoinRequest,
   fetchLiveGuests,
@@ -34,7 +35,7 @@ import {
 import { liveGuestVideoConstraints, liveMicConstraints } from './liveQuality';
 import { fetchLiveChat, sendLiveChat, type LiveChatMessage } from './liveChat';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
-import { patchBroadcast, readBroadcast } from '../demo/testLab';
+import { patchBroadcast, readBroadcast, setBroadcast } from '../demo/testLab';
 import { SEED_LIVE_CONTACTS } from './liveAudience';
 import { LIVE_CHAT_FOCUS, openLiveGiftShop } from './liveGifts';
 import {
@@ -162,7 +163,8 @@ export default function FeedLiveNowStage({
   cardId,
   youtubeId: youtubeIdProp,
 }: Props) {
-  const { videoRef, status, error, facing, switching, startCamera, switchCamera } = useLiveCamera();
+  const { videoRef, status, error, facing, switching, startCamera, stopCamera, switchCamera } = useLiveCamera();
+  const [endingLive, setEndingLive] = useState(false);
   const guestCamRef = useRef<HTMLVideoElement | null>(null);
   const guestStreamRef = useRef<MediaStream | null>(null);
   const chatInputRef = useRef<HTMLInputElement | null>(null);
@@ -459,6 +461,26 @@ export default function FeedLiveNowStage({
   const openGift = () => {
     if (!watching && !isHost) startWatching();
     openLiveGiftShop({ fromName: chatWho, cardId });
+  };
+
+  const endLiveSession = async () => {
+    if (!isHost || endingLive) return;
+    if (!window.confirm('End this live session for everyone?')) return;
+    setEndingLive(true);
+    try {
+      try {
+        await stopSessionRecording();
+      } catch {
+        /* recording optional */
+      }
+      stopCamera();
+      stopLiveMediaSource();
+      stopAllSlotFramePublish();
+      stopAllSlotAudioPublish();
+      setBroadcast(false);
+    } finally {
+      setEndingLive(false);
+    }
   };
 
   // Comment icon on feed → focus live chat composer
@@ -928,7 +950,7 @@ export default function FeedLiveNowStage({
             </span>
           ) : null}
           {!fromFile && !ytLive ? (
-            <span className="ml-auto pointer-events-auto">
+            <span className="pointer-events-auto">
               {flipBtn({
                 onClick: () => void switchCamera(),
                 busy: switching,
@@ -936,6 +958,17 @@ export default function FeedLiveNowStage({
               })}
             </span>
           ) : null}
+          <button
+            type="button"
+            disabled={endingLive}
+            className="ml-auto h-7 px-3 rounded-full bg-white text-black font-extrabold text-[11px] pointer-events-auto disabled:opacity-50 shadow"
+            onClick={(e) => {
+              e.stopPropagation();
+              void endLiveSession();
+            }}
+          >
+            {endingLive ? 'Ending…' : 'End live'}
+          </button>
         </div>
         {isHost ? (
           <div
@@ -970,6 +1003,17 @@ export default function FeedLiveNowStage({
               }}
             >
               WhatsApp invite
+            </button>
+            <button
+              type="button"
+              disabled={endingLive}
+              className="rounded-full px-3 h-8 mono text-[10px] font-bold border backdrop-blur-md bg-white text-black border-white disabled:opacity-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                void endLiveSession();
+              }}
+            >
+              {endingLive ? 'Ending…' : 'End live'}
             </button>
           </div>
         ) : null}
@@ -1108,6 +1152,17 @@ export default function FeedLiveNowStage({
           <div className="poppins text-[18px] font-extrabold">You are on Audio Live</div>
           <div className="mono text-[12px] text-white/70 mt-2">{title}</div>
           <div className="mt-4 mono text-[11px] text-[#8FFF4A] font-bold">Mic publishing to feed · {viewerCount}</div>
+          <button
+            type="button"
+            disabled={endingLive}
+            className="mt-5 h-10 px-5 rounded-full bg-white text-black font-extrabold text-[12px] disabled:opacity-50"
+            onClick={(e) => {
+              e.stopPropagation();
+              void endLiveSession();
+            }}
+          >
+            {endingLive ? 'Ending…' : 'End live'}
+          </button>
         </div>
       );
     }
@@ -1286,6 +1341,16 @@ export default function FeedLiveNowStage({
         >
           🎁 Gift
         </button>
+        {isHost ? (
+          <button
+            type="button"
+            disabled={endingLive}
+            className="h-7 px-3 rounded-full bg-white text-black font-extrabold text-[11px] shrink-0 disabled:opacity-50 shadow"
+            onClick={() => void endLiveSession()}
+          >
+            {endingLive ? 'Ending…' : 'End live'}
+          </button>
+        ) : null}
         {watching ? (
           <button
             type="button"
