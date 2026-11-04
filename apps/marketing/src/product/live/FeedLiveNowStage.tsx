@@ -806,6 +806,18 @@ export default function FeedLiveNowStage({
           </div>
         ))}
       </div>
+      {/* Footer strip — viewers (live) · no Gift/Share/Book/Shop (those stay on the right rail) */}
+      <div className="flex items-center gap-1.5 overflow-x-auto">
+        <span
+          className="whitespace-nowrap glass rounded-full px-2.5 py-1 mono text-[10px] text-white/90 inline-flex items-center gap-1"
+          aria-live="polite"
+          title="Current viewers"
+        >
+          <span aria-hidden>👁</span>
+          <span className="font-bold">{viewerCount}</span>
+          <span className="text-white/55">watching</span>
+        </span>
+      </div>
       <div className="flex gap-2 items-center">
         <input
           value={draft}

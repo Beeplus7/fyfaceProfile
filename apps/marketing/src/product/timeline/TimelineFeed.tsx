@@ -40,7 +40,6 @@ import {
   IconComment,
   IconCommand,
   IconGames,
-  IconGift,
   IconHeart,
   IconHeartFill,
   IconHome,
@@ -1427,29 +1426,22 @@ export default function TimelineFeed() {
                       {card.price && <span className="rounded-lg bg-white text-black px-2.5 py-1 mono text-[10px] font-bold">{card.price}</span>}
                     </div>
 
-                    {/* Action row bottom */}
+                    {/* Action row — keep light; Gift/Share/Book/Shop live on the right rail */}
                     <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto">
                       {[
-                        {label:`♥ ${card.likes}`, active:liked.has(card.id), run:()=>toggleLike(card.id)},
-                        {label:`💬 ${card.comments}`, run:()=>setActionSheet({ kind:'comment', card })},
-                        {label:`👑 Gift`, run:()=>openGiftForCard(card.id)},
-                        {
-                          label: `↗ Share`,
-                          run: () => {
-                            if (card.type === 'liveNow') {
-                              void shareLiveSession(card);
-                              return;
-                            }
-                            setActionSheet({ kind: 'share', card });
-                          },
-                        },
-                        {label:`◑ Book`, run:()=>setActionSheet({ kind:'book', card })},
-                        {label:`👜 Shop`, run:()=>setActionSheet({ kind:'shop', card })},
-                      ].map((a,i)=>(
+                        { label: `♥ ${card.likes}`, active: liked.has(card.id), run: () => toggleLike(card.id) },
+                        { label: `💬 ${card.comments}`, run: () => setActionSheet({ kind: 'comment', card }) },
+                        ...(card.type === 'liveReplay' || typeof card.viewers === 'number'
+                          ? [{ label: `👁 ${card.viewers ?? 0}`, active: false, run: () => flashToast(`${card.viewers ?? 0} watching`) }]
+                          : []),
+                      ].map((a, i) => (
                         <button
                           key={i}
                           type="button"
-                          onClick={(e)=>{e.stopPropagation(); a.run();}}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            a.run();
+                          }}
                           className={`whitespace-nowrap glass rounded-full px-2.5 py-1 mono text-[10px] ${a.active ? 'bg-white text-black' : 'text-white/70'}`}
                         >
                           {a.label}
