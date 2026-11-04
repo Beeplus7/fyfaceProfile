@@ -128,6 +128,11 @@ interface Card {
   viewers?: number;
   /** YouTube video id when live source is YouTube */
   youtubeId?: string;
+  /** Ordered playlist — next video autoplays when one ends */
+  youtubePlaylistIds?: string[];
+  youtubePlaylist?: { id: string; caption: string }[];
+  /** Planned YouTube live length (sec); clip/playlist loops if shorter */
+  youtubeDurationSec?: number;
   beforeAfter?: { before: string; after: string };
   /** IndexedDB clip for user-uploaded / recorded video */
   mediaId?: string;
@@ -605,6 +610,9 @@ export default function TimelineFeed() {
       viewers: liveBroadcast.viewers,
       duration: liveBroadcast.startedAt,
       youtubeId: liveBroadcast.youtubeId,
+      youtubePlaylistIds: liveBroadcast.youtubePlaylistIds,
+      youtubePlaylist: liveBroadcast.youtubePlaylist,
+      youtubeDurationSec: liveBroadcast.youtubeDurationSec,
     };
   }, [liveBroadcast, liveInviteOpen]);
 
@@ -1471,6 +1479,10 @@ export default function TimelineFeed() {
                         viewers={card.viewers}
                         cardId={card.id}
                         youtubeId={card.youtubeId}
+                        youtubePlaylistIds={card.youtubePlaylistIds}
+                        youtubePlaylist={card.youtubePlaylist}
+                        youtubeDurationSec={card.youtubeDurationSec}
+                        startedAt={liveBroadcast?.startedAt || card.duration}
                       />
                     )}
 
@@ -1972,17 +1984,26 @@ export default function TimelineFeed() {
                 } catch {
                   /* ignore */
                 }
+                const mins = Math.round(pick.durationSec / 60);
+                const n = pick.playlist.length;
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
                   youtubeId: pick.youtubeId,
+                  youtubePlaylistIds: pick.playlist.map((p) => p.id),
+                  youtubePlaylist: pick.playlist,
+                  youtubeDurationSec: pick.durationSec,
                   title: goPublic
-                    ? `YouTube Live · ${pick.youtubeId}`
-                    : `Private YT · ${pick.youtubeId}`,
+                    ? `YouTube · ${n} vid · ${mins}m`
+                    : `Private YT · ${n} vid · ${mins}m`,
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);
-                flashToast(goPublic ? 'YouTube on public feed' : 'Private YouTube · contacts only');
+                flashToast(
+                  goPublic
+                    ? `YouTube playlist · ${n} · ${mins}m`
+                    : `Private YouTube playlist · ${n} · ${mins}m`,
+                );
                 navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
                 return;
               }

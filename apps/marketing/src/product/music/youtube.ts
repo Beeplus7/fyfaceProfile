@@ -85,18 +85,83 @@ export function extractYoutubeId(input: string): string | null {
   return loose?.[1] || null;
 }
 
-export function youtubeEmbedUrl(id: string, autoplay = false) {
+export type YoutubePlaylistItem = {
+  id: string;
+  caption: string;
+};
+
+/** Ordered unique video ids (11-char). First is the starting clip. */
+export function normalizeYoutubePlaylistIds(ids: unknown, max = 25): string[] {
+  if (!Array.isArray(ids)) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const raw of ids) {
+    if (typeof raw !== 'string') continue;
+    const id = raw.trim();
+    if (!/^[a-zA-Z0-9_-]{11}$/.test(id) || seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+/** Ordered playlist entries with optional captions (deduped by video id). */
+export function normalizeYoutubePlaylistItems(raw: unknown, max = 25): YoutubePlaylistItem[] {
+  if (!Array.isArray(raw)) return [];
+  const out: YoutubePlaylistItem[] = [];
+  const seen = new Set<string>();
+  for (const row of raw) {
+    if (typeof row === 'string') {
+      const id = row.trim();
+      if (!/^[a-zA-Z0-9_-]{11}$/.test(id) || seen.has(id)) continue;
+      seen.add(id);
+      out.push({ id, caption: '' });
+    } else if (row && typeof row === 'object') {
+      const id = typeof (row as { id?: unknown }).id === 'string' ? (row as { id: string }).id.trim() : '';
+      if (!/^[a-zA-Z0-9_-]{11}$/.test(id) || seen.has(id)) continue;
+      seen.add(id);
+      const captionRaw =
+        typeof (row as { caption?: unknown }).caption === 'string'
+          ? (row as { caption: string }).caption
+          : '';
+      out.push({ id, caption: captionRaw.trim().slice(0, 160) });
+    }
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+export function youtubeEmbedUrl(
+  id: string,
+  autoplay = false,
+  opts?: { loop?: boolean; playlistIds?: string[]; origin?: string },
+) {
   const params = new URLSearchParams({
     rel: '0',
     modestbranding: '1',
     playsinline: '1',
     enablejsapi: '1',
   });
+  if (opts?.origin) params.set('origin', opts.origin);
   if (autoplay) {
     params.set('autoplay', '1');
     // Unmuted autoplay works after a user gesture (Watch Live / Save music)
     params.set('mute', '0');
   }
+
+  const queue = normalizeYoutubePlaylistIds([id, ...(opts?.playlistIds || [])]);
+  const rest = queue.filter((x) => x !== id);
+  const hasQueue = rest.length > 0;
+  const loop = Boolean(opts?.loop);
+
+  // Playlist = next videos after the embed id. Loop needs the full list incl. first (YT quirk).
+  if (hasQueue || loop) {
+    const playlist = loop ? (queue.length ? queue : [id]) : rest.length ? rest : [id];
+    params.set('playlist', playlist.join(','));
+  }
+  if (loop) params.set('loop', '1');
+
   return `https://www.youtube.com/embed/${id}?${params.toString()}`;
 }
 

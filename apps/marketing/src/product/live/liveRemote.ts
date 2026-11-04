@@ -1,5 +1,10 @@
 import type { BroadcastMode, BroadcastState } from '../demo/testLab';
 import type { Music } from '../music/MusicDrawer';
+import {
+  normalizeYoutubePlaylistIds,
+  normalizeYoutubePlaylistItems,
+  type YoutubePlaylistItem,
+} from '../music/youtube';
 
 const LIVE_STATUS_URL = '/api/live-status';
 
@@ -24,6 +29,12 @@ export type RemoteLiveStatus = {
   hasAudio?: boolean;
   /** Primary live video from YouTube (not BGM) */
   youtubeId?: string;
+  /** Ordered YouTube ids — autoplays next when one ends */
+  youtubePlaylistIds?: string[];
+  /** Playlist entries with captions for the playing clip */
+  youtubePlaylist?: YoutubePlaylistItem[];
+  /** Planned YouTube live length (sec); clip/playlist loops if shorter */
+  youtubeDurationSec?: number;
   visibility?: 'public' | 'contacts';
   publicFeed?: boolean;
   allowedContactIds?: string[];
@@ -111,6 +122,9 @@ export async function publishRemoteLive(
         hasVideo: true,
         hasAudio: extras?.hasAudio !== false,
         youtubeId: state.youtubeId || undefined,
+        youtubePlaylistIds: state.youtubePlaylistIds || undefined,
+        youtubePlaylist: state.youtubePlaylist || undefined,
+        youtubeDurationSec: state.youtubeDurationSec || undefined,
         visibility: state.visibility === 'public' ? 'public' : 'contacts',
         publicFeed: Boolean(state.publicFeed),
         allowedContactIds: Array.isArray(state.allowedContactIds) ? state.allowedContactIds : [],
@@ -150,6 +164,29 @@ export async function fetchRemoteLive(): Promise<RemoteLiveBroadcast | null> {
       typeof data.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(data.youtubeId)
         ? data.youtubeId
         : undefined;
+    const youtubeDurationSec =
+      youtubeId &&
+      typeof data.youtubeDurationSec === 'number' &&
+      Number.isFinite(data.youtubeDurationSec) &&
+      data.youtubeDurationSec >= 60 &&
+      data.youtubeDurationSec <= 8 * 60 * 60
+        ? Math.round(data.youtubeDurationSec)
+        : undefined;
+    const youtubePlaylist = youtubeId
+      ? normalizeYoutubePlaylistItems([
+          ...(data.youtubePlaylist || []),
+          ...normalizeYoutubePlaylistIds([youtubeId, ...(data.youtubePlaylistIds || [])]).map(
+            (id) => ({ id, caption: '' }),
+          ),
+        ])
+      : undefined;
+    const orderedPlaylist = youtubePlaylist?.length
+      ? normalizeYoutubePlaylistItems([
+          youtubePlaylist.find((i) => i.id === youtubeId) || { id: youtubeId!, caption: '' },
+          ...youtubePlaylist.filter((i) => i.id !== youtubeId),
+        ])
+      : undefined;
+    const youtubePlaylistIds = orderedPlaylist?.map((i) => i.id);
     const visibility = data.visibility === 'public' ? 'public' : 'contacts';
     const allowedContactIds = Array.isArray(data.allowedContactIds)
       ? data.allowedContactIds.filter((id): id is string => typeof id === 'string')
@@ -168,6 +205,14 @@ export async function fetchRemoteLive(): Promise<RemoteLiveBroadcast | null> {
       publicFeed,
       allowedContactIds,
       ...(youtubeId ? { youtubeId } : {}),
+      ...(youtubePlaylistIds && youtubePlaylistIds.length > 1
+        ? { youtubePlaylistIds }
+        : {}),
+      ...(orderedPlaylist &&
+      (orderedPlaylist.length > 1 || orderedPlaylist.some((i) => i.caption))
+        ? { youtubePlaylist: orderedPlaylist }
+        : {}),
+      ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
       music: data.music || null,
     };
   } catch {

@@ -1,4 +1,9 @@
 import type { GameId } from '../arcade/mfcEconomy';
+import {
+  normalizeYoutubePlaylistIds,
+  normalizeYoutubePlaylistItems,
+  type YoutubePlaylistItem,
+} from '../music/youtube';
 import { markOnboardingDone } from '../onboarding/storage';
 
 export const DEMO_SESSION_KEY = 'myface_demo_session';
@@ -71,6 +76,12 @@ export type BroadcastState = {
   from?: string;
   /** When set, live stage plays this YouTube video (embed) for host + viewers */
   youtubeId?: string;
+  /** Ordered YouTube ids (includes first). Plays next when one ends; loops if duration set. */
+  youtubePlaylistIds?: string[];
+  /** Playlist with captions shown while each video plays */
+  youtubePlaylist?: YoutubePlaylistItem[];
+  /** Planned YouTube live length (sec). Clip/playlist loops if shorter; session ends at this mark. */
+  youtubeDurationSec?: number;
   /** contacts = invite list; public = open room */
   visibility?: 'public' | 'contacts';
   /** When false, hidden from public For You feed */
@@ -81,16 +92,48 @@ export type BroadcastState = {
   allowedContacts?: { id: string; name: string; phone?: string }[];
 };
 
+function normalizeYoutubeDurationSec(raw: unknown): number | undefined {
+  const n = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN;
+  if (!Number.isFinite(n)) return undefined;
+  const sec = Math.round(n);
+  if (sec < 60 || sec > 8 * 60 * 60) return undefined;
+  return sec;
+}
+
 type BroadcastMeta = {
   title?: string;
   viewers?: number;
   mode?: BroadcastMode;
   youtubeId?: string | null;
+  youtubePlaylistIds?: string[] | null;
+  youtubePlaylist?: YoutubePlaylistItem[] | null;
+  youtubeDurationSec?: number | null;
   visibility?: 'public' | 'contacts';
   publicFeed?: boolean;
   allowedContactIds?: string[];
   allowedContacts?: { id: string; name: string; phone?: string }[];
 };
+
+function resolveYoutubePlaylistItems(
+  youtubeId: string | undefined,
+  itemsRaw: unknown,
+  idsRaw?: unknown,
+): YoutubePlaylistItem[] | undefined {
+  if (!youtubeId) return undefined;
+  const fromItems = normalizeYoutubePlaylistItems(itemsRaw);
+  const fromIds = normalizeYoutubePlaylistIds(idsRaw);
+  const merged = normalizeYoutubePlaylistItems([
+    ...fromItems,
+    ...fromIds.map((id) => ({ id, caption: '' })),
+    { id: youtubeId, caption: '' },
+  ]);
+  const first = merged.find((i) => i.id === youtubeId) || {
+    id: youtubeId,
+    caption: '',
+  };
+  const rest = merged.filter((i) => i.id !== youtubeId);
+  return normalizeYoutubePlaylistItems([first, ...rest]);
+}
 
 export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
   if (!live) {
@@ -104,6 +147,15 @@ export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
     typeof meta?.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(meta.youtubeId)
       ? meta.youtubeId
       : undefined;
+  const youtubeDurationSec = youtubeId
+    ? normalizeYoutubeDurationSec(meta?.youtubeDurationSec)
+    : undefined;
+  const youtubePlaylist = resolveYoutubePlaylistItems(
+    youtubeId,
+    meta?.youtubePlaylist,
+    meta?.youtubePlaylistIds,
+  );
+  const youtubePlaylistIds = youtubePlaylist?.map((i) => i.id);
   const visibility = meta?.visibility === 'public' ? 'public' : 'contacts';
   const allowedContactIds = Array.isArray(meta?.allowedContactIds)
     ? meta!.allowedContactIds.filter(Boolean).slice(0, 40)
@@ -138,6 +190,13 @@ export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
     allowedContactIds,
     allowedContacts,
     ...(youtubeId ? { youtubeId } : {}),
+    ...(youtubePlaylistIds && youtubePlaylistIds.length > 1
+      ? { youtubePlaylistIds }
+      : {}),
+    ...(youtubePlaylist && youtubePlaylist.some((i) => i.caption || youtubePlaylist.length > 1)
+      ? { youtubePlaylist }
+      : {}),
+    ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
   };
   localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
   window.dispatchEvent(new Event('myface-broadcast'));
@@ -172,6 +231,20 @@ export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
       : typeof patch.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(patch.youtubeId)
         ? patch.youtubeId
         : cur.youtubeId;
+  const youtubeDurationSec =
+    patch.youtubeDurationSec === null
+      ? undefined
+      : normalizeYoutubeDurationSec(patch.youtubeDurationSec) ??
+        (youtubeId ? cur.youtubeDurationSec : undefined);
+  const youtubePlaylist =
+    patch.youtubePlaylist === null
+      ? undefined
+      : resolveYoutubePlaylistItems(
+          youtubeId,
+          patch.youtubePlaylist ?? cur.youtubePlaylist,
+          patch.youtubePlaylistIds ?? cur.youtubePlaylistIds,
+        );
+  const youtubePlaylistIds = youtubePlaylist?.map((i) => i.id);
   const payload: BroadcastState = {
     ...cur,
     title: patch.title ?? cur.title,
@@ -182,8 +255,30 @@ export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
     allowedContactIds,
     allowedContacts,
     ...(youtubeId ? { youtubeId } : { youtubeId: undefined }),
+    ...(youtubeId && youtubePlaylistIds && youtubePlaylistIds.length > 1
+      ? { youtubePlaylistIds }
+      : { youtubePlaylistIds: undefined }),
+    ...(youtubeId &&
+    youtubePlaylist &&
+    (youtubePlaylist.length > 1 || youtubePlaylist.some((i) => i.caption))
+      ? { youtubePlaylist }
+      : { youtubePlaylist: undefined }),
+    ...(youtubeId && youtubeDurationSec
+      ? { youtubeDurationSec }
+      : { youtubeDurationSec: undefined }),
   };
   if (!youtubeId) delete payload.youtubeId;
+  if (!youtubeId || !youtubePlaylistIds || youtubePlaylistIds.length <= 1) {
+    delete payload.youtubePlaylistIds;
+  }
+  if (
+    !youtubeId ||
+    !youtubePlaylist ||
+    (youtubePlaylist.length <= 1 && !youtubePlaylist.some((i) => i.caption))
+  ) {
+    delete payload.youtubePlaylist;
+  }
+  if (!youtubeId || !youtubeDurationSec) delete payload.youtubeDurationSec;
   localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
   window.dispatchEvent(new Event('myface-broadcast'));
   void import('../live/liveRemote').then((m) => m.publishRemoteLive(payload)).catch(() => undefined);
@@ -200,6 +295,15 @@ export function readBroadcast(): BroadcastState | null {
       typeof parsed.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(parsed.youtubeId)
         ? parsed.youtubeId
         : undefined;
+    const youtubeDurationSec = youtubeId
+      ? normalizeYoutubeDurationSec(parsed.youtubeDurationSec)
+      : undefined;
+    const youtubePlaylist = resolveYoutubePlaylistItems(
+      youtubeId,
+      parsed.youtubePlaylist,
+      parsed.youtubePlaylistIds,
+    );
+    const youtubePlaylistIds = youtubePlaylist?.map((i) => i.id);
     const visibility = parsed.visibility === 'public' ? 'public' : 'contacts';
     const allowedContactIds = Array.isArray(parsed.allowedContactIds)
       ? parsed.allowedContactIds.filter((id): id is string => typeof id === 'string')
@@ -232,6 +336,14 @@ export function readBroadcast(): BroadcastState | null {
       allowedContactIds,
       allowedContacts,
       ...(youtubeId ? { youtubeId } : {}),
+      ...(youtubePlaylistIds && youtubePlaylistIds.length > 1
+        ? { youtubePlaylistIds }
+        : {}),
+      ...(youtubePlaylist &&
+      (youtubePlaylist.length > 1 || youtubePlaylist.some((i) => i.caption))
+        ? { youtubePlaylist }
+        : {}),
+      ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
     };
   } catch {
     return null;

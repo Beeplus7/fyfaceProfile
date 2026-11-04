@@ -1,6 +1,10 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { BroadcastMode } from '../demo/testLab';
-import { extractYoutubeId } from '../music/youtube';
+import {
+  extractYoutubeId,
+  normalizeYoutubePlaylistItems,
+  type YoutubePlaylistItem,
+} from '../music/youtube';
 import {
   DEFAULT_LIVE_AUDIENCE,
   normalizeAudience,
@@ -13,7 +17,16 @@ export type GoLivePick =
   | { kind: 'camera'; mode: BroadcastMode; audience: LiveAudience }
   | { kind: 'file'; file: File; audience: LiveAudience }
   | { kind: 'link'; url: string; audience: LiveAudience }
-  | { kind: 'youtube'; youtubeId: string; url: string; audience: LiveAudience }
+  | {
+      kind: 'youtube';
+      youtubeId: string;
+      url: string;
+      audience: LiveAudience;
+      /** Planned live length — playlist/video loops if shorter */
+      durationSec: number;
+      /** Ordered videos with captions. Next plays when one ends. */
+      playlist: YoutubePlaylistItem[];
+    }
   /** Upload a video and publish it as a WorkCut on the feed (not live stream). */
   | { kind: 'post'; file: File };
 
@@ -21,7 +34,35 @@ type PendingLive =
   | { kind: 'camera'; mode: BroadcastMode }
   | { kind: 'file'; file: File }
   | { kind: 'link'; url: string }
-  | { kind: 'youtube'; youtubeId: string; url: string };
+  | {
+      kind: 'youtube';
+      youtubeId: string;
+      url: string;
+      durationSec: number;
+      playlist: YoutubePlaylistItem[];
+    };
+
+const YT_DURATION_PRESETS: { label: string; sec: number }[] = [
+  { label: '15m', sec: 15 * 60 },
+  { label: '30m', sec: 30 * 60 },
+  { label: '45m', sec: 45 * 60 },
+  { label: '1h', sec: 60 * 60 },
+  { label: '2h', sec: 2 * 60 * 60 },
+];
+
+const DEFAULT_YT_DURATION_SEC = 30 * 60;
+
+function clampYtDurationSec(sec: number) {
+  return Math.min(8 * 60 * 60, Math.max(60, Math.round(sec)));
+}
+
+function formatYtDurationLabel(sec: number) {
+  if (sec >= 3600 && sec % 3600 === 0) return `${sec / 3600}h`;
+  if (sec >= 60 && sec % 60 === 0) return `${sec / 60}m`;
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return s ? `${m}m ${s}s` : `${m}m`;
+}
 
 type Props = {
   open: boolean;
@@ -40,7 +81,21 @@ function withAudience(pending: PendingLive, audience: LiveAudience): GoLivePick 
   if (pending.kind === 'camera') return { kind: 'camera', mode: pending.mode, audience };
   if (pending.kind === 'file') return { kind: 'file', file: pending.file, audience };
   if (pending.kind === 'youtube') {
-    return { kind: 'youtube', youtubeId: pending.youtubeId, url: pending.url, audience };
+    const playlist = normalizeYoutubePlaylistItems([
+      { id: pending.youtubeId, caption: '' },
+      ...(pending.playlist || []),
+    ]);
+    // Keep captions from pending (pending.youtubeId may have been first with caption)
+    const merged = normalizeYoutubePlaylistItems(pending.playlist?.length ? pending.playlist : playlist);
+    const first = merged[0] || { id: pending.youtubeId, caption: '' };
+    return {
+      kind: 'youtube',
+      youtubeId: first.id,
+      url: pending.url || `https://www.youtube.com/watch?v=${first.id}`,
+      audience,
+      durationSec: clampYtDurationSec(pending.durationSec || DEFAULT_YT_DURATION_SEC),
+      playlist: merged,
+    };
   }
   return { kind: 'link', url: pending.url, audience };
 }
@@ -63,6 +118,10 @@ export default function GoLivePicker({
   const [ytOpen, setYtOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
   const [ytUrl, setYtUrl] = useState('');
+  const [ytCaptionDraft, setYtCaptionDraft] = useState('');
+  const [ytQueue, setYtQueue] = useState<YoutubePlaylistItem[]>([]);
+  const [ytDurationSec, setYtDurationSec] = useState(DEFAULT_YT_DURATION_SEC);
+  const [ytCustomMin, setYtCustomMin] = useState('');
   const [linkErr, setLinkErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [busyLabel, setBusyLabel] = useState('');
@@ -81,6 +140,11 @@ export default function GoLivePicker({
       setSelectedIds([]);
       setLinkErr(null);
       setBusy(false);
+      setYtDurationSec(DEFAULT_YT_DURATION_SEC);
+      setYtCustomMin('');
+      setYtQueue([]);
+      setYtUrl('');
+      setYtCaptionDraft('');
     }
   }, [open]);
 
@@ -179,7 +243,18 @@ export default function GoLivePicker({
     }
     const yt = extractYoutubeId(url);
     if (yt) {
-      beginAudience({ kind: 'youtube', youtubeId: yt, url });
+      const playlist = normalizeYoutubePlaylistItems([
+        ...ytQueue,
+        { id: yt, caption: ytCaptionDraft.trim().slice(0, 160) },
+      ]);
+      const first = playlist[0] || { id: yt, caption: '' };
+      beginAudience({
+        kind: 'youtube',
+        youtubeId: first.id,
+        url,
+        durationSec: clampYtDurationSec(ytDurationSec || DEFAULT_YT_DURATION_SEC),
+        playlist,
+      });
       return;
     }
     if (/vimeo\.com|tiktok\.com/i.test(url)) {
@@ -189,15 +264,91 @@ export default function GoLivePicker({
     beginAudience({ kind: 'link', url });
   };
 
-  const submitYoutube = () => {
+  const addYtToQueue = () => {
     const raw = ytUrl.trim();
+    if (!raw) {
+      setLinkErr('Paste a YouTube URL, then tap Add');
+      return;
+    }
     const yt = extractYoutubeId(raw);
     if (!yt) {
       setLinkErr('Paste a YouTube watch / youtu.be / Shorts / Live URL');
       return;
     }
-    const url = raw.startsWith('http') ? raw : `https://www.youtube.com/watch?v=${yt}`;
-    beginAudience({ kind: 'youtube', youtubeId: yt, url });
+    const caption = ytCaptionDraft.trim().slice(0, 160);
+    setYtQueue((prev) => {
+      if (prev.some((x) => x.id === yt)) {
+        return prev.map((x) => (x.id === yt ? { ...x, caption: caption || x.caption } : x));
+      }
+      if (prev.length >= 25) return prev;
+      return [...prev, { id: yt, caption }];
+    });
+    setYtUrl('');
+    setYtCaptionDraft('');
+    setLinkErr(null);
+  };
+
+  const updateQueueCaption = (id: string, caption: string) => {
+    const next = caption.slice(0, 160);
+    setYtQueue((prev) => prev.map((x) => (x.id === id ? { ...x, caption: next } : x)));
+    setPending((p) =>
+      p?.kind === 'youtube'
+        ? {
+            ...p,
+            playlist: p.playlist.map((x) => (x.id === id ? { ...x, caption: next } : x)),
+          }
+        : p,
+    );
+  };
+
+  const removeYtFromQueue = (id: string) => {
+    setYtQueue((prev) => prev.filter((x) => x.id !== id));
+    setPending((p) => {
+      if (p?.kind !== 'youtube') return p;
+      const playlist = normalizeYoutubePlaylistItems(p.playlist.filter((x) => x.id !== id));
+      if (!playlist.length) return null;
+      return {
+        ...p,
+        youtubeId: playlist[0]!.id,
+        url: `https://www.youtube.com/watch?v=${playlist[0]!.id}`,
+        playlist,
+      };
+    });
+  };
+
+  const submitYoutube = () => {
+    const raw = ytUrl.trim();
+    const typed = raw ? extractYoutubeId(raw) : null;
+    const playlist = normalizeYoutubePlaylistItems([
+      ...ytQueue,
+      ...(typed
+        ? [{ id: typed, caption: ytCaptionDraft.trim().slice(0, 160) }]
+        : []),
+    ]);
+    if (!playlist.length) {
+      setLinkErr('Add at least one YouTube video to the playlist');
+      return;
+    }
+    const custom = Number(ytCustomMin);
+    const durationSec = clampYtDurationSec(
+      Number.isFinite(custom) && custom > 0 ? custom * 60 : ytDurationSec || DEFAULT_YT_DURATION_SEC,
+    );
+    if (durationSec < 60) {
+      setLinkErr('Set a live duration of at least 1 minute');
+      return;
+    }
+    const first = playlist[0]!;
+    const url = `https://www.youtube.com/watch?v=${first.id}`;
+    setYtQueue(playlist);
+    setYtUrl('');
+    setYtCaptionDraft('');
+    beginAudience({ kind: 'youtube', youtubeId: first.id, url, durationSec, playlist });
+  };
+
+  const setPendingYtDuration = (sec: number) => {
+    const next = clampYtDurationSec(sec);
+    setYtDurationSec(next);
+    setPending((p) => (p?.kind === 'youtube' ? { ...p, durationSec: next } : p));
   };
 
   return (
@@ -320,6 +471,70 @@ export default function GoLivePicker({
                 This live will appear on the public For You feed for everyone.
               </div>
             )}
+
+            {pending.kind === 'youtube' ? (
+              <div className={`rounded-2xl border p-3 space-y-2 ${dark ? 'border-white/12 bg-white/[0.04]' : 'border-[#E7EBF0] bg-[#F7F8FA]'}`}>
+                <div className="text-[13px] font-bold">
+                  Playlist · {pending.playlist.length} video{pending.playlist.length === 1 ? '' : 's'}
+                </div>
+                <div className={`mono text-[10px] leading-relaxed ${muted}`}>
+                  Plays in order — next starts when one ends. Captions show on the live stage for the
+                  playing clip. Runs for {formatYtDurationLabel(pending.durationSec)}.
+                </div>
+                <div className="space-y-2 max-h-[28svh] overflow-y-auto">
+                  {pending.playlist.map((item, i) => (
+                    <div
+                      key={item.id}
+                      className={`rounded-xl border px-2.5 py-2 space-y-1.5 ${
+                        dark ? 'border-white/10' : 'border-[#E7EBF0]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`mono text-[9px] w-5 shrink-0 ${muted}`}>{i + 1}</span>
+                        <span className="mono text-[11px] font-bold truncate flex-1">{item.id}</span>
+                        {pending.playlist.length > 1 ? (
+                          <button
+                            type="button"
+                            className={`mono text-[9px] font-bold px-2 h-6 rounded-md border ${ghost}`}
+                            onClick={() => removeYtFromQueue(item.id)}
+                          >
+                            Remove
+                          </button>
+                        ) : null}
+                      </div>
+                      <input
+                        value={item.caption}
+                        onChange={(e) => updateQueueCaption(item.id, e.target.value)}
+                        placeholder="Caption for this video…"
+                        maxLength={160}
+                        className={`w-full h-9 rounded-lg border px-2.5 text-[12px] outline-none ${field}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {YT_DURATION_PRESETS.map((p) => {
+                    const on = pending.durationSec === p.sec;
+                    return (
+                      <button
+                        key={p.sec}
+                        type="button"
+                        onClick={() => setPendingYtDuration(p.sec)}
+                        className={`h-8 px-2.5 rounded-lg border mono text-[10px] font-bold ${
+                          on
+                            ? dark
+                              ? 'border-[#FF6666]/60 bg-[#FF0000]/20 text-white'
+                              : 'border-[#FF0000] bg-red-50 text-[#B91C1C]'
+                            : ghost
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
 
             {linkErr ? <div className="mono text-[10px] text-red-400 px-1">{linkErr}</div> : null}
 
@@ -460,27 +675,131 @@ export default function GoLivePicker({
                   ▶
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[15px] font-bold">YouTube Live / video</div>
-                  <div className={`text-[11px] mt-0.5 ${muted}`}>Paste youtube.com or youtu.be link</div>
+                  <div className="text-[15px] font-bold">YouTube Live / playlist</div>
+                  <div className={`text-[11px] mt-0.5 ${muted}`}>Queue videos · auto-plays next when one ends</div>
                 </div>
                 <span className="mono text-[10px] font-bold text-[#FF6666]">YT</span>
               </div>
             </button>
 
             {ytOpen ? (
-              <div className={`rounded-2xl border p-3 space-y-2 ${dark ? 'border-white/12 bg-black/30' : 'border-[#E7EBF0] bg-[#F7F8FA]'}`}>
+              <div className={`rounded-2xl border p-3 space-y-2.5 ${dark ? 'border-white/12 bg-black/30' : 'border-[#E7EBF0] bg-[#F7F8FA]'}`}>
+                <div className="flex gap-2">
+                  <input
+                    value={ytUrl}
+                    onChange={(e) => {
+                      setYtUrl(e.target.value);
+                      setLinkErr(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addYtToQueue();
+                      }
+                    }}
+                    placeholder="https://www.youtube.com/watch?v=… or youtu.be/…"
+                    className={`flex-1 h-11 rounded-xl border px-3 text-[13px] outline-none ${field}`}
+                    inputMode="url"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={addYtToQueue}
+                    className="h-11 px-3 rounded-xl border border-white/15 mono text-[11px] font-bold shrink-0"
+                  >
+                    Add
+                  </button>
+                </div>
                 <input
-                  value={ytUrl}
-                  onChange={(e) => {
-                    setYtUrl(e.target.value);
-                    setLinkErr(null);
-                  }}
-                  placeholder="https://www.youtube.com/watch?v=… or youtu.be/…"
-                  className={`w-full h-11 rounded-xl border px-3 text-[13px] outline-none ${field}`}
-                  inputMode="url"
-                  autoCapitalize="off"
-                  autoCorrect="off"
+                  value={ytCaptionDraft}
+                  onChange={(e) => setYtCaptionDraft(e.target.value.slice(0, 160))}
+                  placeholder="Caption for this video (shown while it plays)"
+                  maxLength={160}
+                  className={`w-full h-10 rounded-xl border px-3 text-[13px] outline-none ${field}`}
                 />
+                {ytQueue.length ? (
+                  <div className="space-y-2 max-h-[28svh] overflow-y-auto">
+                    <div className={`mono text-[9px] ${muted}`}>
+                      Playlist · {ytQueue.length} · next autoplays · captions overlay on live
+                    </div>
+                    {ytQueue.map((item, i) => (
+                      <div
+                        key={item.id}
+                        className={`rounded-xl border px-2.5 py-2 space-y-1.5 ${
+                          dark ? 'border-white/10' : 'border-[#E7EBF0]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className={`mono text-[9px] w-5 shrink-0 ${muted}`}>{i + 1}</span>
+                          <span className="mono text-[11px] font-bold truncate flex-1">{item.id}</span>
+                          <button
+                            type="button"
+                            className={`mono text-[9px] font-bold px-2 h-6 rounded-md border ${ghost}`}
+                            onClick={() => removeYtFromQueue(item.id)}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        <input
+                          value={item.caption}
+                          onChange={(e) => updateQueueCaption(item.id, e.target.value)}
+                          placeholder="Caption for this video…"
+                          maxLength={160}
+                          className={`w-full h-9 rounded-lg border px-2.5 text-[12px] outline-none ${field}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className={`mono text-[10px] leading-relaxed ${muted}`}>
+                    Paste a link, write a caption, tap Add. Or Continue with one link + caption.
+                  </div>
+                )}
+                <div>
+                  <div className="text-[12px] font-bold mb-1">Live duration</div>
+                  <div className={`mono text-[9px] mb-2 leading-relaxed ${muted}`}>
+                    How long the live runs. Playlist auto-advances; loops from the start if still under duration.
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {YT_DURATION_PRESETS.map((p) => {
+                      const on = ytDurationSec === p.sec && !ytCustomMin.trim();
+                      return (
+                        <button
+                          key={p.sec}
+                          type="button"
+                          onClick={() => {
+                            setYtDurationSec(p.sec);
+                            setYtCustomMin('');
+                            setLinkErr(null);
+                          }}
+                          className={`h-8 px-2.5 rounded-lg border mono text-[10px] font-bold ${
+                            on
+                              ? dark
+                                ? 'border-[#FF6666]/60 bg-[#FF0000]/20 text-white'
+                                : 'border-[#FF0000] bg-red-50 text-[#B91C1C]'
+                              : ghost
+                          }`}
+                        >
+                          {p.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <input
+                      value={ytCustomMin}
+                      onChange={(e) => {
+                        setYtCustomMin(e.target.value.replace(/[^\d]/g, '').slice(0, 4));
+                        setLinkErr(null);
+                      }}
+                      placeholder="Custom minutes"
+                      className={`flex-1 h-10 rounded-xl border px-3 text-[13px] outline-none ${field}`}
+                      inputMode="numeric"
+                    />
+                    <span className={`mono text-[10px] shrink-0 ${muted}`}>min</span>
+                  </div>
+                </div>
                 <button
                   type="button"
                   onClick={submitYoutube}

@@ -757,11 +757,16 @@ export default function LiveViewerExperience() {
               const audienceMeta = broadcastMetaFromAudience(pick.audience);
               if (pick.kind === 'youtube') {
                 stopLiveMediaSource();
+                const mins = Math.round(pick.durationSec / 60);
+                const n = pick.playlist.length;
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
                   youtubeId: pick.youtubeId,
-                  title: `YouTube Live · ${pick.youtubeId}`,
+                  youtubePlaylistIds: pick.playlist.map((p) => p.id),
+                  youtubePlaylist: pick.playlist,
+                  youtubeDurationSec: pick.durationSec,
+                  title: `YouTube · ${n} vid · ${mins}m`,
                   ...audienceMeta,
                 });
                 setBc(readBroadcast());

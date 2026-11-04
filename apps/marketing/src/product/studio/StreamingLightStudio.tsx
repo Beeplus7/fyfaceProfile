@@ -685,11 +685,16 @@ export default function StreamingLightStudio() {
                 stopLiveMediaSource();
                 setLiveMode('video');
                 setCamOn(false);
+                const mins = Math.round(pick.durationSec / 60);
+                const n = pick.playlist.length;
                 setBroadcast(true, {
                   viewers,
                   mode: 'video',
                   youtubeId: pick.youtubeId,
-                  title: `${shop} · YouTube Live · ${loc}`,
+                  youtubePlaylistIds: pick.playlist.map((p) => p.id),
+                  youtubePlaylist: pick.playlist,
+                  youtubeDurationSec: pick.durationSec,
+                  title: `${shop} · YT · ${n} · ${mins}m · ${loc}`,
                   ...audienceMeta,
                 });
                 setBc(readBroadcast());

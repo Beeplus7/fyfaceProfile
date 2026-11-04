@@ -47,6 +47,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // YouTube as primary live video (embed id synced to viewers)
   if (!empty($data['youtubeId']) && preg_match('/^[a-zA-Z0-9_-]{11}$/', (string)$data['youtubeId'])) {
     $payload['youtubeId'] = (string)$data['youtubeId'];
+    // Ordered playlist — next video autoplays when one ends (+ optional captions)
+    $plist = array();
+    $pcaptions = array();
+    if (isset($data['youtubePlaylist']) && is_array($data['youtubePlaylist'])) {
+      foreach ($data['youtubePlaylist'] as $row) {
+        if (!is_array($row)) continue;
+        $s = isset($row['id']) ? (string)$row['id'] : '';
+        if (!preg_match('/^[a-zA-Z0-9_-]{11}$/', $s) || in_array($s, $plist, true)) continue;
+        $plist[] = $s;
+        $cap = isset($row['caption']) ? substr(trim((string)$row['caption']), 0, 160) : '';
+        if ($cap !== '') $pcaptions[$s] = $cap;
+        if (count($plist) >= 25) break;
+      }
+    }
+    if (isset($data['youtubePlaylistIds']) && is_array($data['youtubePlaylistIds'])) {
+      foreach ($data['youtubePlaylistIds'] as $vid) {
+        $s = (string)$vid;
+        if (preg_match('/^[a-zA-Z0-9_-]{11}$/', $s) && !in_array($s, $plist, true)) {
+          $plist[] = $s;
+        }
+        if (count($plist) >= 25) break;
+      }
+    }
+    if (!in_array($payload['youtubeId'], $plist, true)) {
+      array_unshift($plist, $payload['youtubeId']);
+    }
+    if (count($plist) > 1) {
+      $payload['youtubePlaylistIds'] = $plist;
+    }
+    $pitems = array();
+    foreach ($plist as $pid) {
+      $item = array('id' => $pid);
+      if (!empty($pcaptions[$pid])) $item['caption'] = $pcaptions[$pid];
+      else $item['caption'] = '';
+      $pitems[] = $item;
+    }
+    $hasCaption = false;
+    foreach ($pitems as $it) {
+      if (!empty($it['caption'])) { $hasCaption = true; break; }
+    }
+    if (count($pitems) > 1 || $hasCaption) {
+      $payload['youtubePlaylist'] = $pitems;
+    }
+    // Planned session length — client loops clip/playlist when shorter than this
+    if (isset($data['youtubeDurationSec'])) {
+      $dur = (int)$data['youtubeDurationSec'];
+      if ($dur >= 60 && $dur <= 28800) {
+        $payload['youtubeDurationSec'] = $dur;
+      }
+    }
   }
   // Audience: contacts-only vs public For You
   $visibility = (isset($data['visibility']) && $data['visibility'] === 'public') ? 'public' : 'contacts';

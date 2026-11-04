@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { BroadcastMode } from '../demo/testLab';
 import YoutubeEmbed from '../music/YoutubeEmbed';
+import type { YoutubePlaylistItem } from '../music/youtube';
 import { switchStreamCamera, useLiveCamera } from './useLiveCamera';
 import { getSharedLiveStream, sharedStreamIsLive } from './liveCameraBus';
 import { liveFrameSrc, remoteFrameIsLive } from './liveFrameRelay';
@@ -56,7 +57,24 @@ type Props = {
   cardId?: string;
   /** YouTube as primary live video (embed for host + viewers) */
   youtubeId?: string;
+  /** Ordered playlist — next video autoplays when one ends */
+  youtubePlaylistIds?: string[];
+  /** Playlist with captions for the playing video */
+  youtubePlaylist?: YoutubePlaylistItem[];
+  /** Planned YouTube live length (sec). Clip/playlist loops if shorter; host auto-ends at mark. */
+  youtubeDurationSec?: number;
+  /** ISO start time for duration countdown */
+  startedAt?: string;
 };
+
+function formatRemainClock(totalSec: number) {
+  const s = Math.max(0, Math.floor(totalSec));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const r = s % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(r).padStart(2, '0')}`;
+  return `${m}:${String(r).padStart(2, '0')}`;
+}
 
 const BADGE_TOP = { top: 'calc(var(--feed-chrome-h, 72px) + 8px)' } as const;
 
@@ -162,6 +180,10 @@ export default function FeedLiveNowStage({
   isHost = false,
   cardId,
   youtubeId: youtubeIdProp,
+  youtubePlaylistIds: youtubePlaylistIdsProp,
+  youtubePlaylist: youtubePlaylistProp,
+  youtubeDurationSec: youtubeDurationSecProp,
+  startedAt: startedAtProp,
 }: Props) {
   const { videoRef, status, error, facing, switching, startCamera, stopCamera, switchCamera } = useLiveCamera();
   const [endingLive, setEndingLive] = useState(false);
@@ -171,8 +193,30 @@ export default function FeedLiveNowStage({
   const [guestFacing, setGuestFacing] = useState<'user' | 'environment'>('user');
   const [guestSwitching, setGuestSwitching] = useState(false);
   const [remoteYoutubeId, setRemoteYoutubeId] = useState<string | undefined>(youtubeIdProp);
+  const [remoteYtPlaylistIds, setRemoteYtPlaylistIds] = useState<string[] | undefined>(
+    youtubePlaylistIdsProp,
+  );
+  const [remoteYtPlaylist, setRemoteYtPlaylist] = useState<YoutubePlaylistItem[] | undefined>(
+    youtubePlaylistProp,
+  );
+  const [remoteYtDurationSec, setRemoteYtDurationSec] = useState<number | undefined>(
+    youtubeDurationSecProp,
+  );
+  const [remoteStartedAt, setRemoteStartedAt] = useState<string | undefined>(startedAtProp);
+  const [ytRemainSec, setYtRemainSec] = useState<number | null>(null);
+  const ytAutoEndedRef = useRef(false);
   const youtubeId = youtubeIdProp || remoteYoutubeId;
+  const youtubePlaylist = youtubePlaylistProp?.length ? youtubePlaylistProp : remoteYtPlaylist;
+  const youtubePlaylistIds = youtubePlaylist?.length
+    ? youtubePlaylist.map((i) => i.id)
+    : youtubePlaylistIdsProp?.length
+      ? youtubePlaylistIdsProp
+      : remoteYtPlaylistIds;
+  const youtubeDurationSec = youtubeDurationSecProp || remoteYtDurationSec;
+  const ytStartedAt = startedAtProp || remoteStartedAt;
   const ytLive = Boolean(youtubeId);
+  const ytLoop = Boolean(youtubeId && youtubeDurationSec && youtubeDurationSec >= 60);
+  const ytPlaylistCount = youtubePlaylistIds?.length || (youtubeId ? 1 : 0);
   const videoMode = mode !== 'audio';
   const hostLive =
     isHost &&
@@ -364,6 +408,22 @@ export default function FeedLiveNowStage({
     if (youtubeIdProp) setRemoteYoutubeId(youtubeIdProp);
   }, [youtubeIdProp]);
 
+  useEffect(() => {
+    if (youtubePlaylistIdsProp?.length) setRemoteYtPlaylistIds(youtubePlaylistIdsProp);
+  }, [youtubePlaylistIdsProp]);
+
+  useEffect(() => {
+    if (youtubePlaylistProp?.length) setRemoteYtPlaylist(youtubePlaylistProp);
+  }, [youtubePlaylistProp]);
+
+  useEffect(() => {
+    if (youtubeDurationSecProp) setRemoteYtDurationSec(youtubeDurationSecProp);
+  }, [youtubeDurationSecProp]);
+
+  useEffect(() => {
+    if (startedAtProp) setRemoteStartedAt(startedAtProp);
+  }, [startedAtProp]);
+
   // Poll live BGM + YouTube source from host
   useEffect(() => {
     if (isHost && youtubeIdProp) return;
@@ -374,6 +434,10 @@ export default function FeedLiveNowStage({
       setLiveMusic(remote?.music ?? null);
       if (remote?.youtubeId) setRemoteYoutubeId(remote.youtubeId);
       else if (!youtubeIdProp) setRemoteYoutubeId(undefined);
+      if (remote?.youtubePlaylistIds?.length) setRemoteYtPlaylistIds(remote.youtubePlaylistIds);
+      if (remote?.youtubePlaylist?.length) setRemoteYtPlaylist(remote.youtubePlaylist);
+      if (remote?.youtubeDurationSec) setRemoteYtDurationSec(remote.youtubeDurationSec);
+      if (remote?.startedAt) setRemoteStartedAt(remote.startedAt);
     };
     void tick();
     const id = window.setInterval(() => void tick(), 2500);
@@ -463,9 +527,9 @@ export default function FeedLiveNowStage({
     openLiveGiftShop({ fromName: chatWho, cardId });
   };
 
-  const endLiveSession = async () => {
+  const endLiveSession = async (opts?: { silent?: boolean }) => {
     if (!isHost || endingLive) return;
-    if (!window.confirm('End this live session for everyone?')) return;
+    if (!opts?.silent && !window.confirm('End this live session for everyone?')) return;
     setEndingLive(true);
     try {
       try {
@@ -482,6 +546,34 @@ export default function FeedLiveNowStage({
       setEndingLive(false);
     }
   };
+
+  // YouTube planned duration: countdown + auto-end (host). Clip loops via embed until then.
+  useEffect(() => {
+    ytAutoEndedRef.current = false;
+    if (!ytLive || !youtubeDurationSec || !ytStartedAt) {
+      setYtRemainSec(null);
+      return;
+    }
+    const startMs = Date.parse(ytStartedAt);
+    if (!Number.isFinite(startMs)) {
+      setYtRemainSec(null);
+      return;
+    }
+    const endMs = startMs + youtubeDurationSec * 1000;
+    const tick = () => {
+      const left = Math.ceil((endMs - Date.now()) / 1000);
+      setYtRemainSec(left);
+      if (left <= 0 && isHost && !ytAutoEndedRef.current) {
+        ytAutoEndedRef.current = true;
+        void endLiveSession({ silent: true });
+      }
+    };
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+    // endLiveSession identity changes each render — intentionally omit
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ytLive, youtubeDurationSec, ytStartedAt, isHost]);
 
   // Comment icon on feed → focus live chat composer
   useEffect(() => {
@@ -893,10 +985,14 @@ export default function FeedLiveNowStage({
           renderSplit(panes)
         ) : ytLive && youtubeId ? (
           <YoutubeEmbed
-            key={`yt-live-host-${youtubeId}`}
+            key={`yt-live-host-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
             youtubeId={youtubeId}
             title={title || 'YouTube Live'}
             autoplay
+            loop={ytLoop}
+            playlistIds={youtubePlaylistIds}
+            playlist={youtubePlaylist}
+            showCaptions
             fill
           />
         ) : fromFile && fileMedia ? (
@@ -944,6 +1040,17 @@ export default function FeedLiveNowStage({
           <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0">
             {viewerCount}
           </span>
+          {ytLive && ytPlaylistCount > 1 ? (
+            <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0">
+              {ytPlaylistCount} videos
+            </span>
+          ) : null}
+          {ytLive && ytRemainSec != null ? (
+            <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0">
+              {ytRemainSec > 0 ? `${formatRemainClock(ytRemainSec)} left` : 'Ending…'}
+              {ytLoop ? ' · loop' : ''}
+            </span>
+          ) : null}
           {guestState.pending.length > 0 ? (
             <span className="rounded-full bg-[#FFE600] text-black px-2.5 h-7 inline-flex items-center mono text-[10px] font-black shrink-0">
               {guestState.pending.length} join
@@ -1254,10 +1361,14 @@ export default function FeedLiveNowStage({
         renderSplit(panes)
       ) : ytLive && youtubeId && (watching || isHost) ? (
         <YoutubeEmbed
-          key={`yt-live-view-${youtubeId}`}
+          key={`yt-live-view-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
           youtubeId={youtubeId}
           title={title || 'YouTube Live'}
           autoplay={watching || isHost}
+          loop={ytLoop}
+          playlistIds={youtubePlaylistIds}
+          playlist={youtubePlaylist}
+          showCaptions
           fill
         />
       ) : frameUrl && (watching || frameLive) ? (
@@ -1293,6 +1404,17 @@ export default function FeedLiveNowStage({
         <span className="rounded-full bg-black/55 border border-white/15 px-2 h-6 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
           {viewerCount}
         </span>
+        {ytLive && ytPlaylistCount > 1 ? (
+          <span className="rounded-full bg-black/55 border border-white/15 px-2 h-6 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
+            {ytPlaylistCount} videos
+          </span>
+        ) : null}
+        {ytLive && ytRemainSec != null ? (
+          <span className="rounded-full bg-black/55 border border-white/15 px-2 h-6 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
+            {ytRemainSec > 0 ? `${formatRemainClock(ytRemainSec)} left` : 'Ending…'}
+            {ytLoop ? ' · loop' : ''}
+          </span>
+        ) : null}
         {!amGuest && !amPending ? (
           <button
             type="button"
