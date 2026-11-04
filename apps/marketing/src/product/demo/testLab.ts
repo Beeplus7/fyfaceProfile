@@ -21,6 +21,8 @@ export const TEST_ROUTES = [
   { path: '/app/arcade?tab=economics', label: 'Ad Revenue Scorecard' },
   { path: '/app/dashboard?pane=projects', label: 'Projects Kanban' },
   { path: '/app/dashboard?pane=contacts', label: 'Contacts' },
+  { path: '/app/dashboard?pane=profile', label: 'Maker Profile assess' },
+  { path: '/app/maker/tpl_01', label: 'TikTok-style maker profile' },
   { path: '/readiness', label: 'Readiness' },
 ] as const;
 

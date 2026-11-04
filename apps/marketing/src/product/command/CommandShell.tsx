@@ -50,6 +50,7 @@ type NavId =
   | 'feed'
   | 'stream'
   | 'workcut'
+  | 'profile'
   | 'trust'
   | 'contacts'
   | 'pricing'
@@ -62,6 +63,7 @@ const NAV: { id: NavId; label: string; Icon: IconCmp }[] = [
   { id: 'dashboard', label: 'Dashboard', Icon: IconHome },
   { id: 'projects', label: 'Projects', Icon: IconCommand },
   { id: 'contacts', label: 'Contacts', Icon: IconPeople },
+  { id: 'profile', label: 'Maker Profile', Icon: IconPeople },
   { id: 'games', label: 'Games Arcade', Icon: IconGames },
   { id: 'adrev', label: 'Ad Revenue', Icon: IconChart },
   { id: 'live', label: 'Live Workshop', Icon: IconLive },
@@ -73,6 +75,17 @@ const NAV: { id: NavId; label: string; Icon: IconCmp }[] = [
   { id: 'readiness', label: 'Readiness', Icon: IconChart },
   { id: 'settings', label: 'Settings', Icon: IconSettings },
 ];
+
+const PROFILE_ASSESS = [
+  { id: 'name-handle', label: 'Display name + @handle (left), avatar right', ok: true },
+  { id: 'live-ring', label: 'LIVE ring / badge on avatar when streaming', ok: true },
+  { id: 'stats', label: 'Following · Followers · Likes row', ok: true },
+  { id: 'actions', label: 'Follow + Message + suggest CTA', ok: true },
+  { id: 'bio-pills', label: 'Bio + LIVE / WorkCut pills', ok: true },
+  { id: 'tabs', label: 'Grid / Private / Reposts tabs', ok: true },
+  { id: 'grid', label: '3-column WorkCut grid · Pinned + views', ok: true },
+  { id: 'dashboard', label: 'Assessible from Command Center', ok: true },
+] as const;
 
 type ProjectStatus = 'idea' | 'crafting' | 'live' | 'gifted';
 type Project = { id: string; title: string; status: ProjectStatus; trade: string; pins: number; mfc: number };
@@ -436,6 +449,9 @@ export default function CommandShell() {
                 <button type="button" className={L_BTN_GHOST} onClick={() => setPane('projects')}>
                   + Create project
                 </button>
+                <button type="button" className={L_BTN_GHOST} onClick={() => setPane('profile')}>
+                  Assess profile
+                </button>
                 <button type="button" className={L_BTN} onClick={() => setPane('adrev')}>
                   Get AI insight
                 </button>
@@ -717,6 +733,74 @@ export default function CommandShell() {
               <h2 className={L_TITLE}>Ad Revenue Economics</h2>
               <div className={L_CARD + ' overflow-hidden'}>
                 <AdRevenueScorecard embedded />
+              </div>
+            </section>
+          ) : null}
+
+          {activeNav === 'profile' ? (
+            <section className="space-y-4">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 className={L_TITLE}>Maker Profile · TikTok parity</h2>
+                  <p className="text-[13px] text-[#64748B] mt-1 max-w-xl leading-relaxed">
+                    Assess the public maker profile layout against TikTok: stats, Follow/Message, bio pills, and
+                    3-column WorkCut grid.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Link to="/app/maker/tpl_01" className={L_BTN}>
+                    Open sample profile
+                  </Link>
+                  <Link to="/app/maker/tpl_04" className={L_BTN_GHOST}>
+                    Plumber template
+                  </Link>
+                  <Link to="/app/feed" className={L_BTN_GHOST}>
+                    From feed avatars
+                  </Link>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-4">
+                <div className={L_CARD + ' p-4 space-y-3'}>
+                  <div className={L_EYE}>Assessment checklist</div>
+                  <ul className="space-y-2">
+                    {PROFILE_ASSESS.map((row) => (
+                      <li
+                        key={row.id}
+                        className="flex items-start gap-2.5 rounded-xl border border-[#E7EBF0] bg-[#F8FAFC] px-3 py-2.5"
+                      >
+                        <span
+                          className={`mt-0.5 h-5 w-5 rounded-md grid place-items-center text-[11px] font-black shrink-0 ${
+                            row.ok ? 'bg-[#8FFF4A] text-black' : 'bg-[#FEE2E2] text-[#B91C1C]'
+                          }`}
+                        >
+                          {row.ok ? '✓' : '!'}
+                        </span>
+                        <span className="text-[13px] font-medium text-[#0F172A] leading-snug">{row.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mono text-[10px] text-[#94A3B8] pt-1">
+                    Route · /app/maker/:makerId · Dashboard pane · ?pane=profile
+                  </div>
+                </div>
+
+                <div className={L_CARD + ' p-4 space-y-3'}>
+                  <div className={L_EYE}>Phone preview</div>
+                  <div className="mx-auto w-full max-w-[320px] rounded-[28px] border-[10px] border-[#0F172A] bg-[#0F172A] shadow-xl overflow-hidden">
+                    <div className="bg-white aspect-[9/16] relative">
+                      <iframe
+                        title="Maker profile preview"
+                        src="/app/maker/tpl_01"
+                        className="absolute inset-0 h-full w-full border-0"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[12px] text-[#64748B] text-center leading-relaxed">
+                    Live iframe of <span className="font-semibold text-[#0F172A]">/app/maker/tpl_01</span>. Open full
+                    screen to tap Follow, LIVE, and grid clips.
+                  </p>
+                </div>
               </div>
             </section>
           ) : null}
