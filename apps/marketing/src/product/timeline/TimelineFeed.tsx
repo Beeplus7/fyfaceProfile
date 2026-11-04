@@ -46,7 +46,6 @@ import {
   IconHome,
   IconLive,
   IconMore,
-  IconMusic,
   IconMute,
   IconPlay,
   IconShare,
@@ -1243,43 +1242,6 @@ export default function TimelineFeed() {
                           >
                             {mutedMap[card.id]===false ? <IconPlay size={16} /> : <IconMute size={16} />}
                           </button>
-                          <div
-                            className="absolute left-3 rounded-lg border border-white/15 bg-black/40 backdrop-blur-md px-2.5 py-1 mono text-[9px] flex items-center gap-1.5"
-                            style={{ top: 'calc(var(--feed-chrome-h, 72px) + 8px)' }}
-                          >
-                            <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"/>{' '}
-                            {card.mediaId
-                              ? `Upload · ${card.duration || 'clip'}`
-                              : card.isTemplate
-                                ? 'Template · 30s'
-                                : 'WorkCut · 30s'}
-                          </div>
-                          {card.isTemplate && !card.mediaId ? (
-                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 bg-black/45">
-                              <div
-                                className="h-16 w-16 rounded-full grid place-items-center text-black text-[18px] font-black border-2 border-white/30"
-                                style={{ background: card.maker.color }}
-                              >
-                                {card.maker.avatar}
-                              </div>
-                              <div className="text-center">
-                                <div className="poppins text-[16px] font-extrabold">{card.maker.trade}</div>
-                                <div className="mono text-[11px] text-white/70 mt-1">
-                                  Template account · upload a 30s WorkCut
-                                </div>
-                              </div>
-                              <button
-                                type="button"
-                                className="rounded-full bg-white text-black px-4 py-2 mono text-[11px] font-bold"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setGoLiveOpen(true);
-                                }}
-                              >
-                                Upload 30s
-                              </button>
-                            </div>
-                          ) : null}
                       </div>
                     )}
 
@@ -1317,7 +1279,7 @@ export default function TimelineFeed() {
 
                     {/* Progress bar — sits above bottom info, clear of nav */}
                     {card.type !== 'liveNow' ? (
-                    <div className="absolute bottom-[168px] left-0 right-0 h-[2px] bg-white/15 lg:bottom-[136px]">
+                    <div className="absolute bottom-[128px] left-0 right-0 h-[2px] bg-white/15 lg:bottom-[100px]">
                       <div className="h-full m-gradient" style={{width: isPlayingMap[card.id] ? '44%' : '8%', transition: lowMotion ? 'none' : 'width 0.6s ease'}}/>
                     </div>
                     ) : null}
@@ -1368,23 +1330,6 @@ export default function TimelineFeed() {
                               action: () => void toggleFollow(card.maker.id),
                               Icon: IconHeart as typeof IconHeart,
                             },
-                            {
-                              k: 'music',
-                              label: 'Music',
-                              active: false,
-                              action: () => {
-                                const hostingHere =
-                                  sharedStreamIsLive() ||
-                                  isLiveAudioPublishing() ||
-                                  isLiveMediaSourceActive();
-                                if (!hostingHere) {
-                                  flashToast('Only host can change live BGM');
-                                  return;
-                                }
-                                openMusicDrawer(card.id);
-                              },
-                              Icon: IconMusic as typeof IconHeart,
-                            },
                           ]
                         : []),
                       {k:'book', label:'Book', active:false, action:()=>setActionSheet({ kind: 'book', card }), Icon: IconBook},
@@ -1431,34 +1376,40 @@ export default function TimelineFeed() {
                   {/* Bottom info — skip chrome on liveNow so camera stays full-bleed */}
                   {card.type !== 'liveNow' ? (
                   <div className="relative z-10 p-3 pb-[calc(76px+env(safe-area-inset-bottom,0px))] lg:pb-4 bg-gradient-to-t from-black/90 via-black/55 to-transparent">
-                    {/* Maker row — tap name/tick → work profile */}
+                    {/* Maker row — TikTok-style: avatar + follow up high, name only */}
                     <div className="flex items-center gap-2.5">
-                      <button
-                        type="button"
-                        className="relative h-9 w-9 rounded-full flex items-center justify-center font-black text-[11px] text-black shrink-0"
-                        style={{background:card.maker.color}}
-                        onClick={(e)=>{e.stopPropagation(); navigate(`/app/maker/${card.maker.id}`);}}
-                        aria-label={`${card.maker.name} profile`}
-                      >
-                        {card.maker.avatar}
-                      </button>
+                      <div className="relative shrink-0">
+                        <button
+                          type="button"
+                          className="h-11 w-11 rounded-full flex items-center justify-center font-black text-[12px] text-black ring-2 ring-white/80"
+                          style={{background:card.maker.color}}
+                          onClick={(e)=>{e.stopPropagation(); navigate(`/app/maker/${card.maker.id}`);}}
+                          aria-label={`${card.maker.name} profile`}
+                        >
+                          {card.maker.avatar}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e)=>{e.stopPropagation(); void toggleFollow(card.maker.id);}}
+                          className={`absolute -bottom-1 left-1/2 -translate-x-1/2 h-5 min-w-5 px-1 rounded-full text-[10px] font-black leading-none flex items-center justify-center shadow-md ${
+                            followed.has(card.maker.id)
+                              ? 'bg-white/90 text-black'
+                              : 'bg-[#FE2C55] text-white'
+                          }`}
+                          aria-label={followed.has(card.maker.id) ? 'Following' : 'Follow'}
+                        >
+                          {followed.has(card.maker.id) ? '✓' : '+'}
+                        </button>
+                      </div>
                       <button
                         type="button"
                         className="flex-1 min-w-0 text-left"
                         onClick={(e)=>{e.stopPropagation(); navigate(`/app/maker/${card.maker.id}`);}}
                       >
                         <div className="flex items-center gap-1.5">
-                          <span className="poppins text-[12px] font-extrabold tracking-wide truncate">{card.maker.name}</span>
+                          <span className="poppins text-[13px] font-extrabold tracking-wide truncate">{card.maker.name}</span>
                           {card.maker.verified && <span className="h-4 w-4 rounded-full bg-[#1A7CFF] flex items-center justify-center text-[10px] text-white shrink-0">✓</span>}
-                          <span className="glass rounded-full px-1.5 py-0.5 mono text-[8px]">{card.maker.trade}</span>
-                          <span className="mono text-[9px] text-white/50 truncate">{card.maker.location}</span>
                         </div>
-                        <div className="flex items-center gap-2 mono text-[9px] text-white/50">
-                          <span>TrustScore {card.maker.trustScore}</span><span>•</span><span>{card.maker.followers} followers</span>
-                        </div>
-                      </button>
-                      <button type="button" onClick={(e)=>{e.stopPropagation(); toggleFollow(card.maker.id);}} className={`rounded-lg px-3.5 py-1.5 text-[11px] font-semibold transition ${followed.has(card.maker.id) ? 'bg-white/15 text-white border border-white/15' : 'bg-white text-black'}`}>
-                        {followed.has(card.maker.id) ? 'Following' : 'Follow'}
                       </button>
                       <button type="button" className="h-8 w-8 rounded-lg border border-white/12 bg-black/40 flex items-center justify-center text-white/70" onClick={(e)=>{e.stopPropagation(); navigate(`/app/maker/${card.maker.id}`);}}><IconMore size={16} /></button>
                     </div>
@@ -1466,39 +1417,16 @@ export default function TimelineFeed() {
                     {/* Caption */}
                     <div className="mt-2.5">
                       <div className="poppins text-[13px] font-bold leading-[1.25]">{card.title}</div>
-                      <div className="mono text-[11px] leading-[1.4] text-white/70 mt-1 line-clamp-2">{card.caption} <span className="text-[#8FFF4A]">{card.hashtags.join(' ')}</span></div>
+                      {card.hashtags.length > 0 ? (
+                        <div className="mono text-[11px] leading-[1.4] text-[#8FFF4A] mt-1 line-clamp-1">{card.hashtags.join(' ')}</div>
+                      ) : null}
                     </div>
 
                     {/* Project tag + shop */}
                     <div className="mt-2.5 flex flex-wrap items-center gap-2">
                       {card.projectTag && <span className="rounded-lg border border-white/15 bg-black/40 px-3 py-1 mono text-[10px] font-bold text-white/80">{card.projectTag}</span>}
                       {card.price && <span className="rounded-lg bg-white text-black px-2.5 py-1 mono text-[10px] font-bold">{card.price}</span>}
-                      {card.isTemplate ? (
-                        <span className="rounded-lg border border-amber-400/40 bg-amber-400/10 px-2.5 py-1 mono text-[9px] text-amber-200">
-                          Template · 30s
-                        </span>
-                      ) : null}
                     </div>
-
-                    {/* Music row */}
-                    <button type="button" onClick={(e)=>{e.stopPropagation(); openMusicDrawer(card.id);}} className="mt-3 w-full rounded-lg border border-white/12 bg-black/40 px-3 py-2 flex items-center gap-2.5 text-left hover:bg-white/[0.06] transition group">
-                      <div className="h-7 w-7 rounded-lg m-gradient flex items-center justify-center text-black"><IconMusic size={14} /></div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="mono text-[11px] font-bold truncate">{card.music.title}</span>
-                          <span className="mono text-[9px] text-white/50">• {card.music.artist}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="mono text-[9px] px-1.5 py-0.5 rounded-full bg-white/10 text-white/60">{card.music.source} • {card.music.api}</span>
-                          <span className="mono text-[9px] text-white/40">{card.music.duration}</span>
-                          <span className="h-1 w-12 rounded-full bg-white/10 overflow-hidden hidden sm:block"><span className="block h-full w-[62%] m-gradient"/></span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="mono text-[9px] px-2 py-1 rounded-lg bg-white text-black font-bold">Music</span>
-                        <span className="text-white/40">›</span>
-                      </div>
-                    </button>
 
                     {/* Action row bottom */}
                     <div className="mt-2.5 flex items-center gap-1.5 overflow-x-auto">
