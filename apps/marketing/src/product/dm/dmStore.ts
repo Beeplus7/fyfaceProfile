@@ -49,9 +49,9 @@ function readAll(): DmThread[] {
         },
         messages: t.messages
           .filter((m) => m && typeof m.text === 'string')
-          .map((m) => ({
+          .map((m): DmMessage => ({
             id: m.id || `m_${m.ts}`,
-            from: m.from === 'peer' ? 'peer' : 'me',
+            from: m.from === 'peer' ? ('peer' as const) : ('me' as const),
             text: String(m.text).slice(0, 500),
             ts: typeof m.ts === 'number' ? m.ts : Date.now(),
           })),
