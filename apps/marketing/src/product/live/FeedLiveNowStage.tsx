@@ -1226,25 +1226,77 @@ export default function FeedLiveNowStage({
         <video ref={guestCamRef} className="hidden" playsInline muted autoPlay />
       ) : null}
 
-      <div className="absolute left-3 right-3 z-[5] flex items-center gap-2" style={BADGE_TOP}>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 h-7 text-[11px] font-bold tracking-wide shrink-0 pointer-events-none">
+      <div
+        className="absolute left-3 right-3 z-[45] flex items-center gap-1.5 flex-wrap"
+        style={BADGE_TOP}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2 h-6 text-[10px] font-bold tracking-wide shrink-0 pointer-events-none">
           <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{' '}
           {multi ? `LIVE · ${1 + guestState.guests.length}` : ytLive ? 'YT · LIVE' : 'LIVE · AYO'}
         </span>
-        <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
+        <span className="rounded-full bg-black/55 border border-white/15 px-2 h-6 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
           {viewerCount}
         </span>
+        {!amGuest && !amPending ? (
+          <button
+            type="button"
+            disabled={joinBusy || guestState.guests.length >= 3}
+            className="h-6 px-2.5 rounded-full bg-[#8FFF4A] text-black font-bold text-[10px] disabled:opacity-50 shrink-0"
+            onClick={() => void onRequestJoin()}
+          >
+            {guestState.guests.length >= 3 ? 'Full' : 'Join'}
+          </button>
+        ) : null}
+        {amPending ? (
+          <button
+            type="button"
+            disabled={joinBusy}
+            className="h-6 px-2.5 rounded-full bg-[#FFE600] text-black font-bold text-[10px] shrink-0"
+            onClick={() => void onCancelJoin()}
+          >
+            Waiting… ✕
+          </button>
+        ) : null}
+        {amGuest ? (
+          <>
+            {guestStreamRef.current
+              ? flipBtn({
+                  onClick: () => void onSwitchGuestCamera(),
+                  busy: guestSwitching,
+                  label: guestFacing === 'environment' ? 'Back' : 'Front',
+                  className:
+                    'h-6 px-2 rounded-full bg-black/55 border border-white/20 font-bold text-[10px] disabled:opacity-50',
+                })
+              : null}
+            <button
+              type="button"
+              disabled={joinBusy}
+              className="h-6 px-2.5 rounded-full bg-white/15 border border-white/25 font-bold text-[10px] shrink-0"
+              onClick={() => void onLeaveGuest()}
+            >
+              Leave
+            </button>
+          </>
+        ) : null}
+        <button
+          type="button"
+          className="h-6 px-2.5 rounded-full bg-[#FE2C55] text-white font-bold text-[10px] shadow-[0_2px_8px_rgba(254,44,85,0.4)] shrink-0"
+          onClick={() => openGift()}
+        >
+          🎁 Gift
+        </button>
         {watching ? (
           <button
             type="button"
-            className="ml-auto h-7 px-2.5 rounded-full bg-black/55 border border-white/15 mono text-[10px] font-bold"
+            className="ml-auto h-6 px-2.5 rounded-full bg-black/55 border border-white/15 mono text-[10px] font-bold shrink-0"
             onClick={(e) => {
               e.stopPropagation();
               setSoundOn((v) => !v);
               if (!soundOn) audioViewer.current?.unlock();
             }}
           >
-            {soundOn ? 'Sound on' : 'Muted'}
+            {soundOn ? 'Sound' : 'Muted'}
           </button>
         ) : null}
       </div>
@@ -1294,29 +1346,6 @@ export default function FeedLiveNowStage({
           >
             Watch Live
           </button>
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-            <button
-              type="button"
-              disabled={joinBusy || guestState.guests.length >= 3}
-              className="h-11 px-7 rounded-full bg-[#8FFF4A] text-black font-bold text-[13px] disabled:opacity-50"
-              onClick={(e) => {
-                e.stopPropagation();
-                void onRequestJoin();
-              }}
-            >
-              {guestState.guests.length >= 3 ? 'Live full' : amPending ? 'Waiting for host…' : 'Request to join'}
-            </button>
-            <button
-              type="button"
-              className="h-11 px-5 rounded-full bg-[#FE2C55] text-white font-bold text-[13px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
-              onClick={(e) => {
-                e.stopPropagation();
-                openGift();
-              }}
-            >
-              🎁 Gift
-            </button>
-          </div>
           {joinError ? (
             <div className="mt-2 max-w-xs rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
               {joinError}
@@ -1356,64 +1385,17 @@ export default function FeedLiveNowStage({
             </div>
           ) : null}
 
-          {/* Join controls sit above shared chat composer */}
-          <div
-            className="absolute left-3 right-16 z-[43] flex flex-wrap gap-2 pointer-events-auto"
-            style={{ bottom: guestNeedsCam ? 'calc(100px + 42svh)' : 'calc(100px + 28svh)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {joinError ? (
-              <div className="w-full rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
+          {joinError ? (
+            <div
+              className="absolute left-3 right-16 z-[43] pointer-events-auto"
+              style={{ top: 'calc(var(--feed-chrome-h, 72px) + 40px)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="rounded-xl border border-red-400/40 bg-red-500/25 px-3 py-2 mono text-[11px] font-bold text-red-100">
                 {joinError}
               </div>
-            ) : null}
-            {!amGuest && !amPending ? (
-              <button
-                type="button"
-                disabled={joinBusy || guestState.guests.length >= 3}
-                className="h-10 px-4 rounded-full bg-[#8FFF4A] text-black font-bold text-[12px] disabled:opacity-50"
-                onClick={() => void onRequestJoin()}
-              >
-                {guestState.guests.length >= 3 ? 'Live full' : 'Request to join'}
-              </button>
-            ) : null}
-            {amPending ? (
-              <button
-                type="button"
-                disabled={joinBusy}
-                className="h-10 px-4 rounded-full bg-[#FFE600] text-black font-bold text-[12px]"
-                onClick={() => void onCancelJoin()}
-              >
-                Waiting for host… Cancel
-              </button>
-            ) : null}
-            {amGuest && guestStreamRef.current ? (
-              <>
-                {flipBtn({
-                  onClick: () => void onSwitchGuestCamera(),
-                  busy: guestSwitching,
-                  label: guestFacing === 'environment' ? 'Back' : 'Front',
-                  className:
-                    'h-10 px-4 rounded-full bg-black/55 border border-white/20 font-bold text-[12px] disabled:opacity-50',
-                })}
-                <button
-                  type="button"
-                  disabled={joinBusy}
-                  className="h-10 px-4 rounded-full bg-white/15 border border-white/25 font-bold text-[12px]"
-                  onClick={() => void onLeaveGuest()}
-                >
-                  Leave split live
-                </button>
-              </>
-            ) : null}
-            <button
-              type="button"
-              className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
-              onClick={() => openGift()}
-            >
-              🎁 Gift
-            </button>
-          </div>
+            </div>
+          ) : null}
           {chatComposer}
         </>
       )}
