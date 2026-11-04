@@ -38,6 +38,7 @@ import LiveViewerPage from './product/live/LiveViewerPage';
 import StreamingStudioPage from './product/studio/StreamingStudioPage';
 import WorkCutStudioPage from './product/studio/WorkCutStudioPage';
 import DiscoverPage from './product/discover/DiscoverPage';
+import DirectMessagesPage from './product/dm/DirectMessagesPage';
 import MakerProfilePage from './product/maker/MakerProfilePage';
 import TimelinePage from './product/timeline/TimelinePage';
 
@@ -63,6 +64,8 @@ export default function App() {
             <Route path="feed" element={<TimelinePage />} />
             <Route path="discover" element={<DiscoverPage />} />
             <Route path="maker/:makerId" element={<MakerProfilePage />} />
+            <Route path="messages" element={<DirectMessagesPage />} />
+            <Route path="messages/:peerId" element={<DirectMessagesPage />} />
             <Route path="studio/stream" element={<StreamingStudioPage />} />
             <Route path="studio/workcut" element={<WorkCutStudioPage />} />
           </Route>

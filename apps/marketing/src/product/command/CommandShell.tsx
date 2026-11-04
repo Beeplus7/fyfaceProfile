@@ -51,6 +51,7 @@ type NavId =
   | 'stream'
   | 'workcut'
   | 'profile'
+  | 'messages'
   | 'trust'
   | 'contacts'
   | 'pricing'
@@ -63,6 +64,7 @@ const NAV: { id: NavId; label: string; Icon: IconCmp }[] = [
   { id: 'dashboard', label: 'Dashboard', Icon: IconHome },
   { id: 'projects', label: 'Projects', Icon: IconCommand },
   { id: 'contacts', label: 'Contacts', Icon: IconPeople },
+  { id: 'messages', label: 'Direct Messages', Icon: IconPeople },
   { id: 'profile', label: 'Maker Profile', Icon: IconPeople },
   { id: 'games', label: 'Games Arcade', Icon: IconGames },
   { id: 'adrev', label: 'Ad Revenue', Icon: IconChart },
@@ -81,6 +83,7 @@ const PROFILE_ASSESS = [
   { id: 'live-ring', label: 'LIVE ring / badge on avatar when streaming', ok: true },
   { id: 'stats', label: 'Following · Followers · Likes row', ok: true },
   { id: 'actions', label: 'Follow + Message + suggest CTA', ok: true },
+  { id: 'dms', label: 'DM inbox · Message opens /app/messages/:id', ok: true },
   { id: 'bio-pills', label: 'Bio + LIVE / WorkCut pills', ok: true },
   { id: 'tabs', label: 'Grid / Private / Reposts tabs', ok: true },
   { id: 'grid', label: '3-column WorkCut grid · Pinned + views', ok: true },
@@ -214,6 +217,10 @@ export default function CommandShell() {
     }
     if (id === 'workcut') {
       navigate('/app/studio/workcut');
+      return;
+    }
+    if (id === 'messages') {
+      navigate('/app/messages');
       return;
     }
     setParams(id === 'dashboard' ? {} : { pane: id });
@@ -751,8 +758,11 @@ export default function CommandShell() {
                   <Link to="/app/maker/tpl_01" className={L_BTN}>
                     Open sample profile
                   </Link>
-                  <Link to="/app/maker/tpl_04" className={L_BTN_GHOST}>
-                    Plumber template
+                  <Link to="/app/messages/tpl_01" className={L_BTN_GHOST}>
+                    DM sample maker
+                  </Link>
+                  <Link to="/app/messages" className={L_BTN_GHOST}>
+                    Messages inbox
                   </Link>
                   <Link to="/app/feed" className={L_BTN_GHOST}>
                     From feed avatars

@@ -164,7 +164,7 @@ export default function MakerProfilePage() {
             {following ? 'Following' : 'Follow'}
           </button>
           <Link
-            to="/app/dashboard?pane=contacts"
+            to={`/app/messages/${tpl.id}`}
             className="flex-1 h-11 rounded-xl bg-[#F1F5F9] text-[#0F172A] text-[15px] font-bold grid place-items-center border border-black/5"
           >
             Message
@@ -278,6 +278,12 @@ export default function MakerProfilePage() {
           className="h-10 px-4 rounded-xl border border-black/10 text-[13px] font-bold grid place-items-center"
         >
           Upload 30s
+        </Link>
+        <Link
+          to={`/app/messages/${tpl.id}`}
+          className="h-10 px-4 rounded-xl border border-black/10 text-[13px] font-bold grid place-items-center"
+        >
+          Open DM
         </Link>
         <Link
           to="/app/dashboard?pane=profile"

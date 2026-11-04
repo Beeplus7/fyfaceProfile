@@ -23,6 +23,8 @@ export const TEST_ROUTES = [
   { path: '/app/dashboard?pane=contacts', label: 'Contacts' },
   { path: '/app/dashboard?pane=profile', label: 'Maker Profile assess' },
   { path: '/app/maker/tpl_01', label: 'TikTok-style maker profile' },
+  { path: '/app/messages', label: 'Direct Messages inbox' },
+  { path: '/app/messages/tpl_01', label: 'DM with sample maker' },
   { path: '/readiness', label: 'Readiness' },
 ] as const;
 

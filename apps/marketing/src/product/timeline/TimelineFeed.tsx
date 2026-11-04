@@ -1862,6 +1862,13 @@ export default function TimelineFeed() {
                       navigate(`/app/maker/${actionSheet.card.maker.id}`);
                     },
                   },
+                  {
+                    label: 'Message maker (DM)',
+                    run: () => {
+                      setActionSheet(null);
+                      navigate(`/app/messages/${actionSheet.card.maker.id}`);
+                    },
+                  },
                 ].map((row) => (
                   <button key={row.label} type="button" className="h-12 rounded-2xl border border-white/12 bg-white/[0.04] text-left px-4 font-semibold text-[13px]" onClick={() => void row.run()}>
                     {row.label}
