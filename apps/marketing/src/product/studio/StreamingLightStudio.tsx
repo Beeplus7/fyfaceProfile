@@ -131,7 +131,12 @@ export default function StreamingLightStudio() {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   })();
 
-  const startLive = async (mode: BroadcastMode) => {
+  const startLive = async (
+    mode: BroadcastMode,
+    audience?: import('../live/liveAudience').LiveAudience,
+  ) => {
+    const { broadcastMetaFromAudience } = await import('../live/liveAudience');
+    const audienceMeta = broadcastMetaFromAudience(audience);
     setLiveMode(mode);
     if (mode === 'audio') {
       setCamOn(false);
@@ -146,6 +151,7 @@ export default function StreamingLightStudio() {
       viewers,
       mode,
       title: mode === 'audio' ? `${shop} · Audio Live · ${loc}` : `${shop} · Video Live · ${loc}`,
+      ...audienceMeta,
     });
     setBc(readBroadcast());
     setGoLiveOpen(false);
@@ -668,12 +674,30 @@ export default function StreamingLightStudio() {
               return;
             }
             if (pick.kind === 'camera') {
-              await startLive(pick.mode);
+              await startLive(pick.mode, pick.audience);
               return;
             }
             try {
               stopCamera();
+              const { broadcastMetaFromAudience } = await import('../live/liveAudience');
+              const audienceMeta = broadcastMetaFromAudience(pick.audience);
+              if (pick.kind === 'youtube') {
+                stopLiveMediaSource();
+                setLiveMode('video');
+                setCamOn(false);
+                setBroadcast(true, {
+                  viewers,
+                  mode: 'video',
+                  youtubeId: pick.youtubeId,
+                  title: `${shop} · YouTube Live · ${loc}`,
+                  ...audienceMeta,
+                });
+                setBc(readBroadcast());
+                setGoLiveOpen(false);
+                return;
+              }
               await startLiveMediaSource(pick.kind === 'file' ? pick.file : pick.url);
+              void startSessionRecording({ mode: 'video' });
               setLiveMode('video');
               setCamOn(true);
               setBroadcast(true, {
@@ -683,6 +707,7 @@ export default function StreamingLightStudio() {
                   pick.kind === 'file'
                     ? `${shop} · File Live · ${loc}`
                     : `${shop} · Link Live · ${loc}`,
+                ...audienceMeta,
               });
               setBc(readBroadcast());
               setGoLiveOpen(false);

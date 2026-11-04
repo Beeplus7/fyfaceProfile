@@ -28,7 +28,8 @@ async function recordCanvas(
     recorder = new MediaRecorder(stream);
   }
 
-  const durationMs = Math.min(6000, Math.max(2800, Math.min(rec.durationSec || 6, 12) * 400));
+  // durationSec → ms (was *400, which capped stand-ins around ~2–5s)
+  const durationMs = Math.min(30_000, Math.max(3_000, Math.min(rec.durationSec || 6, 30) * 1000));
   const started = performance.now();
   let raf = 0;
 

@@ -69,12 +69,30 @@ export type BroadcastState = {
   startedAt: string;
   mode: BroadcastMode;
   from?: string;
+  /** When set, live stage plays this YouTube video (embed) for host + viewers */
+  youtubeId?: string;
+  /** contacts = invite list; public = open room */
+  visibility?: 'public' | 'contacts';
+  /** When false, hidden from public For You feed */
+  publicFeed?: boolean;
+  /** CRM contact ids invited to this private live */
+  allowedContactIds?: string[];
+  /** Invited contacts (names/phones) for WhatsApp share UI */
+  allowedContacts?: { id: string; name: string; phone?: string }[];
 };
 
-export function setBroadcast(
-  live: boolean,
-  meta?: { title?: string; viewers?: number; mode?: BroadcastMode },
-) {
+type BroadcastMeta = {
+  title?: string;
+  viewers?: number;
+  mode?: BroadcastMode;
+  youtubeId?: string | null;
+  visibility?: 'public' | 'contacts';
+  publicFeed?: boolean;
+  allowedContactIds?: string[];
+  allowedContacts?: { id: string; name: string; phone?: string }[];
+};
+
+export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
   if (!live) {
     localStorage.removeItem(DEMO_BROADCAST_KEY);
     window.dispatchEvent(new Event('myface-broadcast'));
@@ -82,17 +100,92 @@ export function setBroadcast(
     return null;
   }
   const mode: BroadcastMode = meta?.mode === 'audio' ? 'audio' : 'video';
+  const youtubeId =
+    typeof meta?.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(meta.youtubeId)
+      ? meta.youtubeId
+      : undefined;
+  const visibility = meta?.visibility === 'public' ? 'public' : 'contacts';
+  const allowedContactIds = Array.isArray(meta?.allowedContactIds)
+    ? meta!.allowedContactIds.filter(Boolean).slice(0, 40)
+    : [];
+  const allowedContacts = Array.isArray(meta?.allowedContacts)
+    ? meta!.allowedContacts
+        .filter((c) => c && typeof c.id === 'string' && typeof c.name === 'string')
+        .slice(0, 40)
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          ...(c.phone ? { phone: c.phone } : {}),
+        }))
+    : [];
+  // Default private: contacts-only stays off public feed unless host opts in
+  const publicFeed = visibility === 'public' ? true : Boolean(meta?.publicFeed);
   const payload: BroadcastState = {
     live: true,
-    title: meta?.title ?? (mode === 'audio' ? 'Audio Live · Spindlegate OL1' : 'AYO sewing lace · Spindlegate OL1'),
+    title:
+      meta?.title ??
+      (youtubeId
+        ? 'YouTube Live · OL1'
+        : mode === 'audio'
+          ? 'Audio Live · Spindlegate OL1'
+          : 'AYO sewing lace · Spindlegate OL1'),
     viewers: meta?.viewers ?? 12,
     startedAt: new Date().toISOString(),
     mode,
     from: 'test-lab',
+    visibility,
+    publicFeed,
+    allowedContactIds,
+    allowedContacts,
+    ...(youtubeId ? { youtubeId } : {}),
   };
   localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
   window.dispatchEvent(new Event('myface-broadcast'));
   // Cross-device: phone feed polls /api/live-status while PC is hosting
+  void import('../live/liveRemote').then((m) => m.publishRemoteLive(payload)).catch(() => undefined);
+  return payload;
+}
+
+/** Update fields on an active live without ending the session (e.g. switch public feed on). */
+export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
+  const cur = readBroadcast();
+  if (!cur?.live) return null;
+  const visibility =
+    patch.visibility === 'public' || patch.visibility === 'contacts'
+      ? patch.visibility
+      : cur.visibility ?? 'contacts';
+  const allowedContactIds = Array.isArray(patch.allowedContactIds)
+    ? patch.allowedContactIds.filter(Boolean).slice(0, 40)
+    : cur.allowedContactIds ?? [];
+  const allowedContacts = Array.isArray(patch.allowedContacts)
+    ? patch.allowedContacts.slice(0, 40)
+    : cur.allowedContacts ?? [];
+  const publicFeed =
+    typeof patch.publicFeed === 'boolean'
+      ? patch.publicFeed
+      : visibility === 'public'
+        ? true
+        : Boolean(cur.publicFeed);
+  const youtubeId =
+    patch.youtubeId === null
+      ? undefined
+      : typeof patch.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(patch.youtubeId)
+        ? patch.youtubeId
+        : cur.youtubeId;
+  const payload: BroadcastState = {
+    ...cur,
+    title: patch.title ?? cur.title,
+    viewers: patch.viewers ?? cur.viewers,
+    mode: patch.mode ?? cur.mode,
+    visibility,
+    publicFeed,
+    allowedContactIds,
+    allowedContacts,
+    ...(youtubeId ? { youtubeId } : { youtubeId: undefined }),
+  };
+  if (!youtubeId) delete payload.youtubeId;
+  localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
+  window.dispatchEvent(new Event('myface-broadcast'));
   void import('../live/liveRemote').then((m) => m.publishRemoteLive(payload)).catch(() => undefined);
   return payload;
 }
@@ -103,6 +196,30 @@ export function readBroadcast(): BroadcastState | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<BroadcastState> & { live?: boolean };
     if (!parsed?.live) return null;
+    const youtubeId =
+      typeof parsed.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(parsed.youtubeId)
+        ? parsed.youtubeId
+        : undefined;
+    const visibility = parsed.visibility === 'public' ? 'public' : 'contacts';
+    const allowedContactIds = Array.isArray(parsed.allowedContactIds)
+      ? parsed.allowedContactIds.filter((id): id is string => typeof id === 'string')
+      : [];
+    const allowedContacts = Array.isArray(parsed.allowedContacts)
+      ? parsed.allowedContacts
+          .filter(
+            (c): c is { id: string; name: string; phone?: string } =>
+              Boolean(c && typeof (c as { id?: string }).id === 'string' && typeof (c as { name?: string }).name === 'string'),
+          )
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            ...(typeof c.phone === 'string' ? { phone: c.phone } : {}),
+          }))
+      : [];
+    const publicFeed =
+      typeof parsed.publicFeed === 'boolean'
+        ? parsed.publicFeed
+        : visibility === 'public';
     return {
       live: true,
       title: parsed.title ?? 'Live · Oldham OL1',
@@ -110,6 +227,11 @@ export function readBroadcast(): BroadcastState | null {
       startedAt: parsed.startedAt ?? new Date().toISOString(),
       mode: parsed.mode === 'audio' ? 'audio' : 'video',
       from: parsed.from,
+      visibility,
+      publicFeed,
+      allowedContactIds,
+      allowedContacts,
+      ...(youtubeId ? { youtubeId } : {}),
     };
   } catch {
     return null;

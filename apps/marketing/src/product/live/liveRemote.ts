@@ -22,6 +22,11 @@ export type RemoteLiveStatus = {
   makerId?: string;
   updatedAt?: string;
   hasAudio?: boolean;
+  /** Primary live video from YouTube (not BGM) */
+  youtubeId?: string;
+  visibility?: 'public' | 'contacts';
+  publicFeed?: boolean;
+  allowedContactIds?: string[];
   music?: LiveMusicPayload | null;
 };
 
@@ -105,6 +110,10 @@ export async function publishRemoteLive(
         makerId: 'ayo',
         hasVideo: true,
         hasAudio: extras?.hasAudio !== false,
+        youtubeId: state.youtubeId || undefined,
+        visibility: state.visibility === 'public' ? 'public' : 'contacts',
+        publicFeed: Boolean(state.publicFeed),
+        allowedContactIds: Array.isArray(state.allowedContactIds) ? state.allowedContactIds : [],
         music: musicPayload,
       }),
       keepalive: true,
@@ -137,6 +146,16 @@ export async function fetchRemoteLive(): Promise<RemoteLiveBroadcast | null> {
     if (!res.ok) return null;
     const data = (await res.json()) as RemoteLiveStatus;
     if (!data?.live) return null;
+    const youtubeId =
+      typeof data.youtubeId === 'string' && /^[a-zA-Z0-9_-]{11}$/.test(data.youtubeId)
+        ? data.youtubeId
+        : undefined;
+    const visibility = data.visibility === 'public' ? 'public' : 'contacts';
+    const allowedContactIds = Array.isArray(data.allowedContactIds)
+      ? data.allowedContactIds.filter((id): id is string => typeof id === 'string')
+      : [];
+    const publicFeed =
+      typeof data.publicFeed === 'boolean' ? data.publicFeed : visibility === 'public';
     return {
       live: true,
       title: data.title || 'Video Live · OL1',
@@ -145,6 +164,10 @@ export async function fetchRemoteLive(): Promise<RemoteLiveBroadcast | null> {
       mode: data.mode === 'audio' ? 'audio' : 'video',
       from: 'remote',
       hasAudio: Boolean(data.hasAudio),
+      visibility,
+      publicFeed,
+      allowedContactIds,
+      ...(youtubeId ? { youtubeId } : {}),
       music: data.music || null,
     };
   } catch {

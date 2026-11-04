@@ -34,7 +34,13 @@ import {
 import { liveGuestVideoConstraints, liveMicConstraints } from './liveQuality';
 import { fetchLiveChat, sendLiveChat, type LiveChatMessage } from './liveChat';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
+import { patchBroadcast, readBroadcast } from '../demo/testLab';
+import { SEED_LIVE_CONTACTS } from './liveAudience';
 import { LIVE_CHAT_FOCUS, openLiveGiftShop } from './liveGifts';
+import {
+  openWhatsAppPrivateLiveBroadcast,
+  openWhatsAppPrivateLiveInvite,
+} from './liveWhatsAppShare';
 
 type Props = {
   title: string;
@@ -47,6 +53,8 @@ type Props = {
   isHost?: boolean;
   /** Feed card id — passed into gift shop for rain / counts */
   cardId?: string;
+  /** YouTube as primary live video (embed for host + viewers) */
+  youtubeId?: string;
 };
 
 const BADGE_TOP = { top: 'calc(var(--feed-chrome-h, 72px) + 8px)' } as const;
@@ -152,6 +160,7 @@ export default function FeedLiveNowStage({
   viewers = 144,
   isHost = false,
   cardId,
+  youtubeId: youtubeIdProp,
 }: Props) {
   const { videoRef, status, error, facing, switching, startCamera, switchCamera } = useLiveCamera();
   const guestCamRef = useRef<HTMLVideoElement | null>(null);
@@ -159,10 +168,14 @@ export default function FeedLiveNowStage({
   const chatInputRef = useRef<HTMLInputElement | null>(null);
   const [guestFacing, setGuestFacing] = useState<'user' | 'environment'>('user');
   const [guestSwitching, setGuestSwitching] = useState(false);
+  const [remoteYoutubeId, setRemoteYoutubeId] = useState<string | undefined>(youtubeIdProp);
+  const youtubeId = youtubeIdProp || remoteYoutubeId;
+  const ytLive = Boolean(youtubeId);
   const videoMode = mode !== 'audio';
   const hostLive =
-    isHost && (sharedStreamIsLive() || isLiveMediaSourceActive() || status === 'live');
-  const fileMedia = isHost ? getLiveMediaElement() : null;
+    isHost &&
+    (ytLive || sharedStreamIsLive() || isLiveMediaSourceActive() || status === 'live');
+  const fileMedia = isHost && !ytLive ? getLiveMediaElement() : null;
   const [watching, setWatching] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [frameUrl, setFrameUrl] = useState<string | null>(null);
@@ -180,6 +193,8 @@ export default function FeedLiveNowStage({
   const [chat, setChat] = useState<LiveChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [viewerCount, setViewerCount] = useState(viewers);
+  const [publicFeedOn, setPublicFeedOn] = useState(() => Boolean(readBroadcast()?.publicFeed));
+  const [waInviteOpen, setWaInviteOpen] = useState(false);
   const audioViewer = useRef<ReturnType<typeof createLiveAudioViewer> | null>(null);
   const guestAudioViewers = useRef<Map<string, ReturnType<typeof createSlotAudioViewer>>>(new Map());
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -343,14 +358,20 @@ export default function FeedLiveNowStage({
     guestAudioViewers.current.forEach((v) => v.setMuted(!soundOn));
   }, [soundOn]);
 
-  // Poll live BGM metadata from host
   useEffect(() => {
-    if (isHost || hostLive) return;
+    if (youtubeIdProp) setRemoteYoutubeId(youtubeIdProp);
+  }, [youtubeIdProp]);
+
+  // Poll live BGM + YouTube source from host
+  useEffect(() => {
+    if (isHost && youtubeIdProp) return;
     let cancelled = false;
     const tick = async () => {
       const remote = await fetchRemoteLive();
       if (cancelled) return;
       setLiveMusic(remote?.music ?? null);
+      if (remote?.youtubeId) setRemoteYoutubeId(remote.youtubeId);
+      else if (!youtubeIdProp) setRemoteYoutubeId(undefined);
     };
     void tick();
     const id = window.setInterval(() => void tick(), 2500);
@@ -358,7 +379,7 @@ export default function FeedLiveNowStage({
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [isHost, hostLive]);
+  }, [isHost, youtubeIdProp]);
 
   // Mic / mixed BGM audio from host chunks
   useEffect(() => {
@@ -840,7 +861,7 @@ export default function FeedLiveNowStage({
     </div>
   );
 
-  /* ——— Host camera / uploaded video on this device ——— */
+  /* ——— Host camera / uploaded video / YouTube on this device ——— */
   if (hostLive && videoMode) {
     const panes = buildPanes();
     const fromFile = Boolean(fileMedia || isLiveMediaSourceActive());
@@ -848,6 +869,14 @@ export default function FeedLiveNowStage({
       <div className="absolute inset-0 flex flex-col bg-black">
         {multi ? (
           renderSplit(panes)
+        ) : ytLive && youtubeId ? (
+          <YoutubeEmbed
+            key={`yt-live-host-${youtubeId}`}
+            youtubeId={youtubeId}
+            title={title || 'YouTube Live'}
+            autoplay
+            fill
+          />
         ) : fromFile && fileMedia ? (
           <video
             key={fileMedia.src || 'file-live'}
@@ -882,7 +911,13 @@ export default function FeedLiveNowStage({
         <div className="absolute left-3 right-16 z-[5] flex items-center gap-2 pointer-events-none" style={BADGE_TOP}>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 h-7 text-[11px] font-bold tracking-wide shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{' '}
-            {multi ? `LIVE · ${1 + guestState.guests.length}` : fromFile ? 'FILE · LIVE' : 'LIVE · YOU'}
+            {multi
+              ? `LIVE · ${1 + guestState.guests.length}`
+              : ytLive
+                ? 'YT · LIVE'
+                : fromFile
+                  ? 'FILE · LIVE'
+                  : 'LIVE · YOU'}
           </span>
           <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0">
             {viewerCount}
@@ -892,7 +927,7 @@ export default function FeedLiveNowStage({
               {guestState.pending.length} join
             </span>
           ) : null}
-          {!fromFile ? (
+          {!fromFile && !ytLive ? (
             <span className="ml-auto pointer-events-auto">
               {flipBtn({
                 onClick: () => void switchCamera(),
@@ -902,9 +937,124 @@ export default function FeedLiveNowStage({
             </span>
           ) : null}
         </div>
+        {isHost ? (
+          <div
+            className="absolute left-3 right-14 z-[6] pointer-events-auto flex flex-wrap gap-2"
+            style={{ top: 'calc(var(--feed-chrome-h, 72px) + 44px)' }}
+          >
+            <button
+              type="button"
+              className={`rounded-full px-3 h-8 mono text-[10px] font-bold border backdrop-blur-md ${
+                publicFeedOn
+                  ? 'bg-[#8FFF4A] text-black border-[#8FFF4A]'
+                  : 'bg-black/55 text-white border-white/20'
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                const next = !publicFeedOn;
+                setPublicFeedOn(next);
+                patchBroadcast({
+                  publicFeed: next,
+                  visibility: next ? 'public' : 'contacts',
+                });
+              }}
+            >
+              {publicFeedOn ? 'Public For You · ON' : 'Show on public For You'}
+            </button>
+            <button
+              type="button"
+              className="rounded-full px-3 h-8 mono text-[10px] font-bold border backdrop-blur-md bg-[#25D366] text-black border-[#25D366]"
+              onClick={(e) => {
+                e.stopPropagation();
+                setWaInviteOpen(true);
+              }}
+            >
+              WhatsApp invite
+            </button>
+          </div>
+        ) : null}
+        {isHost && waInviteOpen ? (
+          <div
+            className="absolute inset-x-3 z-[70] pointer-events-auto rounded-2xl border border-white/15 bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
+            style={{ top: 'calc(var(--feed-chrome-h, 72px) + 88px)', maxHeight: '42svh' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <div>
+                <div className="text-[13px] font-extrabold">Share private live</div>
+                <div className="mono text-[9px] text-white/50">Send WhatsApp invite to selected contacts</div>
+              </div>
+              <button
+                type="button"
+                className="h-8 w-8 rounded-full border border-white/15 text-[12px]"
+                onClick={() => setWaInviteOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="space-y-1.5 overflow-y-auto max-h-[28svh] pr-1">
+              {(() => {
+                const bc = readBroadcast();
+                const invites =
+                  bc?.allowedContacts?.length
+                    ? bc.allowedContacts
+                    : (bc?.allowedContactIds || [])
+                        .map((id) => SEED_LIVE_CONTACTS.find((c) => c.id === id))
+                        .filter(Boolean)
+                        .map((c) => ({ id: c!.id, name: c!.name, phone: c!.phone }));
+                if (!invites.length) {
+                  return (
+                    <div className="mono text-[10px] text-white/50 py-3 text-center">
+                      No contacts selected · share link via WhatsApp picker
+                    </div>
+                  );
+                }
+                return invites.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    className="w-full flex items-center gap-2 rounded-xl border border-white/12 bg-white/[0.04] px-3 py-2.5 text-left hover:bg-white/[0.08]"
+                    onClick={() => {
+                      openWhatsAppPrivateLiveInvite({
+                        contact: c,
+                        hostName: makerName,
+                        title,
+                      });
+                    }}
+                  >
+                    <span className="h-8 w-8 rounded-full bg-[#25D366] text-black grid place-items-center text-[12px] font-black shrink-0">
+                      wa
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[12px] font-bold truncate">{c.name}</span>
+                      <span className="mono text-[9px] text-white/45">
+                        {c.phone ? `WhatsApp · ${c.phone}` : 'Open WhatsApp · pick chat'}
+                      </span>
+                    </span>
+                    <span className="mono text-[9px] font-bold text-[#25D366]">Send</span>
+                  </button>
+                ));
+              })()}
+            </div>
+            <button
+              type="button"
+              className="mt-2 w-full h-10 rounded-xl bg-[#25D366] text-black font-bold text-[12px]"
+              onClick={() => {
+                const bc = readBroadcast();
+                openWhatsAppPrivateLiveBroadcast({
+                  hostName: makerName,
+                  title,
+                  contactNames: (bc?.allowedContacts || []).map((c) => c.name),
+                });
+              }}
+            >
+              WhatsApp · share invite link
+            </button>
+          </div>
+        ) : null}
         <div
           className="absolute left-3 right-14"
-          style={{ top: 'calc(var(--feed-chrome-h, 72px) + 44px)', zIndex: 80 }}
+          style={{ top: 'calc(var(--feed-chrome-h, 72px) + 80px)', zIndex: 80 }}
         >
           <LiveHostJoinInbox active />
         </div>
@@ -914,7 +1064,7 @@ export default function FeedLiveNowStage({
   }
 
   /* ——— Host needs to enable cam ——— */
-  if (isHost && videoMode && status !== 'live') {
+  if (isHost && videoMode && !ytLive && status !== 'live') {
     return (
       <div className="absolute inset-0 flex flex-col bg-black">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] via-black to-black" />
@@ -1047,6 +1197,14 @@ export default function FeedLiveNowStage({
     <div className="absolute inset-0 flex flex-col bg-black">
       {showSplit ? (
         renderSplit(panes)
+      ) : ytLive && youtubeId && (watching || isHost) ? (
+        <YoutubeEmbed
+          key={`yt-live-view-${youtubeId}`}
+          youtubeId={youtubeId}
+          title={title || 'YouTube Live'}
+          autoplay={watching || isHost}
+          fill
+        />
       ) : frameUrl && (watching || frameLive) ? (
         <img
           src={frameUrl}
@@ -1071,7 +1229,7 @@ export default function FeedLiveNowStage({
       <div className="absolute left-3 right-3 z-[5] flex items-center gap-2" style={BADGE_TOP}>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 h-7 text-[11px] font-bold tracking-wide shrink-0 pointer-events-none">
           <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{' '}
-          {multi ? `LIVE · ${1 + guestState.guests.length}` : 'LIVE · AYO'}
+          {multi ? `LIVE · ${1 + guestState.guests.length}` : ytLive ? 'YT · LIVE' : 'LIVE · AYO'}
         </span>
         <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0 pointer-events-none">
           {viewerCount}

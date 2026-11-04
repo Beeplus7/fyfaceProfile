@@ -50,8 +50,29 @@ export default function UploadPostSheet({ open, file, onClose, onPost }: Props) 
 
         <div className="rounded-2xl overflow-hidden border border-white/12 bg-black aspect-[9/14] max-h-[42svh] relative">
           {previewUrl ? (
-            <video src={previewUrl} className="absolute inset-0 h-full w-full object-cover" controls playsInline muted={false} />
+            <video
+              key={previewUrl}
+              src={previewUrl}
+              className="absolute inset-0 h-full w-full object-cover"
+              controls
+              playsInline
+              autoPlay
+              // Preview with sound after file-pick gesture; fall back to muted if blocked
+              ref={(el) => {
+                if (!el) return;
+                el.muted = false;
+                el.defaultMuted = false;
+                el.volume = 1;
+                void el.play().catch(() => {
+                  el.muted = true;
+                  void el.play().catch(() => undefined);
+                });
+              }}
+            />
           ) : null}
+        </div>
+        <div className="mono text-[10px] text-white/45 mt-2">
+          Preview plays with sound when the browser allows it. Feed posts keep the original audio.
         </div>
 
         <div className="mt-3 space-y-2">

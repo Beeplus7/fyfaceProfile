@@ -6,13 +6,31 @@ export default function YoutubeEmbed({
   autoplay = false,
   className = '',
   compact = false,
+  fill = false,
 }: {
   youtubeId: string;
   title?: string;
   autoplay?: boolean;
   className?: string;
   compact?: boolean;
+  /** Full-bleed live stage (absolute inset-0) */
+  fill?: boolean;
 }) {
+  if (fill) {
+    return (
+      <div className={`absolute inset-0 overflow-hidden bg-black ${className}`}>
+        <iframe
+          title={title}
+          src={youtubeEmbedUrl(youtubeId, autoplay)}
+          className="absolute inset-0 h-full w-full border-0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className={

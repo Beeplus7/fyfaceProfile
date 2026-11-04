@@ -10,6 +10,8 @@ import {
 } from '../demo/testLab';
 import FeedLiveNowStage from '../live/FeedLiveNowStage';
 import GoLivePicker, { type GoLivePick } from '../live/GoLivePicker';
+import { broadcastMetaFromAudience } from '../live/liveAudience';
+import { openWhatsAppPrivateLiveBroadcast, privateLiveInviteUrl } from '../live/liveWhatsAppShare';
 import LiveGiftPortal from '../live/LiveGiftPortal';
 import LiveHostJoinInbox from '../live/LiveHostJoinInbox';
 import { focusLiveChat, openLiveGiftShop, readMfcWallet } from '../live/liveGifts';
@@ -18,6 +20,7 @@ import { fetchRemoteLive, publishRemoteLiveMusic } from '../live/liveRemote';
 import { isLiveAudioPublishing, setLiveMusicBed, startLiveAudioOnlyPublish } from '../live/liveAudioRelay';
 import { sharedStreamIsLive } from '../live/liveCameraBus';
 import { isLiveMediaSourceActive, startLiveMediaSource } from '../live/liveMediaSource';
+import { startSessionRecording } from '../live/liveSessionRecorder';
 import { acquireLiveCamera } from '../live/useLiveCamera';
 import {
   formatDuration,
@@ -37,6 +40,8 @@ import {
 import UploadPostSheet from './UploadPostSheet';
 import {
   IconBook,
+  IconBookmark,
+  IconBookmarkFill,
   IconComment,
   IconCommand,
   IconGames,
@@ -46,10 +51,32 @@ import {
   IconLive,
   IconMore,
   IconMute,
-  IconPlay,
+  IconMusic,
   IconShare,
   IconShop,
+  IconVolume,
 } from '../ui/icons';
+
+const SAVED_FEED_KEY = 'myface.feed.saved.v1';
+
+function readSavedFeedIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(SAVED_FEED_KEY);
+    if (!raw) return new Set();
+    const list = JSON.parse(raw) as string[];
+    return new Set(Array.isArray(list) ? list : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function writeSavedFeedIds(ids: Set<string>) {
+  try {
+    localStorage.setItem(SAVED_FEED_KEY, JSON.stringify([...ids]));
+  } catch {
+    /* ignore */
+  }
+}
 
 import posterLace from '../../assets/c580b278bd1bf106-image_20261029_175419.webp';
 import posterSew from '../../assets/2f721bcceb44c761-image_20261029_175423.webp';
@@ -99,6 +126,8 @@ interface Card {
   shopItems?: { name: string; price: string; tagX: number; tagY: number }[];
   duration?: string;
   viewers?: number;
+  /** YouTube video id when live source is YouTube */
+  youtubeId?: string;
   beforeAfter?: { before: string; after: string };
   /** IndexedDB clip for user-uploaded / recorded video */
   mediaId?: string;
@@ -254,6 +283,7 @@ export default function TimelineFeed() {
   const [cards, setCards] = useState<Card[]>(() => genTemplateCards());
   const [currentIndex, setCurrentIndex] = useState(0);
   const [liked, setLiked] = useState<Set<string>>(new Set());
+  const [saved, setSaved] = useState<Set<string>>(() => readSavedFeedIds());
   const [followed, setFollowed] = useState<Set<string>>(new Set());
   const [wallet, setWallet] = useState(() => readMfcWallet());
   const [musicDrawerOpen, setMusicDrawerOpen] = useState(false);
@@ -262,7 +292,17 @@ export default function TimelineFeed() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMusicPreview, setSelectedMusicPreview] = useState<Music | null>(null);
   const [isPlayingMap, setIsPlayingMap] = useState<Record<string, boolean>>({});
+  /** true = muted. Default false (sound on) after unlock; browsers may force mute until gesture. */
   const [mutedMap, setMutedMap] = useState<Record<string, boolean>>({});
+  /** Session unlock so autoplay-with-sound works after Post / first unmute tap */
+  const [feedSoundUnlocked, setFeedSoundUnlocked] = useState(() => {
+    try {
+      return sessionStorage.getItem('myface.feed.soundUnlocked') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const videoElsRef = useRef<Record<string, HTMLVideoElement | null>>({});
   const [giftBurst, setGiftBurst] = useState<string | null>(null);
   const [heartBurst, setHeartBurst] = useState<string | null>(null);
   const [showCaptions, setShowCaptions] = useState(true);
@@ -290,6 +330,55 @@ export default function TimelineFeed() {
   const flashToast = (msg: string) => {
     setToast(msg);
     window.setTimeout(() => setToast(null), 2000);
+  };
+
+  const unlockFeedSound = () => {
+    setFeedSoundUnlocked(true);
+    try {
+      sessionStorage.setItem('myface.feed.soundUnlocked', '1');
+    } catch {
+      /* ignore */
+    }
+    // Sync gesture unlock (must run before any await) — helps unmuted video.play later
+    try {
+      const AC =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (AC) {
+        const ctx = new AC();
+        const buf = ctx.createBuffer(1, 1, 22050);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+        void ctx.resume();
+      }
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const cardWantsMute = (cardId: string) =>
+    mutedMap[cardId] === true || (mutedMap[cardId] !== false && !feedSoundUnlocked);
+
+  const applyVideoAudio = (cardId: string, muted: boolean) => {
+    const el = videoElsRef.current[cardId];
+    if (!el) return;
+    el.defaultMuted = muted;
+    el.muted = muted;
+    if (!muted) el.volume = 1;
+    const play = el.play();
+    if (play && typeof play.catch === 'function') {
+      void play.catch(() => {
+        // Autoplay with sound blocked — keep video going muted, show mute icon
+        if (!muted) {
+          el.muted = true;
+          el.defaultMuted = true;
+          setMutedMap((m) => ({ ...m, [cardId]: true }));
+          void el.play().catch(() => undefined);
+        }
+      });
+    }
   };
 
   // Keep header MFC balance in sync with gift shop wallet
@@ -363,7 +452,12 @@ export default function TimelineFeed() {
   useEffect(() => {
     const syncLive = async () => {
       const local = readBroadcast();
-      const hostingHere = sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
+      const hostingYoutube = Boolean(local?.live && local.youtubeId && local.from !== 'remote');
+      const hostingHere =
+        sharedStreamIsLive() ||
+        isLiveAudioPublishing() ||
+        isLiveMediaSourceActive() ||
+        hostingYoutube;
       const remote = await fetchRemoteLive();
 
       // Stale local "live" on a viewer phone must not block remote AYO or steal the host badge
@@ -384,8 +478,14 @@ export default function TimelineFeed() {
     const onLiveEvent = () => {
       void syncLive();
     };
-    const syncRecs = () => setPublishedRecs(readPublishedLiveRecordings());
-    const syncUserPosts = () => setUserPosts(readFeedUserPosts());
+    const syncRecs = () => {
+      const next = readPublishedLiveRecordings();
+      setPublishedRecs((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    };
+    const syncUserPosts = () => {
+      const next = readFeedUserPosts();
+      setUserPosts((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    };
     void syncLive();
     syncRecs();
     syncUserPosts();
@@ -395,9 +495,9 @@ export default function TimelineFeed() {
     window.addEventListener('storage', onLiveEvent);
     window.addEventListener('storage', syncRecs);
     window.addEventListener('storage', syncUserPosts);
+    // Poll live status only — do NOT rebuild recordings every 2s (that remounted videos)
     const id = window.setInterval(() => {
       void syncLive();
-      syncRecs();
     }, 2000);
     return () => {
       window.removeEventListener('myface-broadcast', onLiveEvent);
@@ -410,17 +510,35 @@ export default function TimelineFeed() {
     };
   }, []);
 
-  // Resolve blob URLs for uploaded / recorded clips on visible cards
+  // Stable media id list — only resolve new blob URLs when clips are added/removed
+  const mediaIdsKey = useMemo(() => {
+    const ids: string[] = [];
+    userPosts.forEach((p) => ids.push(p.mediaId));
+    publishedRecs.forEach((r) => {
+      if (r.hasMedia) ids.push(r.id);
+    });
+    return ids.sort().join('|');
+  }, [userPosts, publishedRecs]);
+
+  const mediaUrlMapRef = useRef<Record<string, string>>({});
+  useEffect(() => {
+    mediaUrlMapRef.current = mediaUrlMap;
+  }, [mediaUrlMap]);
+
+  // Resolve blob URLs for uploaded / recorded clips — reuse existing URLs so playback is not reset
   useEffect(() => {
     let cancelled = false;
-    const ids = new Set<string>();
-    userPosts.forEach((p) => ids.add(p.mediaId));
-    publishedRecs.forEach((r) => {
-      if (r.hasMedia) ids.add(r.id);
-    });
+    const wanted = new Set(mediaIdsKey ? mediaIdsKey.split('|').filter(Boolean) : []);
     void (async () => {
+      const prev = mediaUrlMapRef.current;
       const next: Record<string, string> = {};
-      for (const id of ids) {
+      const revoke: string[] = [];
+      for (const [id, url] of Object.entries(prev)) {
+        if (wanted.has(id)) next[id] = url;
+        else revoke.push(url);
+      }
+      for (const id of wanted) {
+        if (next[id]) continue;
         try {
           const url = await liveClipUrl(id);
           if (url) next[id] = url;
@@ -429,25 +547,40 @@ export default function TimelineFeed() {
         }
       }
       if (cancelled) {
-        Object.values(next).forEach((u) => URL.revokeObjectURL(u));
+        for (const [id, url] of Object.entries(next)) {
+          if (prev[id] !== url) URL.revokeObjectURL(url);
+        }
         return;
       }
-      setMediaUrlMap((prev) => {
-        Object.values(prev).forEach((u) => {
-          if (!Object.values(next).includes(u)) URL.revokeObjectURL(u);
-        });
-        return next;
-      });
+      const unchanged =
+        Object.keys(next).length === Object.keys(prev).length &&
+        Object.keys(next).every((id) => next[id] === prev[id]);
+      if (unchanged) return;
+      revoke.forEach((u) => URL.revokeObjectURL(u));
+      setMediaUrlMap(next);
     })();
     return () => {
       cancelled = true;
     };
-  }, [userPosts, publishedRecs]);
+  }, [mediaIdsKey]);
+
+  const liveInviteOpen = searchParams.get('invite') === 'private';
 
   const liveNowCard = useMemo((): Card | null => {
     if (!liveBroadcast?.live) return null;
+    // Private contacts-only lives stay off public For You unless host opts in
+    // Invitees opening a WhatsApp link (?invite=private) can still join
+    const isPublic = Boolean(liveBroadcast.publicFeed) || liveBroadcast.visibility === 'public';
+    const isHostSession = liveBroadcast.from !== 'remote';
+    if (!isPublic && !isHostSession && !liveInviteOpen) return null;
     const maker = HOST_MAKER;
     const mode = liveBroadcast.mode || 'video';
+    const privateTag =
+      !isPublic && (liveBroadcast.allowedContactIds?.length || 0) > 0
+        ? `Private · ${liveBroadcast.allowedContactIds!.length} contacts`
+        : !isPublic
+          ? 'Private · contacts'
+          : null;
     return {
       id: 'live-now-host',
       type: 'liveNow',
@@ -456,7 +589,11 @@ export default function TimelineFeed() {
       title: liveBroadcast.title || (mode === 'audio' ? 'Audio Live now' : 'Video Live now'),
       caption: mode === 'audio'
         ? 'Voice-only live · tap to join the room'
-        : 'Creator is LIVE on camera · tap to watch on the feed',
+        : liveBroadcast.youtubeId
+          ? 'YouTube Live on the feed · tap Watch Live'
+          : privateTag
+            ? `${privateTag} · not on public feed until you switch on`
+            : 'Creator is LIVE on camera · tap to watch on the feed',
       hashtags: ['#LIVE', '#Oldham', `#${maker.trade.replace(/\s+/g, '')}`, '#VideoLive'],
       videoPoster: 'live-now',
       posterSrc: POSTERS[0],
@@ -464,11 +601,12 @@ export default function TimelineFeed() {
       likes: 0,
       comments: 0,
       gifts: 0,
-      projectTag: 'Live session',
+      projectTag: privateTag || (liveBroadcast.youtubeId ? 'YouTube Live' : 'Live session'),
       viewers: liveBroadcast.viewers,
       duration: liveBroadcast.startedAt,
+      youtubeId: liveBroadcast.youtubeId,
     };
-  }, [liveBroadcast]);
+  }, [liveBroadcast, liveInviteOpen]);
 
   const feedCardH = useRef(0);
   const touchingRef = useRef(false);
@@ -662,6 +800,16 @@ export default function TimelineFeed() {
         if (rec) await callAPI('records.delete',{collection:'likes', id:rec.id});
       }
     } catch {}
+  };
+
+  const toggleSave = (cardId: string) => {
+    const already = saved.has(cardId);
+    const next = new Set(saved);
+    if (already) next.delete(cardId);
+    else next.add(cardId);
+    setSaved(next);
+    writeSavedFeedIds(next);
+    flashToast(already ? 'Removed from saved' : 'Saved to collection');
   };
 
   const toggleFollow = async (makerId: string) => {
@@ -894,10 +1042,29 @@ export default function TimelineFeed() {
   const hostingHere =
     sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
 
-  const liveShareUrl = (card: Card) =>
-    `${window.location.origin}/app/feed?live=1&maker=${encodeURIComponent(card.maker.id)}`;
+  const liveShareUrl = (card: Card) => {
+    const privateLive =
+      liveBroadcast?.live &&
+      !liveBroadcast.publicFeed &&
+      liveBroadcast.visibility !== 'public';
+    if (privateLive) return privateLiveInviteUrl();
+    return `${window.location.origin}/app/feed?live=1&maker=${encodeURIComponent(card.maker.id)}`;
+  };
 
   const shareLiveSession = async (card: Card) => {
+    const privateLive =
+      liveBroadcast?.live &&
+      !liveBroadcast.publicFeed &&
+      liveBroadcast.visibility !== 'public';
+    if (privateLive) {
+      openWhatsAppPrivateLiveBroadcast({
+        hostName: card.maker.name,
+        title: card.title,
+        contactNames: (liveBroadcast?.allowedContacts || []).map((c) => c.name),
+      });
+      flashToast('Opening WhatsApp…');
+      return;
+    }
     const url = liveShareUrl(card);
     const title = card.title || `${card.maker.name} is LIVE`;
     const text = `Watch ${card.maker.name} live on MyFace`;
@@ -984,6 +1151,20 @@ export default function TimelineFeed() {
                 <div className="h-4 w-4 rounded-full m-gradient flex items-center justify-center text-[8px] font-black text-black">M</div>
                 <span className="mono text-[11px] font-bold">{wallet}</span>
               </div>
+              <button
+                type="button"
+                className="h-8 w-8 rounded-full bg-black/25 border border-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/10 transition"
+                aria-label="Music"
+                onClick={() => {
+                  const current = visibleCards[currentIndex] || cards[currentIndex];
+                  const live =
+                    cards.find((c) => c.type === 'liveNow' && c.id === current?.id) ||
+                    cards.find((c) => c.type === 'liveNow');
+                  openMusicDrawer(live?.id || current?.id || 'live-now-host');
+                }}
+              >
+                <IconMusic size={15} />
+              </button>
               <button
                 type="button"
                 className="h-8 w-8 rounded-full bg-black/25 border border-white/10 backdrop-blur-md flex items-center justify-center hover:bg-white/10 transition relative"
@@ -1223,23 +1404,49 @@ export default function TimelineFeed() {
                       <div className="absolute inset-0">
                           {card.mediaId && mediaUrlMap[card.mediaId] ? (
                             <video
-                              key={mediaUrlMap[card.mediaId]}
+                              key={card.mediaId}
+                              ref={(el) => {
+                                videoElsRef.current[card.id] = el;
+                                if (!el) return;
+                                const muted = cardWantsMute(card.id);
+                                el.defaultMuted = muted;
+                                el.muted = muted;
+                                if (!muted) el.volume = 1;
+                              }}
                               src={mediaUrlMap[card.mediaId]}
                               className="absolute inset-0 h-full w-full object-cover bg-black"
                               playsInline
                               loop
                               autoPlay
-                              muted={mutedMap[card.id] !== false}
+                              muted={cardWantsMute(card.id)}
+                              onLoadedData={() => {
+                                applyVideoAudio(card.id, cardWantsMute(card.id));
+                              }}
                               onClick={(e) => e.stopPropagation()}
                             />
                           ) : null}
                           <button
                             type="button"
-                            onClick={(e)=>{e.stopPropagation(); setMutedMap(m=>({...m,[card.id]:!m[card.id]}));}}
+                            aria-label={cardWantsMute(card.id) ? 'Unmute' : 'Mute'}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const nextMuted = !cardWantsMute(card.id);
+                              if (!nextMuted) unlockFeedSound();
+                              setMutedMap((m) => {
+                                const n = { ...m, [card.id]: nextMuted };
+                                if (!nextMuted) {
+                                  Object.keys(videoElsRef.current).forEach((id) => {
+                                    if (id !== card.id && n[id] !== true) n[id] = false;
+                                  });
+                                }
+                                return n;
+                              });
+                              applyVideoAudio(card.id, nextMuted);
+                            }}
                             className="absolute right-3 z-[5] h-9 w-9 rounded-lg border border-white/15 bg-black/40 backdrop-blur-md text-white flex items-center justify-center"
                             style={{ top: 'calc(var(--feed-chrome-h, 72px) + 8px)' }}
                           >
-                            {mutedMap[card.id]===false ? <IconPlay size={16} /> : <IconMute size={16} />}
+                            {cardWantsMute(card.id) ? <IconMute size={16} /> : <IconVolume size={16} />}
                           </button>
                       </div>
                     )}
@@ -1250,10 +1457,20 @@ export default function TimelineFeed() {
                         makerName={card.maker.name}
                         makerAvatar={card.maker.avatar}
                         makerColor={card.maker.color}
-                        isHost={sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive()}
+                        isHost={
+                          sharedStreamIsLive() ||
+                          isLiveAudioPublishing() ||
+                          isLiveMediaSourceActive() ||
+                          Boolean(
+                            card.youtubeId &&
+                              liveBroadcast?.youtubeId === card.youtubeId &&
+                              liveBroadcast.from !== 'remote',
+                          )
+                        }
                         mode={card.liveMode || 'video'}
                         viewers={card.viewers}
                         cardId={card.id}
+                        youtubeId={card.youtubeId}
                       />
                     )}
 
@@ -1318,6 +1535,13 @@ export default function TimelineFeed() {
                           setActionSheet({ kind: 'share', card });
                         },
                         Icon: IconShare,
+                      },
+                      {
+                        k: 'save',
+                        label: saved.has(card.id) ? 'Saved' : 'Save',
+                        active: saved.has(card.id),
+                        action: () => toggleSave(card.id),
+                        Icon: (saved.has(card.id) ? IconBookmarkFill : IconBookmark) as typeof IconHeart,
                       },
                       ...(card.type === 'liveNow'
                         ? [
@@ -1698,6 +1922,10 @@ export default function TimelineFeed() {
                 setUploadPostFile(pick.file);
                 return;
               }
+              const audienceMeta = broadcastMetaFromAudience(pick.audience);
+              const goPublic = Boolean(
+                pick.audience.publicFeed || pick.audience.visibility === 'public',
+              );
               if (pick.kind === 'camera' && pick.mode === 'video') {
                 try {
                   await acquireLiveCamera();
@@ -1711,10 +1939,12 @@ export default function TimelineFeed() {
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
-                  title: "Video Live · AYO'S · OL1",
+                  title: goPublic ? "Video Live · AYO'S · OL1" : "Private Live · contacts",
+                  ...audienceMeta,
                 });
                 setGoLiveOpen(false);
-                navigate('/app/live?mode=video');
+                flashToast(goPublic ? 'Live on public feed' : 'Private live · contacts only');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
                 return;
               }
               if (pick.kind === 'camera' && pick.mode === 'audio') {
@@ -1727,26 +1957,54 @@ export default function TimelineFeed() {
                 setBroadcast(true, {
                   mode: 'audio',
                   viewers: 144,
-                  title: "Audio Live · AYO'S · OL1",
+                  title: goPublic ? "Audio Live · AYO'S · OL1" : 'Private Audio · contacts',
+                  ...audienceMeta,
                 });
                 setGoLiveOpen(false);
-                navigate('/app/live?mode=audio');
+                flashToast(goPublic ? 'Audio live on public feed' : 'Private audio · contacts only');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=audio');
+                return;
+              }
+              if (pick.kind === 'youtube') {
+                try {
+                  const { stopLiveMediaSource } = await import('../live/liveMediaSource');
+                  stopLiveMediaSource();
+                } catch {
+                  /* ignore */
+                }
+                setBroadcast(true, {
+                  mode: 'video',
+                  viewers: 144,
+                  youtubeId: pick.youtubeId,
+                  title: goPublic
+                    ? `YouTube Live · ${pick.youtubeId}`
+                    : `Private YT · ${pick.youtubeId}`,
+                  ...audienceMeta,
+                });
+                setGoLiveOpen(false);
+                flashToast(goPublic ? 'YouTube on public feed' : 'Private YouTube · contacts only');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
                 return;
               }
               if (pick.kind === 'file' || pick.kind === 'link') {
                 const src = pick.kind === 'file' ? pick.file : pick.url;
                 await startLiveMediaSource(src);
+                void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
-                  title:
-                    pick.kind === 'file'
+                  title: goPublic
+                    ? pick.kind === 'file'
                       ? `File Live · ${pick.file.name.slice(0, 28)}`
-                      : 'Link Live · AYO stream',
+                      : 'Link Live · AYO stream'
+                    : pick.kind === 'file'
+                      ? `Private file · ${pick.file.name.slice(0, 20)}`
+                      : 'Private link live',
+                  ...audienceMeta,
                 });
                 setGoLiveOpen(false);
-                flashToast(pick.kind === 'file' ? 'File streaming to feed' : 'Link streaming to feed');
-                navigate('/app/feed?live=1');
+                flashToast(goPublic ? 'Streaming to public feed' : 'Private live · contacts only');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
               }
             } catch (err) {
               const msg = err instanceof Error ? err.message : 'Could not start stream';
@@ -1761,13 +2019,31 @@ export default function TimelineFeed() {
         file={uploadPostFile}
         onClose={() => setUploadPostFile(null)}
         onPost={async ({ file, title, caption }) => {
+          // Post click = user gesture: unlock audio BEFORE any await
+          unlockFeedSound();
+          const seedUrl = URL.createObjectURL(file);
+          const warm = document.createElement('video');
+          warm.playsInline = true;
+          warm.setAttribute('playsinline', '');
+          warm.src = seedUrl;
+          warm.muted = false;
+          warm.volume = 1;
+          void warm.play().catch(() => undefined);
+
           const post = await createFeedUserPost({ file, title, caption });
+          const cardId = `upost-${post.id}`;
+          // Seed blob URL immediately so feed can play with sound without waiting on IDB
+          setMediaUrlMap((m) => ({ ...m, [post.mediaId]: seedUrl }));
+          setMutedMap((m) => ({ ...m, [cardId]: false }));
           setUserPosts(readFeedUserPosts());
           setUploadPostFile(null);
           setTopTab('For You');
-          flashToast('Posted to For You');
+          flashToast('Posted with sound · For You');
+          warm.pause();
           requestAnimationFrame(() => {
-            cardRefs.current[`upost-${post.id}`]?.scrollIntoView({ behavior: 'auto', block: 'start' });
+            cardRefs.current[cardId]?.scrollIntoView({ behavior: 'auto', block: 'start' });
+            window.setTimeout(() => applyVideoAudio(cardId, false), 80);
+            window.setTimeout(() => applyVideoAudio(cardId, false), 350);
           });
         }}
       />

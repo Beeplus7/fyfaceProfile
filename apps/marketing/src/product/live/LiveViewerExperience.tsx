@@ -219,13 +219,18 @@ export default function LiveViewerExperience() {
     setPostPublic(false);
   };
 
-  const beginVideoLive = async () => {
+  const beginVideoLive = async (audience?: import('./liveAudience').LiveAudience) => {
+    const { broadcastMetaFromAudience } = await import('./liveAudience');
+    const audienceMeta = broadcastMetaFromAudience(audience);
     // Camera FIRST while click is still a user gesture (Mac Chrome/Safari).
     const ok = await startCamera();
     setBroadcast(true, {
       mode: 'video',
       viewers: 144,
-      title: "AYO'S TAILORS · Video Live · OL1",
+      title: audienceMeta.publicFeed
+        ? "AYO'S TAILORS · Video Live · OL1"
+        : "AYO'S TAILORS · Private Live",
+      ...audienceMeta,
     });
     setBc(readBroadcast());
     setGoLiveOpen(false);
@@ -239,15 +244,20 @@ export default function LiveViewerExperience() {
     }
   };
 
-  const beginAudioLive = () => {
+  const beginAudioLive = (audience?: import('./liveAudience').LiveAudience) => {
     // stopCamera also clears frame/audio relays — start mic publish after
     stopCamera();
     void (async () => {
+      const { broadcastMetaFromAudience } = await import('./liveAudience');
+      const audienceMeta = broadcastMetaFromAudience(audience);
       const ok = await startLiveAudioOnlyPublish();
       setBroadcast(true, {
         mode: 'audio',
         viewers: 144,
-        title: "AYO'S TAILORS · Audio Live · OL1",
+        title: audienceMeta.publicFeed
+          ? "AYO'S TAILORS · Audio Live · OL1"
+          : "AYO'S TAILORS · Private Audio",
+        ...audienceMeta,
       });
       setBc(readBroadcast());
       setGoLiveOpen(false);
@@ -735,16 +745,33 @@ export default function LiveViewerExperience() {
               return;
             }
             if (pick.kind === 'camera' && pick.mode === 'audio') {
-              beginAudioLive();
+              beginAudioLive(pick.audience);
               return;
             }
             if (pick.kind === 'camera') {
-              void beginVideoLive();
+              void beginVideoLive(pick.audience);
               return;
             }
             try {
+              const { broadcastMetaFromAudience } = await import('./liveAudience');
+              const audienceMeta = broadcastMetaFromAudience(pick.audience);
+              if (pick.kind === 'youtube') {
+                stopLiveMediaSource();
+                setBroadcast(true, {
+                  mode: 'video',
+                  viewers: 144,
+                  youtubeId: pick.youtubeId,
+                  title: `YouTube Live · ${pick.youtubeId}`,
+                  ...audienceMeta,
+                });
+                setBc(readBroadcast());
+                setGoLiveOpen(false);
+                setShowTheater(false);
+                return;
+              }
               const src = pick.kind === 'file' ? pick.file : pick.url;
               await startLiveMediaSource(src);
+              void startSessionRecording({ mode: 'video' });
               setBroadcast(true, {
                 mode: 'video',
                 viewers: 144,
@@ -752,6 +779,7 @@ export default function LiveViewerExperience() {
                   pick.kind === 'file'
                     ? `File Live · ${pick.file.name.slice(0, 28)}`
                     : 'Link Live · AYO stream',
+                ...audienceMeta,
               });
               setBc(readBroadcast());
               setGoLiveOpen(false);

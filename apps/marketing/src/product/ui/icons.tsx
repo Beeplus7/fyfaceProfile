@@ -108,6 +108,23 @@ export function IconBook(p: IconProps) {
   );
 }
 
+/** TikTok-style bookmark / save */
+export function IconBookmark(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.5L6 20V5a1 1 0 0 1 1-1Z" />
+    </svg>
+  );
+}
+
+export function IconBookmarkFill(p: IconProps) {
+  return (
+    <svg {...base({ ...p, strokeWidth: 0 })} fill="currentColor" stroke="none">
+      <path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.5L6 20V5a1 1 0 0 1 1-1Z" />
+    </svg>
+  );
+}
+
 export function IconShop(p: IconProps) {
   return (
     <svg {...base(p)}>
@@ -142,6 +159,15 @@ export function IconMute(p: IconProps) {
     <svg {...base(p)}>
       <path d="M11 5 6 9H3v6h3l5 4V5Z" />
       <path d="m16 9 5 5M21 9l-5 5" />
+    </svg>
+  );
+}
+
+export function IconVolume(p: IconProps) {
+  return (
+    <svg {...base(p)}>
+      <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+      <path d="M16 9.5a4 4 0 0 1 0 5M18.5 7a7 7 0 0 1 0 10" />
     </svg>
   );
 }

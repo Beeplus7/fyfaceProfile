@@ -44,6 +44,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'updatedAt' => gmdate('c'),
     'hasAudio' => !empty($data['hasAudio']),
   );
+  // YouTube as primary live video (embed id synced to viewers)
+  if (!empty($data['youtubeId']) && preg_match('/^[a-zA-Z0-9_-]{11}$/', (string)$data['youtubeId'])) {
+    $payload['youtubeId'] = (string)$data['youtubeId'];
+  }
+  // Audience: contacts-only vs public For You
+  $visibility = (isset($data['visibility']) && $data['visibility'] === 'public') ? 'public' : 'contacts';
+  $payload['visibility'] = $visibility;
+  $payload['publicFeed'] = !empty($data['publicFeed']) || $visibility === 'public';
+  $ids = array();
+  if (isset($data['allowedContactIds']) && is_array($data['allowedContactIds'])) {
+    foreach ($data['allowedContactIds'] as $cid) {
+      $s = substr(preg_replace('/[^a-zA-Z0-9_-]/', '', (string)$cid), 0, 64);
+      if ($s !== '') $ids[] = $s;
+      if (count($ids) >= 40) break;
+    }
+  }
+  $payload['allowedContactIds'] = $ids;
   // Sync live BGM so phones can play the same track (YouTube / Jamendo URL)
   if (isset($data['music']) && is_array($data['music'])) {
     $m = $data['music'];

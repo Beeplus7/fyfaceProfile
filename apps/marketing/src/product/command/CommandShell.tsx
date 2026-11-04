@@ -24,6 +24,7 @@ import {
 import { readBroadcast, setBroadcast, type BroadcastMode } from '../demo/testLab';
 import GoLivePicker, { type GoLivePick } from '../live/GoLivePicker';
 import { startLiveMediaSource } from '../live/liveMediaSource';
+import { startSessionRecording } from '../live/liveSessionRecorder';
 import { isOnboardingDone, loadProfile } from '../onboarding/storage';
 import {
   IconChart,
@@ -840,6 +841,12 @@ export default function CommandShell() {
         onClose={() => setGoLiveOpen(false)}
         theme="light"
         title="Go Live"
+        contacts={contactRows.map((c) => ({
+          id: c.id,
+          name: c.name,
+          trade: c.trade,
+          status: c.status,
+        }))}
         onChoose={(pick: GoLivePick) => {
           void (async () => {
             if (pick.kind === 'post') {
@@ -847,9 +854,42 @@ export default function CommandShell() {
               navigate('/app/feed?upload=1');
               return;
             }
+            const { broadcastMetaFromAudience } = await import('../live/liveAudience');
+            const audienceMeta = broadcastMetaFromAudience(
+              pick.audience,
+              contactRows.map((c) => ({
+                id: c.id,
+                name: c.name,
+                trade: c.trade,
+                status: c.status,
+              })),
+            );
+            const goPublic = Boolean(
+              pick.audience.publicFeed || pick.audience.visibility === 'public',
+            );
+            if (pick.kind === 'youtube') {
+              try {
+                const { stopLiveMediaSource } = await import('../live/liveMediaSource');
+                stopLiveMediaSource();
+                setBroadcast(true, {
+                  mode: 'video',
+                  viewers: 144,
+                  youtubeId: pick.youtubeId,
+                  title: `YouTube Live · ${pick.youtubeId}`,
+                  ...audienceMeta,
+                });
+                setArcadeLive(true);
+                setGoLiveOpen(false);
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+              } catch (err) {
+                window.alert(err instanceof Error ? err.message : 'Could not start YouTube live');
+              }
+              return;
+            }
             if (pick.kind === 'file' || pick.kind === 'link') {
               try {
                 await startLiveMediaSource(pick.kind === 'file' ? pick.file : pick.url);
+                void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
@@ -857,10 +897,11 @@ export default function CommandShell() {
                     pick.kind === 'file'
                       ? `File Live · ${pick.file.name.slice(0, 28)}`
                       : 'Link Live · AYO stream',
+                  ...audienceMeta,
                 });
                 setArcadeLive(true);
                 setGoLiveOpen(false);
-                navigate('/app/feed?live=1');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
               } catch (err) {
                 window.alert(err instanceof Error ? err.message : 'Could not start media stream');
               }
@@ -871,6 +912,7 @@ export default function CommandShell() {
               mode,
               viewers: 144,
               title: mode === 'audio' ? "Audio Live · AYO'S · OL1" : "Video Live · AYO'S · OL1",
+              ...audienceMeta,
             });
             try {
               if (mode === 'video') sessionStorage.setItem('myface.live.needCamera', '1');
