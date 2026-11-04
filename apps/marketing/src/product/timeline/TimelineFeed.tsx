@@ -1307,7 +1307,6 @@ export default function TimelineFeed() {
                         },
                         Icon: IconComment,
                       },
-                      {k:'gift', label:`${card.gifts}`, active:false, action:()=>openGiftForCard(card.id), Icon: IconGift},
                       {
                         k:'share',
                         label:'Share',

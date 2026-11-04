@@ -896,21 +896,6 @@ export default function FeedLiveNowStage({
         >
           <LiveHostJoinInbox active />
         </div>
-        <div
-          className="absolute right-3 z-[43] pointer-events-auto"
-          style={{ bottom: 'calc(100px + 28svh)' }}
-        >
-          <button
-            type="button"
-            className="h-10 px-3.5 rounded-full bg-[#FE2C55] text-white font-bold text-[12px] shadow-[0_2px_12px_rgba(254,44,85,0.45)]"
-            onClick={(e) => {
-              e.stopPropagation();
-              openGift();
-            }}
-          >
-            🎁 Gift
-          </button>
-        </div>
         {chatComposer}
       </div>
     );
