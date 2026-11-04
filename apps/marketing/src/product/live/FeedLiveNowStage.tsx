@@ -1242,7 +1242,7 @@ export default function FeedLiveNowStage({
           <button
             type="button"
             disabled={joinBusy || guestState.guests.length >= 3}
-            className="h-6 px-2.5 rounded-full bg-[#8FFF4A] text-black font-bold text-[10px] disabled:opacity-50 shrink-0"
+            className="h-7 px-3 rounded-full bg-[#8FFF4A] text-black font-extrabold text-[11px] disabled:opacity-50 shrink-0 shadow-[0_2px_10px_rgba(143,255,74,0.35)]"
             onClick={() => void onRequestJoin()}
           >
             {guestState.guests.length >= 3 ? 'Full' : 'Join'}
@@ -1252,7 +1252,7 @@ export default function FeedLiveNowStage({
           <button
             type="button"
             disabled={joinBusy}
-            className="h-6 px-2.5 rounded-full bg-[#FFE600] text-black font-bold text-[10px] shrink-0"
+            className="h-7 px-3 rounded-full bg-[#FFE600] text-black font-extrabold text-[11px] shrink-0"
             onClick={() => void onCancelJoin()}
           >
             Waiting… ✕
@@ -1266,13 +1266,13 @@ export default function FeedLiveNowStage({
                   busy: guestSwitching,
                   label: guestFacing === 'environment' ? 'Back' : 'Front',
                   className:
-                    'h-6 px-2 rounded-full bg-black/55 border border-white/20 font-bold text-[10px] disabled:opacity-50',
+                    'h-7 px-2.5 rounded-full bg-black/55 border border-white/20 font-bold text-[10px] disabled:opacity-50',
                 })
               : null}
             <button
               type="button"
               disabled={joinBusy}
-              className="h-6 px-2.5 rounded-full bg-white/15 border border-white/25 font-bold text-[10px] shrink-0"
+              className="h-7 px-2.5 rounded-full bg-white/15 border border-white/25 font-bold text-[10px] shrink-0"
               onClick={() => void onLeaveGuest()}
             >
               Leave
@@ -1281,7 +1281,7 @@ export default function FeedLiveNowStage({
         ) : null}
         <button
           type="button"
-          className="h-6 px-2.5 rounded-full bg-[#FE2C55] text-white font-bold text-[10px] shadow-[0_2px_8px_rgba(254,44,85,0.4)] shrink-0"
+          className="h-7 px-3 rounded-full bg-[#FE2C55] text-white font-extrabold text-[11px] shadow-[0_2px_10px_rgba(254,44,85,0.45)] shrink-0"
           onClick={() => openGift()}
         >
           🎁 Gift
@@ -1289,7 +1289,7 @@ export default function FeedLiveNowStage({
         {watching ? (
           <button
             type="button"
-            className="ml-auto h-6 px-2.5 rounded-full bg-black/55 border border-white/15 mono text-[10px] font-bold shrink-0"
+            className="ml-auto h-7 px-2.5 rounded-full bg-black/55 border border-white/15 mono text-[10px] font-bold shrink-0"
             onClick={(e) => {
               e.stopPropagation();
               setSoundOn((v) => !v);
@@ -1361,7 +1361,7 @@ export default function FeedLiveNowStage({
         </div>
       ) : (
         <>
-          {!frameLive && !multi && !amGuest ? (
+          {!frameLive && !multi && !amGuest && !ytLive ? (
             <div className="absolute inset-0 z-[4] flex flex-col items-center justify-center pointer-events-none px-6">
               <div
                 className="h-28 w-28 rounded-full grid place-items-center text-black text-[32px] font-black ring-4 ring-red-500/50 animate-pulse"
