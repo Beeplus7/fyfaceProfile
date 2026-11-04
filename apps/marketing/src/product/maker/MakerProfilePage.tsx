@@ -1,10 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { readBroadcast } from '../demo/testLab';
 import { getTemplateMaker, TEMPLATE_MAKERS } from '../makers/templateMakers';
-import { sharedStreamIsLive } from '../live/liveCameraBus';
-import { isLiveAudioPublishing } from '../live/liveAudioRelay';
-import { isLiveMediaSourceActive } from '../live/liveMediaSource';
+import { isLocalLiveHost } from '../live/liveHost';
 import { IconShare } from '../ui/icons';
 import posterLace from '../../assets/c580b278bd1bf106-image_20261029_175419.webp';
 import posterSew from '../../assets/2f721bcceb44c761-image_20261029_175423.webp';
@@ -39,8 +36,7 @@ export default function MakerProfilePage() {
     .map((w) => w[0])
     .join('')
     .slice(0, 2);
-  const hostingHere = sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
-  const live = Boolean(readBroadcast()?.live && hostingHere);
+  const live = isLocalLiveHost();
   const [following, setFollowing] = useState(false);
   const [tab, setTab] = useState<ProfileTab>('grid');
 

@@ -19,6 +19,7 @@ import { getOrCreateGuestIdentity } from '../live/liveGuests';
 import { fetchRemoteLive, publishRemoteLiveMusic } from '../live/liveRemote';
 import { isLiveAudioPublishing, setLiveMusicBed, startLiveAudioOnlyPublish } from '../live/liveAudioRelay';
 import { sharedStreamIsLive } from '../live/liveCameraBus';
+import { isLocalLiveHost } from '../live/liveHost';
 import { isLiveMediaSourceActive, startLiveMediaSource } from '../live/liveMediaSource';
 import { startSessionRecording } from '../live/liveSessionRecorder';
 import { acquireLiveCamera } from '../live/useLiveCamera';
@@ -457,16 +458,12 @@ export default function TimelineFeed() {
   useEffect(() => {
     const syncLive = async () => {
       const local = readBroadcast();
-      const hostingYoutube = Boolean(local?.live && local.youtubeId && local.from !== 'remote');
-      const hostingHere =
-        sharedStreamIsLive() ||
-        isLiveAudioPublishing() ||
-        isLiveMediaSourceActive() ||
-        hostingYoutube;
+      const hostingHere = isLocalLiveHost();
       const remote = await fetchRemoteLive();
 
-      // Stale local "live" on a viewer phone must not block remote AYO or steal the host badge
-      if (local?.live && !hostingHere) {
+      // Stale local "live" on a viewer phone must not block remote AYO or steal the host badge.
+      // Never clear YouTube local hosts — they have no MediaStream.
+      if (local?.live && local.from !== 'remote' && !hostingHere && !local.youtubeId) {
         clearLocalBroadcastOnly();
       }
 
@@ -850,8 +847,7 @@ export default function TimelineFeed() {
     setCards(prev=>prev.map(c=> c.id===activeCardForMusic ? {...c, music: selectedMusicPreview} : c));
     setMusicDrawerOpen(false);
     // Only the device actually hosting may push BGM to the room
-    const hostingHere =
-      sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
+    const hostingHere = isLocalLiveHost();
     if (hostingHere) {
       const playableUrl =
         selectedMusicPreview.objectUrl &&
@@ -1047,8 +1043,7 @@ export default function TimelineFeed() {
     else if (timelineRef.current) timelineRef.current.scrollTop = 0;
   };
 
-  const hostingHere =
-    sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
+  const hostingHere = isLocalLiveHost();
 
   const liveShareUrl = (card: Card) => {
     const privateLive =
@@ -1216,7 +1211,7 @@ export default function TimelineFeed() {
               <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
               <span className="mono text-[9px] font-bold tracking-wide whitespace-nowrap">
                 {liveBroadcast?.live
-                  ? sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive()
+                  ? isLocalLiveHost()
                     ? 'YOU LIVE · tap'
                     : 'LIVE · return'
                   : `${LIVE_NEARBY_COUNT} LIVE`}
@@ -1465,16 +1460,7 @@ export default function TimelineFeed() {
                         makerName={card.maker.name}
                         makerAvatar={card.maker.avatar}
                         makerColor={card.maker.color}
-                        isHost={
-                          sharedStreamIsLive() ||
-                          isLiveAudioPublishing() ||
-                          isLiveMediaSourceActive() ||
-                          Boolean(
-                            card.youtubeId &&
-                              liveBroadcast?.youtubeId === card.youtubeId &&
-                              liveBroadcast.from !== 'remote',
-                          )
-                        }
+                        isHost={isLocalLiveHost()}
                         mode={card.liveMode || 'video'}
                         viewers={card.viewers}
                         cardId={card.id}

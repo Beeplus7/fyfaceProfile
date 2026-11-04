@@ -26,6 +26,7 @@ import {
 import { isLiveMediaSourceActive, startLiveMediaSource, stopLiveMediaSource } from './liveMediaSource';
 import { startSessionRecording, stopSessionRecording, takePendingRecordingBlob } from './liveSessionRecorder';
 import { sharedStreamIsLive } from './liveCameraBus';
+import { isLocalLiveHost } from './liveHost';
 import { useLiveCamera } from './useLiveCamera';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
 import LiveGiftPortal from './LiveGiftPortal';
@@ -68,13 +69,14 @@ export default function LiveViewerExperience() {
   const [postPublic, setPostPublic] = useState(false);
 
   const watchIntent = params.get('watch') === '1' || params.get('view') === '1';
-  const localHost = sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
+  // Include YouTube hosts (no MediaStream) — camera-only checks wrongly treated them as viewers
+  const localHost = isLocalLiveHost();
   const session = localHost && broadcast?.live ? broadcast : remoteLive || broadcast;
   const mode: BroadcastMode =
     session?.mode || (params.get('mode') === 'audio' ? 'audio' : 'video');
   const audioLive = Boolean(session?.live && mode === 'audio');
   const videoHosting = Boolean(localHost && broadcast?.live && mode === 'video');
-  /** Viewers always watch on For You feed — never workshop HTML */
+  /** Viewers watch on For You — hosts (incl. YouTube) keep Live Workshop */
   const redirectWatchToFeed = Boolean(!localHost && (watchIntent || remoteLive?.live));
   const watchingRemote = false;
   const {
@@ -98,8 +100,10 @@ export default function LiveViewerExperience() {
     const syncLocal = () => setBc(readBroadcast());
     const syncRemote = async () => {
       const local = readBroadcast();
-      const hostingHere = sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
-      if (local?.live && !hostingHere) {
+      const hostingHere = isLocalLiveHost();
+      // Only drop stale local flags when this device is clearly not the host
+      // (YouTube hosts have no camera — never clear them here)
+      if (local?.live && local.from !== 'remote' && !hostingHere && !local.youtubeId) {
         clearLocalBroadcastOnly();
       }
       if (hostingHere && local?.live) {

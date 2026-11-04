@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { clearLocalBroadcastOnly, readBroadcast } from '../demo/testLab';
-import { isLiveAudioPublishing } from './liveAudioRelay';
-import { sharedStreamIsLive } from './liveCameraBus';
-import { isLiveMediaSourceActive } from './liveMediaSource';
+import { isLocalLiveHost } from './liveHost';
 import { fetchRemoteLive } from './liveRemote';
 
 /**
@@ -19,13 +17,16 @@ export default function LiveReturnPill() {
     let cancelled = false;
     const tick = async () => {
       const local = readBroadcast();
-      const hostingHere = sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive();
-      if (local?.live && !hostingHere) clearLocalBroadcastOnly();
+      const hostingHere = isLocalLiveHost();
+      // Never clear YouTube local hosts — they have no MediaStream
+      if (local?.live && local.from !== 'remote' && !hostingHere && !local.youtubeId) {
+        clearLocalBroadcastOnly();
+      }
       const remote = hostingHere ? null : await fetchRemoteLive();
       if (cancelled) return;
       if (hostingHere && local?.live) {
         setActive(true);
-        setLabel(local.mode === 'audio' ? 'Audio LIVE' : 'Your LIVE');
+        setLabel(local.youtubeId ? 'YT LIVE' : local.mode === 'audio' ? 'Audio LIVE' : 'Your LIVE');
         return;
       }
       if (remote?.live) {

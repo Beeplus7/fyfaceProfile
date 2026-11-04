@@ -204,6 +204,7 @@ export default function CommandShell() {
       return;
     }
     if (id === 'live') {
+      // Host (incl. YouTube) stays in workshop; viewers are redirected to feed by LiveViewerExperience
       navigate('/app/live');
       return;
     }
@@ -838,12 +839,25 @@ export default function CommandShell() {
                   type="button"
                   className={L_BTN_GHOST}
                   onClick={() => {
-                    if (readBroadcast()?.live || arcadeLive) {
-                      setBroadcast(false);
-                      setArcadeLive(false);
-                      return;
-                    }
-                    setGoLiveOpen(true);
+                    void (async () => {
+                      const { isLocalLiveHost } = await import('../live/liveHost');
+                      if (readBroadcast()?.live || isLocalLiveHost() || arcadeLive) {
+                        setBroadcast(false);
+                        setArcadeLive(false);
+                        return;
+                      }
+                      // Recovery: local YouTube host flag was wiped — still end remote for everyone
+                      const { fetchRemoteLive, publishRemoteLive } = await import('../live/liveRemote');
+                      const remote = await fetchRemoteLive();
+                      if (remote?.live) {
+                        if (window.confirm('End the live session for everyone?')) {
+                          await publishRemoteLive(null);
+                          setArcadeLive(false);
+                        }
+                        return;
+                      }
+                      setGoLiveOpen(true);
+                    })();
                   }}
                 >
                   {readBroadcast()?.live || arcadeLive ? 'End stream' : 'Go Live'}
