@@ -4,7 +4,11 @@ import type { BroadcastMode } from '../demo/testLab';
 import YoutubeEmbed from '../music/YoutubeEmbed';
 import type { YoutubePlaylistItem } from '../music/youtube';
 import { switchStreamCamera, useLiveCamera } from './useLiveCamera';
-import { getSharedLiveStream, sharedStreamIsLive } from './liveCameraBus';
+import {
+  getSharedLiveStream,
+  sharedStreamIsLive,
+  subscribeSharedLiveStream,
+} from './liveCameraBus';
 import { liveFrameSrc, remoteFrameIsLive } from './liveFrameRelay';
 import { createLiveAudioViewer } from './liveAudioRelay';
 import { getLiveMediaElement, isLiveMediaSourceActive, stopLiveMediaSource } from './liveMediaSource';
@@ -218,6 +222,9 @@ export default function FeedLiveNowStage({
   const ytLoop = Boolean(youtubeId && youtubeDurationSec && youtubeDurationSec >= 60);
   const ytPlaylistCount = youtubePlaylistIds?.length || (youtubeId ? 1 : 0);
   const videoMode = mode !== 'audio';
+  // Re-render when shared camera bus changes (acquire before mount, remounts, flip)
+  const [, setStreamBusTick] = useState(0);
+  useEffect(() => subscribeSharedLiveStream(() => setStreamBusTick((t) => t + 1)), []);
   const hostLive =
     isHost &&
     (ytLive || sharedStreamIsLive() || isLiveMediaSourceActive() || status === 'live');
@@ -251,11 +258,21 @@ export default function FeedLiveNowStage({
   const multi = guestState.guests.length > 0;
 
   useEffect(() => {
-    if (!videoMode || !isHost) return;
+    if (!videoMode || !isHost || ytLive) return;
     if (getSharedLiveStream() && sharedStreamIsLive()) {
       void startCamera();
+      return;
     }
-  }, [videoMode, isHost, startCamera]);
+    // Camera was promised by Go Live — retry attach once the stage mounts
+    try {
+      if (sessionStorage.getItem('myface.live.needCamera') === '1') {
+        sessionStorage.removeItem('myface.live.needCamera');
+        void startCamera();
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [videoMode, isHost, ytLive, startCamera]);
 
   // Guest roster poll (host + viewers) — faster while waiting / in split
   useEffect(() => {
@@ -664,7 +681,8 @@ export default function FeedLiveNowStage({
         guestCamRef.current.srcObject = stream;
         void guestCamRef.current.play().catch(() => undefined);
       }
-      startSlotFramePublish(slot, stream, guestCamRef.current);
+      // Always use hidden capture video — tile <video> remounts kill Safari publish
+      startSlotFramePublish(slot, stream);
       const audioOk = await startSlotAudioPublish(slot, stream, {
         guestCount: Math.max(1, guestState.guests.length),
       });
@@ -778,7 +796,7 @@ export default function FeedLiveNowStage({
         guestCamRef.current.srcObject = next;
         void guestCamRef.current.play().catch(() => undefined);
       }
-      startSlotFramePublish(slot, next, guestCamRef.current);
+      startSlotFramePublish(slot, next);
       setGuestStreamTick((t) => t + 1);
     } catch {
       setGuestCamError('Could not switch camera');
@@ -874,6 +892,31 @@ export default function FeedLiveNowStage({
                     guestCamRef.current = el;
                   }
                 : undefined;
+          // YouTube host + guests: keep YT playing in the host cell (no camera JPEG)
+          if (pane.kind === 'host' && ytLive && youtubeId) {
+            return (
+              <div key={pane.key} className={`relative min-h-0 min-w-0 overflow-hidden bg-black ${spanHostTop}`}>
+                <YoutubeEmbed
+                  youtubeId={youtubeId}
+                  title={title || 'YouTube Live'}
+                  autoplay
+                  loop={ytLoop}
+                  playlistIds={youtubePlaylistIds}
+                  playlist={youtubePlaylist}
+                  showCaptions
+                  fill
+                />
+                <div className="absolute left-2 bottom-2 z-[2] flex items-center gap-1.5 pointer-events-none">
+                  <span className="rounded-full bg-red-500 px-1.5 h-5 inline-flex items-center mono text-[9px] font-bold">
+                    HOST
+                  </span>
+                  <span className="rounded-full bg-black/60 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold max-w-[70%] truncate">
+                    {pane.label}
+                  </span>
+                </div>
+              </div>
+            );
+          }
           return (
             <div key={pane.key} className={`relative min-h-0 min-w-0 ${spanHostTop}`}>
               <GuestTile
@@ -1014,7 +1057,15 @@ export default function FeedLiveNowStage({
           />
         ) : (
           <video
-            ref={videoRef}
+            ref={(el) => {
+              videoRef(el);
+              const stream = getSharedLiveStream();
+              if (el && stream && sharedStreamIsLive() && el.srcObject !== stream) {
+                el.srcObject = stream;
+                el.muted = true;
+                void el.play().catch(() => undefined);
+              }
+            }}
             className={`absolute inset-0 h-full w-full object-cover bg-black ${
               facing === 'environment' ? '' : 'scale-x-[-1]'
             }`}

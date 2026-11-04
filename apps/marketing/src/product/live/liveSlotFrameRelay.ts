@@ -135,29 +135,39 @@ async function push(p: SlotPub) {
 }
 
 function ensureHiddenVideo(p: SlotPub, stream: MediaStream) {
-  if (!p.video || !p.ownVideo) {
-    if (!p.video) {
-      const videoEl = document.createElement('video');
-      p.ownVideo = true;
-      videoEl.muted = true;
-      videoEl.defaultMuted = true;
-      videoEl.playsInline = true;
-      videoEl.autoplay = true;
-      videoEl.setAttribute('playsinline', 'true');
-      videoEl.setAttribute('muted', '');
-      Object.assign(videoEl.style, {
-        position: 'fixed',
-        left: '0',
-        top: '0',
-        width: '960px',
-        height: '540px',
-        opacity: '0.02',
-        pointerEvents: 'none',
-        zIndex: '-1',
-      });
-      document.body.appendChild(videoEl);
-      p.video = videoEl;
+  const needsNew =
+    !p.ownVideo ||
+    !p.video ||
+    (typeof p.video.isConnected === 'boolean' && !p.video.isConnected);
+  if (needsNew) {
+    if (p.ownVideo && p.video) {
+      try {
+        p.video.srcObject = null;
+        p.video.remove();
+      } catch {
+        /* ignore */
+      }
     }
+    const videoEl = document.createElement('video');
+    p.ownVideo = true;
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.playsInline = true;
+    videoEl.autoplay = true;
+    videoEl.setAttribute('playsinline', 'true');
+    videoEl.setAttribute('muted', '');
+    Object.assign(videoEl.style, {
+      position: 'fixed',
+      left: '0',
+      top: '0',
+      width: '960px',
+      height: '540px',
+      opacity: '0.02',
+      pointerEvents: 'none',
+      zIndex: '-1',
+    });
+    document.body.appendChild(videoEl);
+    p.video = videoEl;
   }
   if (p.video && p.video.srcObject !== stream) p.video.srcObject = stream;
   void p.video?.play().catch(() => undefined);
@@ -185,12 +195,11 @@ export function startSlotFramePublish(
   p.stream = stream;
   p.publishing = true;
   p.interval = liveFrameIntervalMs('guest').fast;
+  // Always encode from a stable hidden <video> — tile remounts kill Safari publish
+  ensureHiddenVideo(p, stream);
   if (fromVideo) {
-    p.video = fromVideo;
-    p.ownVideo = false;
+    if (fromVideo.srcObject !== stream) fromVideo.srcObject = stream;
     void fromVideo.play().catch(() => undefined);
-  } else {
-    ensureHiddenVideo(p, stream);
   }
   if (p.timer) window.clearInterval(p.timer);
   void push(p);

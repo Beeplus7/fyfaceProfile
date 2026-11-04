@@ -1400,8 +1400,14 @@ export default function TimelineFeed() {
                 >
                   {/* Video / Poster area */}
                   <div className="absolute inset-0">
-                    <img src={card.posterSrc} alt="" className="absolute inset-0 h-full w-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/80" />
+                    {card.type !== 'liveNow' ? (
+                      <>
+                        <img src={card.posterSrc} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/80" />
+                      </>
+                    ) : (
+                      <div className="absolute inset-0 bg-black" />
+                    )}
                     
                     {card.type==='workcut' && (
                       <div className="absolute inset-0">
@@ -1949,7 +1955,8 @@ export default function TimelineFeed() {
                 });
                 setGoLiveOpen(false);
                 flashToast(goPublic ? 'Live on public feed' : 'Private live · contacts only');
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+                // Group/split video only exists on the feed live stage — keep private lives there too
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
                 return;
               }
               if (pick.kind === 'camera' && pick.mode === 'audio') {
@@ -1967,7 +1974,7 @@ export default function TimelineFeed() {
                 });
                 setGoLiveOpen(false);
                 flashToast(goPublic ? 'Audio live on public feed' : 'Private audio · contacts only');
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=audio');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
                 return;
               }
               if (pick.kind === 'youtube') {
@@ -1997,7 +2004,7 @@ export default function TimelineFeed() {
                     ? `YouTube playlist · ${n} · ${mins}m`
                     : `Private YouTube playlist · ${n} · ${mins}m`,
                 );
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
                 return;
               }
               if (pick.kind === 'file' || pick.kind === 'link') {
@@ -2018,7 +2025,7 @@ export default function TimelineFeed() {
                 });
                 setGoLiveOpen(false);
                 flashToast(goPublic ? 'Streaming to public feed' : 'Private live · contacts only');
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
               }
             } catch (err) {
               const msg = err instanceof Error ? err.message : 'Could not start stream';

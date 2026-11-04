@@ -993,7 +993,7 @@ export default function CommandShell() {
                 });
                 setArcadeLive(true);
                 setGoLiveOpen(false);
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
               } catch (err) {
                 window.alert(err instanceof Error ? err.message : 'Could not start YouTube live');
               }
@@ -1014,13 +1014,23 @@ export default function CommandShell() {
                 });
                 setArcadeLive(true);
                 setGoLiveOpen(false);
-                navigate(goPublic ? '/app/feed?live=1' : '/app/live?mode=video');
+                navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
               } catch (err) {
                 window.alert(err instanceof Error ? err.message : 'Could not start media stream');
               }
               return;
             }
             const mode = pick.mode;
+            // Acquire camera before broadcasting so host stream exists on feed stage
+            if (mode === 'video') {
+              try {
+                const { acquireLiveCamera } = await import('../live/useLiveCamera');
+                await acquireLiveCamera();
+              } catch (err) {
+                window.alert(err instanceof Error ? err.message : 'Camera permission needed');
+                return;
+              }
+            }
             setBroadcast(true, {
               mode,
               viewers: 144,
@@ -1035,7 +1045,11 @@ export default function CommandShell() {
             }
             setArcadeLive(true);
             setGoLiveOpen(false);
-            navigate(mode === 'audio' ? '/app/live?mode=audio' : '/app/live?mode=video');
+            if (mode === 'audio') {
+              navigate('/app/live?mode=audio');
+            } else {
+              navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
+            }
           })();
         }}
       />

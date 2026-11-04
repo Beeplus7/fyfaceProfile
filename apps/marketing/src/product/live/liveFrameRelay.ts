@@ -141,32 +141,42 @@ async function pushFrame() {
 }
 
 function ensureHiddenVideo(stream: MediaStream) {
-  if (!videoEl || !ownHiddenVideo) {
-    if (!videoEl) {
-      videoEl = document.createElement('video');
-      ownHiddenVideo = true;
-      videoEl.muted = true;
-      videoEl.defaultMuted = true;
-      videoEl.playsInline = true;
-      videoEl.autoplay = true;
-      videoEl.setAttribute('playsinline', 'true');
-      videoEl.setAttribute('webkit-playsinline', 'true');
-      videoEl.setAttribute('muted', '');
-      Object.assign(videoEl.style, {
-        position: 'fixed',
-        left: '0',
-        top: '0',
-        width: '480px',
-        height: '270px',
-        opacity: '0.02',
-        pointerEvents: 'none',
-        zIndex: '-1',
-      });
-      document.body.appendChild(videoEl);
+  // Never capture from the remountable React preview — a detached <video>
+  // leaves the host stage blank and stops JPEG publish for viewers.
+  const needsNew =
+    !ownHiddenVideo || !videoEl || (typeof videoEl.isConnected === 'boolean' && !videoEl.isConnected);
+  if (needsNew) {
+    if (ownHiddenVideo && videoEl) {
+      try {
+        videoEl.srcObject = null;
+        videoEl.remove();
+      } catch {
+        /* ignore */
+      }
     }
+    videoEl = document.createElement('video');
+    ownHiddenVideo = true;
+    videoEl.muted = true;
+    videoEl.defaultMuted = true;
+    videoEl.playsInline = true;
+    videoEl.autoplay = true;
+    videoEl.setAttribute('playsinline', 'true');
+    videoEl.setAttribute('webkit-playsinline', 'true');
+    videoEl.setAttribute('muted', '');
+    Object.assign(videoEl.style, {
+      position: 'fixed',
+      left: '0',
+      top: '0',
+      width: '480px',
+      height: '270px',
+      opacity: '0.02',
+      pointerEvents: 'none',
+      zIndex: '-1',
+    });
+    document.body.appendChild(videoEl);
   }
-  if (videoEl.srcObject !== stream) videoEl.srcObject = stream;
-  void videoEl.play().catch(() => undefined);
+  if (videoEl && videoEl.srcObject !== stream) videoEl.srcObject = stream;
+  void videoEl?.play().catch(() => undefined);
 }
 
 /** Start pushing frames from the host camera MediaStream (Mac). */
@@ -182,12 +192,11 @@ export function startLiveFramePublish(stream: MediaStream, fromVideo?: HTMLVideo
   consecutiveFails = 0;
   currentInterval = liveFrameIntervalMs('host').fast;
 
+  // Always encode from a stable hidden <video>. Optional fromVideo is display-only.
+  ensureHiddenVideo(stream);
   if (fromVideo) {
-    videoEl = fromVideo;
-    ownHiddenVideo = false;
+    if (fromVideo.srcObject !== stream) fromVideo.srcObject = stream;
     void fromVideo.play().catch(() => undefined);
-  } else {
-    ensureHiddenVideo(stream);
   }
 
   if (timer) window.clearInterval(timer);
@@ -196,14 +205,11 @@ export function startLiveFramePublish(stream: MediaStream, fromVideo?: HTMLVideo
 }
 
 export function attachLiveFramePreview(fromVideo: HTMLVideoElement | null) {
-  if (!publishing) return;
-  // Preview unmounted (user navigated away) — keep publishing from hidden video
-  if (!fromVideo) {
-    if (streamRef) ensureHiddenVideo(streamRef);
-    return;
-  }
-  videoEl = fromVideo;
-  ownHiddenVideo = false;
+  if (!publishing || !streamRef) return;
+  // Keep JPEG capture on the hidden element; only rebind the visible preview.
+  ensureHiddenVideo(streamRef);
+  if (!fromVideo) return;
+  if (fromVideo.srcObject !== streamRef) fromVideo.srcObject = streamRef;
   void fromVideo.play().catch(() => undefined);
 }
 

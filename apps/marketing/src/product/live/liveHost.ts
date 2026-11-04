@@ -1,17 +1,20 @@
 import { readBroadcast } from '../demo/testLab';
-import { isLiveAudioPublishing } from './liveAudioRelay';
-import { sharedStreamIsLive } from './liveCameraBus';
-import { isLiveMediaSourceActive } from './liveMediaSource';
 
 /**
  * True when THIS browser owns the live session.
- * YouTube / playlist lives have no MediaStream — ownership is the local broadcast
- * record (from !== 'remote' + youtubeId). Do not treat those as "viewer only".
+ * Ownership is the local broadcast record (from !== 'remote'), not MediaStream
+ * presence — camera may still be starting, and YouTube/file hosts have no cam.
  */
 export function isLocalLiveHost(): boolean {
   const local = readBroadcast();
-  if (!local?.live || local.from === 'remote') return false;
-  if (sharedStreamIsLive() || isLiveAudioPublishing() || isLiveMediaSourceActive()) return true;
-  if (local.youtubeId) return true;
-  return false;
+  return Boolean(local?.live && local.from !== 'remote');
+}
+
+/** Feed URL that keeps private contacts group live visible (split video stage). */
+export function liveFeedEntryUrl(opts?: { invitePrivate?: boolean }): string {
+  const local = readBroadcast();
+  const privateLive =
+    opts?.invitePrivate ||
+    Boolean(local?.live && !local.publicFeed && local.visibility !== 'public');
+  return privateLive ? '/app/feed?live=1&invite=private' : '/app/feed?live=1';
 }

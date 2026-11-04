@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { clearLocalBroadcastOnly, readBroadcast } from '../demo/testLab';
-import { isLocalLiveHost } from './liveHost';
+import { isLocalLiveHost, liveFeedEntryUrl } from './liveHost';
 import { fetchRemoteLive } from './liveRemote';
 
 /**
@@ -53,7 +53,7 @@ export default function LiveReturnPill() {
 
   return (
     <Link
-      to="/app/feed?live=1"
+      to={liveFeedEntryUrl()}
       className="fixed z-[80] right-3 bottom-[calc(72px+env(safe-area-inset-bottom,0px))] flex items-center gap-2 rounded-full bg-red-600 pl-2.5 pr-3.5 py-2 shadow-[0_8px_28px_rgba(220,38,38,0.45)] border border-white/20"
       aria-label="Return to live feed"
     >

@@ -429,7 +429,9 @@ export function useLiveCamera(): Hook {
 
   useEffect(
     () => () => {
-      if (elRef.current) elRef.current.srcObject = null;
+      // Detach preview only — do NOT clear the shared stream or hidden JPEG capture.
+      // Clearing srcObject on unmount was blanking live after feed remounts / Strict Mode.
+      elRef.current = null;
     },
     [],
   );
