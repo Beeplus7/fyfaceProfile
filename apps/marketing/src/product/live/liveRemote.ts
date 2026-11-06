@@ -38,6 +38,10 @@ export type RemoteLiveStatus = {
   visibility?: 'public' | 'contacts';
   publicFeed?: boolean;
   allowedContactIds?: string[];
+  dualSplit?: boolean;
+  mediaOnTop?: boolean;
+  /** Compressed data-URL wallpaper (may be omitted if too large for status) */
+  wallpaperUrl?: string;
   music?: LiveMusicPayload | null;
 };
 
@@ -128,6 +132,15 @@ export async function publishRemoteLive(
         visibility: state.visibility === 'public' ? 'public' : 'contacts',
         publicFeed: Boolean(state.publicFeed),
         allowedContactIds: Array.isArray(state.allowedContactIds) ? state.allowedContactIds : [],
+        dualSplit: Boolean(state.dualSplit),
+        mediaOnTop: state.mediaOnTop !== false,
+        // Cap wallpaper so PHP status JSON stays small
+        wallpaperUrl:
+          typeof state.wallpaperUrl === 'string' &&
+          state.wallpaperUrl.startsWith('data:image/') &&
+          state.wallpaperUrl.length < 120_000
+            ? state.wallpaperUrl
+            : undefined,
         music: musicPayload,
       }),
       keepalive: true,
@@ -213,6 +226,10 @@ export async function fetchRemoteLive(): Promise<RemoteLiveBroadcast | null> {
         ? { youtubePlaylist: orderedPlaylist }
         : {}),
       ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
+      ...(data.dualSplit ? { dualSplit: true, mediaOnTop: data.mediaOnTop !== false } : {}),
+      ...(typeof data.wallpaperUrl === 'string' && data.wallpaperUrl.startsWith('data:image/')
+        ? { wallpaperUrl: data.wallpaperUrl }
+        : {}),
       music: data.music || null,
     };
   } catch {

@@ -94,6 +94,12 @@ export type BroadcastState = {
   allowedContactIds?: string[];
   /** Invited contacts (names/phones) for WhatsApp share UI */
   allowedContacts?: { id: string; name: string; phone?: string }[];
+  /** File/link video + creator camera stacked split */
+  dualSplit?: boolean;
+  /** When dualSplit: true = playing video on top, camera below */
+  mediaOnTop?: boolean;
+  /** Compressed JPEG data URL wallpaper behind live stage */
+  wallpaperUrl?: string;
 };
 
 function normalizeYoutubeDurationSec(raw: unknown): number | undefined {
@@ -116,6 +122,9 @@ type BroadcastMeta = {
   publicFeed?: boolean;
   allowedContactIds?: string[];
   allowedContacts?: { id: string; name: string; phone?: string }[];
+  dualSplit?: boolean;
+  mediaOnTop?: boolean;
+  wallpaperUrl?: string | null;
 };
 
 function resolveYoutubePlaylistItems(
@@ -176,6 +185,12 @@ export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
     : [];
   // Default private: contacts-only stays off public feed unless host opts in
   const publicFeed = visibility === 'public' ? true : Boolean(meta?.publicFeed);
+  const dualSplit = Boolean(meta?.dualSplit);
+  const mediaOnTop = meta?.mediaOnTop !== false;
+  const wallpaperUrl =
+    typeof meta?.wallpaperUrl === 'string' && meta.wallpaperUrl.startsWith('data:image/')
+      ? meta.wallpaperUrl
+      : undefined;
   const payload: BroadcastState = {
     live: true,
     title:
@@ -201,6 +216,8 @@ export function setBroadcast(live: boolean, meta?: BroadcastMeta) {
       ? { youtubePlaylist }
       : {}),
     ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
+    ...(dualSplit ? { dualSplit: true, mediaOnTop } : {}),
+    ...(wallpaperUrl ? { wallpaperUrl } : {}),
   };
   localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
   window.dispatchEvent(new Event('myface-broadcast'));
@@ -249,6 +266,18 @@ export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
           patch.youtubePlaylistIds ?? cur.youtubePlaylistIds,
         );
   const youtubePlaylistIds = youtubePlaylist?.map((i) => i.id);
+  const dualSplit =
+    typeof patch.dualSplit === 'boolean' ? patch.dualSplit : Boolean(cur.dualSplit);
+  const mediaOnTop =
+    typeof patch.mediaOnTop === 'boolean' ? patch.mediaOnTop : cur.mediaOnTop !== false;
+  let wallpaperUrl = cur.wallpaperUrl;
+  if (patch.wallpaperUrl === null) wallpaperUrl = undefined;
+  else if (
+    typeof patch.wallpaperUrl === 'string' &&
+    patch.wallpaperUrl.startsWith('data:image/')
+  ) {
+    wallpaperUrl = patch.wallpaperUrl;
+  }
   const payload: BroadcastState = {
     ...cur,
     title: patch.title ?? cur.title,
@@ -270,6 +299,8 @@ export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
     ...(youtubeId && youtubeDurationSec
       ? { youtubeDurationSec }
       : { youtubeDurationSec: undefined }),
+    ...(dualSplit ? { dualSplit: true, mediaOnTop } : { dualSplit: undefined, mediaOnTop: undefined }),
+    ...(wallpaperUrl ? { wallpaperUrl } : { wallpaperUrl: undefined }),
   };
   if (!youtubeId) delete payload.youtubeId;
   if (!youtubeId || !youtubePlaylistIds || youtubePlaylistIds.length <= 1) {
@@ -283,6 +314,11 @@ export function patchBroadcast(patch: BroadcastMeta): BroadcastState | null {
     delete payload.youtubePlaylist;
   }
   if (!youtubeId || !youtubeDurationSec) delete payload.youtubeDurationSec;
+  if (!dualSplit) {
+    delete payload.dualSplit;
+    delete payload.mediaOnTop;
+  }
+  if (!wallpaperUrl) delete payload.wallpaperUrl;
   localStorage.setItem(DEMO_BROADCAST_KEY, JSON.stringify(payload));
   window.dispatchEvent(new Event('myface-broadcast'));
   void import('../live/liveRemote').then((m) => m.publishRemoteLive(payload)).catch(() => undefined);
@@ -328,6 +364,12 @@ export function readBroadcast(): BroadcastState | null {
       typeof parsed.publicFeed === 'boolean'
         ? parsed.publicFeed
         : visibility === 'public';
+    const dualSplit = Boolean(parsed.dualSplit);
+    const mediaOnTop = parsed.mediaOnTop !== false;
+    const wallpaperUrl =
+      typeof parsed.wallpaperUrl === 'string' && parsed.wallpaperUrl.startsWith('data:image/')
+        ? parsed.wallpaperUrl
+        : undefined;
     return {
       live: true,
       title: parsed.title ?? 'Live · Oldham OL1',
@@ -348,6 +390,8 @@ export function readBroadcast(): BroadcastState | null {
         ? { youtubePlaylist }
         : {}),
       ...(youtubeDurationSec ? { youtubeDurationSec } : {}),
+      ...(dualSplit ? { dualSplit: true, mediaOnTop } : {}),
+      ...(wallpaperUrl ? { wallpaperUrl } : {}),
     };
   } catch {
     return null;

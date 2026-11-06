@@ -16,6 +16,8 @@ let canvas: HTMLCanvasElement | null = null;
 let drawTimer: number | null = null;
 let canvasStream: MediaStream | null = null;
 let active = false;
+/** True when this module replaced the shared bus with a file/link capture (not dual+camera). */
+let mediaOwnsShared = false;
 
 function teardownMediaOnly() {
   if (drawTimer) {
@@ -103,13 +105,7 @@ function ensureVisiblePreview(video: HTMLVideoElement) {
   if (!video.isConnected) document.body.appendChild(video);
 }
 
-/**
- * Start publishing a File or direct media URL (mp4/webm/mov/m4v) to the live feed.
- * YouTube/Vimeo page links are not supported — use a direct file URL.
- */
-export async function startLiveMediaSource(source: File | string): Promise<MediaStream> {
-  stopLiveMediaSource();
-
+async function loadMediaElement(source: File | string): Promise<HTMLVideoElement> {
   const isFile = source instanceof File;
   if (!isFile) {
     const raw = source.trim();
@@ -134,6 +130,10 @@ export async function startLiveMediaSource(source: File | string): Promise<Media
       throw Object.assign(new Error('Choose a video file (mp4, mov, webm…)'), { name: 'TypeError' });
     }
   }
+
+  // Tear down prior file/link only — do not kill the creator camera bus
+  active = false;
+  teardownMediaOnly();
 
   const url = isFile ? URL.createObjectURL(source) : source.trim();
   if (isFile) objectUrl = url;
@@ -191,14 +191,6 @@ export async function startLiveMediaSource(source: File | string): Promise<Media
     /* muted autoplay should work after file pick gesture */
   }
 
-  active = true;
-  const stream = captureFromElement(video);
-  if (!stream.getVideoTracks().length) {
-    active = false;
-    teardownMediaOnly();
-    throw Object.assign(new Error('Browser could not capture video from that file'), { name: 'NotSupportedError' });
-  }
-
   if (video.paused) {
     try {
       await video.play();
@@ -207,6 +199,37 @@ export async function startLiveMediaSource(source: File | string): Promise<Media
     }
   }
 
+  active = true;
+  return video;
+}
+
+/**
+ * Play a file/link beside the creator camera (split dual). Does not replace the camera bus.
+ */
+export async function startLiveMediaCompanion(source: File | string): Promise<HTMLVideoElement> {
+  mediaOwnsShared = false;
+  return loadMediaElement(source);
+}
+
+/**
+ * Start publishing a File or direct media URL (mp4/webm/mov/m4v) alone to the live feed.
+ * Prefer startLiveMediaCompanion + dual compose when the creator camera should stay on.
+ * YouTube/Vimeo page links are not supported — use a direct file URL.
+ */
+export async function startLiveMediaSource(source: File | string): Promise<MediaStream> {
+  stopLiveMediaSource();
+
+  const video = await loadMediaElement(source);
+  const stream = captureFromElement(video);
+  if (!stream.getVideoTracks().length) {
+    active = false;
+    teardownMediaOnly();
+    throw Object.assign(new Error('Browser could not capture video from that file'), {
+      name: 'NotSupportedError',
+    });
+  }
+
+  mediaOwnsShared = true;
   setSharedLiveStream(stream);
   startLiveFramePublish(stream, video);
   attachLiveFramePreview(video);
@@ -218,8 +241,11 @@ export async function startLiveMediaSource(source: File | string): Promise<Media
 
 export function stopLiveMediaSource() {
   active = false;
-  stopLiveFramePublish();
-  stopLiveAudioPublish();
-  stopSharedLiveStream();
+  if (mediaOwnsShared) {
+    stopLiveFramePublish();
+    stopLiveAudioPublish();
+    stopSharedLiveStream();
+    mediaOwnsShared = false;
+  }
   teardownMediaOnly();
 }

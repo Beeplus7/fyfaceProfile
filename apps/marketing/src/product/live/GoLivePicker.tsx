@@ -608,8 +608,8 @@ export default function GoLivePicker({
                   ⬆
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[15px] font-bold">Upload video to live stream</div>
-                  <div className={`text-[11px] mt-0.5 ${muted}`}>Then choose contacts or public</div>
+                  <div className="text-[15px] font-bold">Upload video + your camera</div>
+                  <div className={`text-[11px] mt-0.5 ${muted}`}>Split screen · flip video ↔ cam live</div>
                 </div>
                 <span className="mono text-[10px] font-bold text-[#FFE600]">LIVE</span>
               </div>
@@ -824,8 +824,8 @@ export default function GoLivePicker({
                   🔗
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-[15px] font-bold">External video URL</div>
-                  <div className={`text-[11px] mt-0.5 ${muted}`}>Direct https://…mp4 / webm file link</div>
+                  <div className="text-[15px] font-bold">Video link + your camera</div>
+                  <div className={`text-[11px] mt-0.5 ${muted}`}>Direct https://…mp4 · split with flip</div>
                 </div>
                 <span className="mono text-[10px] font-bold text-[#8FFF4A]">LINK</span>
               </div>

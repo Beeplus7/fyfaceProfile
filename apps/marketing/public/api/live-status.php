@@ -111,6 +111,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
   $payload['allowedContactIds'] = $ids;
+  // Split: playing video + creator camera
+  if (!empty($data['dualSplit'])) {
+    $payload['dualSplit'] = true;
+    $payload['mediaOnTop'] = !isset($data['mediaOnTop']) || !empty($data['mediaOnTop']);
+  }
+  // Wallpaper background (compressed data URL — keep under ~100KB)
+  if (!empty($data['wallpaperUrl']) && is_string($data['wallpaperUrl'])) {
+    $wp = (string)$data['wallpaperUrl'];
+    if (strpos($wp, 'data:image/') === 0 && strlen($wp) < 120000) {
+      $payload['wallpaperUrl'] = $wp;
+    }
+  }
   // Sync live BGM so phones can play the same track (YouTube / Jamendo URL)
   if (isset($data['music']) && is_array($data['music'])) {
     $m = $data['music'];

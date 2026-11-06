@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { BroadcastMode } from '../demo/testLab';
 import YoutubeEmbed from '../music/YoutubeEmbed';
 import type { YoutubePlaylistItem } from '../music/youtube';
-import { switchStreamCamera, useLiveCamera } from './useLiveCamera';
+import { acquireLiveCamera, switchStreamCamera, useLiveCamera } from './useLiveCamera';
 import {
   getSharedLiveStream,
   sharedStreamIsLive,
@@ -11,7 +11,21 @@ import {
 } from './liveCameraBus';
 import { liveFrameSrc, remoteFrameIsLive } from './liveFrameRelay';
 import { createLiveAudioViewer } from './liveAudioRelay';
-import { getLiveMediaElement, isLiveMediaSourceActive, stopLiveMediaSource } from './liveMediaSource';
+import {
+  getLiveMediaElement,
+  isLiveMediaSourceActive,
+  startLiveMediaCompanion,
+  stopLiveMediaSource,
+} from './liveMediaSource';
+import {
+  getLiveDualMediaOnTop,
+  isLiveDualActive,
+  setLiveDualMediaOnTop,
+  setLiveDualWallpaper,
+  startLiveDualCompose,
+  stopLiveDualCompose,
+} from './liveDualCompose';
+import { compressLiveWallpaper } from './liveWallpaper';
 import { fetchRemoteLive, type LiveMusicPayload } from './liveRemote';
 import { stopSessionRecording } from './liveSessionRecorder';
 import {
@@ -69,6 +83,10 @@ type Props = {
   youtubeDurationSec?: number;
   /** ISO start time for duration countdown */
   startedAt?: string;
+  /** False when the feed scrolled this live card off-screen — mute/stop viewer audio */
+  stageActive?: boolean;
+  /** Live session wallpaper (data URL) */
+  wallpaperUrl?: string;
 };
 
 function formatRemainClock(totalSec: number) {
@@ -188,9 +206,21 @@ export default function FeedLiveNowStage({
   youtubePlaylist: youtubePlaylistProp,
   youtubeDurationSec: youtubeDurationSecProp,
   startedAt: startedAtProp,
+  stageActive = true,
+  wallpaperUrl: wallpaperUrlProp,
 }: Props) {
   const { videoRef, status, error, facing, switching, startCamera, stopCamera, switchCamera } = useLiveCamera();
   const [endingLive, setEndingLive] = useState(false);
+  const [mediaOnTop, setMediaOnTop] = useState(() => {
+    const b = readBroadcast();
+    return b?.mediaOnTop !== false;
+  });
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | undefined>(
+    () => wallpaperUrlProp || readBroadcast()?.wallpaperUrl,
+  );
+  const [dualTick, setDualTick] = useState(0);
+  const wallpaperInputRef = useRef<HTMLInputElement | null>(null);
+  const mediaInputRef = useRef<HTMLInputElement | null>(null);
   const guestCamRef = useRef<HTMLVideoElement | null>(null);
   const guestStreamRef = useRef<MediaStream | null>(null);
   const chatInputRef = useRef<HTMLInputElement | null>(null);
@@ -273,6 +303,26 @@ export default function FeedLiveNowStage({
       /* ignore */
     }
   }, [videoMode, isHost, ytLive, startCamera]);
+
+  // Re-attach dual compose after navigation if broadcast says split + media is loaded
+  useEffect(() => {
+    if (!isHost || !videoMode || ytLive) return;
+    const b = readBroadcast();
+    if (!b?.dualSplit || !isLiveMediaSourceActive()) return;
+    if (isLiveDualActive()) {
+      setMediaOnTop(b.mediaOnTop !== false);
+      return;
+    }
+    if (!getSharedLiveStream() || !sharedStreamIsLive()) return;
+    const ok = startLiveDualCompose({
+      mediaOnTop: b.mediaOnTop !== false,
+      wallpaperUrl: b.wallpaperUrl || wallpaperUrl || null,
+    });
+    if (ok) {
+      setMediaOnTop(b.mediaOnTop !== false);
+      setDualTick((t) => t + 1);
+    }
+  }, [isHost, videoMode, ytLive, hostLive, wallpaperUrl]);
 
   // Guest roster poll (host + viewers) — faster while waiting / in split
   useEffect(() => {
@@ -390,9 +440,9 @@ export default function FeedLiveNowStage({
     };
   }, []);
 
-  // Viewers (and host): play guest slot audio while watching / hosting
+  // Viewers (and host): play guest slot audio while watching / hosting — only on active card
   useEffect(() => {
-    const wantAudio = watching || hostLive;
+    const wantAudio = stageActive && (watching || hostLive);
     const slots = guestState.guests
       .map((g) => String(g.slot || ''))
       .filter((s) => s && !(myRole.guest && String(myRole.guest.slot) === s));
@@ -415,7 +465,33 @@ export default function FeedLiveNowStage({
       viewer.setMuted(!soundOn);
       viewer.start();
     }
-  }, [guestState.guests, watching, hostLive, myRole.guest?.slot, soundOn]);
+  }, [guestState.guests, watching, hostLive, myRole.guest?.slot, soundOn, stageActive]);
+
+  // Scrolled away from live card → silence everything local (host keeps publishing)
+  useEffect(() => {
+    if (stageActive) return;
+    setSoundOn(false);
+    audioViewer.current?.setMuted(true);
+    audioViewer.current?.stop();
+    guestAudioViewers.current.forEach((v) => {
+      v.setMuted(true);
+      v.stop();
+    });
+    guestAudioViewers.current.clear();
+    if (bgmRef.current) {
+      bgmRef.current.pause();
+      bgmRef.current.volume = 0;
+    }
+    if (!isHost) setWatching(false);
+  }, [stageActive, isHost]);
+
+  useEffect(() => {
+    if (wallpaperUrlProp) setWallpaperUrl(wallpaperUrlProp);
+  }, [wallpaperUrlProp]);
+
+  useEffect(() => {
+    setLiveDualWallpaper(wallpaperUrl || null);
+  }, [wallpaperUrl]);
 
   useEffect(() => {
     guestAudioViewers.current.forEach((v) => v.setMuted(!soundOn));
@@ -466,7 +542,7 @@ export default function FeedLiveNowStage({
 
   // Mic / mixed BGM audio from host chunks
   useEffect(() => {
-    if (isHost || hostLive || !watching) {
+    if (isHost || hostLive || !watching || !stageActive) {
       audioViewer.current?.stop();
       return;
     }
@@ -478,11 +554,11 @@ export default function FeedLiveNowStage({
       player.stop();
       if (audioViewer.current === player) audioViewer.current = null;
     };
-  }, [isHost, hostLive, watching]);
+  }, [isHost, hostLive, watching, stageActive]);
 
   // Direct preview URL BGM (Jamendo)
   useEffect(() => {
-    if (isHost || hostLive || !watching) {
+    if (isHost || hostLive || !watching || !stageActive) {
       if (bgmRef.current) {
         bgmRef.current.pause();
         bgmRef.current = null;
@@ -507,7 +583,7 @@ export default function FeedLiveNowStage({
       el.pause();
       if (bgmRef.current === el) bgmRef.current = null;
     };
-  }, [isHost, hostLive, watching, liveMusic?.previewUrl, liveMusic?.youtubeId, soundOn]);
+  }, [isHost, hostLive, watching, stageActive, liveMusic?.previewUrl, liveMusic?.youtubeId, soundOn]);
 
   useEffect(() => {
     if (bgmRef.current) bgmRef.current.volume = soundOn ? 0.55 : 0;
@@ -554,6 +630,7 @@ export default function FeedLiveNowStage({
       } catch {
         /* recording optional */
       }
+      stopLiveDualCompose();
       stopCamera();
       stopLiveMediaSource();
       stopAllSlotFramePublish();
@@ -563,6 +640,56 @@ export default function FeedLiveNowStage({
       setEndingLive(false);
     }
   };
+
+  const flipDualLayout = () => {
+    const next = !mediaOnTop;
+    setMediaOnTop(next);
+    setLiveDualMediaOnTop(next);
+    patchBroadcast({ mediaOnTop: next, dualSplit: true });
+    setDualTick((t) => t + 1);
+  };
+
+  const onPickWallpaper = async (file: File | null) => {
+    if (!file || !isHost) return;
+    try {
+      const url = await compressLiveWallpaper(file);
+      setWallpaperUrl(url);
+      setLiveDualWallpaper(url);
+      patchBroadcast({ wallpaperUrl: url });
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : 'Could not use that image');
+    }
+  };
+
+  const onPickSplitMedia = async (file: File | null) => {
+    if (!file || !isHost) return;
+    try {
+      if (!getSharedLiveStream() || !sharedStreamIsLive()) {
+        await acquireLiveCamera();
+        await startCamera();
+      }
+      await startLiveMediaCompanion(file);
+      const ok = startLiveDualCompose({
+        mediaOnTop,
+        wallpaperUrl: wallpaperUrl || null,
+      });
+      if (!ok) throw new Error('Could not start split — allow camera and retry');
+      patchBroadcast({
+        dualSplit: true,
+        mediaOnTop,
+        title: readBroadcast()?.title || 'Split Live · video + cam',
+      });
+      setDualTick((t) => t + 1);
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : 'Could not add video');
+    }
+  };
+
+  const dualLive = Boolean(
+    isHost && (isLiveDualActive() || readBroadcast()?.dualSplit) && isLiveMediaSourceActive(),
+  );
+  void dualTick;
+  void getLiveDualMediaOnTop;
 
   // YouTube planned duration: countdown + auto-end (host). Clip loops via embed until then.
   useEffect(() => {
@@ -1018,20 +1145,167 @@ export default function FeedLiveNowStage({
     </div>
   );
 
+  const wallpaperLayer =
+    wallpaperUrl && stageActive ? (
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${wallpaperUrl})` }}
+        aria-hidden
+      >
+        <div className="absolute inset-0 bg-black/45" />
+      </div>
+    ) : null;
+
+  const hostToolRow = isHost ? (
+    <div className="pointer-events-auto flex flex-wrap gap-1.5 items-center">
+      <input
+        ref={wallpaperInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0] || null;
+          e.target.value = '';
+          void onPickWallpaper(f);
+        }}
+      />
+      <input
+        ref={mediaInputRef}
+        type="file"
+        accept="video/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0] || null;
+          e.target.value = '';
+          void onPickSplitMedia(f);
+        }}
+      />
+      <button
+        type="button"
+        className="h-7 px-2.5 rounded-full bg-black/55 border border-white/20 mono text-[10px] font-bold"
+        onClick={(e) => {
+          e.stopPropagation();
+          wallpaperInputRef.current?.click();
+        }}
+      >
+        Wallpaper
+      </button>
+      {!ytLive ? (
+        <button
+          type="button"
+          className="h-7 px-2.5 rounded-full bg-black/55 border border-white/20 mono text-[10px] font-bold"
+          onClick={(e) => {
+            e.stopPropagation();
+            mediaInputRef.current?.click();
+          }}
+        >
+          {dualLive ? 'Swap video' : 'Add video'}
+        </button>
+      ) : null}
+      {dualLive ? (
+        <button
+          type="button"
+          className="h-7 px-2.5 rounded-full bg-[#8FFF4A] text-black mono text-[10px] font-black"
+          onClick={(e) => {
+            e.stopPropagation();
+            flipDualLayout();
+          }}
+        >
+          Flip · {mediaOnTop ? 'video↑' : 'cam↑'}
+        </button>
+      ) : null}
+    </div>
+  ) : null;
+
+  const renderDualHost = () => {
+    const media = getLiveMediaElement();
+    const mediaPane = (
+      <div className="relative min-h-0 min-w-0 flex-1 overflow-hidden bg-black border-b border-white/20">
+        {media ? (
+          <video
+            key={media.src || 'dual-media'}
+            ref={(el) => {
+              if (!el || !media) return;
+              if (el.src !== media.src) el.src = media.src;
+              el.loop = true;
+              el.muted = true;
+              el.setAttribute('playsinline', 'true');
+              void el.play().catch(() => undefined);
+            }}
+            className="absolute inset-0 h-full w-full object-cover"
+            playsInline
+            autoPlay
+            muted
+            loop
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center mono text-[11px] text-white/50">
+            Video
+          </div>
+        )}
+        <span className="absolute left-2 bottom-2 rounded-full bg-black/60 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold pointer-events-none">
+          Playing
+        </span>
+      </div>
+    );
+    const camPane = (
+      <div className="relative min-h-0 min-w-0 flex-1 overflow-hidden bg-black">
+        <video
+          ref={(el) => {
+            videoRef(el);
+            const stream = getSharedLiveStream();
+            if (el && stream && sharedStreamIsLive() && el.srcObject !== stream) {
+              el.srcObject = stream;
+              el.muted = true;
+              void el.play().catch(() => undefined);
+            }
+          }}
+          className={`absolute inset-0 h-full w-full object-cover ${
+            facing === 'environment' ? '' : 'scale-x-[-1]'
+          }`}
+          playsInline
+          autoPlay
+          muted
+        />
+        <span className="absolute left-2 bottom-2 rounded-full bg-red-500 px-2 h-5 inline-flex items-center mono text-[10px] font-bold pointer-events-none">
+          You
+        </span>
+      </div>
+    );
+    return (
+      <div className="absolute inset-0 flex flex-col">
+        {mediaOnTop ? (
+          <>
+            {mediaPane}
+            {camPane}
+          </>
+        ) : (
+          <>
+            {camPane}
+            {mediaPane}
+          </>
+        )}
+      </div>
+    );
+  };
+
   /* ——— Host camera / uploaded video / YouTube on this device ——— */
   if (hostLive && videoMode) {
     const panes = buildPanes();
     const fromFile = Boolean(fileMedia || isLiveMediaSourceActive());
     return (
       <div className="absolute inset-0 flex flex-col bg-black">
+        {wallpaperLayer}
         {multi ? (
           renderSplit(panes)
+        ) : dualLive ? (
+          renderDualHost()
         ) : ytLive && youtubeId ? (
           <YoutubeEmbed
             key={`yt-live-host-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
             youtubeId={youtubeId}
             title={title || 'YouTube Live'}
-            autoplay
+            autoplay={stageActive}
             loop={ytLoop}
             playlistIds={youtubePlaylistIds}
             playlist={youtubePlaylist}
@@ -1077,16 +1351,18 @@ export default function FeedLiveNowStage({
         {!multi ? (
           <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/80 pointer-events-none" />
         ) : null}
-        <div className="absolute left-3 right-16 z-[5] flex items-center gap-2 pointer-events-none" style={BADGE_TOP}>
+        <div className="absolute left-3 right-16 z-[5] flex items-center gap-2 pointer-events-none flex-wrap" style={BADGE_TOP}>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 h-7 text-[11px] font-bold tracking-wide shrink-0">
             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{' '}
             {multi
               ? `LIVE · ${1 + guestState.guests.length}`
-              : ytLive
-                ? 'YT · LIVE'
-                : fromFile
-                  ? 'FILE · LIVE'
-                  : 'LIVE · YOU'}
+              : dualLive
+                ? 'SPLIT · LIVE'
+                : ytLive
+                  ? 'YT · LIVE'
+                  : fromFile
+                    ? 'FILE · LIVE'
+                    : 'LIVE · YOU'}
           </span>
           <span className="rounded-full bg-black/55 border border-white/15 px-2.5 h-7 inline-flex items-center mono text-[10px] shrink-0">
             {viewerCount}
@@ -1107,7 +1383,7 @@ export default function FeedLiveNowStage({
               {guestState.pending.length} join
             </span>
           ) : null}
-          {!fromFile && !ytLive ? (
+          {(!fromFile || dualLive) && !ytLive ? (
             <span className="pointer-events-auto">
               {flipBtn({
                 onClick: () => void switchCamera(),
@@ -1133,6 +1409,7 @@ export default function FeedLiveNowStage({
             className="absolute left-3 right-14 z-[6] pointer-events-auto flex flex-wrap gap-2"
             style={{ top: 'calc(var(--feed-chrome-h, 72px) + 44px)' }}
           >
+            {hostToolRow}
             <button
               type="button"
               className={`rounded-full px-3 h-8 mono text-[10px] font-bold border backdrop-blur-md ${
@@ -1301,6 +1578,8 @@ export default function FeedLiveNowStage({
     if (isHost) {
       return (
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-[#0a1628] via-black to-black">
+          {wallpaperLayer}
+          <div className="relative z-[1] flex flex-col items-center">
           <div
             className="h-20 w-20 rounded-full grid place-items-center text-black text-[24px] font-black mb-3 ring-4 ring-red-500/50"
             style={{ background: makerColor }}
@@ -1310,6 +1589,7 @@ export default function FeedLiveNowStage({
           <div className="poppins text-[18px] font-extrabold">You are on Audio Live</div>
           <div className="mono text-[12px] text-white/70 mt-2">{title}</div>
           <div className="mt-4 mono text-[11px] text-[#8FFF4A] font-bold">Mic publishing to feed · {viewerCount}</div>
+          <div className="mt-4">{hostToolRow}</div>
           <button
             type="button"
             disabled={endingLive}
@@ -1321,11 +1601,14 @@ export default function FeedLiveNowStage({
           >
             {endingLive ? 'Ending…' : 'End live'}
           </button>
+          </div>
         </div>
       );
     }
     return (
       <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-[#0a1628] via-black to-black">
+        {wallpaperLayer}
+        <div className="relative z-[1] flex flex-col items-center">
         <div
           className="h-20 w-20 rounded-full grid place-items-center text-black text-[24px] font-black mb-3"
           style={{ background: makerColor }}
@@ -1398,6 +1681,7 @@ export default function FeedLiveNowStage({
             </div>
           </div>
         )}
+        </div>
       </div>
     );
   }
@@ -1408,9 +1692,10 @@ export default function FeedLiveNowStage({
 
   return (
     <div className="absolute inset-0 flex flex-col bg-black">
+      {wallpaperLayer}
       {showSplit ? (
         renderSplit(panes)
-      ) : ytLive && youtubeId && (watching || isHost) ? (
+      ) : ytLive && youtubeId && (watching || isHost) && stageActive ? (
         <YoutubeEmbed
           key={`yt-live-view-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
           youtubeId={youtubeId}
@@ -1422,7 +1707,7 @@ export default function FeedLiveNowStage({
           showCaptions
           fill
         />
-      ) : frameUrl && (watching || frameLive) ? (
+      ) : frameUrl && (watching || frameLive) && stageActive ? (
         <img
           src={frameUrl}
           alt=""
@@ -1539,7 +1824,7 @@ export default function FeedLiveNowStage({
         ) : null}
       </div>
 
-      {watching && liveMusic?.youtubeId && soundOn ? (
+      {watching && liveMusic?.youtubeId && soundOn && stageActive ? (
         <div
           className="absolute left-3 z-[6] rounded-xl overflow-hidden border border-white/15 bg-black/70 shadow-lg"
           style={{ top: 'calc(var(--feed-chrome-h, 72px) + 44px)' }}

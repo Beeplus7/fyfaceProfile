@@ -20,7 +20,8 @@ import { fetchRemoteLive, publishRemoteLiveMusic } from '../live/liveRemote';
 import { isLiveAudioPublishing, setLiveMusicBed, startLiveAudioOnlyPublish } from '../live/liveAudioRelay';
 import { sharedStreamIsLive } from '../live/liveCameraBus';
 import { isLocalLiveHost } from '../live/liveHost';
-import { isLiveMediaSourceActive, startLiveMediaSource } from '../live/liveMediaSource';
+import { startLiveMediaCompanion } from '../live/liveMediaSource';
+import { startLiveDualCompose } from '../live/liveDualCompose';
 import { startSessionRecording } from '../live/liveSessionRecorder';
 import { acquireLiveCamera } from '../live/useLiveCamera';
 import {
@@ -1475,6 +1476,8 @@ export default function TimelineFeed() {
                         youtubePlaylist={card.youtubePlaylist}
                         youtubeDurationSec={card.youtubeDurationSec}
                         startedAt={liveBroadcast?.startedAt || card.duration}
+                        stageActive={currentIndex === cardIndex}
+                        wallpaperUrl={liveBroadcast?.wallpaperUrl}
                       />
                     )}
 
@@ -2009,22 +2012,39 @@ export default function TimelineFeed() {
               }
               if (pick.kind === 'file' || pick.kind === 'link') {
                 const src = pick.kind === 'file' ? pick.file : pick.url;
-                await startLiveMediaSource(src);
+                // Split: playing video + creator camera (flip on stage)
+                try {
+                  await acquireLiveCamera();
+                } catch {
+                  try {
+                    sessionStorage.setItem('myface.live.needCamera', '1');
+                  } catch {
+                    /* ignore */
+                  }
+                }
+                await startLiveMediaCompanion(src);
+                startLiveDualCompose({ mediaOnTop: true });
                 void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
+                  dualSplit: true,
+                  mediaOnTop: true,
                   title: goPublic
                     ? pick.kind === 'file'
-                      ? `File Live · ${pick.file.name.slice(0, 28)}`
-                      : 'Link Live · AYO stream'
+                      ? `Split · ${pick.file.name.slice(0, 24)}`
+                      : 'Split · link + cam'
                     : pick.kind === 'file'
-                      ? `Private file · ${pick.file.name.slice(0, 20)}`
-                      : 'Private link live',
+                      ? `Private split · ${pick.file.name.slice(0, 18)}`
+                      : 'Private split live',
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);
-                flashToast(goPublic ? 'Streaming to public feed' : 'Private live · contacts only');
+                flashToast(
+                  goPublic
+                    ? 'Split live · video + your camera'
+                    : 'Private split · video + camera',
+                );
                 navigate(goPublic ? '/app/feed?live=1' : '/app/feed?live=1&invite=private');
               }
             } catch (err) {

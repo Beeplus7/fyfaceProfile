@@ -23,7 +23,6 @@ import {
 } from '../crmLight';
 import { readBroadcast, setBroadcast, type BroadcastMode } from '../demo/testLab';
 import GoLivePicker, { type GoLivePick } from '../live/GoLivePicker';
-import { startLiveMediaSource } from '../live/liveMediaSource';
 import { startSessionRecording } from '../live/liveSessionRecorder';
 import { isOnboardingDone, loadProfile } from '../onboarding/storage';
 import {
@@ -1001,15 +1000,26 @@ export default function CommandShell() {
             }
             if (pick.kind === 'file' || pick.kind === 'link') {
               try {
-                await startLiveMediaSource(pick.kind === 'file' ? pick.file : pick.url);
+                const { acquireLiveCamera } = await import('../live/useLiveCamera');
+                const { startLiveMediaCompanion } = await import('../live/liveMediaSource');
+                const { startLiveDualCompose } = await import('../live/liveDualCompose');
+                try {
+                  await acquireLiveCamera();
+                } catch {
+                  /* dual will attach cam when allowed */
+                }
+                await startLiveMediaCompanion(pick.kind === 'file' ? pick.file : pick.url);
+                startLiveDualCompose({ mediaOnTop: true });
                 void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
                   viewers: 144,
+                  dualSplit: true,
+                  mediaOnTop: true,
                   title:
                     pick.kind === 'file'
-                      ? `File Live · ${pick.file.name.slice(0, 28)}`
-                      : 'Link Live · AYO stream',
+                      ? `Split · ${pick.file.name.slice(0, 24)}`
+                      : 'Split · link + cam',
                   ...audienceMeta,
                 });
                 setArcadeLive(true);
