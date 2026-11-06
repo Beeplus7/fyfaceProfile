@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import { CRM_BTN, CRM_BTN_GHOST, CRM_BTN_QUIET, CRM_EYE, CRM_LIVE_PILL } from '../crmChrome';
 import {
   clearLocalBroadcastOnly,
+  patchBroadcast,
   readBroadcast,
   setBroadcast,
   type BroadcastMode,
@@ -31,6 +32,8 @@ import { useLiveCamera } from './useLiveCamera';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
 import LiveGiftPortal from './LiveGiftPortal';
 import { openLiveGiftShop } from './liveGifts';
+import { compressLiveWallpaper } from './liveWallpaper';
+import { setLiveDualWallpaper } from './liveDualCompose';
 
 const LIVE_SRC = '/live/session-viewer.html';
 
@@ -67,6 +70,10 @@ export default function LiveViewerExperience() {
   const [endSheet, setEndSheet] = useState<BroadcastState | null>(null);
   const [savedRecId, setSavedRecId] = useState<string | null>(null);
   const [postPublic, setPostPublic] = useState(false);
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | undefined>(
+    () => readBroadcast()?.wallpaperUrl,
+  );
+  const wallpaperInputRef = useRef<HTMLInputElement | null>(null);
 
   const watchIntent = params.get('watch') === '1' || params.get('view') === '1';
   // Include YouTube hosts (no MediaStream) — camera-only checks wrongly treated them as viewers
@@ -97,7 +104,11 @@ export default function LiveViewerExperience() {
     } catch {
       /* ignore */
     }
-    const syncLocal = () => setBc(readBroadcast());
+    const syncLocal = () => {
+      const next = readBroadcast();
+      setBc(next);
+      if (next?.wallpaperUrl) setWallpaperUrl(next.wallpaperUrl);
+    };
     const syncRemote = async () => {
       const local = readBroadcast();
       const hostingHere = isLocalLiveHost();
@@ -223,17 +234,44 @@ export default function LiveViewerExperience() {
     setPostPublic(false);
   };
 
-  const beginVideoLive = async (audience?: import('./liveAudience').LiveAudience) => {
+  const applyWallpaper = (url: string | undefined) => {
+    setWallpaperUrl(url);
+    setLiveDualWallpaper(url || null);
+    if (readBroadcast()?.live) {
+      patchBroadcast({ wallpaperUrl: url || null });
+      setBc(readBroadcast());
+    }
+  };
+
+  const onPickWallpaper = async (file: File | null) => {
+    if (!file) return;
+    try {
+      const url = await compressLiveWallpaper(file);
+      applyWallpaper(url);
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : 'Could not use that image');
+    }
+  };
+
+  const beginVideoLive = async (
+    audience?: import('./liveAudience').LiveAudience,
+    nextWallpaper?: string,
+  ) => {
     const { broadcastMetaFromAudience } = await import('./liveAudience');
     const audienceMeta = broadcastMetaFromAudience(audience);
     // Camera FIRST while click is still a user gesture (Mac Chrome/Safari).
     const ok = await startCamera();
+    if (nextWallpaper) {
+      setWallpaperUrl(nextWallpaper);
+      setLiveDualWallpaper(nextWallpaper);
+    }
     setBroadcast(true, {
       mode: 'video',
       viewers: 144,
       title: audienceMeta.publicFeed
         ? "AYO'S TAILORS · Video Live · OL1"
         : "AYO'S TAILORS · Private Live",
+      ...(nextWallpaper ? { wallpaperUrl: nextWallpaper } : {}),
       ...audienceMeta,
     });
     setBc(readBroadcast());
@@ -248,19 +286,27 @@ export default function LiveViewerExperience() {
     }
   };
 
-  const beginAudioLive = (audience?: import('./liveAudience').LiveAudience) => {
+  const beginAudioLive = (
+    audience?: import('./liveAudience').LiveAudience,
+    nextWallpaper?: string,
+  ) => {
     // stopCamera also clears frame/audio relays — start mic publish after
     stopCamera();
     void (async () => {
       const { broadcastMetaFromAudience } = await import('./liveAudience');
       const audienceMeta = broadcastMetaFromAudience(audience);
       const ok = await startLiveAudioOnlyPublish();
+      if (nextWallpaper) {
+        setWallpaperUrl(nextWallpaper);
+        setLiveDualWallpaper(nextWallpaper);
+      }
       setBroadcast(true, {
         mode: 'audio',
         viewers: 144,
         title: audienceMeta.publicFeed
           ? "AYO'S TAILORS · Audio Live · OL1"
           : "AYO'S TAILORS · Private Audio",
+        ...(nextWallpaper ? { wallpaperUrl: nextWallpaper } : {}),
         ...audienceMeta,
       });
       setBc(readBroadcast());
@@ -463,8 +509,18 @@ export default function LiveViewerExperience() {
             ) : null}
           </div>
         ) : audioLive && session?.live ? (
-          <div className="min-h-[52svh] flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-[#0a1628] via-black to-black py-10">
-            <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_30%,#1A7CFF66,transparent_55%)] pointer-events-none" />
+          <div className="relative min-h-[52svh] flex flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-[#0a1628] via-black to-black py-10 overflow-hidden">
+            {wallpaperUrl ? (
+              <div
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${wallpaperUrl})` }}
+                aria-hidden
+              >
+                <div className="absolute inset-0 bg-black/55" />
+              </div>
+            ) : (
+              <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_30%,#1A7CFF66,transparent_55%)] pointer-events-none" />
+            )}
             <div
               className="relative h-28 w-28 rounded-full grid place-items-center text-black text-[28px] font-black mb-5 shadow-[0_0_50px_rgba(26,124,255,0.45)]"
               style={{ background: 'linear-gradient(135deg,#8FFF4A,#1A7CFF,#FFE600)' }}
@@ -498,13 +554,51 @@ export default function LiveViewerExperience() {
             <div className="relative mt-6 rounded-full border border-white/15 bg-white/5 px-4 py-2 mono text-[11px]">
               {session.viewers} listening · {uptime}
             </div>
+            {localHost ? (
+              <div className="relative mt-4 flex flex-wrap gap-2 justify-center">
+                <input
+                  ref={wallpaperInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] || null;
+                    e.target.value = '';
+                    void onPickWallpaper(f);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold"
+                  onClick={() => wallpaperInputRef.current?.click()}
+                >
+                  {wallpaperUrl ? 'Change wallpaper' : 'Add wallpaper'}
+                </button>
+                {wallpaperUrl ? (
+                  <button
+                    type="button"
+                    className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold"
+                    onClick={() => applyWallpaper(undefined)}
+                  >
+                    Clear wallpaper
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         ) : videoHosting ? (
           <div className="relative w-full bg-black">
             <div className="relative aspect-[9/16] max-h-[70svh] md:aspect-video md:max-h-[min(62svh,720px)] mx-auto w-full overflow-hidden bg-[#0a0a0a]">
+              {wallpaperUrl ? (
+                <div
+                  className="absolute inset-0 bg-cover bg-center z-0"
+                  style={{ backgroundImage: `url(${wallpaperUrl})` }}
+                  aria-hidden
+                />
+              ) : null}
               <video
                 ref={videoRef}
-                className={`absolute inset-0 h-full w-full object-cover bg-black ${
+                className={`absolute inset-0 h-full w-full object-cover bg-transparent z-[1] ${
                   camFacing === 'environment' ? '' : 'scale-x-[-1]'
                 }`}
                 playsInline
@@ -550,6 +644,17 @@ export default function LiveViewerExperience() {
                 ) : null}
               </div>
               <div className="absolute bottom-3 inset-x-3 flex flex-wrap gap-2 z-[3]">
+                <input
+                  ref={wallpaperInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] || null;
+                    e.target.value = '';
+                    void onPickWallpaper(f);
+                  }}
+                />
                 {camStatus === 'live' ? (
                   <>
                     <button
@@ -571,6 +676,13 @@ export default function LiveViewerExperience() {
                     Enable camera
                   </button>
                 )}
+                <button
+                  type="button"
+                  className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold"
+                  onClick={() => wallpaperInputRef.current?.click()}
+                >
+                  {wallpaperUrl ? 'Wallpaper ✓' : 'Wallpaper'}
+                </button>
                 <button
                   type="button"
                   className="h-9 px-3 rounded-xl bg-[#FE2C55] text-white text-[12px] font-bold shadow-[0_2px_12px_rgba(254,44,85,0.4)]"
@@ -748,17 +860,22 @@ export default function LiveViewerExperience() {
               window.location.href = '/app/feed?upload=1';
               return;
             }
+            const wp = 'wallpaperUrl' in pick ? pick.wallpaperUrl : undefined;
             if (pick.kind === 'camera' && pick.mode === 'audio') {
-              beginAudioLive(pick.audience);
+              beginAudioLive(pick.audience, wp);
               return;
             }
             if (pick.kind === 'camera') {
-              void beginVideoLive(pick.audience);
+              void beginVideoLive(pick.audience, wp);
               return;
             }
             try {
               const { broadcastMetaFromAudience } = await import('./liveAudience');
               const audienceMeta = broadcastMetaFromAudience(pick.audience);
+              if (wp) {
+                setWallpaperUrl(wp);
+                setLiveDualWallpaper(wp);
+              }
               if (pick.kind === 'youtube') {
                 stopLiveMediaSource();
                 const mins = Math.round(pick.durationSec / 60);
@@ -771,6 +888,7 @@ export default function LiveViewerExperience() {
                   youtubePlaylist: pick.playlist,
                   youtubeDurationSec: pick.durationSec,
                   title: `YouTube · ${n} vid · ${mins}m`,
+                  ...(wp ? { wallpaperUrl: wp } : {}),
                   ...audienceMeta,
                 });
                 setBc(readBroadcast());
@@ -788,6 +906,7 @@ export default function LiveViewerExperience() {
                   pick.kind === 'file'
                     ? `File Live · ${pick.file.name.slice(0, 28)}`
                     : 'Link Live · AYO stream',
+                ...(wp ? { wallpaperUrl: wp } : {}),
                 ...audienceMeta,
               });
               setBc(readBroadcast());

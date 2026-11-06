@@ -1939,6 +1939,10 @@ export default function TimelineFeed() {
               const goPublic = Boolean(
                 pick.audience.publicFeed || pick.audience.visibility === 'public',
               );
+              const wallpaperMeta =
+                'wallpaperUrl' in pick && pick.wallpaperUrl
+                  ? { wallpaperUrl: pick.wallpaperUrl }
+                  : {};
               if (pick.kind === 'camera' && pick.mode === 'video') {
                 try {
                   await acquireLiveCamera();
@@ -1953,6 +1957,7 @@ export default function TimelineFeed() {
                   mode: 'video',
                   viewers: 144,
                   title: goPublic ? "Video Live · AYO'S · OL1" : "Private Live · contacts",
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);
@@ -1972,6 +1977,7 @@ export default function TimelineFeed() {
                   mode: 'audio',
                   viewers: 144,
                   title: goPublic ? "Audio Live · AYO'S · OL1" : 'Private Audio · contacts',
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);
@@ -1998,6 +2004,7 @@ export default function TimelineFeed() {
                   title: goPublic
                     ? `YouTube · ${n} vid · ${mins}m`
                     : `Private YT · ${n} vid · ${mins}m`,
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);
@@ -2022,7 +2029,10 @@ export default function TimelineFeed() {
                   }
                 }
                 await startLiveMediaCompanion(src);
-                startLiveDualCompose({ mediaOnTop: true });
+                startLiveDualCompose({
+                  mediaOnTop: true,
+                  wallpaperUrl: wallpaperMeta.wallpaperUrl || null,
+                });
                 void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
@@ -2036,6 +2046,7 @@ export default function TimelineFeed() {
                     : pick.kind === 'file'
                       ? `Private split · ${pick.file.name.slice(0, 18)}`
                       : 'Private split live',
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setGoLiveOpen(false);

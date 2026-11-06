@@ -974,6 +974,10 @@ export default function CommandShell() {
             const goPublic = Boolean(
               pick.audience.publicFeed || pick.audience.visibility === 'public',
             );
+            const wallpaperMeta =
+              'wallpaperUrl' in pick && pick.wallpaperUrl
+                ? { wallpaperUrl: pick.wallpaperUrl }
+                : {};
             if (pick.kind === 'youtube') {
               try {
                 const { stopLiveMediaSource } = await import('../live/liveMediaSource');
@@ -988,6 +992,7 @@ export default function CommandShell() {
                   youtubePlaylist: pick.playlist,
                   youtubeDurationSec: pick.durationSec,
                   title: `YouTube · ${n} vid · ${mins}m`,
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setArcadeLive(true);
@@ -1009,7 +1014,10 @@ export default function CommandShell() {
                   /* dual will attach cam when allowed */
                 }
                 await startLiveMediaCompanion(pick.kind === 'file' ? pick.file : pick.url);
-                startLiveDualCompose({ mediaOnTop: true });
+                startLiveDualCompose({
+                  mediaOnTop: true,
+                  wallpaperUrl: wallpaperMeta.wallpaperUrl || null,
+                });
                 void startSessionRecording({ mode: 'video' });
                 setBroadcast(true, {
                   mode: 'video',
@@ -1020,6 +1028,7 @@ export default function CommandShell() {
                     pick.kind === 'file'
                       ? `Split · ${pick.file.name.slice(0, 24)}`
                       : 'Split · link + cam',
+                  ...wallpaperMeta,
                   ...audienceMeta,
                 });
                 setArcadeLive(true);
@@ -1045,6 +1054,7 @@ export default function CommandShell() {
               mode,
               viewers: 144,
               title: mode === 'audio' ? "Audio Live · AYO'S · OL1" : "Video Live · AYO'S · OL1",
+              ...wallpaperMeta,
               ...audienceMeta,
             });
             try {

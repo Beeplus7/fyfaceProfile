@@ -12,11 +12,12 @@ import {
   type LiveAudience,
   type LiveContactOption,
 } from './liveAudience';
+import { compressLiveWallpaper } from './liveWallpaper';
 
 export type GoLivePick =
-  | { kind: 'camera'; mode: BroadcastMode; audience: LiveAudience }
-  | { kind: 'file'; file: File; audience: LiveAudience }
-  | { kind: 'link'; url: string; audience: LiveAudience }
+  | { kind: 'camera'; mode: BroadcastMode; audience: LiveAudience; wallpaperUrl?: string }
+  | { kind: 'file'; file: File; audience: LiveAudience; wallpaperUrl?: string }
+  | { kind: 'link'; url: string; audience: LiveAudience; wallpaperUrl?: string }
   | {
       kind: 'youtube';
       youtubeId: string;
@@ -26,6 +27,7 @@ export type GoLivePick =
       durationSec: number;
       /** Ordered videos with captions. Next plays when one ends. */
       playlist: YoutubePlaylistItem[];
+      wallpaperUrl?: string;
     }
   /** Upload a video and publish it as a WorkCut on the feed (not live stream). */
   | { kind: 'post'; file: File };
@@ -77,9 +79,14 @@ type Props = {
   contacts?: LiveContactOption[];
 };
 
-function withAudience(pending: PendingLive, audience: LiveAudience): GoLivePick {
-  if (pending.kind === 'camera') return { kind: 'camera', mode: pending.mode, audience };
-  if (pending.kind === 'file') return { kind: 'file', file: pending.file, audience };
+function withAudience(
+  pending: PendingLive,
+  audience: LiveAudience,
+  wallpaperUrl?: string,
+): GoLivePick {
+  const wp = wallpaperUrl ? { wallpaperUrl } : {};
+  if (pending.kind === 'camera') return { kind: 'camera', mode: pending.mode, audience, ...wp };
+  if (pending.kind === 'file') return { kind: 'file', file: pending.file, audience, ...wp };
   if (pending.kind === 'youtube') {
     const playlist = normalizeYoutubePlaylistItems([
       { id: pending.youtubeId, caption: '' },
@@ -95,9 +102,10 @@ function withAudience(pending: PendingLive, audience: LiveAudience): GoLivePick 
       audience,
       durationSec: clampYtDurationSec(pending.durationSec || DEFAULT_YT_DURATION_SEC),
       playlist: merged,
+      ...wp,
     };
   }
-  return { kind: 'link', url: pending.url, audience };
+  return { kind: 'link', url: pending.url, audience, ...wp };
 }
 
 /** Modal: camera / audio / upload / YouTube / link + contacts-only audience. */
@@ -112,8 +120,10 @@ export default function GoLivePicker({
 }: Props) {
   const fileId = useId();
   const postFileId = useId();
+  const wallpaperId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
   const postFileRef = useRef<HTMLInputElement>(null);
+  const wallpaperRef = useRef<HTMLInputElement>(null);
   const [linkOpen, setLinkOpen] = useState(false);
   const [ytOpen, setYtOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
@@ -129,6 +139,8 @@ export default function GoLivePicker({
   const [visibility, setVisibility] = useState<'contacts' | 'public'>('contacts');
   const [publicFeed, setPublicFeed] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | undefined>();
+  const [wallpaperBusy, setWallpaperBusy] = useState(false);
 
   const contactList = contacts?.length ? contacts : SEED_LIVE_CONTACTS;
 
@@ -145,6 +157,8 @@ export default function GoLivePicker({
       setYtQueue([]);
       setYtUrl('');
       setYtCaptionDraft('');
+      setWallpaperUrl(undefined);
+      setWallpaperBusy(false);
     }
   }, [open]);
 
@@ -207,7 +221,7 @@ export default function GoLivePicker({
       publicFeed: visibility === 'public' ? true : publicFeed,
       contactIds: visibility === 'contacts' ? selectedIds : [],
     });
-    const pick = withAudience(pending, audience);
+    const pick = withAudience(pending, audience, wallpaperUrl);
     const label =
       pick.kind === 'camera'
         ? pick.mode === 'audio'
@@ -365,7 +379,7 @@ export default function GoLivePicker({
             </h2>
             <p className={`text-[12px] mt-1 leading-relaxed ${muted}`}>
               {pending
-                ? 'Private with selected contacts by default. Switch on public For You only if you want everyone to see it.'
+                ? 'Pick who can watch, optional wallpaper, then start. Public For You only if you want everyone to see it.'
                 : 'Post a WorkCut, or go live with camera / file / YouTube / link.'}
             </p>
           </div>
@@ -535,6 +549,68 @@ export default function GoLivePicker({
                 </div>
               </div>
             ) : null}
+
+            <div
+              className={`rounded-2xl border p-3 space-y-2 ${
+                dark ? 'border-white/12 bg-white/[0.04]' : 'border-[#E7EBF0] bg-[#F7F8FA]'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <div>
+                  <div className="text-[13px] font-bold">Live wallpaper</div>
+                  <div className={`mono text-[9px] mt-0.5 ${muted}`}>
+                    Optional background for video + audio live
+                  </div>
+                </div>
+                {wallpaperUrl ? (
+                  <button
+                    type="button"
+                    className={`h-8 px-2.5 rounded-lg border mono text-[10px] font-bold ${ghost}`}
+                    onClick={() => setWallpaperUrl(undefined)}
+                  >
+                    Clear
+                  </button>
+                ) : null}
+              </div>
+              <input
+                id={wallpaperId}
+                ref={wallpaperRef}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  e.target.value = '';
+                  if (!file) return;
+                  setWallpaperBusy(true);
+                  setLinkErr(null);
+                  void compressLiveWallpaper(file)
+                    .then((url) => setWallpaperUrl(url))
+                    .catch((err) =>
+                      setLinkErr(err instanceof Error ? err.message : 'Could not use that image'),
+                    )
+                    .finally(() => setWallpaperBusy(false));
+                }}
+              />
+              {wallpaperUrl ? (
+                <div className="relative h-24 w-full overflow-hidden rounded-xl border border-white/15">
+                  <img src={wallpaperUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-black/25" />
+                  <span className="absolute left-2 bottom-2 rounded-full bg-black/60 px-2 h-5 inline-flex items-center mono text-[9px] font-bold">
+                    Wallpaper ready
+                  </span>
+                </div>
+              ) : (
+                <label
+                  htmlFor={wallpaperId}
+                  className={`flex h-11 items-center justify-center rounded-xl border border-dashed cursor-pointer mono text-[11px] font-bold ${
+                    dark ? 'border-white/20 text-white/70' : 'border-[#CBD5E1] text-[#64748B]'
+                  }`}
+                >
+                  {wallpaperBusy ? 'Compressing…' : 'Choose wallpaper image'}
+                </label>
+              )}
+            </div>
 
             {linkErr ? <div className="mono text-[10px] text-red-400 px-1">{linkErr}</div> : null}
 
