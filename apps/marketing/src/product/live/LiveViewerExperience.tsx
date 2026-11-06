@@ -24,16 +24,28 @@ import {
   startLiveAudioOnlyPublish,
   stopLiveAudioPublish,
 } from './liveAudioRelay';
-import { isLiveMediaSourceActive, startLiveMediaSource, stopLiveMediaSource } from './liveMediaSource';
+import {
+  getLiveMediaElement,
+  isLiveMediaSourceActive,
+  startLiveMediaCompanion,
+  stopLiveMediaSource,
+} from './liveMediaSource';
 import { startSessionRecording, stopSessionRecording, takePendingRecordingBlob } from './liveSessionRecorder';
 import { sharedStreamIsLive } from './liveCameraBus';
 import { isLocalLiveHost } from './liveHost';
-import { useLiveCamera } from './useLiveCamera';
+import { acquireLiveCamera, useLiveCamera } from './useLiveCamera';
 import LiveHostJoinInbox from './LiveHostJoinInbox';
 import LiveGiftPortal from './LiveGiftPortal';
 import { openLiveGiftShop } from './liveGifts';
 import { compressLiveWallpaper } from './liveWallpaper';
-import { setLiveDualWallpaper } from './liveDualCompose';
+import {
+  getLiveDualMediaOnTop,
+  isLiveDualActive,
+  setLiveDualMediaOnTop,
+  setLiveDualWallpaper,
+  startLiveDualCompose,
+  stopLiveDualCompose,
+} from './liveDualCompose';
 
 const LIVE_SRC = '/live/session-viewer.html';
 
@@ -70,10 +82,11 @@ export default function LiveViewerExperience() {
   const [endSheet, setEndSheet] = useState<BroadcastState | null>(null);
   const [savedRecId, setSavedRecId] = useState<string | null>(null);
   const [postPublic, setPostPublic] = useState(false);
-  const [wallpaperUrl, setWallpaperUrl] = useState<string | undefined>(
-    () => readBroadcast()?.wallpaperUrl,
-  );
+  const [wallpaperUrl, setWallpaperUrl] = useState<string | undefined>();
+  const [mediaOnTop, setMediaOnTop] = useState(() => readBroadcast()?.mediaOnTop !== false);
+  const [dualTick, setDualTick] = useState(0);
   const wallpaperInputRef = useRef<HTMLInputElement | null>(null);
+  const splitFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const watchIntent = params.get('watch') === '1' || params.get('view') === '1';
   // Include YouTube hosts (no MediaStream) — camera-only checks wrongly treated them as viewers
@@ -107,7 +120,9 @@ export default function LiveViewerExperience() {
     const syncLocal = () => {
       const next = readBroadcast();
       setBc(next);
-      if (next?.wallpaperUrl) setWallpaperUrl(next.wallpaperUrl);
+      // Always sync (including clear) so last wallpaper does not stick after End
+      setWallpaperUrl(next?.live ? next.wallpaperUrl : undefined);
+      if (next?.live && typeof next.mediaOnTop === 'boolean') setMediaOnTop(next.mediaOnTop);
     };
     const syncRemote = async () => {
       const local = readBroadcast();
@@ -193,17 +208,30 @@ export default function LiveViewerExperience() {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   })();
 
+  const clearWallpaperLocal = () => {
+    setWallpaperUrl(undefined);
+    setLiveDualWallpaper(null);
+  };
+
   const endLive = () => {
     const current = readBroadcast();
     void (async () => {
       await stopSessionRecording();
+      stopLiveDualCompose();
       stopCamera();
       stopLiveAudioPublish();
       stopLiveMediaSource();
       setBroadcast(false);
       setBc(null);
+      clearWallpaperLocal();
       setShowTheater(false);
-      if (current?.live) setEndSheet(current);
+      setDualTick((t) => t + 1);
+      if (current?.live) {
+        // Don't carry wallpaper into the post-live save sheet / next Go Live
+        const { wallpaperUrl: _wp, ...rest } = current;
+        void _wp;
+        setEndSheet(rest);
+      }
     })();
   };
 
@@ -253,6 +281,56 @@ export default function LiveViewerExperience() {
     }
   };
 
+  const startSplitWithSource = async (src: File | string, opts?: { wallpaperUrl?: string }) => {
+    try {
+      await acquireLiveCamera();
+    } catch {
+      /* may still attach after permission */
+    }
+    await startCamera();
+    await startLiveMediaCompanion(src);
+    let ok = startLiveDualCompose({
+      mediaOnTop: true,
+      wallpaperUrl: opts?.wallpaperUrl || null,
+    });
+    if (!ok) {
+      await new Promise((r) => window.setTimeout(r, 350));
+      ok = startLiveDualCompose({
+        mediaOnTop: true,
+        wallpaperUrl: opts?.wallpaperUrl || null,
+      });
+    }
+    if (!ok) {
+      throw new Error('Could not start split — allow camera, then try Add video again');
+    }
+    setMediaOnTop(true);
+    setDualTick((t) => t + 1);
+  };
+
+  const flipSplit = () => {
+    const next = !mediaOnTop;
+    setMediaOnTop(next);
+    setLiveDualMediaOnTop(next);
+    patchBroadcast({ dualSplit: true, mediaOnTop: next });
+    setDualTick((t) => t + 1);
+  };
+
+  const onPickSplitFile = async (file: File | null) => {
+    if (!file || !localHost) return;
+    try {
+      await startSplitWithSource(file, { wallpaperUrl });
+      patchBroadcast({
+        dualSplit: true,
+        mediaOnTop,
+        title: readBroadcast()?.title || 'Split · video + cam',
+      });
+      setBc(readBroadcast());
+      setDualTick((t) => t + 1);
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : 'Could not add video');
+    }
+  };
+
   const beginVideoLive = async (
     audience?: import('./liveAudience').LiveAudience,
     nextWallpaper?: string,
@@ -261,9 +339,12 @@ export default function LiveViewerExperience() {
     const audienceMeta = broadcastMetaFromAudience(audience);
     // Camera FIRST while click is still a user gesture (Mac Chrome/Safari).
     const ok = await startCamera();
+    // Fresh session — never keep last wallpaper unless user picked one this Go Live
     if (nextWallpaper) {
       setWallpaperUrl(nextWallpaper);
       setLiveDualWallpaper(nextWallpaper);
+    } else {
+      clearWallpaperLocal();
     }
     setBroadcast(true, {
       mode: 'video',
@@ -299,6 +380,8 @@ export default function LiveViewerExperience() {
       if (nextWallpaper) {
         setWallpaperUrl(nextWallpaper);
         setLiveDualWallpaper(nextWallpaper);
+      } else {
+        clearWallpaperLocal();
       }
       setBroadcast(true, {
         mode: 'audio',
@@ -315,6 +398,12 @@ export default function LiveViewerExperience() {
       if (ok) void startSessionRecording({ mode: 'audio' });
     })();
   };
+
+  void dualTick;
+  void getLiveDualMediaOnTop;
+  const dualLive = Boolean(
+    localHost && videoHosting && (isLiveDualActive() || broadcast?.dualSplit) && isLiveMediaSourceActive(),
+  );
 
   if (redirectWatchToFeed) {
     return <Navigate to="/app/feed?live=1" replace />;
@@ -598,25 +687,87 @@ export default function LiveViewerExperience() {
                   <div className="absolute inset-0 bg-black/20" />
                 </div>
               ) : null}
-              {/* TikTok-style: floating cam tile over wallpaper so the image stays visible */}
-              <div
-                className={
-                  wallpaperUrl
-                    ? 'absolute z-[1] left-3 right-3 top-[12%] bottom-[18%] rounded-[22px] overflow-hidden border border-white/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] bg-black/30'
-                    : 'absolute inset-0 z-[1]'
-                }
-              >
-              <video
-                ref={videoRef}
-                className={`absolute inset-0 h-full w-full object-cover ${
-                  wallpaperUrl ? 'bg-transparent' : 'bg-black'
-                } ${camFacing === 'environment' ? '' : 'scale-x-[-1]'}`}
-                playsInline
-                autoPlay
-                muted
-              />
-              </div>
-              {camStatus !== 'live' ? (
+              {dualLive ? (
+                <div className="absolute inset-0 z-[1] flex flex-col">
+                  {(() => {
+                    const media = getLiveMediaElement();
+                    const mediaPane = (
+                      <div className="relative min-h-0 flex-1 overflow-hidden bg-black border-b border-white/20">
+                        {media ? (
+                          <video
+                            key={media.src || 'split-media'}
+                            ref={(el) => {
+                              if (!el || !media) return;
+                              if (el.src !== media.src) el.src = media.src;
+                              el.loop = true;
+                              el.muted = true;
+                              void el.play().catch(() => undefined);
+                            }}
+                            className="absolute inset-0 h-full w-full object-cover"
+                            playsInline
+                            autoPlay
+                            muted
+                            loop
+                          />
+                        ) : (
+                          <div className="absolute inset-0 grid place-items-center mono text-[11px] text-white/50">
+                            Playing video…
+                          </div>
+                        )}
+                        <span className="absolute left-2 bottom-2 rounded-full bg-black/60 px-2 h-5 inline-flex items-center mono text-[10px] font-bold">
+                          Playing
+                        </span>
+                      </div>
+                    );
+                    const camPane = (
+                      <div className="relative min-h-0 flex-1 overflow-hidden bg-black">
+                        <video
+                          ref={videoRef}
+                          className={`absolute inset-0 h-full w-full object-cover ${
+                            camFacing === 'environment' ? '' : 'scale-x-[-1]'
+                          }`}
+                          playsInline
+                          autoPlay
+                          muted
+                        />
+                        <span className="absolute left-2 bottom-2 rounded-full bg-red-500 px-2 h-5 inline-flex items-center mono text-[10px] font-bold">
+                          You
+                        </span>
+                      </div>
+                    );
+                    return mediaOnTop ? (
+                      <>
+                        {mediaPane}
+                        {camPane}
+                      </>
+                    ) : (
+                      <>
+                        {camPane}
+                        {mediaPane}
+                      </>
+                    );
+                  })()}
+                </div>
+              ) : (
+                <div
+                  className={
+                    wallpaperUrl
+                      ? 'absolute z-[1] left-3 right-3 top-[12%] bottom-[18%] rounded-[22px] overflow-hidden border border-white/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] bg-black/30'
+                      : 'absolute inset-0 z-[1]'
+                  }
+                >
+                  <video
+                    ref={videoRef}
+                    className={`absolute inset-0 h-full w-full object-cover ${
+                      wallpaperUrl ? 'bg-transparent' : 'bg-black'
+                    } ${camFacing === 'environment' ? '' : 'scale-x-[-1]'}`}
+                    playsInline
+                    autoPlay
+                    muted
+                  />
+                </div>
+              )}
+              {camStatus !== 'live' && !dualLive ? (
                 <div className="absolute inset-0 z-[2] flex flex-col items-center justify-center gap-3 px-6 text-center bg-gradient-to-br from-[#0F172A] via-black to-[#1E293B]">
                   <div className="h-16 w-16 rounded-2xl border border-white/15 bg-white/5 grid place-items-center text-[22px]">
                     {camStatus === 'requesting' ? '…' : '📷'}
@@ -645,7 +796,11 @@ export default function LiveViewerExperience() {
                 <span className="rounded-full bg-black/55 border border-white/15 px-2.5 py-1 mono text-[10px]">
                   {broadcast?.viewers ?? 0} · {uptime}
                 </span>
-                {camStatus === 'live' ? (
+                {dualLive ? (
+                  <span className="rounded-full bg-[#8FFF4A]/20 border border-[#8FFF4A]/40 text-[#8FFF4A] px-2.5 py-1 mono text-[10px] font-bold">
+                    SPLIT · VIDEO + CAM
+                  </span>
+                ) : camStatus === 'live' ? (
                   <span className="rounded-full bg-[#8FFF4A]/20 border border-[#8FFF4A]/40 text-[#8FFF4A] px-2.5 py-1 mono text-[10px] font-bold">
                     YOU · CAM ON
                     {liveFramePublishStats().lastOkAt && Date.now() - liveFramePublishStats().lastOkAt! < 3000
@@ -666,7 +821,18 @@ export default function LiveViewerExperience() {
                     void onPickWallpaper(f);
                   }}
                 />
-                {camStatus === 'live' ? (
+                <input
+                  ref={splitFileInputRef}
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] || null;
+                    e.target.value = '';
+                    void onPickSplitFile(f);
+                  }}
+                />
+                {camStatus === 'live' || dualLive ? (
                   <>
                     <button
                       type="button"
@@ -687,6 +853,22 @@ export default function LiveViewerExperience() {
                     Enable camera
                   </button>
                 )}
+                <button
+                  type="button"
+                  className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold"
+                  onClick={() => splitFileInputRef.current?.click()}
+                >
+                  {dualLive ? 'Swap video' : 'Add video'}
+                </button>
+                {dualLive ? (
+                  <button
+                    type="button"
+                    className="h-9 px-3 rounded-xl bg-[#8FFF4A] text-black text-[12px] font-black"
+                    onClick={flipSplit}
+                  >
+                    Flip · {mediaOnTop ? 'video↑' : 'cam↑'}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="h-9 px-3 rounded-xl bg-black/55 border border-white/15 text-[12px] font-semibold"
@@ -871,7 +1053,7 @@ export default function LiveViewerExperience() {
               window.location.href = '/app/feed?upload=1';
               return;
             }
-            const wp = 'wallpaperUrl' in pick ? pick.wallpaperUrl : undefined;
+              const wp = 'wallpaperUrl' in pick ? pick.wallpaperUrl : undefined;
             if (pick.kind === 'camera' && pick.mode === 'audio') {
               beginAudioLive(pick.audience, wp);
               return;
@@ -886,9 +1068,12 @@ export default function LiveViewerExperience() {
               if (wp) {
                 setWallpaperUrl(wp);
                 setLiveDualWallpaper(wp);
+              } else {
+                clearWallpaperLocal();
               }
               if (pick.kind === 'youtube') {
                 stopLiveMediaSource();
+                stopLiveDualCompose();
                 const mins = Math.round(pick.durationSec / 60);
                 const n = pick.playlist.length;
                 setBroadcast(true, {
@@ -907,22 +1092,26 @@ export default function LiveViewerExperience() {
                 setShowTheater(false);
                 return;
               }
+              // Split: playing file/link + creator camera (not media-only)
               const src = pick.kind === 'file' ? pick.file : pick.url;
-              await startLiveMediaSource(src);
+              await startSplitWithSource(src, { wallpaperUrl: wp });
               void startSessionRecording({ mode: 'video' });
               setBroadcast(true, {
                 mode: 'video',
                 viewers: 144,
+                dualSplit: true,
+                mediaOnTop: true,
                 title:
                   pick.kind === 'file'
-                    ? `File Live · ${pick.file.name.slice(0, 28)}`
-                    : 'Link Live · AYO stream',
+                    ? `Split · ${pick.file.name.slice(0, 24)}`
+                    : 'Split · link + cam',
                 ...(wp ? { wallpaperUrl: wp } : {}),
                 ...audienceMeta,
               });
               setBc(readBroadcast());
               setGoLiveOpen(false);
               setShowTheater(false);
+              setDualTick((t) => t + 1);
             } catch (err) {
               window.alert(err instanceof Error ? err.message : 'Could not start media stream');
             }

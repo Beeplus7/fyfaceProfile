@@ -218,8 +218,11 @@ export function stopLiveDualCompose(opts?: { keepMedia?: boolean; keepCameraAudi
     }
     camVideo = null;
   }
+  if (!opts?.keepMedia) {
+    wallpaperImg = null;
+    wallpaperUrl = null;
+  }
   if (!opts?.keepCameraAudio) {
     // caller may restart camera publish
   }
-  void opts?.keepMedia;
 }

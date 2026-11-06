@@ -486,7 +486,8 @@ export default function FeedLiveNowStage({
   }, [stageActive, isHost]);
 
   useEffect(() => {
-    if (wallpaperUrlProp) setWallpaperUrl(wallpaperUrlProp);
+    // Prop undefined = clear sticky wallpaper from a previous session
+    setWallpaperUrl(wallpaperUrlProp);
   }, [wallpaperUrlProp]);
 
   useEffect(() => {
@@ -635,6 +636,8 @@ export default function FeedLiveNowStage({
       stopLiveMediaSource();
       stopAllSlotFramePublish();
       stopAllSlotAudioPublish();
+      setWallpaperUrl(undefined);
+      setLiveDualWallpaper(null);
       setBroadcast(false);
     } finally {
       setEndingLive(false);
