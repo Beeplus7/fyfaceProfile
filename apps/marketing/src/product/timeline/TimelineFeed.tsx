@@ -18,7 +18,6 @@ import { focusLiveChat, openLiveGiftShop, readMfcWallet } from '../live/liveGift
 import { getOrCreateGuestIdentity } from '../live/liveGuests';
 import { fetchRemoteLive, publishRemoteLiveMusic } from '../live/liveRemote';
 import { isLiveAudioPublishing, setLiveMusicBed, startLiveAudioOnlyPublish } from '../live/liveAudioRelay';
-import { sharedStreamIsLive } from '../live/liveCameraBus';
 import { isLocalLiveHost } from '../live/liveHost';
 import { startLiveMediaCompanion } from '../live/liveMediaSource';
 import { startLiveDualCompose } from '../live/liveDualCompose';
