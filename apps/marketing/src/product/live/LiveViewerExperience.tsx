@@ -516,7 +516,7 @@ export default function LiveViewerExperience() {
                 style={{ backgroundImage: `url(${wallpaperUrl})` }}
                 aria-hidden
               >
-                <div className="absolute inset-0 bg-black/55" />
+                <div className="absolute inset-0 bg-black/25" />
               </div>
             ) : (
               <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_30%,#1A7CFF66,transparent_55%)] pointer-events-none" />
@@ -594,17 +594,28 @@ export default function LiveViewerExperience() {
                   className="absolute inset-0 bg-cover bg-center z-0"
                   style={{ backgroundImage: `url(${wallpaperUrl})` }}
                   aria-hidden
-                />
+                >
+                  <div className="absolute inset-0 bg-black/20" />
+                </div>
               ) : null}
+              {/* TikTok-style: floating cam tile over wallpaper so the image stays visible */}
+              <div
+                className={
+                  wallpaperUrl
+                    ? 'absolute z-[1] left-3 right-3 top-[12%] bottom-[18%] rounded-[22px] overflow-hidden border border-white/25 shadow-[0_12px_40px_rgba(0,0,0,0.4)] bg-black/30'
+                    : 'absolute inset-0 z-[1]'
+                }
+              >
               <video
                 ref={videoRef}
-                className={`absolute inset-0 h-full w-full object-cover bg-transparent z-[1] ${
-                  camFacing === 'environment' ? '' : 'scale-x-[-1]'
-                }`}
+                className={`absolute inset-0 h-full w-full object-cover ${
+                  wallpaperUrl ? 'bg-transparent' : 'bg-black'
+                } ${camFacing === 'environment' ? '' : 'scale-x-[-1]'}`}
                 playsInline
                 autoPlay
                 muted
               />
+              </div>
               {camStatus !== 'live' ? (
                 <div className="absolute inset-0 z-[2] flex flex-col items-center justify-center gap-3 px-6 text-center bg-gradient-to-br from-[#0F172A] via-black to-[#1E293B]">
                   <div className="h-16 w-16 rounded-2xl border border-white/15 bg-white/5 grid place-items-center text-[22px]">

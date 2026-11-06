@@ -1001,8 +1001,13 @@ export default function FeedLiveNowStage({
           ? 'grid-cols-2 grid-rows-1'
           : 'grid-cols-2 grid-rows-2';
 
+    const wallpaperSplit = Boolean(wallpaperUrl);
     return (
-      <div className={`absolute inset-0 grid ${gridClass} gap-px bg-white/10`}>
+      <div
+        className={`absolute inset-0 grid ${gridClass} ${
+          wallpaperSplit ? 'gap-2 p-3 pt-[calc(var(--feed-chrome-h,72px)+48px)] pb-[108px] bg-transparent' : 'gap-px bg-white/10'
+        }`}
+      >
         {panes.map((pane, idx) => {
           const spanHostTop = n === 3 && idx === 0 ? 'col-span-2' : '';
           const url =
@@ -1022,7 +1027,12 @@ export default function FeedLiveNowStage({
           // YouTube host + guests: keep YT playing in the host cell (no camera JPEG)
           if (pane.kind === 'host' && ytLive && youtubeId) {
             return (
-              <div key={pane.key} className={`relative min-h-0 min-w-0 overflow-hidden bg-black ${spanHostTop}`}>
+              <div
+                key={pane.key}
+                className={`relative min-h-0 min-w-0 overflow-hidden bg-black ${spanHostTop} ${
+                  wallpaperSplit ? 'rounded-2xl border border-white/25 shadow-lg' : ''
+                }`}
+              >
                 <YoutubeEmbed
                   youtubeId={youtubeId}
                   title={title || 'YouTube Live'}
@@ -1045,7 +1055,12 @@ export default function FeedLiveNowStage({
             );
           }
           return (
-            <div key={pane.key} className={`relative min-h-0 min-w-0 ${spanHostTop}`}>
+            <div
+              key={pane.key}
+              className={`relative min-h-0 min-w-0 ${spanHostTop} ${
+                wallpaperSplit ? 'rounded-2xl overflow-hidden border border-white/25 shadow-lg' : ''
+              }`}
+            >
               <GuestTile
                 pane={pane}
                 frameUrl={pane.local ? null : url}
@@ -1069,7 +1084,7 @@ export default function FeedLiveNowStage({
             </div>
           );
         })}
-        {n === 3 ? <div className="bg-black/80" aria-hidden /> : null}
+        {n === 3 && !wallpaperSplit ? <div className="bg-black/80" aria-hidden /> : null}
       </div>
     );
   };
@@ -1145,16 +1160,52 @@ export default function FeedLiveNowStage({
     </div>
   );
 
-  const wallpaperLayer =
-    wallpaperUrl && stageActive ? (
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${wallpaperUrl})` }}
-        aria-hidden
-      >
-        <div className="absolute inset-0 bg-black/45" />
-      </div>
-    ) : null;
+  // TikTok-style: wallpaper fills the stage; camera/guests float on top (not full-bleed covering it)
+  const wallpaperMode = Boolean(wallpaperUrl);
+  const wallpaperLayer = wallpaperUrl ? (
+    <div
+      className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${wallpaperUrl})` }}
+      aria-hidden
+    >
+      <div className="absolute inset-0 bg-black/20" />
+    </div>
+  ) : null;
+
+  const bindHostPreview = (el: HTMLVideoElement | null) => {
+    videoRef(el);
+    const stream = getSharedLiveStream();
+    if (el && stream && sharedStreamIsLive() && el.srcObject !== stream) {
+      el.srcObject = stream;
+      el.muted = true;
+      void el.play().catch(() => undefined);
+    }
+  };
+
+  /** Host cam as a floating card over wallpaper (TikTok live wallpaper layout). */
+  const renderWallpaperHostCam = () => (
+    <div
+      className="absolute z-[1] left-3 right-3 overflow-hidden rounded-[22px] border border-white/25 bg-black/40 shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
+      style={{
+        top: 'calc(var(--feed-chrome-h, 72px) + 56px)',
+        bottom: '118px',
+      }}
+    >
+      <video
+        ref={bindHostPreview}
+        className={`absolute inset-0 h-full w-full object-cover ${
+          facing === 'environment' ? '' : 'scale-x-[-1]'
+        }`}
+        playsInline
+        autoPlay
+        muted
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+      <span className="absolute left-2.5 bottom-2.5 rounded-full bg-red-500 px-2 h-5 inline-flex items-center mono text-[10px] font-bold pointer-events-none">
+        YOU
+      </span>
+    </div>
+  );
 
   const hostToolRow = isHost ? (
     <div className="pointer-events-auto flex flex-wrap gap-1.5 items-center">
@@ -1293,26 +1344,33 @@ export default function FeedLiveNowStage({
   if (hostLive && videoMode) {
     const panes = buildPanes();
     const fromFile = Boolean(fileMedia || isLiveMediaSourceActive());
+    const showWallpaperHost = wallpaperMode && !dualLive && !ytLive && !(fromFile && !dualLive && !sharedStreamIsLive());
     return (
       <div className="absolute inset-0 flex flex-col bg-black">
         {wallpaperLayer}
         {multi ? (
-          renderSplit(panes)
+          <div className={`absolute inset-0 z-[1] ${wallpaperMode ? 'bg-transparent' : ''}`}>
+            {renderSplit(panes)}
+          </div>
         ) : dualLive ? (
-          renderDualHost()
+          <div className="absolute inset-0 z-[1]">{renderDualHost()}</div>
         ) : ytLive && youtubeId ? (
-          <YoutubeEmbed
-            key={`yt-live-host-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
-            youtubeId={youtubeId}
-            title={title || 'YouTube Live'}
-            autoplay={stageActive}
-            loop={ytLoop}
-            playlistIds={youtubePlaylistIds}
-            playlist={youtubePlaylist}
-            showCaptions
-            fill
-          />
-        ) : fromFile && fileMedia ? (
+          <div className={`absolute z-[1] ${wallpaperMode ? 'inset-x-3 top-[22%] bottom-[120px] rounded-[22px] overflow-hidden border border-white/20' : 'inset-0'}`}>
+            <YoutubeEmbed
+              key={`yt-live-host-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
+              youtubeId={youtubeId}
+              title={title || 'YouTube Live'}
+              autoplay={stageActive}
+              loop={ytLoop}
+              playlistIds={youtubePlaylistIds}
+              playlist={youtubePlaylist}
+              showCaptions
+              fill
+            />
+          </div>
+        ) : showWallpaperHost && sharedStreamIsLive() ? (
+          renderWallpaperHostCam()
+        ) : fromFile && fileMedia && !sharedStreamIsLive() ? (
           <video
             key={fileMedia.src || 'file-live'}
             ref={(el) => {
@@ -1323,24 +1381,22 @@ export default function FeedLiveNowStage({
               el.setAttribute('playsinline', 'true');
               void el.play().catch(() => undefined);
             }}
-            className="absolute inset-0 h-full w-full object-cover bg-black"
+            className={`absolute z-[1] object-cover bg-black ${
+              wallpaperMode
+                ? 'inset-x-3 top-[22%] bottom-[120px] rounded-[22px] border border-white/20'
+                : 'inset-0 h-full w-full'
+            }`}
             playsInline
             autoPlay
             muted
             loop
           />
+        ) : wallpaperMode ? (
+          renderWallpaperHostCam()
         ) : (
           <video
-            ref={(el) => {
-              videoRef(el);
-              const stream = getSharedLiveStream();
-              if (el && stream && sharedStreamIsLive() && el.srcObject !== stream) {
-                el.srcObject = stream;
-                el.muted = true;
-                void el.play().catch(() => undefined);
-              }
-            }}
-            className={`absolute inset-0 h-full w-full object-cover bg-black ${
+            ref={bindHostPreview}
+            className={`absolute inset-0 z-[1] h-full w-full object-cover bg-black ${
               facing === 'environment' ? '' : 'scale-x-[-1]'
             }`}
             playsInline
@@ -1348,8 +1404,8 @@ export default function FeedLiveNowStage({
             muted
           />
         )}
-        {!multi ? (
-          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/80 pointer-events-none" />
+        {!multi && !wallpaperMode ? (
+          <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/45 via-transparent to-black/80 pointer-events-none" />
         ) : null}
         <div className="absolute left-3 right-16 z-[5] flex items-center gap-2 pointer-events-none flex-wrap" style={BADGE_TOP}>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500 px-2.5 h-7 text-[11px] font-bold tracking-wide shrink-0">
@@ -1693,33 +1749,46 @@ export default function FeedLiveNowStage({
   return (
     <div className="absolute inset-0 flex flex-col bg-black">
       {wallpaperLayer}
-      {showSplit ? (
-        renderSplit(panes)
-      ) : ytLive && youtubeId && (watching || isHost) && stageActive ? (
-        <YoutubeEmbed
-          key={`yt-live-view-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
-          youtubeId={youtubeId}
-          title={title || 'YouTube Live'}
-          autoplay={watching || isHost}
-          loop={ytLoop}
-          playlistIds={youtubePlaylistIds}
-          playlist={youtubePlaylist}
-          showCaptions
-          fill
-        />
-      ) : frameUrl && (watching || frameLive) && stageActive ? (
-        <img
-          src={frameUrl}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover scale-x-[-1] bg-black"
-        />
-      ) : (
+      {!wallpaperLayer && !showSplit && !(ytLive && youtubeId) && !(frameUrl && (watching || frameLive)) ? (
         <>
           <div className="absolute inset-0 bg-gradient-to-br from-[#1A7CFF]/50 via-[#0a0a0a] to-[#8FFF4A]/25" />
           <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_40%,#ff3b3b55,transparent_50%)]" />
         </>
-      )}
-      {!showSplit ? (
+      ) : null}
+      {showSplit ? (
+        renderSplit(panes)
+      ) : ytLive && youtubeId && (watching || isHost) && stageActive ? (
+        <div
+          className={`absolute z-[1] ${
+            wallpaperMode
+              ? 'inset-x-3 top-[22%] bottom-[120px] rounded-[22px] overflow-hidden border border-white/20'
+              : 'inset-0'
+          }`}
+        >
+          <YoutubeEmbed
+            key={`yt-live-view-${youtubeId}-${ytPlaylistCount}-${ytLoop ? 'loop' : 'once'}`}
+            youtubeId={youtubeId}
+            title={title || 'YouTube Live'}
+            autoplay={watching || isHost}
+            loop={ytLoop}
+            playlistIds={youtubePlaylistIds}
+            playlist={youtubePlaylist}
+            showCaptions
+            fill
+          />
+        </div>
+      ) : frameUrl && (watching || frameLive) && stageActive ? (
+        <img
+          src={frameUrl}
+          alt=""
+          className={`absolute z-[1] object-cover scale-x-[-1] ${
+            wallpaperMode
+              ? 'inset-x-3 top-[22%] bottom-[120px] rounded-[22px] border border-white/20'
+              : 'inset-0 h-full w-full bg-black'
+          }`}
+        />
+      ) : null}
+      {!showSplit && !wallpaperMode ? (
         <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/80 pointer-events-none" />
       ) : null}
 
