@@ -136,10 +136,10 @@ export default function HomePage() {
             <Link to="/work-os" className="hover:text-[#0A1931] transition">
               Work OS
             </Link>
-            <a href="#earn" className="hover:text-[#0A1931] transition flex items-center gap-1.5">
+            <Link to="/video-to-cash" className="hover:text-[#0A1931] transition flex items-center gap-1.5">
               Video → Cash{" "}
               <span className="h-4 px-1.5 rounded-full bg-[#FFC300] text-[10px] text-[#0A1931] font-bold flex items-center">NEW</span>
-            </a>
+            </Link>
             <Link to="/pricing" className="hover:text-[#0A1931] transition">
               Pricing
             </Link>
@@ -206,13 +206,13 @@ export default function HomePage() {
                   </span>
                 </span>
               </Link>
-              <a
-                href="#earn"
+              <Link
+                to="/video-to-cash"
                 className="inline-flex h-[48px] items-center gap-2.5 rounded-full border-2 border-[#0A1931] bg-white px-6 text-[14px] font-extrabold text-[#0A1931] hover:bg-[#FFF8E1] transition"
               >
                 <Coins className="w-4 h-4" />
                 See Video → Cash
-              </a>
+              </Link>
               <button
                 onClick={tryPlayDemo}
                 className="inline-flex h-[48px] items-center gap-2.5 rounded-full border border-[#D4CBB8] bg-white px-6 text-[14px] font-medium text-[#5B6470] hover:text-[#0A1931] transition"
@@ -843,9 +843,9 @@ export default function HomePage() {
                   <Link to="/how-it-works" className="block hover:text-[#0A1931]">
                     How It Works
                   </Link>
-                  <a href="#earn" className="block hover:text-[#0A1931]">
+                  <Link to="/video-to-cash" className="block hover:text-[#0A1931]">
                     Video → Cash
-                  </a>
+                  </Link>
                   <Link to="/work-os" className="block hover:text-[#0A1931]">
                     Work OS
                   </Link>

@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Layers, Sparkles, Map, CircleDollarSign } from 'lucide-react';
+import { Home, Layers, Coins, Map, CircleDollarSign } from 'lucide-react';
 
 const items = [
   { to: '/', label: 'Home', icon: Home },
-  { to: '/how-it-works', label: 'How', icon: Sparkles },
+  { to: '/video-to-cash', label: 'Earn', icon: Coins },
   { to: '/work-os', label: 'Work OS', icon: Layers },
   { to: '/pricing', label: 'Pricing', icon: CircleDollarSign },
   { to: '/sitemap', label: 'All', icon: Map },

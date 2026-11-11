@@ -22,6 +22,7 @@ import SitemapPage from './pages/SitemapPage';
 import StaticHtmlFramePage from './pages/StaticHtmlFramePage';
 import StubPage from './pages/StubPage';
 import VerticalsPage from './pages/VerticalsPage';
+import VideoToCashPage from './pages/VideoToCashPage';
 import WorkOsPage from './pages/WorkOsPage';
 import {
   AppIndexRedirect,
@@ -81,6 +82,8 @@ export default function App() {
             <Route path="projects" element={<ProjectsPage />} />
             <Route path="projects/:id" element={<ProjectDetailPage />} />
             <Route path="pricing" element={<PricingPage />} />
+            <Route path="video-to-cash" element={<VideoToCashPage />} />
+            <Route path="capture-guide" element={<Navigate to="/video-to-cash" replace />} />
             <Route path="verticals" element={<VerticalsPage />} />
             <Route path="for-tailors" element={<ForTailorsPage />} />
             <Route path="for-mechanics" element={<ForMechanicsPage />} />

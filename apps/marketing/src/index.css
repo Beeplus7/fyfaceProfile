@@ -96,6 +96,32 @@
   box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
 }
 
+/* Capture Guide / Video → Cash helpers */
+.font-mono2 {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.rainbow {
+  background: linear-gradient(90deg, #8fff4a, #00e5c0, #1a7cff, #ffe600, #ff8a00);
+}
+.rainbow-text {
+  background: linear-gradient(90deg, #00a66a, #00a99d, #1a7cff, #e6a800, #ff8a00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.guide-card {
+  border: 1px solid var(--mkt-line);
+  border-radius: 24px;
+  background: var(--mkt-card);
+  box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
 /* Pure white / near-white panels → dim sand */
 .marketing-surface .bg-white,
 .marketing-surface .\bg-white\/90,
