@@ -236,12 +236,12 @@ function StatusBadge({ status, badge }: { status?: Status, badge?: string }){
   const map: Record<string,string> = {
     DONE:"bg-[var(--done)] text-black",
     NEW:"bg-[var(--new)] text-black",
-    FROM:"bg-[var(--from)] text-white",
+    FROM:"bg-[var(--from)] text-[#0A1931]",
   };
   return (
     <div className="flex items-center gap-1.5 ml-2">
       {status && <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-widest ${map[status]}`}>{status}</span>}
-      {badge && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-white/70 border border-white/10">{badge}</span>}
+      {badge && <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F0E9DB] text-[#5B6470] border border-[#D4CBB8]">{badge}</span>}
     </div>
   );
 }
@@ -252,7 +252,7 @@ function FileIcon({ node, expanded }: { node: TreeNodeData, expanded?: boolean }
   }
   if(node.name.endsWith(".tsx")||node.name.endsWith(".ts")) return <FileCode className="w-4 h-4 text-sky-300/70" />;
   if(node.name.endsWith(".yaml")||node.name.endsWith(".json")) return <FileJson className="w-4 h-4 text-lime-300/70" />;
-  return <FileText className="w-4 h-4 text-white/40" />;
+  return <FileText className="w-4 h-4 text-[#5B6470]" />;
 }
 
 function TreeRow({ node, depth, expanded, selected, onToggle, onSelect, search }: {
@@ -261,7 +261,7 @@ function TreeRow({ node, depth, expanded, selected, onToggle, onSelect, search }
   const highlight = search && node.name.toLowerCase().includes(search.toLowerCase());
   return (
     <div
-      className={`group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all border ${selected ? "bg-white/[0.08] border-white/15 text-white" : "border-transparent hover:bg-white/[0.04] hover:border-white/5 text-white/70 hover:text-white/90"} ${highlight ? "ring-1 ring-[var(--m-lime)]/30" : ""}`}
+      className={`group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all border ${selected ? "bg-[#F0E9DB] border-[#D4CBB8] text-[#0A1931]" : "border-transparent hover:bg-[#F0E9DB] hover:border-[#D4CBB8] text-[#5B6470] hover:text-[#0A1931]"} ${highlight ? "ring-1 ring-[var(--m-lime)]/30" : ""}`}
       style={{ marginLeft: depth*16 }}
       onClick={onSelect}
     >
@@ -270,7 +270,7 @@ function TreeRow({ node, depth, expanded, selected, onToggle, onSelect, search }
       </button>
       <FileIcon node={node} expanded={expanded} />
       <span className="font-mono text-[13px] tracking-tight truncate">{node.name}</span>
-      {node.count !== undefined && <span className="ml-auto text-[11px] font-mono text-white/30">{node.count} files</span>}
+      {node.count !== undefined && <span className="ml-auto text-[11px] font-mono text-[#5B6470]">{node.count} files</span>}
       <StatusBadge status={node.status as Status} badge={node.badge} />
       {node.desc && depth>0 && <span className="hidden xl:block ml-2 text-[11px] text-white/25 truncate max-w-[260px]">— {node.desc}</span>}
     </div>
@@ -384,7 +384,7 @@ export default function ArchitecturePage(){
         <div key={node.id}>
           <TreeRow node={node} depth={depth} expanded={exp} selected={sel} onToggle={()=>toggle(node.id)} onSelect={()=>setSelectedId(node.id)} search={search} />
           {node.children && exp && (
-            <div className="border-l border-white/[0.06] ml-5">
+            <div className="border-l border-[#D4CBB8] ml-5">
               {renderTree(node.children, depth+1)}
             </div>
           )}
@@ -396,19 +396,19 @@ export default function ArchitecturePage(){
   return (
     <div data-safe-area-inset-root className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] selection:bg-[var(--m-lime)] selection:text-black" style={{ boxSizing:'border-box', paddingTop:'var(--safe-area-inset-top)' }}>
       {/* Top Stats Bar */}
-      <div className="sticky top-0 z-30 border-b border-white/10 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'var(--safe-area-inset-top)' }}>
+      <div className="sticky top-0 z-30 border-b border-[#D4CBB8] backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'var(--safe-area-inset-top)' }}>
         <div className="bg-[#FFFDF7]/92">
           <div className="flex flex-wrap items-center gap-2 px-3 md:px-5 py-2.5 text-[11px] font-mono">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg m-gradient flex items-center justify-center font-black text-black text-[14px]">M</div>
               <span className="font-poppins font-extrabold text-[14px] tracking-tight">MY FACE PROFILE — FULL PROJECT TREE OS</span>
-              <span className="hidden md:inline-flex ml-2 px-2 py-0.5 rounded-full bg-white/10 border border-white/10 text-white/50">Turbo monorepo • pnpm dev • production-ready</span>
+              <span className="hidden md:inline-flex ml-2 px-2 py-0.5 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#5B6470]">Turbo monorepo • pnpm dev • production-ready</span>
             </div>
             <div className="ml-auto flex flex-wrap gap-1.5 items-center">
               {[
                 "26 Pages","32 Onboarding Fields","9 Bots","6 Trades","12 Projects","47 Contacts","1247 MFC","4.9 Trust","£618K ARR","640 Files","Touch of GOD"
               ].map(k=>(
-                <span key={k} className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/10 text-white/70 hover:bg-white/10 transition-colors">{k}</span>
+                <span key={k} className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#5B6470] hover:bg-[#F0E9DB] transition-colors">{k}</span>
               ))}
             </div>
           </div>
@@ -417,16 +417,16 @@ export default function ArchitecturePage(){
       </div>
 
       {/* Search + Filter */}
-      <div className="sticky z-20 backdrop-blur-xl bg-[#FFFDF7]/90 border-b border-white/5" style={{ top:'calc(var(--safe-area-inset-top) + 56px)' }} data-safe-area-sticky-top>
+      <div className="sticky z-20 backdrop-blur-xl bg-[#FFFDF7]/90 border-b border-[#D4CBB8]" style={{ top:'calc(var(--safe-area-inset-top) + 56px)' }} data-safe-area-sticky-top>
         <div className="flex flex-col md:flex-row gap-2 px-3 md:px-5 py-3">
           <div className="flex items-center gap-2 flex-1 glass rounded-xl px-3 py-2">
-            <Search className="w-4 h-4 text-white/30" />
+            <Search className="w-4 h-4 text-[#5B6470]" />
             <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search files: onboarding companion, uprm, projects, tailors, mechanic, trust..." className="flex-1 bg-transparent outline-none text-[13px] font-mono placeholder:text-white/25" />
-            {search && <button onClick={()=>setSearch("")} className="text-[11px] px-2 py-0.5 rounded bg-white/10">clear</button>}
+            {search && <button onClick={()=>setSearch("")} className="text-[11px] px-2 py-0.5 rounded bg-[#F0E9DB]">clear</button>}
           </div>
           <div className="flex gap-1.5 items-center overflow-x-auto">
             {(["ALL","DONE","NEW","FROM"] as const).map(f=>(
-              <button key={f} onClick={()=>setFilter(f as any)} className={`px-3 py-2 rounded-xl text-[11px] font-bold tracking-widest border transition-all shrink-0 ${filter===f ? "bg-white text-black border-white" : "bg-white/5 border-white/10 text-white/50 hover:text-white hover:bg-white/10"}`}>{f}</button>
+              <button key={f} onClick={()=>setFilter(f as any)} className={`px-3 py-2 rounded-xl text-[11px] font-bold tracking-widest border transition-all shrink-0 ${filter===f ? "bg-white text-black border-white" : "bg-[#F0E9DB] border-[#D4CBB8] text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB]"}`}>{f}</button>
             ))}
             <button onClick={()=>setShowStats(s=>!s)} className="ml-2 px-3 py-2 rounded-xl text-[11px] font-bold tracking-widest bg-[var(--m-lime)] text-black">STATS {showStats?"ON":"OFF"}</button>
           </div>
@@ -435,8 +435,8 @@ export default function ArchitecturePage(){
 
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-120px)]">
         {/* LEFT TREE */}
-        <div className="lg:w-[48%] xl:w-[52%] border-r border-white/5 bg-[#080808]">
-          <div className="p-3 flex items-center gap-2 text-[11px] font-mono text-white/30">
+        <div className="lg:w-[48%] xl:w-[52%] border-r border-[#D4CBB8] bg-[#080808]">
+          <div className="p-3 flex items-center gap-2 text-[11px] font-mono text-[#5B6470]">
             <Layers className="w-3.5 h-3.5" /> VS CODE EXPLORER • my-face-profile/ • 640 files • MVP 250 • Full 620-650
             <span className="ml-auto flex gap-1">
               <span className="w-3 h-3 rounded-full bg-red-500/70" /><span className="w-3 h-3 rounded-full bg-yellow-400/70" /><span className="w-3 h-3 rounded-full bg-green-400/70" />
@@ -448,10 +448,10 @@ export default function ArchitecturePage(){
         </div>
 
         {/* RIGHT PREVIEW */}
-        <div className="lg:w-[52%] xl:w-[48%] bg-[#0A0A0A] relative">
+        <div className="lg:w-[52%] xl:w-[48%] bg-[#F0E9DB] relative">
           <div className="sticky top-[108px] p-4 md:p-6 space-y-5" style={{ top:'calc(var(--safe-area-inset-top) + 108px)' }}>
             {/* Path breadcrumb */}
-            <div className="flex items-center gap-2 text-[11px] font-mono text-white/30 overflow-x-auto">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-[#5B6470] overflow-x-auto">
               <FileText className="w-3 h-3 shrink-0" />
               <span className="truncate">{selectedNode.path}</span>
               <span className="ml-auto flex items-center gap-1 shrink-0">
@@ -469,18 +469,18 @@ export default function ArchitecturePage(){
                       <div className="w-9 h-9 rounded-xl m-gradient flex items-center justify-center text-black font-black">M</div>
                       <h2 className="font-poppins font-extrabold text-[22px] md:text-[28px] leading-none tracking-tight">{selectedNode.preview?.title || selectedNode.name}</h2>
                     </div>
-                    <p className="font-mono text-[12px] md:text-[13px] text-white/50 leading-relaxed max-w-[520px]">{selectedNode.preview?.subtitle || selectedNode.desc || selectedNode.deliverable || "Production-ready Turbo monorepo — pnpm-workspace.yaml • Tailwind black #050505 • M gradient #8FFF4A→#00E5C0→#FFE600→#FF8A00 • Poppins Bold 800 • Inter • JetBrains Mono • Glassmorphism"}</p>
+                    <p className="font-mono text-[12px] md:text-[13px] text-[#5B6470] leading-relaxed max-w-[520px]">{selectedNode.preview?.subtitle || selectedNode.desc || selectedNode.deliverable || "Production-ready Turbo monorepo — pnpm-workspace.yaml • Tailwind black #050505 • M gradient #8FFF4A→#00E5C0→#FFE600→#FF8A00 • Poppins Bold 800 • Inter • JetBrains Mono • Glassmorphism"}</p>
                   </div>
                   <div className="hidden md:flex flex-col gap-2">
-                    {selectedNode.count && <span className="px-3 py-1 rounded-full bg-white/10 border border-white/10 font-mono text-[11px]">{selectedNode.count} files</span>}
+                    {selectedNode.count && <span className="px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[11px]">{selectedNode.count} files</span>}
                   </div>
                 </div>
 
                 {/* Deliverable box */}
                 {selectedNode.deliverable && (
-                  <div className="mt-5 rounded-2xl bg-black/60 border border-white/10 p-4">
-                    <div className="text-[10px] font-bold tracking-widest text-white/30 mb-2 flex items-center gap-2"><Sparkles className="w-3 h-3" /> DELIVERABLE / PREVIEW</div>
-                    <p className="font-mono text-[12px] leading-relaxed text-white/70">{selectedNode.deliverable}</p>
+                  <div className="mt-5 rounded-2xl bg-black/60 border border-[#D4CBB8] p-4">
+                    <div className="text-[10px] font-bold tracking-widest text-[#5B6470] mb-2 flex items-center gap-2"><Sparkles className="w-3 h-3" /> DELIVERABLE / PREVIEW</div>
+                    <p className="font-mono text-[12px] leading-relaxed text-[#5B6470]">{selectedNode.deliverable}</p>
                   </div>
                 )}
 
@@ -488,7 +488,7 @@ export default function ArchitecturePage(){
                 {selectedNode.preview?.metrics && (
                   <div className="mt-5 flex flex-wrap gap-2">
                     {selectedNode.preview.metrics.map(m=>(
-                      <span key={m} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[11px] font-mono text-white/70">{m}</span>
+                      <span key={m} className="px-3 py-1.5 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[11px] font-mono text-[#5B6470]">{m}</span>
                     ))}
                   </div>
                 )}
@@ -496,10 +496,10 @@ export default function ArchitecturePage(){
                 {/* Stack */}
                 {selectedNode.preview?.stack && (
                   <div className="mt-4">
-                    <div className="text-[10px] font-bold tracking-widest text-white/30 mb-2">STACK / SOURCE</div>
+                    <div className="text-[10px] font-bold tracking-widest text-[#5B6470] mb-2">STACK / SOURCE</div>
                     <div className="flex flex-wrap gap-2">
                       {selectedNode.preview.stack.map(s=>(
-                        <span key={s} className="px-2.5 py-1 rounded-lg bg-black border border-white/10 font-mono text-[11px] text-[var(--m-teal)]">{s}</span>
+                        <span key={s} className="px-2.5 py-1 rounded-lg bg-black border border-[#D4CBB8] font-mono text-[11px] text-[var(--m-teal)]">{s}</span>
                       ))}
                     </div>
                   </div>
@@ -510,53 +510,53 @@ export default function ArchitecturePage(){
                   <div className="mt-6 space-y-4">
                     {/* Mini OS */}
                     <div className="grid grid-cols-12 gap-3">
-                      <div className="col-span-3 bg-[#FFFDF7] border border-white/10 rounded-xl p-3">
-                        <div className="text-[10px] font-bold tracking-widest text-white/20 mb-2">LEFT SIDEBAR 240px</div>
-                        <div className="space-y-1.5 font-mono text-[10px] text-white/50">
+                      <div className="col-span-3 bg-[#FFFDF7] border border-[#D4CBB8] rounded-xl p-3">
+                        <div className="text-[10px] font-bold tracking-widest text-[#5B6470] mb-2">LEFT SIDEBAR 240px</div>
+                        <div className="space-y-1.5 font-mono text-[10px] text-[#5B6470]">
                           <div className="flex items-center gap-2"><Box className="w-3 h-3" /> M logo</div>
-                          <div className="text-white">OS Core • Dashboard</div>
-                          <div>Projects 12</div><div>UPRM Contacts 47</div><div>Relationship 0-100</div><div>Pipeline 8</div><div>Work Feed</div><div className="h-px bg-white/5 my-1" />
+                          <div className="text-[#0A1931]">OS Core • Dashboard</div>
+                          <div>Projects 12</div><div>UPRM Contacts 47</div><div>Relationship 0-100</div><div>Pipeline 8</div><div>Work Feed</div><div className="h-px bg-[#F0E9DB] my-1" />
                           <div>Production • Shop 24</div><div>Bookings • Live Workshop <span className="w-1.5 h-1.5 inline-block bg-red-500 rounded-full animate-pulse" /></div><div>WorkCut • Analytics</div>
                         </div>
                       </div>
                       <div className="col-span-9 space-y-3">
-                        <div className="bg-[#121212] border border-white/10 rounded-xl p-3 flex items-center justify-between">
-                          <span className="font-mono text-[10px] text-white/30">TOP HEADER sticky • Search + Quick Actions</span>
-                          <div className="flex gap-1.5"><span className="px-2 py-0.5 rounded-full bg-white text-black text-[9px] font-bold">New Project M gradient</span><span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-[9px] font-bold animate-pulse">Go Live</span></div>
+                        <div className="bg-[#121212] border border-[#D4CBB8] rounded-xl p-3 flex items-center justify-between">
+                          <span className="font-mono text-[10px] text-[#5B6470]">TOP HEADER sticky • Search + Quick Actions</span>
+                          <div className="flex gap-1.5"><span className="px-2 py-0.5 rounded-full bg-white text-black text-[9px] font-bold">New Project M gradient</span><span className="px-2 py-0.5 rounded-full bg-red-500 text-[#0A1931] text-[9px] font-bold animate-pulse">Go Live</span></div>
                         </div>
                         <div className="grid grid-cols-3 gap-2">
                           {[
                             ["Total Projects 12","+3 week"],["Relationships 47","avg 73/100"],["Pipeline £8420","8 active"],
                             ["TrustScore 4.9","Verified Gas Safe"],["MFC Wallet 1247","£600 gifts 70%"],["Work Feed 12.4K","+23%"]
                           ].map(([a,b])=>(
-                            <div key={a} className="bg-white/[0.04] border border-white/10 rounded-xl p-2.5">
-                              <div className="font-mono text-[10px] text-white/40">{a}</div><div className="text-[10px] text-white/20">{b}</div>
+                            <div key={a} className="bg-[#F0E9DB] border border-[#D4CBB8] rounded-xl p-2.5">
+                              <div className="font-mono text-[10px] text-[#5B6470]">{a}</div><div className="text-[10px] text-[#5B6470]">{b}</div>
                             </div>
                           ))}
                         </div>
                         <div className="grid grid-cols-12 gap-2">
-                          <div className="col-span-8 bg-white/[0.03] border border-white/10 rounded-xl p-2.5">
-                            <div className="text-[10px] font-bold text-white/30 mb-2">ROW 2 PROJECTS COMMANDER killer object</div>
+                          <div className="col-span-8 bg-[#F0E9DB] border border-[#D4CBB8] rounded-xl p-2.5">
+                            <div className="text-[10px] font-bold text-[#5B6470] mb-2">ROW 2 PROJECTS COMMANDER killer object</div>
                             <div className="grid grid-cols-3 gap-2">
                               {["Aso-Ebi Wedding £45/m","Kitchen £12K","Consumer Unit 230V","Boiler 68C Gas Safe","Corolla OBD2 P0302","Fade £25"].map(t=>(
-                                <div key={t} className="bg-black border border-white/10 rounded-lg p-2 text-[9px] font-mono text-white/50">{t}<div className="mt-1 h-8 rounded bg-gradient-to-br from-white/5 to-white/0" /></div>
+                                <div key={t} className="bg-black border border-[#D4CBB8] rounded-lg p-2 text-[9px] font-mono text-[#5B6470]">{t}<div className="mt-1 h-8 rounded bg-gradient-to-br from-white/5 to-white/0" /></div>
                               ))}
                             </div>
                           </div>
-                          <div className="col-span-4 bg-white/[0.03] border border-white/10 rounded-xl p-2.5">
-                            <div className="text-[10px] font-bold text-white/30 mb-2">UPRM CONTACTS 0-100</div>
+                          <div className="col-span-4 bg-[#F0E9DB] border border-[#D4CBB8] rounded-xl p-2.5">
+                            <div className="text-[10px] font-bold text-[#5B6470] mb-2">UPRM CONTACTS 0-100</div>
                             {[
                               ["Aisha Bridal","94"],["Mrs Okafor","87"],["J Martinez","72"]
                             ].map(([n,s])=>(
-                              <div key={n} className="flex items-center gap-2 mb-1.5"><div className="w-6 h-6 rounded-full bg-white/10" /><div className="text-[9px] font-mono"><div>{n}</div><div className="h-1 w-12 bg-gradient-to-r from-green-400 to-sky-400 rounded-full" /></div><span className="ml-auto text-[9px]">{s}/100</span></div>
+                              <div key={n} className="flex items-center gap-2 mb-1.5"><div className="w-6 h-6 rounded-full bg-[#F0E9DB]" /><div className="text-[9px] font-mono"><div>{n}</div><div className="h-1 w-12 bg-gradient-to-r from-green-400 to-sky-400 rounded-full" /></div><span className="ml-auto text-[9px]">{s}/100</span></div>
                             ))}
                           </div>
                         </div>
-                        <div className="bg-white/[0.03] border border-white/10 rounded-xl p-2.5">
-                          <div className="text-[10px] font-bold text-white/30 mb-2">ROW 3 PIPELINE KANBAN Discovery→Repeat 8 cols</div>
+                        <div className="bg-[#F0E9DB] border border-[#D4CBB8] rounded-xl p-2.5">
+                          <div className="text-[10px] font-bold text-[#5B6470] mb-2">ROW 3 PIPELINE KANBAN Discovery→Repeat 8 cols</div>
                           <div className="flex gap-2 overflow-x-auto">
                             {["Discovery 12","Engagement 8","Inquiry 5","Quote 3","Booked 2","In Progress 2","Final 1","Review 1","Repeat 1"].map(c=>(
-                              <div key={c} className="min-w-[72px] bg-black border border-white/10 rounded-lg p-1.5 text-[8px] font-mono text-white/40">{c}<div className="mt-1 h-6 bg-white/5 rounded" /></div>
+                              <div key={c} className="min-w-[72px] bg-black border border-[#D4CBB8] rounded-lg p-1.5 text-[8px] font-mono text-[#5B6470]">{c}<div className="mt-1 h-6 bg-[#F0E9DB] rounded" /></div>
                             ))}
                           </div>
                           <div className="mt-2 flex gap-1">
@@ -570,7 +570,7 @@ export default function ArchitecturePage(){
                     {/* Bot army + gift rain */}
                     <div className="grid grid-cols-2 gap-3">
                       <div className="glass rounded-xl p-3">
-                        <div className="text-[10px] font-bold tracking-widest text-white/30 flex items-center gap-1"><Cpu className="w-3 h-3" /> BOT ARMY 9 micro-bots green active</div>
+                        <div className="text-[10px] font-bold tracking-widest text-[#5B6470] flex items-center gap-1"><Cpu className="w-3 h-3" /> BOT ARMY 9 micro-bots green active</div>
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {[
                             {n:"Milo",d:"Find leads"},{n:"Cutty",d:"WorkCut"},{n:"Quoto",d:"Quotes"},{n:"Timi",d:"Scheduling"},{n:"Findy",d:"Discovery"},{n:"Helpy",d:"FAQ"},{n:"Veri",d:"Trust"},{n:"Growy",d:"Boost"},{n:"Lingo",d:"Yoruba Hausa English"}
@@ -580,28 +580,28 @@ export default function ArchitecturePage(){
                         </div>
                       </div>
                       <div className="glass rounded-xl p-3">
-                        <div className="text-[10px] font-bold tracking-widest text-white/30 flex items-center gap-1"><Heart className="w-3 h-3" /> GIFT RAIN • MFC • 70% pro</div>
+                        <div className="text-[10px] font-bold tracking-widest text-[#5B6470] flex items-center gap-1"><Heart className="w-3 h-3" /> GIFT RAIN • MFC • 70% pro</div>
                         <div className="mt-2 flex gap-2">
                           {[
-                            {icon:Hammer, label:"Hammer 10", color:"text-zinc-300"},
+                            {icon:Hammer, label:"Hammer 10", color:"text-[#5B6470]"},
                             {icon:Scissors, label:"Scissors 25", color:"text-sky-300"},
                             {icon:Heart, label:"Heart 50", color:"text-pink-300"},
                             {icon:Crown, label:"Crown 100", color:"text-yellow-300"},
                             {icon:Trophy, label:"Trophy 500", color:"text-amber-400"},
                           ].map(g=>(
-                            <div key={g.label} className="flex flex-col items-center gap-1"><g.icon className={`w-5 h-5 ${g.color}`} /><span className="text-[8px] font-mono text-white/40">{g.label}</span></div>
+                            <div key={g.label} className="flex flex-col items-center gap-1"><g.icon className={`w-5 h-5 ${g.color}`} /><span className="text-[8px] font-mono text-[#5B6470]">{g.label}</span></div>
                           ))}
                         </div>
-                        <div className="mt-3 h-8 rounded-lg bg-black/60 border border-white/5 flex items-center justify-center overflow-hidden relative">
+                        <div className="mt-3 h-8 rounded-lg bg-black/60 border border-[#D4CBB8] flex items-center justify-center overflow-hidden relative">
                           <div className="absolute inset-0 bg-gradient-to-t from-[var(--m-lime)]/10 to-transparent animate-pulse" />
-                          <span className="text-[10px] font-mono text-white/40">Gift rain preview • girl live streaming tripod viewers 0 • Start Live gradient red→orange</span>
+                          <span className="text-[10px] font-mono text-[#5B6470]">Gift rain preview • girl live streaming tripod viewers 0 • Start Live gradient red→orange</span>
                         </div>
                       </div>
                     </div>
                     <div className="rounded-xl m-gradient p-[1px]">
                       <div className="rounded-[11px] bg-black p-3 flex items-center justify-between">
                         <span className="font-poppins font-extrabold text-[13px]">Your Work Is Your Face. Promote Enhance — Go Live Now</span>
-                        <span className="font-mono text-[10px] text-white/50">£9620/week = £618K ARR • 10K weekly users</span>
+                        <span className="font-mono text-[10px] text-[#5B6470]">£9620/week = £618K ARR • 10K weekly users</span>
                       </div>
                     </div>
                   </div>
@@ -610,7 +610,7 @@ export default function ArchitecturePage(){
                 {/* Onboarding preview */}
                 {selectedNode.id==="m-onboard-f" && (
                   <div className="mt-6 space-y-3">
-                    <div className="rounded-2xl overflow-hidden border border-white/10">
+                    <div className="rounded-2xl overflow-hidden border border-[#D4CBB8]">
                       <div className="h-28 m-gradient opacity-80 relative">
                         <div className="absolute inset-0 bg-black/30" />
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -625,7 +625,7 @@ export default function ArchitecturePage(){
                           <div className="w-7 h-7 rounded-full m-gradient flex items-center justify-center text-black font-bold text-[10px]">AI</div>
                           <div className="glass rounded-xl px-3 py-2 max-w-[80%]">
                             <div className="text-[11px] font-semibold">What craft makes your hands remember why you started?</div>
-                            <div className="text-[10px] font-mono text-white/40 mt-1">Why we ask this: To show your work in Work Feed within 10mi Oldham — CompanionMessage whyText</div>
+                            <div className="text-[10px] font-mono text-[#5B6470] mt-1">Why we ask this: To show your work in Work Feed within 10mi Oldham — CompanionMessage whyText</div>
                           </div>
                         </div>
                         <div className="flex gap-2 justify-end">
@@ -635,7 +635,7 @@ export default function ArchitecturePage(){
                         <div className="flex gap-2">
                           <div className="w-7 h-7 rounded-full m-gradient flex items-center justify-center text-black font-bold text-[10px]">AI</div>
                           <div className="glass rounded-xl px-3 py-2">
-                            <div className="text-[11px]">Got it. Do you have a workshop or work from home? <span className="text-white/30 font-mono text-[10px]">— fieldGating.ts • if shopItems no → remove shopItemsList</span></div>
+                            <div className="text-[11px]">Got it. Do you have a workshop or work from home? <span className="text-[#5B6470] font-mono text-[10px]">— fieldGating.ts • if shopItems no → remove shopItemsList</span></div>
                           </div>
                         </div>
                       </div>
@@ -647,15 +647,15 @@ export default function ArchitecturePage(){
                         ["Production Engine","7 fields","#FFE600"],
                         ["UPRM Brain","7 fields","#FF8A00"],
                       ].map(([t,c,col])=>(
-                        <div key={t} className="rounded-xl bg-white/[0.04] border border-white/10 p-2.5">
+                        <div key={t} className="rounded-xl bg-[#F0E9DB] border border-[#D4CBB8] p-2.5">
                           <div className="w-2 h-2 rounded-full mb-2" style={{ background:col }} />
                           <div className="font-poppins font-bold text-[11px] leading-tight">{t}</div>
-                          <div className="font-mono text-[10px] text-white/30">{c}</div>
+                          <div className="font-mono text-[10px] text-[#5B6470]">{c}</div>
                         </div>
                       ))}
                     </div>
-                    <div className="glass rounded-xl p-3 font-mono text-[11px] leading-relaxed text-white/60">
-                      <div className="text-[10px] font-bold tracking-widest text-white/30 mb-1">GATING ENGINE — Deterministically-gated</div>
+                    <div className="glass rounded-xl p-3 font-mono text-[11px] leading-relaxed text-[#5B6470]">
+                      <div className="text-[10px] font-bold tracking-widest text-[#5B6470] mb-1">GATING ENGINE — Deterministically-gated</div>
                       Field schema config/onboardingSteps.ts → 32 fields • getEligibleFields ALL_FIELDS FieldDef • appliesIf autoAnswer • if trade !== Tailor → remove Aso-Ebi • if trade !== Electrician → remove consumerUnitDetails RCD 30mA BS 7671 • if trade !== Plumber → remove Gas Safe boiler • rules/gatingEngine.ts reuse as-is deterministic • Edge fn onboarding-chat Payload answersSoFar eligibleFields conversationHistory latestUserReply → {`{ done nextFieldId questionText whyText }`} • on completion → /uprm command center
                     </div>
                   </div>
@@ -663,10 +663,10 @@ export default function ArchitecturePage(){
 
                 {/* Default image placeholder for DONE pages */}
                 {!["web-uprm-page","m-onboard-f"].includes(selectedNode.id) && selectedNode.preview?.hero && (
-                  <div className="mt-5 rounded-2xl bg-black border border-white/10 p-4 flex items-center gap-3">
+                  <div className="mt-5 rounded-2xl bg-black border border-[#D4CBB8] p-4 flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl m-gradient flex items-center justify-center text-black"><Eye className="w-6 h-6" /></div>
                     <div>
-                      <div className="font-mono text-[11px] text-white/40">PREVIEW IMAGE</div>
+                      <div className="font-mono text-[11px] text-[#5B6470]">PREVIEW IMAGE</div>
                       <div className="font-poppins font-bold text-[13px]">{selectedNode.preview.hero}</div>
                     </div>
                   </div>
@@ -674,9 +674,9 @@ export default function ArchitecturePage(){
 
                 {/* Footer meta */}
                 <div className="mt-6 flex flex-wrap gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-white/40"><GitBranch className="w-3 h-3" /> {selectedNode.path}</span>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-white/40"><Package className="w-3 h-3" /> file counts per folder</span>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-white/40"><Construction className="w-3 h-3" /> Touch of GOD • craft as worship</span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono text-[#5B6470]"><GitBranch className="w-3 h-3" /> {selectedNode.path}</span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono text-[#5B6470]"><Package className="w-3 h-3" /> file counts per folder</span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono text-[#5B6470]"><Construction className="w-3 h-3" /> Touch of GOD • craft as worship</span>
                 </div>
               </div>
             </div>
@@ -691,8 +691,8 @@ export default function ArchitecturePage(){
                   { k:"Shared + assets + tests", v:"100 + 100 + 100 = 300 files", icon:Database },
                 ].map(b=>(
                   <div key={b.k} className="glass rounded-xl p-3">
-                    <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-white/30"><b.icon className="w-3 h-3" /> {b.k.toUpperCase()}</div>
-                    <div className="mt-1 font-mono text-[11px] text-white/60 leading-tight">{b.v}</div>
+                    <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#5B6470]"><b.icon className="w-3 h-3" /> {b.k.toUpperCase()}</div>
+                    <div className="mt-1 font-mono text-[11px] text-[#5B6470] leading-tight">{b.v}</div>
                   </div>
                 ))}
                 <div className="col-span-2 md:col-span-4 rounded-xl m-gradient p-[1px]">
@@ -707,14 +707,14 @@ export default function ArchitecturePage(){
             {/* Footer narrative */}
             <div className="glass rounded-2xl p-4 md:p-5">
               <div className="flex items-center gap-2 mb-2"><Flame className="w-4 h-4 text-[var(--m-orange)]" /><span className="font-poppins font-extrabold text-[12px] tracking-widest">FULL PROJECT TREE — FROM VisaguideOS</span></div>
-              <p className="font-mono text-[11px] leading-relaxed text-white/50">
-                From <span className="text-[var(--m-teal)]">Documents/passport-paper/src/onboarding/companion/OnboardingCompanion.tsx</span> → My Face Profile UPRM Onboarding Companion Page 25 → UPRM COMMAND CENTER DASHBOARD Page 26 PID 1 — Combination of everything for users to promote enhance work content — Production-ready Turbo monorepo <span className="text-white">pnpm dev</span> — Ship Oldham Test — <span className="text-[var(--m-lime)]">Your Work Is Your Face. Not Your CV.</span> — 10K weekly users = £9620/week Gifts £600 + Jobs £6300 + Shop £420 + Boost £1500 + Supplier Ads £500 + Lead Unlock £300 = £51528/mo = £618K ARR without Pro — £12882/week with Pro £29/mo — Glassmorphism holy workshop dark OS #050505 glass white/5 backdrop-blur rounded-2xl border white/10 card drop slide-in touch of GOD craft as worship.
+              <p className="font-mono text-[11px] leading-relaxed text-[#5B6470]">
+                From <span className="text-[var(--m-teal)]">Documents/passport-paper/src/onboarding/companion/OnboardingCompanion.tsx</span> → My Face Profile UPRM Onboarding Companion Page 25 → UPRM COMMAND CENTER DASHBOARD Page 26 PID 1 — Combination of everything for users to promote enhance work content — Production-ready Turbo monorepo <span className="text-[#0A1931]">pnpm dev</span> — Ship Oldham Test — <span className="text-[var(--m-lime)]">Your Work Is Your Face. Not Your CV.</span> — 10K weekly users = £9620/week Gifts £600 + Jobs £6300 + Shop £420 + Boost £1500 + Supplier Ads £500 + Lead Unlock £300 = £51528/mo = £618K ARR without Pro — £12882/week with Pro £29/mo — Glassmorphism holy workshop dark OS #050505 glass white/5 backdrop-blur rounded-2xl border white/10 card drop slide-in touch of GOD craft as worship.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono flex items-center gap-1"><MapPin className="w-3 h-3" /> Oldham OL1 OL2 OL8 Manchester 10mi</span>
-                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono flex items-center gap-1"><Workflow className="w-3 h-3" /> VisaguideOS → Roadagel → Oldham Test → MFP OS</span>
-                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono flex items-center gap-1"><Shield className="w-3 h-3" /> Verified Pro 4 steps TrustScore formula Trust Ledger event-sourced</span>
-                <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono flex items-center gap-1"><Zap className="w-3 h-3" /> Data→Traffic flywheel Free→Projects→Work Feed→Discovery→Trust→Commerce→Data→Traffic→Gifts→More Projects</span>
+                <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono flex items-center gap-1"><MapPin className="w-3 h-3" /> Oldham OL1 OL2 OL8 Manchester 10mi</span>
+                <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono flex items-center gap-1"><Workflow className="w-3 h-3" /> VisaguideOS → Roadagel → Oldham Test → MFP OS</span>
+                <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono flex items-center gap-1"><Shield className="w-3 h-3" /> Verified Pro 4 steps TrustScore formula Trust Ledger event-sourced</span>
+                <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[10px] font-mono flex items-center gap-1"><Zap className="w-3 h-3" /> Data→Traffic flywheel Free→Projects→Work Feed→Discovery→Trust→Commerce→Data→Traffic→Gifts→More Projects</span>
               </div>
             </div>
           </div>
@@ -722,12 +722,12 @@ export default function ArchitecturePage(){
       </div>
 
       {/* Bottom sticky legend */}
-      <div className="sticky bottom-0 z-20 border-t border-white/10 bg-[#FFFDF7]/92 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'calc(100vh - 44px)' }}>
+      <div className="sticky bottom-0 z-20 border-t border-[#D4CBB8] bg-[#FFFDF7]/92 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'calc(100vh - 44px)' }}>
         <div className="px-3 md:px-5 py-2.5 flex flex-wrap items-center gap-3 text-[11px] font-mono">
           <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[var(--done)]" /> DONE green 26/26 marketing</span>
           <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[var(--new)]" /> NEW yellow Page 25 26 onboarding UPRM</span>
           <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[var(--from)]" /> FROM VisaguideOS blue replicated deterministically-gated</span>
-          <span className="ml-auto hidden md:flex items-center gap-2 text-white/30">Click file → preview • Expand folder • Search filter by DONE NEW FROM • Path on hover • holy workshop dark OS #050505 glass white/5 backdrop-blur rounded-2xl border white/10</span>
+          <span className="ml-auto hidden md:flex items-center gap-2 text-[#5B6470]">Click file → preview • Expand folder • Search filter by DONE NEW FROM • Path on hover • holy workshop dark OS #050505 glass white/5 backdrop-blur rounded-2xl border white/10</span>
         </div>
         <div className="h-[2px] w-full m-gradient" />
       </div>

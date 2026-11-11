@@ -107,7 +107,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', background: '#050505', minHeight: '100vh' }} className="w-full overflow-x-clip antialiased selection:bg-[#8FFF4A] selection:text-black">
+    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', background: '#050505', minHeight: '100vh' }} className="w-full overflow-x-clip antialiased selection:bg-[#FFC300]/35 selection:text-[#0A1931]">
       
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute -top-[30%] left-[10%] w-[70%] h-[60%] rounded-full blur-[120px] opacity-[0.12]" style={{background: 'var(--m-gradient)'}} />
@@ -115,33 +115,33 @@ export default function ContactPage() {
         <div className="absolute bottom-0 left-0 w-full h-[40%] bg-gradient-to-t from-black to-transparent opacity-60" />
       </div>
 
-      <header data-safe-area-sticky-top style={{ top: 'var(--safe-area-inset-top)' }} className="sticky z-50 w-full border-b border-white/[0.06] backdrop-blur-2xl bg-black/40">
+      <header data-safe-area-sticky-top style={{ top: 'var(--safe-area-inset-top)' }} className="sticky z-50 w-full border-b border-[#D4CBB8] backdrop-blur-2xl bg-[#FFFDF7]/90">
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 h-[68px] flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-[10px]">
               <div className="w-[36px] h-[36px] rounded-[10px] bg-gradient-to-br from-[#8FFF4A] via-[#00E5C0] via-[#FFE600] to-[#FF8A00] flex items-center justify-center font-poppins text-black text-[18px] leading-none">M</div>
               <div className="hidden sm:flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full border border-white/10 overflow-hidden" style={{backgroundImage:`url(${logoOldham})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="Oldham logo" />
-                <div className="w-7 h-7 rounded-full border border-white/10 overflow-hidden" style={{backgroundImage:`url(${logoMFace})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="My Face Profile logo" />
+                <div className="w-7 h-7 rounded-full border border-[#D4CBB8] overflow-hidden" style={{backgroundImage:`url(${logoOldham})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="Oldham logo" />
+                <div className="w-7 h-7 rounded-full border border-[#D4CBB8] overflow-hidden" style={{backgroundImage:`url(${logoMFace})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="My Face Profile logo" />
               </div>
             </div>
-            <div className="h-5 w-px bg-white/10 hidden md:block" />
+            <div className="h-5 w-px bg-[#F0E9DB] hidden md:block" />
             <div className="flex flex-col">
-              <span className="font-poppins text-[13px] tracking-[-0.02em] leading-none text-white">My Face Profile</span>
-              <span className="font-mono text-[9px] tracking-[0.18em] text-white/50 uppercase mt-[2px]">Oldham • OL1 • All Trades</span>
+              <span className="font-poppins text-[13px] tracking-[-0.02em] leading-none text-[#0A1931]">My Face Profile</span>
+              <span className="font-mono text-[9px] tracking-[0.18em] text-[#5B6470] uppercase mt-[2px]">Oldham • OL1 • All Trades</span>
             </div>
           </div>
 
           <div className="flex items-center gap-2 md:gap-6">
             <nav className="hidden md:flex items-center gap-6 font-mono text-[11px] tracking-[0.12em] uppercase">
-              <span className="text-white/40 hover:text-white/80 transition">Home</span>
-              <span className="text-white/40 hover:text-white/80 transition">Pros</span>
-              <span className="text-white/40 hover:text-white/80 transition">Work</span>
+              <span className="text-[#5B6470] hover:text-[#5B6470] transition">Home</span>
+              <span className="text-[#5B6470] hover:text-[#5B6470] transition">Pros</span>
+              <span className="text-[#5B6470] hover:text-[#5B6470] transition">Work</span>
               <span className="px-3 py-1.5 rounded-full bg-white text-black font-bold tracking-[0.12em]">Contact</span>
             </nav>
             <div className="hidden md:flex items-center gap-2 glass rounded-full px-3 py-1.5">
               <div className="w-2 h-2 rounded-full bg-[#8FFF4A] animate-pulse" />
-              <span className="font-mono text-[10px] text-white/70 uppercase tracking-[0.12em]">1247 pros online</span>
+              <span className="font-mono text-[10px] text-[#5B6470] uppercase tracking-[0.12em]">1247 pros online</span>
             </div>
           </div>
         </div>
@@ -151,27 +151,27 @@ export default function ContactPage() {
         <div className="mt-8 md:mt-12 flex flex-wrap items-center gap-3">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 border-gradient-m">
             <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#8FFF4A] to-[#FF8A00] animate-pulse" />
-            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-white/80">Page 20 of 24 • Contact • Oldham • All Trades • Touch of GOD</span>
+            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#5B6470]">Page 20 of 24 • Contact • Oldham • All Trades • Touch of GOD</span>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3 py-1.5">
-            <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/60">Badge:</span>
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-1.5">
+            <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Badge:</span>
             <span className="font-mono text-[10px] font-bold tracking-[0.12em] uppercase text-gradient-m">Contact Standalone</span>
           </div>
         </div>
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 md:gap-10 items-start">
           <div>
-            <h1 className="font-poppins text-[40px] md:text-[64px] lg:text-[72px] leading-[0.9] tracking-[-0.05em] text-white">
+            <h1 className="font-poppins text-[40px] md:text-[64px] lg:text-[72px] leading-[0.9] tracking-[-0.05em] text-[#0A1931]">
               Come to Oldham.<br/>
-              <span className="text-white/90">See Real Work.</span>
+              <span className="text-[#0A1931]">See Real Work.</span>
             </h1>
             <div className="mt-5">
               <h2 className="font-poppins text-[22px] md:text-[28px] leading-[1.1] tracking-[-0.03em] text-gradient-m">
                 hello@myfaceprofile.com<br/>— Oldham OL1
               </h2>
             </div>
-            <p className="mt-6 max-w-[560px] font-mono text-[13px] md:text-[14px] leading-[1.6] text-white/60">
-              <span className="text-white">247 tailors, 189 mechanics, 124 builders, 98 barbers, 87 electricians, 76 plumbers</span> in Oldham already showing real work — Contact us for jobs, partnership, press. No SaaS fluff. Just faces, hands, and finished work in OL1.
+            <p className="mt-6 max-w-[560px] font-mono text-[13px] md:text-[14px] leading-[1.6] text-[#5B6470]">
+              <span className="text-[#0A1931]">247 tailors, 189 mechanics, 124 builders, 98 barbers, 87 electricians, 76 plumbers</span> in Oldham already showing real work — Contact us for jobs, partnership, press. No SaaS fluff. Just faces, hands, and finished work in OL1.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -186,7 +186,7 @@ export default function ContactPage() {
                   <div className="w-8 h-8 rounded-full border-2 border-black" style={{backgroundImage:`url(${imgMechanic})`, backgroundSize:'cover'}} />
                   <div className="w-8 h-8 rounded-full border-2 border-black" style={{backgroundImage:`url(${imgBuilder})`, backgroundSize:'cover'}} />
                 </div>
-                <span className="font-mono text-[11px] leading-[1.2] text-white/70">Trusted by<br/><b className="text-white">1247 Oldham pros</b></span>
+                <span className="font-mono text-[11px] leading-[1.2] text-[#5B6470]">Trusted by<br/><b className="text-[#0A1931]">1247 Oldham pros</b></span>
               </div>
             </div>
 
@@ -197,8 +197,8 @@ export default function ContactPage() {
                 {k:'Trust', v:'4.9/5'},
               ].map(s=>(
                 <div key={s.k} className="glass rounded-[16px] p-4">
-                  <div className="font-poppins text-[22px] leading-none text-white">{s.v}</div>
-                  <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-white/50 mt-1">{s.k}</div>
+                  <div className="font-poppins text-[22px] leading-none text-[#0A1931]">{s.v}</div>
+                  <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mt-1">{s.k}</div>
                 </div>
               ))}
             </div>
@@ -217,13 +217,13 @@ export default function ContactPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80" />
                 <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
                   <div className="glass rounded-full px-2.5 py-1">
-                    <span className="font-mono text-[9px] tracking-[0.12em] uppercase text-white/90">{c.accent}</span>
+                    <span className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#0A1931]">{c.accent}</span>
                   </div>
                   <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center text-[10px]">↗</div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
-                  <div className="font-poppins text-[12px] md:text-[13px] leading-[1.1] text-white">{c.label}</div>
-                  <div className="font-mono text-[10px] leading-[1.3] text-white/60 mt-1">{c.sub}</div>
+                  <div className="font-poppins text-[12px] md:text-[13px] leading-[1.1] text-[#0A1931]">{c.label}</div>
+                  <div className="font-mono text-[10px] leading-[1.3] text-[#5B6470] mt-1">{c.sub}</div>
                 </div>
               </div>
             ))}
@@ -233,7 +233,7 @@ export default function ContactPage() {
         <section id="contact" className="mt-20 md:mt-28">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-full bg-gradient-m flex items-center justify-center text-black font-mono text-[12px] font-bold">01</div>
-            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-white/50">SECTION 1 — CONTACT • Oldham OL1 • Location Proof</h3>
+            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-[#5B6470]">SECTION 1 — CONTACT • Oldham OL1 • Location Proof</h3>
             <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent ml-4" />
           </div>
 
@@ -242,9 +242,9 @@ export default function ContactPage() {
               <div className="glass-strong rounded-[24px] p-6 md:p-7">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/40">Email • Primary</div>
-                    <div className="mt-2 font-poppins text-[20px] md:text-[22px] leading-[1.1] text-white">hello@myfaceprofile.com</div>
-                    <div className="mt-1 font-mono text-[11px] text-white/50">Response in 2h • 9-5 GMT • Oldham OL1</div>
+                    <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#5B6470]">Email • Primary</div>
+                    <div className="mt-2 font-poppins text-[20px] md:text-[22px] leading-[1.1] text-[#0A1931]">hello@myfaceprofile.com</div>
+                    <div className="mt-1 font-mono text-[11px] text-[#5B6470]">Response in 2h • 9-5 GMT • Oldham OL1</div>
                   </div>
                   <div className="w-10 h-10 rounded-full bg-gradient-m flex items-center justify-center text-black">✉</div>
                 </div>
@@ -256,29 +256,29 @@ export default function ContactPage() {
                     {l:'Discord', v:'discord.gg/myface', d:'1247 pros • Live'},
                     {l:'X / LinkedIn', v:'@myfaceprofile', d:'Press & partners'},
                   ].map(x=>(
-                    <div key={x.l} className="rounded-[16px] bg-white/[0.04] border border-white/[0.06] p-4">
-                      <div className="font-mono text-[9px] tracking-[0.16em] uppercase text-white/40">{x.l}</div>
-                      <div className="mt-1 font-poppins text-[13px] text-white">{x.v}</div>
-                      <div className="font-mono text-[10px] text-white/40 mt-1">{x.d}</div>
+                    <div key={x.l} className="rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] p-4">
+                      <div className="font-mono text-[9px] tracking-[0.16em] uppercase text-[#5B6470]">{x.l}</div>
+                      <div className="mt-1 font-poppins text-[13px] text-[#0A1931]">{x.v}</div>
+                      <div className="font-mono text-[10px] text-[#5B6470] mt-1">{x.d}</div>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-6 h-px bg-white/10" />
+                <div className="mt-6 h-px bg-[#F0E9DB]" />
 
                 <div ref={formRef} className="mt-6">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/50">Send Message • Secured • Escrow</span>
+                    <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#5B6470]">Send Message • Secured • Escrow</span>
                     {result && (
-                      <span className="font-mono text-[10px] text-white/60">
+                      <span className="font-mono text-[10px] text-[#5B6470]">
                         {result.saved >0 ? `${result.saved} saved` : ''} {result.error ? `• ${result.error}` : ''}
                       </span>
                     )}
                   </div>
                   <form onSubmit={handleSubmit} className="mt-4 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <input value={form.name} onChange={e=>setForm({...form, name: e.target.value})} placeholder="Your name" className="w-full rounded-[14px] bg-black/40 border border-white/10 px-4 py-3 font-mono text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:border-[#8FFF4A]/50" />
-                      <input value={form.email} onChange={e=>setForm({...form, email: e.target.value})} placeholder="Email — Oldham pro?" className="w-full rounded-[14px] bg-black/40 border border-white/10 px-4 py-3 font-mono text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:border-[#8FFF4A]/50" />
+                      <input value={form.name} onChange={e=>setForm({...form, name: e.target.value})} placeholder="Your name" className="w-full rounded-[14px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
+                      <input value={form.email} onChange={e=>setForm({...form, email: e.target.value})} placeholder="Email — Oldham pro?" className="w-full rounded-[14px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
                     </div>
                     <div className="flex gap-2 flex-wrap">
                       {[
@@ -297,29 +297,29 @@ export default function ContactPage() {
                           }} 
                           data-intent={o.k}
                           data-active={form.intent===o.k}
-                          className={`rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.08em] uppercase border transition ${form.intent===o.k ? 'bg-white text-black border-white' : 'bg-white/5 text-white/60 border-white/10 hover:text-white hover:border-white/20'}`}>{o.l}</button>
+                          className={`rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.08em] uppercase border transition ${form.intent===o.k ? 'bg-white text-black border-white' : 'bg-[#F0E9DB] text-[#5B6470] border-[#D4CBB8] hover:text-[#0A1931] hover:border-[#D4CBB8]'}`}>{o.l}</button>
                       ))}
                     </div>
-                    <textarea value={form.message} onChange={e=>setForm({...form, message: e.target.value})} placeholder="Tell us about your trade, job, or story in Oldham..." rows={4} className="w-full rounded-[16px] bg-black/40 border border-white/10 px-4 py-3 font-mono text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:border-[#8FFF4A]/50 resize-none" />
+                    <textarea value={form.message} onChange={e=>setForm({...form, message: e.target.value})} placeholder="Tell us about your trade, job, or story in Oldham..." rows={4} className="w-full rounded-[16px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50 resize-none" />
                     <button disabled={busy} className="w-full rounded-full bg-gradient-m text-black font-poppins text-[14px] py-3.5 disabled:opacity-50 hover:opacity-90 transition">
                       {busy ? 'Securing...' : `Send to Oldham — ${form.intent.toUpperCase()}`}
                     </button>
                     <div className="flex items-center justify-between pt-1">
-                      <span className="font-mono text-[10px] text-white/30">Storage limit 1000 • Secured ledger • No spam • Touch of GOD</span>
-                      <span className="font-mono text-[10px] text-white/40">{records.length} messages in ledger</span>
+                      <span className="font-mono text-[10px] text-[#5B6470]">Storage limit 1000 • Secured ledger • No spam • Touch of GOD</span>
+                      <span className="font-mono text-[10px] text-[#5B6470]">{records.length} messages in ledger</span>
                     </div>
                   </form>
 
                   {records.length>0 && (
                     <div className="mt-6 space-y-2 max-h-[180px] overflow-y-auto pr-1">
                       {records.slice(0,8).map(r=>(
-                        <div key={r.id} className="flex items-center gap-3 rounded-[12px] bg-white/[0.03] border border-white/[0.06] px-3 py-2">
+                        <div key={r.id} className="flex items-center gap-3 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-2">
                           <div className="w-6 h-6 rounded-full bg-gradient-m flex items-center justify-center text-[10px] text-black font-bold">{r.value.name?.[0] || '?'}</div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-mono text-[11px] text-white truncate">{r.value.name} • {r.value.intent}</div>
-                            <div className="font-mono text-[10px] text-white/40 truncate">{r.value.message.slice(0,60)}</div>
+                            <div className="font-mono text-[11px] text-[#0A1931] truncate">{r.value.name} • {r.value.intent}</div>
+                            <div className="font-mono text-[10px] text-[#5B6470] truncate">{r.value.message.slice(0,60)}</div>
                           </div>
-                          <div className="font-mono text-[9px] text-white/30">{r.value.createdLabel}</div>
+                          <div className="font-mono text-[9px] text-[#5B6470]">{r.value.createdLabel}</div>
                         </div>
                       ))}
                     </div>
@@ -336,11 +336,11 @@ export default function ContactPage() {
               <div className="absolute top-5 left-5 right-5 flex justify-between items-start gap-3">
                 <div className="glass rounded-full px-3 py-1.5 flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-[#8FFF4A] animate-pulse" />
-                  <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-white">Live Location • Spindlegate OL1</span>
+                  <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#0A1931]">Live Location • Spindlegate OL1</span>
                 </div>
                 <div className="glass rounded-[12px] px-3 py-2">
-                  <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/50">GPS Verified</div>
-                  <div className="font-mono text-[11px] text-white mt-0.5">53.5409°N 2.1114°W</div>
+                  <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470]">GPS Verified</div>
+                  <div className="font-mono text-[11px] text-[#0A1931] mt-0.5">53.5409°N 2.1114°W</div>
                 </div>
               </div>
 
@@ -349,8 +349,8 @@ export default function ContactPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="inline-flex items-center gap-2 rounded-full bg-[#8FFF4A] text-black px-2.5 py-1 font-mono text-[9px] font-bold tracking-[0.12em] uppercase">Location Proof • Verified Shop</div>
-                      <h4 className="mt-3 font-poppins text-[22px] leading-[1.05] text-white">AYO'S TAILORS — Spindlegate, Oldham OL1</h4>
-                      <p className="mt-2 font-mono text-[12px] leading-[1.5] text-white/60 max-w-[360px]">Real measuring. Real Aso-Ebi. This is where we built My Face Profile. Come see the tapes, the chalk, the hands that make Oldham dress well.</p>
+                      <h4 className="mt-3 font-poppins text-[22px] leading-[1.05] text-[#0A1931]">AYO'S TAILORS — Spindlegate, Oldham OL1</h4>
+                      <p className="mt-2 font-mono text-[12px] leading-[1.5] text-[#5B6470] max-w-[360px]">Real measuring. Real Aso-Ebi. This is where we built My Face Profile. Come see the tapes, the chalk, the hands that make Oldham dress well.</p>
                     </div>
                     <div className="hidden md:flex w-10 h-10 rounded-full bg-white text-black items-center justify-center">◐</div>
                   </div>
@@ -360,9 +360,9 @@ export default function ContactPage() {
                       {k:'Walk-ins today', v:'38'},
                       {k:'Aso-Ebi fits', v:'12K+'},
                     ].map(i=>(
-                      <div key={i.k} className="rounded-[12px] bg-black/40 border border-white/10 p-3">
-                        <div className="font-poppins text-[16px] text-white leading-none">{i.v}</div>
-                        <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/40 mt-1">{i.k}</div>
+                      <div key={i.k} className="rounded-[12px] bg-black/40 border border-[#D4CBB8] p-3">
+                        <div className="font-poppins text-[16px] text-[#0A1931] leading-none">{i.v}</div>
+                        <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{i.k}</div>
                       </div>
                     ))}
                   </div>
@@ -375,7 +375,7 @@ export default function ContactPage() {
         <section className="mt-20 md:mt-28">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-mono text-[12px] font-bold">02</div>
-            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-white/50">SECTION 2 — HOW TO REACH • Multi-Skill Paths</h3>
+            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-[#5B6470]">SECTION 2 — HOW TO REACH • Multi-Skill Paths</h3>
             <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent ml-4" />
           </div>
 
@@ -418,24 +418,24 @@ export default function ContactPage() {
                 color: 'from-[#8FFF4A] via-[#FFE600] to-[#FF8A00]'
               },
             ].map(card=>(
-              <div key={card.id} className={`group relative rounded-[24px] overflow-hidden glass border-white/10 hover:border-white/20 transition ${activeIntent===card.id ? 'ring-1 ring-[#8FFF4A]/40' : ''}`} onMouseEnter={()=>setActiveIntent(card.id as any)}>
+              <div key={card.id} className={`group relative rounded-[24px] overflow-hidden glass border-[#D4CBB8] hover:border-[#D4CBB8] transition ${activeIntent===card.id ? 'ring-1 ring-[#8FFF4A]/40' : ''}`} onMouseEnter={()=>setActiveIntent(card.id as any)}>
                 <div className="relative h-[220px] overflow-hidden">
                   <div className="absolute inset-0" style={{backgroundImage:`url(${card.img})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label={card.title} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                   <div className={`absolute inset-0 opacity-40 mix-blend-overlay bg-gradient-to-br ${card.color}`} />
                   <div className="absolute top-3 left-3 right-3 flex justify-between">
                     <div className="glass rounded-full px-2.5 py-1">
-                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white">{card.stats}</span>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#0A1931]">{card.stats}</span>
                     </div>
                     <div className={`w-7 h-7 rounded-full bg-gradient-to-br ${card.color} flex items-center justify-center text-black text-[12px]`}>↗</div>
                   </div>
                   <div className="absolute bottom-3 left-3 right-3">
-                    <div className="font-poppins text-[16px] leading-[1.05] text-white">{card.title}</div>
+                    <div className="font-poppins text-[16px] leading-[1.05] text-[#0A1931]">{card.title}</div>
                   </div>
                 </div>
                 <div className="p-4">
-                  <p className="font-mono text-[11px] leading-[1.5] text-white/60 min-h-[54px]">{card.desc}</p>
-                  <button onClick={()=>{setForm(f=>({...f, intent: card.id})); setActiveIntent(card.id as any); formRef.current?.scrollIntoView({behavior:'smooth', block:'center'}); setShowToast(`${card.title} selected`); setTimeout(()=>setShowToast(null),2000)}} className="mt-4 w-full rounded-full bg-white/5 border border-white/10 hover:bg-white hover:text-black transition px-4 py-2.5 font-mono text-[11px] tracking-[0.08em] uppercase text-white/80">{card.cta}</button>
+                  <p className="font-mono text-[11px] leading-[1.5] text-[#5B6470] min-h-[54px]">{card.desc}</p>
+                  <button onClick={()=>{setForm(f=>({...f, intent: card.id})); setActiveIntent(card.id as any); formRef.current?.scrollIntoView({behavior:'smooth', block:'center'}); setShowToast(`${card.title} selected`); setTimeout(()=>setShowToast(null),2000)}} className="mt-4 w-full rounded-full bg-[#F0E9DB] border border-[#D4CBB8] hover:bg-white hover:text-black transition px-4 py-2.5 font-mono text-[11px] tracking-[0.08em] uppercase text-[#5B6470]">{card.cta}</button>
                 </div>
               </div>
             ))}
@@ -445,7 +445,7 @@ export default function ContactPage() {
         <section className="mt-20 md:mt-28">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-8 h-8 rounded-full bg-gradient-m flex items-center justify-center text-black font-mono text-[12px] font-bold">03</div>
-            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-white/50">SECTION 3 — MAP + TRUST • Oldham Is Where We Build</h3>
+            <h3 className="font-mono text-[12px] tracking-[0.2em] uppercase text-[#5B6470]">SECTION 3 — MAP + TRUST • Oldham Is Where We Build</h3>
             <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent ml-4" />
           </div>
 
@@ -453,8 +453,8 @@ export default function ContactPage() {
             <div className="rounded-[24px] glass-strong p-5 md:p-6 overflow-hidden relative">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="font-poppins text-[22px] leading-[1.05] text-white">Oldham is where we build</div>
-                  <div className="mt-1 font-mono text-[11px] text-white/50">OL1 Spindlegate • OL2 • OL8 • 1247 pros mapped • Touch of GOD coordinates</div>
+                  <div className="font-poppins text-[22px] leading-[1.05] text-[#0A1931]">Oldham is where we build</div>
+                  <div className="mt-1 font-mono text-[11px] text-[#5B6470]">OL1 Spindlegate • OL2 • OL8 • 1247 pros mapped • Touch of GOD coordinates</div>
                 </div>
                 <div className="hidden md:flex items-center gap-2 rounded-full bg-[#8FFF4A]/15 border border-[#8FFF4A]/20 px-3 py-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
@@ -462,7 +462,7 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="mt-6 relative rounded-[20px] overflow-hidden bg-[#0A0A0A] border border-white/10 aspect-[16/10] md:aspect-[16/9]">
+              <div className="mt-6 relative rounded-[20px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] aspect-[16/10] md:aspect-[16/9]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(143,255,74,0.15),transparent_50%),radial-gradient(circle_at_80%_70%,rgba(0,229,192,0.12),transparent_50%),radial-gradient(circle_at_60%_40%,rgba(255,230,0,0.08),transparent_60%)]" />
                 <svg viewBox="0 0 800 500" className="absolute inset-0 w-full h-full opacity-60">
                   <path d="M100 120 Q 200 80 350 140 T 600 180 T 700 300 T 500 420 T 200 380 T 100 120" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" strokeDasharray="8 8" />
@@ -489,7 +489,7 @@ export default function ContactPage() {
                     'AYO’S TAILORS verified',
                   ].map(t=>(
                     <div key={t} className="glass rounded-full px-2.5 py-1">
-                      <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-white/70">{t}</span>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.08em] text-[#5B6470]">{t}</span>
                     </div>
                   ))}
                 </div>
@@ -501,10 +501,10 @@ export default function ContactPage() {
                   {k:'Avg Response', v:'1.2h', d:'Real Oldham time'},
                   {k:'Verified', v:'100%', d:'Face + Work proof'},
                 ].map(i=>(
-                  <div key={i.k} className="rounded-[16px] bg-white/[0.04] border border-white/[0.06] p-4">
-                    <div className="font-poppins text-[18px] leading-none text-white">{i.v}</div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/40 mt-1">{i.k}</div>
-                    <div className="font-mono text-[10px] text-white/30 mt-1">{i.d}</div>
+                  <div key={i.k} className="rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] p-4">
+                    <div className="font-poppins text-[18px] leading-none text-[#0A1931]">{i.v}</div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{i.k}</div>
+                    <div className="font-mono text-[10px] text-[#5B6470] mt-1">{i.d}</div>
                   </div>
                 ))}
               </div>
@@ -513,12 +513,12 @@ export default function ContactPage() {
             <div className="space-y-4">
               <div className="rounded-[24px] glass-strong p-6">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-white/40">Trust Ledger • Secured</span>
+                  <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[#5B6470]">Trust Ledger • Secured</span>
                   <span className="w-6 h-6 rounded-full bg-gradient-m flex items-center justify-center text-black text-[12px]">✓</span>
                 </div>
                 <div className="mt-5">
-                  <div className="font-poppins text-[42px] leading-[0.9] text-white">4.9</div>
-                  <div className="font-mono text-[11px] text-white/50 mt-1">Trust Ledger • 12K projects • Touch of GOD</div>
+                  <div className="font-poppins text-[42px] leading-[0.9] text-[#0A1931]">4.9</div>
+                  <div className="font-mono text-[11px] text-[#5B6470] mt-1">Trust Ledger • 12K projects • Touch of GOD</div>
                 </div>
                 <div className="mt-6 space-y-3">
                   {[
@@ -527,11 +527,11 @@ export default function ContactPage() {
                     {k:'OBD2 Certified', v:'189 mechanics • J Martinez', icon:'◑'},
                     {k:'Face + Work', v:'No stock • Real hands', icon:'◎'},
                   ].map(t=>(
-                    <div key={t.k} className="flex items-center gap-3 rounded-[14px] bg-black/40 border border-white/10 p-3">
-                      <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 text-[14px]">{t.icon}</div>
+                    <div key={t.k} className="flex items-center gap-3 rounded-[14px] bg-black/40 border border-[#D4CBB8] p-3">
+                      <div className="w-8 h-8 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] flex items-center justify-center text-[#5B6470] text-[14px]">{t.icon}</div>
                       <div className="flex-1">
-                        <div className="font-poppins text-[12px] leading-none text-white">{t.k}</div>
-                        <div className="font-mono text-[10px] text-white/40 mt-1">{t.v}</div>
+                        <div className="font-poppins text-[12px] leading-none text-[#0A1931]">{t.k}</div>
+                        <div className="font-mono text-[10px] text-[#5B6470] mt-1">{t.v}</div>
                       </div>
                       <div className="w-2 h-2 rounded-full bg-[#8FFF4A]" />
                     </div>
@@ -544,16 +544,16 @@ export default function ContactPage() {
                   <div className="absolute inset-0" style={{backgroundImage:`url(${imgPlumber})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="Plumber Gas Safe Worcester Bosch boiler" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                   <div className="absolute bottom-2 left-2 right-2 glass rounded-[12px] px-3 py-2">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/60">Gas Safe • Worcester</div>
-                    <div className="font-poppins text-[11px] text-white leading-[1.1] mt-0.5">Plumber • OL1</div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470]">Gas Safe • Worcester</div>
+                    <div className="font-poppins text-[11px] text-[#0A1931] leading-[1.1] mt-0.5">Plumber • OL1</div>
                   </div>
                 </div>
                 <div className="rounded-[24px] overflow-hidden relative aspect-[4/3] glass">
                   <div className="absolute inset-0" style={{backgroundImage:`url(${imgMechanic})`, backgroundSize:'cover', backgroundPosition:'center'}} aria-label="Female mechanic J Martinez OBD2" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                   <div className="absolute bottom-2 left-2 right-2 glass rounded-[12px] px-3 py-2">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/60">OBD2 • Certified</div>
-                    <div className="font-poppins text-[11px] text-white leading-[1.1] mt-0.5">J Martinez • Mechanic</div>
+                    <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470]">OBD2 • Certified</div>
+                    <div className="font-poppins text-[11px] text-[#0A1931] leading-[1.1] mt-0.5">J Martinez • Mechanic</div>
                   </div>
                 </div>
               </div>
@@ -562,8 +562,8 @@ export default function ContactPage() {
                 <div className="rounded-[19px] bg-black p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black font-poppins">M</div>
                   <div className="flex-1">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/50">My Face Profile • VisaguideOS</div>
-                    <div className="font-poppins text-[12px] text-white leading-[1.2]">From blueprint to face. Touch of GOD.</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470]">My Face Profile • VisaguideOS</div>
+                    <div className="font-poppins text-[12px] text-[#0A1931] leading-[1.2]">From blueprint to face. Touch of GOD.</div>
                   </div>
                   <div className="font-mono text-[10px] text-black bg-white rounded-full px-2.5 py-1">OL1</div>
                 </div>
@@ -622,7 +622,7 @@ export default function ContactPage() {
                   ].map(s=>(
                     <div key={s.k} className="rounded-[16px] bg-black text-white p-4">
                       <div className="font-poppins text-[22px] leading-none">{s.v}</div>
-                      <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/50 mt-1">{s.k}</div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{s.k}</div>
                     </div>
                   ))}
                   <div className="col-span-3 rounded-[16px] bg-gradient-m p-4 flex items-center justify-between">
@@ -652,15 +652,15 @@ export default function ContactPage() {
           <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] pointer-events-none">
             <div className="glass-strong rounded-full px-5 py-3 flex items-center gap-3 shadow-2xl">
               <div className="w-2 h-2 rounded-full bg-[#8FFF4A] animate-pulse" />
-              <span className="font-mono text-[12px] text-white">{showToast}</span>
+              <span className="font-mono text-[12px] text-[#0A1931]">{showToast}</span>
             </div>
           </div>
         )}
 
         {result && result.error && (
           <div className="fixed top-[80px] right-6 z-50 glass-strong rounded-[12px] px-4 py-2 max-w-[320px]">
-            <div className="font-mono text-[11px] text-white/80">Error: {result.error}</div>
-            <div className="font-mono text-[10px] text-white/40 mt-1">Saved {result.saved}, Remaining {result.remaining}</div>
+            <div className="font-mono text-[11px] text-[#5B6470]">Error: {result.error}</div>
+            <div className="font-mono text-[10px] text-[#5B6470] mt-1">Saved {result.saved}, Remaining {result.remaining}</div>
           </div>
         )}
       </main>

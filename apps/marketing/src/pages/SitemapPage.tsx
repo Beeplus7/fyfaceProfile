@@ -68,13 +68,13 @@ export default function SitemapPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
-      className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#8FFF4A] selection:text-black"
+      className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#FFC300]/35 selection:text-[#0A1931]"
     >
       {/* NAV */}
       <header
         data-safe-area-sticky-top
         style={{ top: 'var(--safe-area-inset-top)' }}
-        className="sticky z-50 border-b border-white/[0.08] backdrop-blur-[24px] bg-[#FFFDF7]/90"
+        className="sticky z-50 border-b border-[#D4CBB8] backdrop-blur-[24px] bg-[#FFFDF7]/90"
       >
         <div className="mx-auto max-w-[1440px] px-6 md:px-10 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -84,7 +84,7 @@ export default function SitemapPage() {
             </div>
             <div className="flex flex-col leading-none">
               <span className="font-poppins font-bold text-[16px] tracking-[-0.02em]">My Face Profile</span>
-              <span className="font-mono text-[10px] tracking-[0.12em] text-white/50 uppercase">Oldham • Work OS</span>
+              <span className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470] uppercase">Oldham • Work OS</span>
             </div>
           </div>
 
@@ -98,7 +98,7 @@ export default function SitemapPage() {
               { label: 'Pricing', href: '/pricing' },
               { label: 'Trust', href: '/trust' },
             ].map(l => (
-              <a key={l.label} href={l.href} className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-white/60 hover:text-white hover:bg-white/[0.06] transition">
+              <a key={l.label} href={l.href} className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB] transition">
                 {l.label}
               </a>
             ))}
@@ -135,7 +135,7 @@ export default function SitemapPage() {
             <div className="flex-1 max-w-[760px]">
               <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 mb-6 card-drop">
                 <span className="h-5 px-2 grid place-items-center rounded-full bg-gradient-to-r from-[#8FFF4A] to-[#FF8A00] text-[10px] font-mono font-bold text-black">No.12</span>
-                <span className="font-mono text-[11px] tracking-[0.14em] text-white/70 uppercase">Master Sitemap • Production Handover • Touch of GOD</span>
+                <span className="font-mono text-[11px] tracking-[0.14em] text-[#5B6470] uppercase">Master Sitemap • Production Handover • Touch of GOD</span>
                 <span className="ml-1 h-1.5 w-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
               </div>
 
@@ -144,24 +144,24 @@ export default function SitemapPage() {
                 <br />
                 11 Artifacts.
                 <br />
-                <span className="text-white">One OS.</span>
+                <span className="text-[#0A1931]">One OS.</span>
                 <br />
-                <span className="text-white">Ready to Ship.</span>
+                <span className="text-[#0A1931]">Ready to Ship.</span>
               </h1>
 
               <div className="mt-6">
                 <p className="font-poppins font-bold text-[22px] md:text-[28px] leading-[1.1] tracking-[-0.02em] text-gradient">
                   From Hero to Sitemap — Full Marketing OS Production-Ready.
                 </p>
-                <p className="mt-4 max-w-[560px] text-[15px] md:text-[16px] leading-[1.6] text-white/60 font-medium">
-                  All 24 marketing pages built, with same fonts, same M gradient, same touch of GOD images — ready to wire into React web/mobile Turbo monorepo — <span className="text-white/90">pnpm dev</span> and go live in Oldham.
+                <p className="mt-4 max-w-[560px] text-[15px] md:text-[16px] leading-[1.6] text-[#5B6470] font-medium">
+                  All 24 marketing pages built, with same fonts, same M gradient, same touch of GOD images — ready to wire into React web/mobile Turbo monorepo — <span className="text-[#0A1931]">pnpm dev</span> and go live in Oldham.
                 </p>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <div className="glass rounded-full px-4 py-2 flex items-center gap-2">
                   <img src={logoMain} alt="" className="h-5 w-5 rounded-full object-cover" />
-                  <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-white/70">Fonts: Poppins 800 + Inter • Maintained from No.1</span>
+                  <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-[#5B6470]">Fonts: Poppins 800 + Inter • Maintained from No.1</span>
                 </div>
                 <div className="rounded-full bg-white text-black px-4 py-2 font-poppins font-bold text-[13px]">apps/marketing/app/sitemap/page.tsx</div>
               </div>
@@ -178,7 +178,7 @@ export default function SitemapPage() {
                 ].map(s => (
                   <div key={s.k} className="glass rounded-[16px] p-3">
                     <div className="font-poppins font-extrabold text-[20px] leading-none">{s.v}</div>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/50 mt-1">{s.k}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{s.k}</div>
                   </div>
                 ))}
               </div>
@@ -193,9 +193,9 @@ export default function SitemapPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5 flex justify-between items-end">
                     <div>
-                      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-white/60">Touch of GOD • Image 12/14</div>
+                      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Touch of GOD • Image 12/14</div>
                       <div className="font-poppins font-bold text-[18px] leading-[1.1] mt-1">Final Wedding Dress Reveal</div>
-                      <div className="font-mono text-[11px] text-white/50 mt-1">Oldham • Bespoke Lace • Holy Craft</div>
+                      <div className="font-mono text-[11px] text-[#5B6470] mt-1">Oldham • Bespoke Lace • Holy Craft</div>
                     </div>
                     <div className="h-10 w-10 rounded-full bg-white text-black grid place-items-center font-poppins font-bold">↗</div>
                   </div>
@@ -211,7 +211,7 @@ export default function SitemapPage() {
                     <img src={tailorLace} alt="Tailor sewing lace detail" className="w-full aspect-[4/3] object-cover" />
                   </div>
                   <div className="p-3">
-                    <div className="font-mono text-[9px] tracking-[0.12em] uppercase text-white/50">Tailor Sewing Lace • Image 11/14</div>
+                    <div className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#5B6470]">Tailor Sewing Lace • Image 11/14</div>
                     <div className="font-poppins font-bold text-[13px] leading-[1.2] mt-1">Hands That Speak — Lace Stitch</div>
                     <div className="mt-2 flex gap-1.5">
                       <span className="px-2 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[9px] font-bold">BUILT</span>
@@ -222,14 +222,14 @@ export default function SitemapPage() {
 
                 {/* blueprint floating */}
                 <div className="absolute -top-6 -right-2 md:-right-6 glass rounded-[20px] p-4 w-[200px] card-drop hidden md:block" style={{ animationDelay: '0.35s' }}>
-                  <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/50">Blueprint Materials</div>
+                  <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Blueprint Materials</div>
                   <div className="mt-3 space-y-2">
                     <div className="h-1.5 w-full rounded-full bg-gradient-to-r from-[#8FFF4A] to-[#00E5C0]" />
                     <div className="h-1.5 w-[70%] rounded-full bg-white/20" />
-                    <div className="h-1.5 w-[90%] rounded-full bg-white/10" />
+                    <div className="h-1.5 w-[90%] rounded-full bg-[#F0E9DB]" />
                   </div>
                   <div className="mt-3 font-poppins font-bold text-[12px]">Glassmorphism + Divine Glow + 24px radius</div>
-                  <div className="mt-2 text-[10px] font-mono text-white/40">Holy craft in every pixel — touch of GOD.</div>
+                  <div className="mt-2 text-[10px] font-mono text-[#5B6470]">Holy craft in every pixel — touch of GOD.</div>
                 </div>
               </div>
             </div>
@@ -241,11 +241,11 @@ export default function SitemapPage() {
       <section className="mx-auto max-w-[1440px] px-6 md:px-10 py-12 md:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
           <div>
-            <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-white/40">Section 01 • Sitemap • 24 Pages Visual Grid</div>
+            <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#5B6470]">Section 01 • Sitemap • 24 Pages Visual Grid</div>
             <h2 className="font-poppins font-extrabold text-[32px] md:text-[48px] leading-[0.9] tracking-[-0.03em] mt-3">
               Every Page Mapped.
               <br />
-              <span className="text-white/40">Holy Production Map.</span>
+              <span className="text-[#5B6470]">Holy Production Map.</span>
             </h2>
           </div>
           <div className="flex items-center gap-2 rounded-full glass p-1.5">
@@ -259,7 +259,7 @@ export default function SitemapPage() {
               <button
                 key={t.id}
                 onClick={() => setActiveGroup(t.id as any)}
-                className={`px-4 py-2 rounded-full text-[12px] font-mono font-bold tracking-[0.06em] transition ${activeGroup === t.id ? 'bg-white text-black' : 'text-white/60 hover:text-white hover:bg-white/[0.06]'}`}
+                className={`px-4 py-2 rounded-full text-[12px] font-mono font-bold tracking-[0.06em] transition ${activeGroup === t.id ? 'bg-white text-black' : 'text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB]'}`}
               >
                 {t.label}
               </button>
@@ -271,13 +271,13 @@ export default function SitemapPage() {
           {filteredGroups.map(group => (
             <div key={group.id} className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="h-px flex-1 bg-white/[0.08]" />
+                <div className="h-px flex-1 bg-[#F0E9DB]" />
                 <div className="flex items-center gap-3 glass rounded-full px-4 py-2">
-                  <span className="font-mono text-[11px] tracking-[0.14em] text-white/60">{group.count}</span>
+                  <span className="font-mono text-[11px] tracking-[0.14em] text-[#5B6470]">{group.count}</span>
                   <span className="font-poppins font-bold text-[13px] tracking-[-0.01em]">{group.label}</span>
                   <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A]" />
                 </div>
-                <div className="h-px flex-1 bg-white/[0.08]" />
+                <div className="h-px flex-1 bg-[#F0E9DB]" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
@@ -300,17 +300,17 @@ export default function SitemapPage() {
                         <div className="w-full h-full bg-[#0e0e0e] relative">
                           <div className="absolute inset-0 opacity-40" style={{ background: `linear-gradient(135deg, ${card.path.includes('mechanic') ? '#8FFF4A22, #00E5C022' : card.path.includes('builder') ? '#FFE60022, #FF8A0022' : card.path.includes('barber') ? '#00E5C022, #8FFF4A22' : card.path.includes('electric') ? '#FFE60022, #8FFF4A22' : '#111, #222'})` }} />
                           <div className="absolute inset-0 grid place-items-center">
-                            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-white/20">{card.path}</div>
+                            <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#5B6470]">{card.path}</div>
                           </div>
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
                       <div className="absolute top-3 left-3 right-3 flex justify-between">
                         <span className="px-2.5 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">✅ {card.status}</span>
-                        <span className="px-2.5 py-1 rounded-full glass font-mono text-[10px] text-white/70">{card.artifact}</span>
+                        <span className="px-2.5 py-1 rounded-full glass font-mono text-[10px] text-[#5B6470]">{card.artifact}</span>
                       </div>
                       <div className="absolute bottom-3 left-3">
-                        <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/60">{card.path}</div>
+                        <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">{card.path}</div>
                         <div className="font-poppins font-bold text-[14px] leading-[1.1] mt-1">{card.label}</div>
                       </div>
                     </div>
@@ -318,7 +318,7 @@ export default function SitemapPage() {
                     {/* meta */}
                     <div className="p-4 flex items-center justify-between">
                       <div className="flex-1 min-w-0">
-                        <div className="font-mono text-[10px] tracking-[0.08em] text-white/40 truncate">SEO: {card.keyword}</div>
+                        <div className="font-mono text-[10px] tracking-[0.08em] text-[#5B6470] truncate">SEO: {card.keyword}</div>
                         <div className="mt-1 flex items-center gap-2">
                           <div className="h-1 w-12 rounded-full bg-gradient-to-r from-[#8FFF4A] to-[#FF8A00]" />
                           <div className="h-1 w-6 rounded-full bg-white/20" />
@@ -341,7 +341,7 @@ export default function SitemapPage() {
             <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#8FFF4A] to-[#FF8A00] grid place-items-center text-black font-poppins font-extrabold">M</div>
             <div>
               <div className="font-poppins font-bold text-[14px]">24 Pages • Same Fonts • Same Glow • Same GOD</div>
-              <div className="font-mono text-[11px] text-white/50">All pages use Poppins 800 headlines + Inter body + JetBrains Mono labels — verified from No.1 homepage</div>
+              <div className="font-mono text-[11px] text-[#5B6470]">All pages use Poppins 800 headlines + Inter body + JetBrains Mono labels — verified from No.1 homepage</div>
             </div>
           </div>
           <div className="flex gap-2">
@@ -353,12 +353,12 @@ export default function SitemapPage() {
       </section>
 
       {/* SECTION 2 — PRODUCTION HANDOVER */}
-      <section className="relative border-y border-white/[0.06] bg-[#0a0a0a]">
+      <section className="relative border-y border-[#D4CBB8] bg-[#F0E9DB]">
         <div className="mx-auto max-w-[1440px] px-6 md:px-10 py-14 md:py-24">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-start">
             {/* code */}
             <div>
-              <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-white/40">Section 02 • Production Handover • How to Wire</div>
+              <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#5B6470]">Section 02 • Production Handover • How to Wire</div>
               <h3 className="font-poppins font-extrabold text-[30px] md:text-[40px] leading-[0.9] tracking-[-0.03em] mt-4">
                 Turbo Monorepo Ready.
                 <br />
@@ -366,16 +366,16 @@ export default function SitemapPage() {
               </h3>
 
               <div className="mt-8 rounded-[24px] glass-strong overflow-hidden divine-glow">
-                <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#D4CBB8]">
                   <div className="flex items-center gap-2">
                     <div className="h-3 w-3 rounded-full bg-[#FF5F56]" />
                     <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
                     <div className="h-3 w-3 rounded-full bg-[#27C93F]" />
                   </div>
-                  <div className="font-mono text-[11px] tracking-[0.12em] text-white/40">apps/marketing/app/ — 24 pages wired</div>
+                  <div className="font-mono text-[11px] tracking-[0.12em] text-[#5B6470]">apps/marketing/app/ — 24 pages wired</div>
                   <div className="px-2.5 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">COPY • PASTE</div>
                 </div>
-                <pre className="p-6 overflow-x-auto font-mono text-[12px] md:text-[13px] leading-[1.7] text-white/80 scrollbar-hide">
+                <pre className="p-6 overflow-x-auto font-mono text-[12px] md:text-[13px] leading-[1.7] text-[#5B6470] scrollbar-hide">
 {`apps/marketing/app/
   page.tsx -> No.1 Hero Home artifact 3
   how-it-works/page.tsx -> No.2
@@ -410,14 +410,14 @@ vercel --prod — ship Oldham`}
 
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <div className="glass rounded-[16px] p-4">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/40">Web</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470]">Web</div>
                   <div className="font-poppins font-bold text-[14px] mt-1">apps/marketing — Next.js 14</div>
-                  <div className="font-mono text-[11px] text-white/50 mt-1">Tailwind + Poppins + Inter + Mono</div>
+                  <div className="font-mono text-[11px] text-[#5B6470] mt-1">Tailwind + Poppins + Inter + Mono</div>
                 </div>
                 <div className="glass rounded-[16px] p-4">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-white/40">Mobile</div>
+                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470]">Mobile</div>
                   <div className="font-poppins font-bold text-[14px] mt-1">apps/mobile — Expo</div>
-                  <div className="font-mono text-[11px] text-white/50 mt-1">Same M gradient • Same glow</div>
+                  <div className="font-mono text-[11px] text-[#5B6470] mt-1">Same M gradient • Same glow</div>
                 </div>
               </div>
             </div>
@@ -468,7 +468,7 @@ vercel --prod — ship Oldham`}
               </div>
 
               <div className="glass rounded-[24px] p-6">
-                <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-white/40">Production Checklist • No.12 Handover</div>
+                <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Production Checklist • No.12 Handover</div>
                 <div className="mt-4 space-y-3">
                   {[
                     'Fonts Poppins 800 + Inter + JetBrains Mono — same as No.1',
@@ -480,7 +480,7 @@ vercel --prod — ship Oldham`}
                   ].map(item => (
                     <div key={item} className="flex gap-2">
                       <span className="mt-0.5 h-4 w-4 rounded-full bg-[#8FFF4A] text-black grid place-items-center font-mono text-[10px] font-bold">✓</span>
-                      <span className="font-mono text-[12px] leading-[1.4] text-white/70">{item}</span>
+                      <span className="font-mono text-[12px] leading-[1.4] text-[#5B6470]">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -492,7 +492,7 @@ vercel --prod — ship Oldham`}
 
       {/* SECTION 3 — FONTS + IMAGES CONSISTENCY */}
       <section className="mx-auto max-w-[1440px] px-6 md:px-10 py-14 md:py-24">
-        <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-white/40">Section 03 • Fonts + Images Consistency • What We Maintained</div>
+        <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#5B6470]">Section 03 • Fonts + Images Consistency • What We Maintained</div>
 
         <div className="mt-8 grid lg:grid-cols-3 gap-6">
           {/* fonts */}
@@ -501,16 +501,16 @@ vercel --prod — ship Oldham`}
             <h4 className="font-poppins font-extrabold text-[20px] leading-[1.1] tracking-[-0.02em] mt-5">Fonts — Holy Consistency</h4>
             <div className="mt-6 space-y-4">
               <div>
-                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40">Headlines</div>
+                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Headlines</div>
                 <div className="font-poppins font-extrabold text-[28px] leading-[0.9] mt-1">Poppins Bold 800</div>
-                <div className="font-mono text-[11px] text-white/50 mt-1">Same across all 12 artifacts — maintained from No.1 homepage</div>
+                <div className="font-mono text-[11px] text-[#5B6470] mt-1">Same across all 12 artifacts — maintained from No.1 homepage</div>
               </div>
               <div>
-                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40">Body</div>
+                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Body</div>
                 <div className="font-inter text-[18px] leading-[1.4] mt-1" style={{ fontFamily: 'Inter' }}>Inter Regular / Medium — clean, readable, Oldham truth</div>
               </div>
               <div>
-                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-white/40">Labels</div>
+                <div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Labels</div>
                 <div className="font-mono text-[13px] mt-1">JetBrains Mono — 11px, tracking 0.14em, uppercase</div>
               </div>
             </div>
@@ -518,25 +518,25 @@ vercel --prod — ship Oldham`}
           </div>
 
           {/* colors */}
-          <div className="rounded-[24px] bg-[#0e0e0e] border border-white/[0.08] p-7 md:p-8">
+          <div className="rounded-[24px] bg-[#0e0e0e] border border-[#D4CBB8] p-7 md:p-8">
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#8FFF4A] to-[#FF8A00] grid place-items-center font-poppins font-extrabold text-black">M</div>
             <h4 className="font-poppins font-extrabold text-[20px] leading-[1.1] tracking-[-0.02em] mt-5">Colors — M Gradient Divine</h4>
             <div className="mt-6">
               <div className="rounded-[16px] overflow-hidden h-[56px] w-full bg-gradient-to-r from-[#8FFF4A] via-[#00E5C0] via-[#FFE600] to-[#FF8A00]" />
               <div className="mt-3 flex gap-2 font-mono text-[10px]">
-                <span className="px-2 py-1 rounded-full bg-white/10">#8FFF4A</span>
-                <span className="px-2 py-1 rounded-full bg-white/10">#00E5C0</span>
-                <span className="px-2 py-1 rounded-full bg-white/10">#FFE600</span>
-                <span className="px-2 py-1 rounded-full bg-white/10">#FF8A00</span>
+                <span className="px-2 py-1 rounded-full bg-[#F0E9DB]">#8FFF4A</span>
+                <span className="px-2 py-1 rounded-full bg-[#F0E9DB]">#00E5C0</span>
+                <span className="px-2 py-1 rounded-full bg-[#F0E9DB]">#FFE600</span>
+                <span className="px-2 py-1 rounded-full bg-[#F0E9DB]">#FF8A00</span>
               </div>
             </div>
-            <div className="mt-6 space-y-3 font-mono text-[12px] text-white/60">
-              <div className="flex justify-between"><span>Black base</span><span className="text-white">#050505</span></div>
-              <div className="flex justify-between"><span>Glass</span><span className="text-white">rgba(255,255,255,0.06)</span></div>
-              <div className="flex justify-between"><span>Border</span><span className="text-white">rgba(255,255,255,0.10)</span></div>
-              <div className="flex justify-between"><span>Radius</span><span className="text-white">24px — everywhere</span></div>
+            <div className="mt-6 space-y-3 font-mono text-[12px] text-[#5B6470]">
+              <div className="flex justify-between"><span>Black base</span><span className="text-[#0A1931]">#050505</span></div>
+              <div className="flex justify-between"><span>Glass</span><span className="text-[#0A1931]">rgba(255,255,255,0.06)</span></div>
+              <div className="flex justify-between"><span>Border</span><span className="text-[#0A1931]">rgba(255,255,255,0.10)</span></div>
+              <div className="flex justify-between"><span>Radius</span><span className="text-[#0A1931]">24px — everywhere</span></div>
             </div>
-            <div className="mt-6 glass rounded-[14px] p-3 font-mono text-[11px] text-white/50">Divine glow: 0 0 80px rgba(143,255,74,0.15) + holy craft border inset</div>
+            <div className="mt-6 glass rounded-[14px] p-3 font-mono text-[11px] text-[#5B6470]">Divine glow: 0 0 80px rgba(143,255,74,0.15) + holy craft border inset</div>
           </div>
 
           {/* images */}
@@ -551,7 +551,7 @@ vercel --prod — ship Oldham`}
               <div className="h-12 w-12 rounded-[12px] bg-gradient-to-br from-[#8FFF4A]/30 to-[#FF8A00]/30 grid place-items-center font-mono text-[10px]">+12</div>
             </div>
             <h4 className="font-poppins font-extrabold text-[20px] leading-[1.1] tracking-[-0.02em] mt-5">Images — Touch of GOD</h4>
-            <div className="mt-4 space-y-2.5 font-mono text-[11px] leading-[1.5] text-white/60">
+            <div className="mt-4 space-y-2.5 font-mono text-[11px] leading-[1.5] text-[#5B6470]">
               <div>• Tailor sewing lace — hands that speak more than words</div>
               <div>• Final wedding dress reveal — holy moment Oldham</div>
               <div>• Mechanic diagnosing — female pro, craft & precision</div>
@@ -577,14 +577,14 @@ vercel --prod — ship Oldham`}
           ].map(c => (
             <div key={c.title} className="glass rounded-[16px] p-4">
               <div className="font-poppins font-bold text-[13px]">{c.title}</div>
-              <div className="font-mono text-[11px] text-white/50 mt-1">{c.desc}</div>
+              <div className="font-mono text-[11px] text-[#5B6470] mt-1">{c.desc}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA FOOTER */}
-      <footer className="relative overflow-hidden border-t border-white/[0.06]">
+      <footer className="relative overflow-hidden border-t border-[#D4CBB8]">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-t from-[#8FFF4A]/10 via-[#FFE600]/5 to-transparent" />
         </div>
@@ -624,17 +624,17 @@ vercel --prod — ship Oldham`}
 
               <div className="lg:w-[340px] w-full space-y-4">
                 <div className="rounded-[20px] bg-black text-white p-6">
-                  <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-white/40">Ready to Wire — Command</div>
+                  <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Ready to Wire — Command</div>
                   <div className="mt-3 font-mono text-[13px] leading-[1.6]">
-                    <div className="text-white/50">$ pnpm dev</div>
+                    <div className="text-[#5B6470]">$ pnpm dev</div>
                     <div className="text-[#8FFF4A]">→ localhost:3000 — Oldham live</div>
-                    <div className="text-white/50 mt-2">$ pnpm build && vercel --prod</div>
+                    <div className="text-[#5B6470] mt-2">$ pnpm build && vercel --prod</div>
                     <div className="text-[#FFE600]">→ Ship production — touch of GOD</div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <Link to="/" className="rounded-full bg-black text-white h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-[#111] transition">Go Home ↗</Link>
+                  <Link to="/" className="rounded-full bg-black text-white h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-[#F0E9DB] transition">Go Home ↗</Link>
                   <Link to="/how-it-works" className="rounded-full bg-transparent border-2 border-black h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-black hover:text-white transition">Work OS</Link>
                 </div>
 
@@ -656,7 +656,7 @@ vercel --prod — ship Oldham`}
 
           {/* small badge */}
           <div className="mt-6 flex justify-center">
-            <div className="glass rounded-full px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-white/50">
+            <div className="glass rounded-full px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-[#5B6470]">
               Badge: No.12 of 24 — Master Sitemap — Production Handover — Touch of GOD — Reverent, Beautiful, Ready to Ship
             </div>
           </div>

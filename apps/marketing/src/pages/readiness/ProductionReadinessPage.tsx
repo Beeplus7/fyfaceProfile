@@ -854,7 +854,7 @@ function Circle({ pct, size = 92, stroke = 8 }: { pct: number; size?: number; st
 
 function Badge({ pct, status }: { pct: number; status: Status }) {
   const map: Record<Status, string> = {
-    DONE: 'bg-[#0F172A] text-white',
+    DONE: 'bg-[#0F172A] text-[#0A1931]',
     WIP: 'bg-white border border-[#E2E8F0] text-[#0F172A]',
     TODO: 'bg-[#F8FAFC] border border-dashed border-[#CBD5E1] text-[#64748B]',
     NEW: 'bg-amber-50 border border-amber-200 text-amber-900',
@@ -1160,20 +1160,20 @@ export default function ProductionReadinessPage() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 w-full rounded-2xl bg-[#0F172A] p-3 text-white flex items-center justify-between gap-3">
+                  <div className="mt-4 w-full rounded-2xl bg-[#0F172A] p-3 text-[#0A1931] flex items-center justify-between gap-3">
                     <div className="text-[11px] leading-tight">
                       <b>Quick jumps</b>
                       <div className="mt-2 flex flex-wrap gap-1.5">
-                        <Link to="/signup" className="rounded-full bg-white/10 px-2 py-0.5 hover:bg-white/20">
+                        <Link to="/signup" className="rounded-full bg-[#F0E9DB] px-2 py-0.5 hover:bg-white/20">
                           Signup
                         </Link>
-                        <Link to="/app/onboarding" className="rounded-full bg-white/10 px-2 py-0.5 hover:bg-white/20">
+                        <Link to="/app/onboarding" className="rounded-full bg-[#F0E9DB] px-2 py-0.5 hover:bg-white/20">
                           32 fields
                         </Link>
-                        <Link to="/app/dashboard" className="rounded-full bg-white/10 px-2 py-0.5 hover:bg-white/20">
+                        <Link to="/app/dashboard" className="rounded-full bg-[#F0E9DB] px-2 py-0.5 hover:bg-white/20">
                           UPRM PID 1
                         </Link>
-                        <Link to="/sitemap" className="rounded-full bg-white/10 px-2 py-0.5 hover:bg-white/20">
+                        <Link to="/sitemap" className="rounded-full bg-[#F0E9DB] px-2 py-0.5 hover:bg-white/20">
                           26 pages
                         </Link>
                       </div>
@@ -1382,7 +1382,7 @@ export default function ProductionReadinessPage() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#0F172A] bg-[#0F172A] text-white p-5 shadow-lg">
+          <div className="rounded-[24px] border border-[#0F172A] bg-[#0F172A] text-[#0A1931] p-5 shadow-lg">
             <div className="text-[11px] font-bold tracking-widest uppercase text-[#94A3B8]">Circle board</div>
             <div className="mt-4 grid grid-cols-3 gap-3">
               {circles.map((c) => (
@@ -1390,7 +1390,7 @@ export default function ProductionReadinessPage() {
                   key={c.label}
                   type="button"
                   onClick={() => document.getElementById('tree')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-3 text-center hover:bg-white/10 transition"
+                  className="rounded-2xl border border-[#D4CBB8] bg-[#F0E9DB] p-3 text-center hover:bg-[#F0E9DB] transition"
                 >
                   <div className="grid place-items-center">
                     <Circle pct={c.pct} size={56} stroke={6} />
@@ -1426,7 +1426,7 @@ export default function ProductionReadinessPage() {
       </footer>
 
       {toast && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] rounded-full bg-[#0F172A] text-white px-4 py-2 text-[12px] font-semibold shadow-lg">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] rounded-full bg-[#0F172A] text-[#0A1931] px-4 py-2 text-[12px] font-semibold shadow-lg">
           {toast}
         </div>
       )}

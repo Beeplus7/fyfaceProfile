@@ -122,12 +122,12 @@ export default function ProjectDetailPage() {
   return (
     <div
       data-safe-area-inset-root
-      className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased overflow-x-clip"
+      className="min-h-screen bg-[#FFFDF7] text-[#0A1931] antialiased overflow-x-clip"
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
     >
       <header
         data-safe-area-sticky-top
-        className="sticky z-50 border-b border-[var(--border)] bg-[rgba(5,5,5,0.92)] backdrop-blur-xl"
+        className="sticky z-50 border-b border-[#D4CBB8] bg-[#FFFDF7]/90 backdrop-blur-xl"
         style={{ top: 'var(--safe-area-inset-top)' }}
       >
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8 h-[64px] flex items-center justify-between">
@@ -137,7 +137,7 @@ export default function ProjectDetailPage() {
             </div>
             <div className="flex items-center gap-2">
               <span className="font-[Poppins] font-extrabold text-[17px] tracking-tight">My Face Profile</span>
-              <span className="hidden md:inline-flex ml-2 mono text-[10px] tracking-[0.18em] uppercase px-2 py-1 rounded-full bg-[#111] border border-[#232323] text-[#8FFF4A]">No.6 of 24</span>
+              <span className="hidden md:inline-flex ml-2 mono text-[10px] tracking-[0.18em] uppercase px-2 py-1 rounded-full bg-[#F0E9DB] border border-[#232323] text-[#8FFF4A]">No.6 of 24</span>
             </div>
           </div>
 
@@ -150,7 +150,7 @@ export default function ProjectDetailPage() {
               { l: "Projects", active: true },
               { l: "Pricing", active: false },
             ].map(i => (
-              <a key={i.l} href={`#${i.l.toLowerCase().replace(/\s/g,'')}`} className={`text-[13.5px] tracking-tight transition ${i.active ? 'text-white font-semibold border-b border-white pb-0.5' : 'text-[#8A8A82] hover:text-white'}`}>
+              <a key={i.l} href={`#${i.l.toLowerCase().replace(/\s/g,'')}`} className={`text-[13.5px] tracking-tight transition ${i.active ? 'text-[#0A1931] font-semibold border-b border-white pb-0.5' : 'text-[#8A8A82] hover:text-[#0A1931]'}`}>
                 {i.l}
               </a>
             ))}
@@ -162,9 +162,9 @@ export default function ProjectDetailPage() {
 
         <div className="border-t border-[#151515] bg-[#080808]">
           <div className="mx-auto max-w-[1280px] px-5 lg:px-8 h-[40px] flex items-center gap-2 mono text-[11px] text-[#6A6A60]">
-            <a href="#" className="hover:text-white">Projects</a>
+            <a href="#" className="hover:text-[#0A1931]">Projects</a>
             <span className="text-[#333]">›</span>
-            <a href="#" className="hover:text-white">Kitchen Renovation</a>
+            <a href="#" className="hover:text-[#0A1931]">Kitchen Renovation</a>
             <span className="text-[#333]">›</span>
             <span className="text-[#D0D0C8]">12 Thornbury Rd</span>
             <span className="ml-auto hidden md:flex items-center gap-2 text-[10px]">
@@ -199,22 +199,22 @@ export default function ProjectDetailPage() {
               </div>
               <div className="rounded-[16px] bg-[#101010] border border-[#232323] px-4 py-3">
                 <div className="mono text-[10px] text-[#7A7A72] tracking-[0.18em] uppercase">Location • Duration • Cost</div>
-                <div className="text-[13px] font-medium mt-1">12 Thornbury Rd, London SW11 3PT • 14 days • <span className="text-white font-bold">£8,400</span></div>
+                <div className="text-[13px] font-medium mt-1">12 Thornbury Rd, London SW11 3PT • 14 days • <span className="text-[#0A1931] font-bold">£8,400</span></div>
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="rounded-[18px] bg-[#111] border border-[#222] p-3">
+              <div className="rounded-[18px] bg-[#F0E9DB] border border-[#222] p-3">
                 <div className="mono text-[10px] text-[#777] uppercase tracking-[0.18em]">TrustScore</div>
                 <div className="font-bold text-[18px] mt-1">98.4<span className="text-[#8FFF4A]">•</span></div>
                 <div className="text-[11px] text-[#9A9A8E]">Completion 98% • On-Time 89%</div>
               </div>
-              <div className="rounded-[18px] bg-[#111] border border-[#222] p-3">
+              <div className="rounded-[18px] bg-[#F0E9DB] border border-[#222] p-3">
                 <div className="mono text-[10px] text-[#777] uppercase tracking-[0.18em]">Status</div>
                 <div className="font-bold text-[15px] mt-1 text-[#8FFF4A]">Completed ✓</div>
                 <div className="text-[11px] text-[#9A9A8E]">Client Approval 5★</div>
               </div>
-              <div className="rounded-[18px] bg-[#111] border border-[#222] p-3 col-span-2">
+              <div className="rounded-[18px] bg-[#F0E9DB] border border-[#222] p-3 col-span-2">
                 <div className="mono text-[10px] text-[#777] uppercase tracking-[0.18em]">Team • Architect + Builder + Electrician + Plumber</div>
                 <div className="flex -space-x-2 mt-2">
                   <div className="h-8 w-8 rounded-full border-2 border-[#111] bg-cover bg-center" style={{ backgroundImage: `url(${tailorImg})` }} />
@@ -245,7 +245,7 @@ export default function ProjectDetailPage() {
               className="relative rounded-[24px] overflow-hidden border border-[#252525] bg-[#0E0E0E] aspect-[4/3] select-none touch-none cursor-ew-resize group"
             >
               <img src={kitchenBeforeImg} alt="Kitchen Before - 1990s floral wallpaper peeling" className="absolute inset-0 h-full w-full object-cover" />
-              <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur mono text-[10px] tracking-[0.18em] uppercase text-white border border-white/10">Before • 1990s • Peeling</div>
+              <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur mono text-[10px] tracking-[0.18em] uppercase text-[#0A1931] border border-[#D4CBB8]">Before • 1990s • Peeling</div>
 
               <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
                 <img src={kitchenAfterImg} alt="Kitchen After - modern white kitchen with black hood and marble countertop" className="absolute inset-0 h-full w-full object-cover" style={{ width: `${100 * (100 / pos)}%`, maxWidth: 'none' }} />
@@ -257,7 +257,7 @@ export default function ProjectDetailPage() {
               </div>
 
               <div className="absolute bottom-0 inset-x-0 h-[64px] bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
-              <div className="absolute bottom-3 left-3 right-3 flex justify-between mono text-[10px] text-white/70">
+              <div className="absolute bottom-3 left-3 right-3 flex justify-between mono text-[10px] text-[#5B6470]">
                 <span>DRAG TO REVEAL →</span><span>{pos.toFixed(0)}% AFTER</span>
               </div>
             </div>
@@ -265,11 +265,11 @@ export default function ProjectDetailPage() {
             <div className="mt-3 grid grid-cols-3 gap-3">
               <div className="rounded-[16px] overflow-hidden border border-[#222] aspect-[4/3] relative bg-cover bg-center" style={{ backgroundImage: `url(${kitchenAfterImg})` }}>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-2 left-2 mono text-[9px] text-white">FINAL REVEAL</div>
+                <div className="absolute bottom-2 left-2 mono text-[9px] text-[#0A1931]">FINAL REVEAL</div>
               </div>
               <div className="rounded-[16px] overflow-hidden border border-[#222] aspect-[4/3] relative bg-cover bg-center" style={{ backgroundImage: `url(${blueprintImg})` }}>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute bottom-2 left-2 mono text-[9px] text-white">BLUEPRINT</div>
+                <div className="absolute bottom-2 left-2 mono text-[9px] text-[#0A1931]">BLUEPRINT</div>
               </div>
               <div className="rounded-[16px] overflow-hidden border border-[#222] aspect-[4/3] relative bg-cover bg-center" style={{ backgroundImage: `url(${reviewImg})` }}>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -296,7 +296,7 @@ export default function ProjectDetailPage() {
                   {idx === 3 && <div className="divine-glow rounded-[24px]" />}
                   
                   <div className="lg:w-[260px] shrink-0">
-                    <div className="relative rounded-[18px] overflow-hidden border border-[#232323] aspect-[4/3] bg-[#111]">
+                    <div className="relative rounded-[18px] overflow-hidden border border-[#232323] aspect-[4/3] bg-[#F0E9DB]">
                       {m.isPrimaryImg ? (
                         <img src={buildersImg} alt="Builders laying bricks in progress" className="h-full w-full object-cover" />
                       ) : (
@@ -306,7 +306,7 @@ export default function ProjectDetailPage() {
                         <img src={weddingDressImg} alt="Wedding dress inspiration for finishing detail" className="absolute bottom-2 right-2 h-[58%] w-[42%] rounded-[12px] border-2 border-white/80 object-cover shadow-xl" />
                       )}
                       <div className="absolute top-2 left-2 flex gap-1.5">
-                        <span className="px-2 py-1 rounded-full bg-black/75 backdrop-blur mono text-[9px] text-white border border-white/10">{m.status}</span>
+                        <span className="px-2 py-1 rounded-full bg-black/75 backdrop-blur mono text-[9px] text-[#0A1931] border border-[#D4CBB8]">{m.status}</span>
                         {m.video && <span className="px-2 py-1 rounded-full bg-[#FFE600] text-black mono text-[9px] font-bold">VIDEO</span>}
                       </div>
                     </div>
@@ -333,7 +333,7 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {idx === 3 && (
-                      <div className="mt-4 rounded-[14px] bg-[#0A0A0A] border border-[#FFE600]/20 p-3 flex gap-3">
+                      <div className="mt-4 rounded-[14px] bg-[#F0E9DB] border border-[#FFE600]/20 p-3 flex gap-3">
                         <div className="h-10 w-10 rounded-[10px] gradient-m grid place-items-center text-black font-bold">✦</div>
                         <div className="text-[12px] leading-[1.5]">
                           <span className="font-bold text-[#FFE600]">Touch of GOD:</span> <span className="text-[#CFCFC2]">Warm divine glow behind final reveal — craft as worship. Marble reflects light like an altar. Every seam prayed over.</span>
@@ -368,14 +368,14 @@ export default function ProjectDetailPage() {
               ))}
             </div>
             <div className="mt-4 rounded-[14px] bg-[#101010] border border-[#242424] p-3 flex justify-between mono text-[12px]">
-              <span className="text-[#9A9A8E]">EST TOTAL</span><span className="font-bold text-white">$2,480 / £2,480</span>
+              <span className="text-[#9A9A8E]">EST TOTAL</span><span className="font-bold text-[#0A1931]">$2,480 / £2,480</span>
             </div>
           </div>
 
           <div className="rounded-[24px] bg-[#0E0E0E] border border-[#232323] p-6">
             <h3 className="font-[Poppins] font-bold text-[18px] mb-5">Team — Oldham Builders</h3>
             <div className="space-y-4">
-              <div className="group rounded-[16px] bg-[#111] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
+              <div className="group rounded-[16px] bg-[#F0E9DB] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
                 <img src={tailorImg} alt="Sarah K Architect" className="h-12 w-12 rounded-[12px] object-cover" />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[13px]">Sarah K. — Architect • Lead Design</div>
@@ -384,7 +384,7 @@ export default function ProjectDetailPage() {
                 <div className="h-7 w-7 rounded-full bg-[#1A1A1A] border border-[#2A2A2A] grid place-items-center text-[10px] group-hover:bg-white group-hover:text-black transition">↗</div>
               </div>
 
-              <div className="group rounded-[16px] bg-[#111] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
+              <div className="group rounded-[16px] bg-[#F0E9DB] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
                 <div className="h-12 w-12 rounded-[12px] bg-cover bg-center border border-[#222]" style={{ backgroundImage: `url(${buildersImg})` }} />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[13px]">Marcus O. — Builder • Site Lead</div>
@@ -393,7 +393,7 @@ export default function ProjectDetailPage() {
                 <div className="h-7 w-7 rounded-full bg-[#1A1A1A] border border-[#2A2A2A] grid place-items-center text-[10px]">↗</div>
               </div>
 
-              <div className="group rounded-[16px] bg-[#111] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
+              <div className="group rounded-[16px] bg-[#F0E9DB] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
                 <img src={mechanicImg} alt="David L Electrician" className="h-12 w-12 rounded-[12px] object-cover" />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[13px]">David L. — Electrician • Certified</div>
@@ -402,7 +402,7 @@ export default function ProjectDetailPage() {
                 <div className="h-7 w-7 rounded-full bg-[#1A1A1A] border border-[#2A2A2A] grid place-items-center text-[10px]">↗</div>
               </div>
 
-              <div className="group rounded-[16px] bg-[#111] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
+              <div className="group rounded-[16px] bg-[#F0E9DB] border border-[#222] p-3 flex items-center gap-3 hover:border-[#333] cursor-pointer transition">
                 <img src={barberImg} alt="Jamal R Plumber" className="h-12 w-12 rounded-[12px] object-cover" />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[13px]">Jamal R. — Plumber • Finishing</div>
@@ -414,7 +414,7 @@ export default function ProjectDetailPage() {
             <div className="mt-5 rounded-[14px] gradient-m p-[1px]">
               <div className="rounded-[13px] bg-[#0E0E0E] p-3 flex items-center gap-2">
                 <img src={logoFull} alt="My Face Profile full brand logo" className="h-8 w-auto rounded-[6px]" />
-                <div className="mono text-[10px] leading-tight text-[#9A9A8E]">Profiles verified via UPRM • Face + Work OS linked • <span className="text-white font-bold">4.8★ avg</span></div>
+                <div className="mono text-[10px] leading-tight text-[#9A9A8E]">Profiles verified via UPRM • Face + Work OS linked • <span className="text-[#0A1931] font-bold">4.8★ avg</span></div>
               </div>
             </div>
           </div>
@@ -431,7 +431,7 @@ export default function ProjectDetailPage() {
                 { label: "Escrow Fee", pct: 10, color: "#FF8A00" },
               ].map(c => (
                 <div key={c.label}>
-                  <div className="flex justify-between mono text-[11px] mb-1"><span className="text-[#9A9A8E]">{c.label}</span><span className="text-white font-bold">{c.pct}%</span></div>
+                  <div className="flex justify-between mono text-[11px] mb-1"><span className="text-[#9A9A8E]">{c.label}</span><span className="text-[#0A1931] font-bold">{c.pct}%</span></div>
                   <div className="h-2 rounded-full bg-[#1A1A1A] overflow-hidden">
                     <div className="h-full rounded-full transition-all" style={{ width: `${c.pct}%`, background: c.color }} />
                   </div>
@@ -439,7 +439,7 @@ export default function ProjectDetailPage() {
               ))}
             </div>
 
-            <div className="mt-6 rounded-[18px] bg-[#111] border border-[#262626] p-4">
+            <div className="mt-6 rounded-[18px] bg-[#F0E9DB] border border-[#262626] p-4">
               <div className="flex items-center gap-3">
                 <div className="h-14 w-14 rounded-[12px] bg-cover bg-center border border-[#333]" style={{ backgroundImage: `url(${escrowImg})` }} />
                 <div>
@@ -449,7 +449,7 @@ export default function ProjectDetailPage() {
                 </div>
               </div>
               <div className="mt-3 grid grid-cols-2 gap-2 mono text-[11px]">
-                <div className="rounded-[10px] bg-[#0E0E0E] border border-[#222] p-2"><span className="text-[#666]">Total Project</span><br/><span className="text-white font-bold text-[14px]">£8,400</span></div>
+                <div className="rounded-[10px] bg-[#0E0E0E] border border-[#222] p-2"><span className="text-[#666]">Total Project</span><br/><span className="text-[#0A1931] font-bold text-[14px]">£8,400</span></div>
                 <div className="rounded-[10px] bg-[#0E0E0E] border border-[#222] p-2"><span className="text-[#666]">Held Now</span><br/><span className="text-[#8FFF4A] font-bold text-[14px]">£80</span></div>
               </div>
             </div>
@@ -473,7 +473,7 @@ export default function ProjectDetailPage() {
           <div className="grid md:grid-cols-3 gap-5">
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#232323] overflow-hidden group hover:border-[#333] transition">
               <div className="relative h-[220px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${kitchenAfterImg})` }}>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">8 units • Soft Close</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">8 units • Soft Close</div>
                 <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#8FFF4A] text-black mono text-[10px] font-bold">SHOP NOW</div>
               </div>
               <div className="p-4 flex items-center justify-between">
@@ -486,7 +486,7 @@ export default function ProjectDetailPage() {
             </div>
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#232323] overflow-hidden group hover:border-[#333] transition">
               <div className="relative h-[220px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${blueprintImg})` }}>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">3.2m • Calacatta</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">3.2m • Calacatta</div>
                 <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#8FFF4A] text-black mono text-[10px] font-bold">SHOP NOW</div>
               </div>
               <div className="p-4 flex items-center justify-between">
@@ -499,7 +499,7 @@ export default function ProjectDetailPage() {
             </div>
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#232323] overflow-hidden group hover:border-[#333] transition">
               <div className="relative h-[220px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${buildersImg})` }}>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">Matte • 720m³/h</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">Matte • 720m³/h</div>
                 <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-[#8FFF4A] text-black mono text-[10px] font-bold">SHOP NOW</div>
               </div>
               <div className="p-4 flex items-center justify-between">
@@ -513,7 +513,7 @@ export default function ProjectDetailPage() {
           </div>
 
           <div className="mt-6 rounded-[24px] gradient-m p-[1px]">
-            <div className="rounded-[23px] bg-[#0A0A0A] p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="rounded-[23px] bg-[#F0E9DB] p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
               <div className="flex items-center gap-4">
                 <div className="h-14 w-14 rounded-[16px] bg-cover bg-center border border-[#222]" style={{ backgroundImage: `url(${buildersImg})` }} />
                 <div>
@@ -539,12 +539,12 @@ export default function ProjectDetailPage() {
               </div>
 
               <div className="grid md:grid-cols-[200px_1fr] gap-6 items-start">
-                <div className="rounded-[18px] overflow-hidden border border-[#232323] bg-[#111] aspect-[4/5] relative">
+                <div className="rounded-[18px] overflow-hidden border border-[#232323] bg-[#F0E9DB] aspect-[4/5] relative">
                   <img src={reviewImg} alt="Client holding custom wallet with phone showing 5 star verified review" className="h-full w-full object-cover" />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black to-transparent h-[50%]" />
                   <div className="absolute bottom-3 left-3 right-3">
-                    <div className="mono text-[9px] text-white/70">REVIEW CUSTOM WALLET 181559 ADAPTED</div>
-                    <div className="text-[12px] font-bold text-white mt-1">Verified Buyer • Phone Review</div>
+                    <div className="mono text-[9px] text-[#5B6470]">REVIEW CUSTOM WALLET 181559 ADAPTED</div>
+                    <div className="text-[12px] font-bold text-[#0A1931] mt-1">Verified Buyer • Phone Review</div>
                   </div>
                 </div>
                 <div>
@@ -610,7 +610,7 @@ export default function ProjectDetailPage() {
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#222] overflow-hidden hover:border-[#333] transition group">
               <div className="relative h-[200px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${tailorImg})` }}>
                 <div className="absolute bottom-2 right-2 h-[60%] w-[38%] rounded-[12px] border-2 border-white/70 bg-cover bg-center shadow-lg" style={{ backgroundImage: `url(${weddingDressImg})` }} />
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">OLDHAM NETWORK</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">OLDHAM NETWORK</div>
               </div>
               <div className="p-4">
                 <div className="font-semibold text-[14px]">Wedding Dress Atelier</div>
@@ -620,7 +620,7 @@ export default function ProjectDetailPage() {
             </div>
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#222] overflow-hidden hover:border-[#333] transition group">
               <div className="relative h-[200px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${mechanicImg})` }}>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">OLDHAM NETWORK</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">OLDHAM NETWORK</div>
               </div>
               <div className="p-4">
                 <div className="font-semibold text-[14px]">Mechanic Diagnostics</div>
@@ -630,7 +630,7 @@ export default function ProjectDetailPage() {
             </div>
             <div className="rounded-[24px] bg-[#0E0E0E] border border-[#222] overflow-hidden hover:border-[#333] transition group">
               <div className="relative h-[200px] overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${barberImg})` }}>
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-white border border-white/10">OLDHAM NETWORK</div>
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">OLDHAM NETWORK</div>
               </div>
               <div className="p-4">
                 <div className="font-semibold text-[14px]">Fade & Craft — Barber</div>
@@ -640,7 +640,7 @@ export default function ProjectDetailPage() {
             </div>
           </div>
 
-          <div className="mt-8 rounded-[20px] bg-[#0A0A0A] border border-[#1E1E1E] p-5 mono text-[11px] leading-[1.7] text-[#6A6A60]">
+          <div className="mt-8 rounded-[20px] bg-[#F0E9DB] border border-[#1E1E1E] p-5 mono text-[11px] leading-[1.7] text-[#6A6A60]">
             <span className="text-[#D0D0C8] font-bold">SEO goldmine:</span> Kitchen Renovation London SW11, Oldham Builders review, 3-Bed House Renovation 12 Thornbury Rd, White Shaker Cabinets install, Marble Countertop cost UK, Black Hood extraction, Escrow builder London, My Face Profile verified projects. Project Detail [ID] pattern for apps/marketing/app/projects/[id]/page.tsx — Touch of GOD.
           </div>
         </section>
@@ -672,9 +672,9 @@ export default function ProjectDetailPage() {
                 <div className="rounded-[24px] overflow-hidden border border-[#232323] bg-[#0E0E0E] aspect-[4/3] relative bg-cover bg-center" style={{ backgroundImage: `url(${kitchenAfterImg})` }}>
                   <div className="divine-glow" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 rounded-[14px] bg-black/70 backdrop-blur border border-white/10 p-3 flex items-center gap-3">
+                  <div className="absolute bottom-4 left-4 right-4 rounded-[14px] bg-black/70 backdrop-blur border border-[#D4CBB8] p-3 flex items-center gap-3">
                     <div className="h-8 w-8 rounded-[10px] bg-cover bg-center" style={{ backgroundImage: `url(${logoIcon})` }} />
-                    <div className="mono text-[11px] leading-tight"><span className="text-white font-bold">My Face Profile</span><br/><span className="text-[#8FFF4A]">Verified • Escrow • Touch of GOD</span></div>
+                    <div className="mono text-[11px] leading-tight"><span className="text-[#0A1931] font-bold">My Face Profile</span><br/><span className="text-[#8FFF4A]">Verified • Escrow • Touch of GOD</span></div>
                   </div>
                 </div>
               </div>
@@ -684,7 +684,7 @@ export default function ProjectDetailPage() {
 
         <footer className="mt-16 border-t border-[#141414] pt-8 flex flex-wrap justify-between gap-4 mono text-[11px] text-[#5A5A52]">
           <div>© 2026 My Face Profile • Project Detail [ID] • Production Marketing Page • Black #050505 • Gradient M #8FFF4A→#00E5C0→#FFE600→#FF8A00 • Poppins Bold 700/800 • Inter • JetBrains Mono</div>
-          <div className="flex gap-4"><a href="#" className="hover:text-white">Privacy</a><a href="#" className="hover:text-white">Escrow Terms</a><a href="#" className="hover:text-white">UPRM</a></div>
+          <div className="flex gap-4"><a href="#" className="hover:text-[#0A1931]">Privacy</a><a href="#" className="hover:text-[#0A1931]">Escrow Terms</a><a href="#" className="hover:text-[#0A1931]">UPRM</a></div>
         </footer>
       </main>
     </div>

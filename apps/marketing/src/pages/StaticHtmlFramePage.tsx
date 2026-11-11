@@ -36,7 +36,7 @@ export default function StaticHtmlFramePage({
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="rounded-full glass px-4 py-2 text-xs font-semibold text-white/90"
+          className="rounded-full glass px-4 py-2 text-xs font-semibold text-[#0A1931]"
         >
           ← Back
         </button>

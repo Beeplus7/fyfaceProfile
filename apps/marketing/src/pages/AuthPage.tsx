@@ -61,12 +61,12 @@ export default function AuthPage() {
       className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] px-4 py-16 flex items-center justify-center"
       style={{ paddingTop: 'max(4rem, var(--safe-area-inset-top))' }}
     >
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 space-y-4">
+      <div className="w-full max-w-md rounded-2xl border border-[#D4CBB8] bg-[#F0E9DB] p-6 sm:p-8 space-y-4">
         <div className="text-[12px] font-bold tracking-[0.18em] uppercase text-[#8FFF4A]">MyFace</div>
         <h1 className="text-3xl font-extrabold tracking-tight">
           {mode === 'signin' ? 'Sign in' : 'Create account'}
         </h1>
-        <p className="text-sm text-white/55">
+        <p className="text-sm text-[#5B6470]">
           {isSupabaseConfigured
             ? 'Email/password + Google via Supabase'
             : 'Add VITE_SUPABASE_* to apps/marketing/.env'}
@@ -74,7 +74,7 @@ export default function AuthPage() {
 
         <form className="space-y-3" onSubmit={onSubmit}>
           <input
-            className="w-full min-h-12 rounded-xl border border-white/12 bg-black/40 px-3 text-white"
+            className="w-full min-h-12 rounded-xl border border-[#D4CBB8] bg-black/40 px-3 text-[#0A1931]"
             type="email"
             required
             placeholder="Email"
@@ -82,7 +82,7 @@ export default function AuthPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            className="w-full min-h-12 rounded-xl border border-white/12 bg-black/40 px-3 text-white"
+            className="w-full min-h-12 rounded-xl border border-[#D4CBB8] bg-black/40 px-3 text-[#0A1931]"
             type="password"
             required
             minLength={6}
@@ -105,7 +105,7 @@ export default function AuthPage() {
           type="button"
           disabled={busy || !isSupabaseConfigured}
           onClick={() => void onGoogle()}
-          className="w-full min-h-12 rounded-xl border border-white/15 font-bold disabled:opacity-60"
+          className="w-full min-h-12 rounded-xl border border-[#D4CBB8] font-bold disabled:opacity-60"
         >
           Continue with Google
         </button>
@@ -118,7 +118,7 @@ export default function AuthPage() {
           {mode === 'signin' ? 'Need an account? Sign up' : 'Have an account? Sign in'}
         </button>
 
-        <Link to="/" className="block text-center text-sm text-white/50">
+        <Link to="/" className="block text-center text-sm text-[#5B6470]">
           ← Back home
         </Link>
       </div>

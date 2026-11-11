@@ -51,13 +51,13 @@
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Marketing routes — exact Africa Pay You Live cream surface */
+/* Marketing routes — Africa Pay cream surface + dim cards (match Home) */
 .marketing-surface {
   --bg: var(--mkt-surface);
   --bg-2: var(--mkt-surface-2);
   --bg-3: var(--mkt-surface-3);
-  --surface: #ffffff;
-  --surface-2: var(--mkt-surface-2);
+  --surface: var(--mkt-card);
+  --surface-2: var(--mkt-card-2);
   --border: var(--mkt-line);
   --text: var(--mkt-ink);
   --text-dim: var(--mkt-muted);
@@ -66,15 +66,17 @@
 }
 
 .marketing-surface .glass {
-  background: var(--mkt-card);
-  border: 1px solid var(--mkt-line);
+  background: var(--mkt-card) !important;
+  border: 1px solid var(--mkt-line) !important;
   box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
+  color: var(--mkt-ink);
 }
 
 .marketing-surface .glass-strong {
-  background: var(--mkt-card-2);
-  border: 1px solid var(--mkt-line);
+  background: var(--mkt-card-2) !important;
+  border: 1px solid var(--mkt-line) !important;
   box-shadow: 0 16px 40px rgba(10, 25, 49, 0.12);
+  color: var(--mkt-ink);
 }
 
 .mkt-chip {
@@ -94,39 +96,56 @@
   box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
 }
 
-/* Pure white panels → dim sand so they separate from page cream */
+/* Pure white / near-white panels → dim sand */
 .marketing-surface .bg-white,
 .marketing-surface .\bg-white\/90,
-.marketing-surface .\bg-white\/95 {
+.marketing-surface .\bg-white\/95,
+.marketing-surface .\bg-white\/80 {
   background-color: var(--mkt-card) !important;
 }
 
-/* Near-white card fills that used to disappear on cream */
-.marketing-surface .\bg-\[\#FFFDF3\] {
+.marketing-surface .\bg-\[\#FFFDF3\],
+.marketing-surface .\bg-\[\#FFFEFB\],
+.marketing-surface .\bg-\[\#FDFCF8\] {
   background-color: var(--mkt-card-2) !important;
 }
 
-/* Flip legacy dark marketing shells to cream without rewriting every page */
+/* Legacy dark shells → page cream (not card sand) */
 .marketing-surface .\bg-\[\#050505\],
 .marketing-surface .\bg-\[\#080808\],
 .marketing-surface .\bg-\[\#0a0a0a\],
 .marketing-surface .\bg-\[\#0A0A0A\],
 .marketing-surface .\bg-\[\#0e0e0e\],
 .marketing-surface .\bg-\[\#0f0f0f\],
-.marketing-surface .\bg-\[\#141414\] {
+.marketing-surface .\bg-\[\#111111\],
+.marketing-surface .\bg-\[\#121212\],
+.marketing-surface .\bg-\[\#141414\],
+.marketing-surface .\bg-\[\#1E1E1E\] {
   background-color: var(--mkt-surface) !important;
 }
 
+.marketing-surface .\bg-\[\#050505\]\/70,
 .marketing-surface .\bg-\[\#050505\]\/80,
-.marketing-surface .\bg-\[\#050505\]\/85 {
+.marketing-surface .\bg-\[\#050505\]\/85,
+.marketing-surface .\bg-\[\#050505\]\/90 {
   background-color: rgba(255, 253, 247, 0.92) !important;
 }
 
 .marketing-surface .\bg-black\/40,
+.marketing-surface .\bg-black\/50,
 .marketing-surface .\bg-black\/60,
 .marketing-surface .\bg-black\/70,
 .marketing-surface .\bg-black\/80 {
-  background-color: rgba(255, 253, 247, 0.82) !important;
+  background-color: var(--mkt-card) !important;
+  color: var(--mkt-ink);
+}
+
+/* Sticky dark glass headers → cream */
+.marketing-surface [class*='bg-[rgba(5,5,5'],
+.marketing-surface [class*='bg-[rgba(10,10,10'],
+.marketing-surface [class*='bg-[rgba(0,0,0'] {
+  background-color: rgba(255, 253, 247, 0.92) !important;
+  border-color: var(--mkt-line) !important;
   color: var(--mkt-ink);
 }
 
@@ -134,34 +153,84 @@
   color: var(--mkt-ink) !important;
 }
 
+.marketing-surface .\text-white\/90,
 .marketing-surface .\text-white\/80,
 .marketing-surface .\text-white\/70,
 .marketing-surface .\text-white\/60,
 .marketing-surface .\text-white\/55,
 .marketing-surface .\text-white\/50,
+.marketing-surface .\text-white\/45,
 .marketing-surface .\text-white\/40,
-.marketing-surface .\text-white\/30 {
+.marketing-surface .\text-white\/35,
+.marketing-surface .\text-white\/30,
+.marketing-surface .\text-white\/20 {
   color: var(--mkt-muted) !important;
 }
 
+/* Keep white type on intentional dark / vivid chips */
+.marketing-surface .\bg-\[\#0A1931\] .\text-white,
+.marketing-surface .\bg-\[\#0A1931\] .\text-white\/90,
+.marketing-surface .\bg-\[\#FF3B30\] .\text-white,
+.marketing-surface .\bg-\[\#FF2D55\] .\text-white,
+.marketing-surface .\bg-\[\#FF3B30\] .\text-white\/90,
+.marketing-surface .\bg-\[\#FF2D55\] .\text-white\/90,
+.marketing-surface .\bg-black .\text-white {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.marketing-surface .\border-white\/5,
 .marketing-surface .\border-white\/10,
 .marketing-surface .\border-white\/12,
 .marketing-surface .\border-white\/15,
+.marketing-surface .\border-white\/20,
+.marketing-surface .\border-white\/\[0\.05\],
 .marketing-surface .\border-white\/\[0\.06\],
 .marketing-surface .\border-white\/\[0\.07\],
-.marketing-surface .\border-white\/\[0\.08\] {
+.marketing-surface .\border-white\/\[0\.08\],
+.marketing-surface .\border-white\/\[0\.1\] {
   border-color: var(--mkt-line) !important;
 }
 
 .marketing-surface .\bg-white\/\[0\.03\],
 .marketing-surface .\bg-white\/\[0\.04\],
+.marketing-surface .\bg-white\/\[0\.05\],
 .marketing-surface .\bg-white\/\[0\.06\],
-.marketing-surface .\bg-white\/\[0\.10\] {
-  background-color: rgba(10, 25, 49, 0.04) !important;
+.marketing-surface .\bg-white\/\[0\.08\],
+.marketing-surface .\bg-white\/\[0\.10\],
+.marketing-surface .\bg-white\/5,
+.marketing-surface .\bg-white\/10 {
+  background-color: var(--mkt-card) !important;
+}
+
+.marketing-surface .\hover\:bg-white\/\[0\.06\]:hover,
+.marketing-surface .\hover\:bg-white\/\[0\.10\]:hover,
+.marketing-surface .\hover\:bg-white\/5:hover,
+.marketing-surface .\hover\:bg-white\/10:hover {
+  background-color: var(--mkt-card-2) !important;
 }
 
 .marketing-surface .\hover\:text-white:hover {
   color: var(--mkt-navy) !important;
+}
+
+.marketing-surface .\divide-white\/10 > :not([hidden]) ~ :not([hidden]),
+.marketing-surface .\border-t,
+.marketing-surface .\border-b,
+.marketing-surface .\border-y {
+  border-color: var(--mkt-line);
+}
+
+/* Soft section bands under cream pages */
+.marketing-surface section[class*='border-t'],
+.marketing-surface footer {
+  border-color: var(--mkt-line);
+}
+
+.marketing-surface .selection\:bg-\[\#8FFF4A\]\/30::selection,
+.marketing-surface ::selection {
+  background: rgba(255, 195, 0, 0.35);
+  color: var(--mkt-navy);
 }
 
 * {

@@ -147,7 +147,7 @@ export default function HowItWorksPage() {
   return (
     <div
       data-safe-area-inset-root
-      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#8FFF4A]/30"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#FFC300]/35"
       style={{ boxSizing: "border-box", paddingTop: "var(--safe-area-inset-top)" }}
     >
       {/* GRID + VIGNETTE */}
@@ -160,7 +160,7 @@ export default function HowItWorksPage() {
       {/* NAV */}
       <header
         data-safe-area-sticky-top
-        className="sticky z-50 border-b border-white/[0.07] backdrop-blur-[22px] bg-[#FFFDF7]/90"
+        className="sticky z-50 border-b border-[#D4CBB8] backdrop-blur-[22px] bg-[#FFFDF7]/90"
         style={{ top: "var(--safe-area-inset-top)" }}
       >
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 h-[64px] flex items-center justify-between">
@@ -171,7 +171,7 @@ export default function HowItWorksPage() {
               </div>
               <div className="hidden sm:flex items-center gap-2">
                 <img src={logoWord} alt="My Face Profile" className="h-[22px] w-auto object-contain invert brightness-[10]" />
-                <span className="font-mono text-[10px] tracking-[0.2em] text-white/30 ml-2 mt-1">No.2 / 24</span>
+                <span className="font-mono text-[10px] tracking-[0.2em] text-[#5B6470] ml-2 mt-1">No.2 / 24</span>
               </div>
             </div>
             <nav className="hidden lg:flex items-center gap-1 text-[13px]">
@@ -185,7 +185,7 @@ export default function HowItWorksPage() {
                 <a
                   key={item.l}
                   href={item.href}
-                  className={`px-4 py-2 rounded-full transition ${item.active ? "bg-white text-black font-[600]" : "text-white/60 hover:text-white hover:bg-white/[0.06]"}`}
+                  className={`px-4 py-2 rounded-full transition ${item.active ? "bg-white text-black font-[600]" : "text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB]"}`}
                 >
                   {item.l}
                 </a>
@@ -201,7 +201,7 @@ export default function HowItWorksPage() {
             >
               Join as Pro →
             </a>
-            <button onClick={() => setMobileMenu(!mobileMenu)} className="lg:hidden w-9 h-9 rounded-full bg-white/[0.08] grid place-items-center">
+            <button onClick={() => setMobileMenu(!mobileMenu)} className="lg:hidden w-9 h-9 rounded-full bg-[#F0E9DB] grid place-items-center">
               <div className="w-4 h-[10px] flex flex-col justify-between">
                 <span className="h-[1.5px] bg-white w-full" />
                 <span className="h-[1.5px] bg-white w-full" />
@@ -211,9 +211,9 @@ export default function HowItWorksPage() {
           </div>
         </div>
         {mobileMenu && (
-          <div className="lg:hidden border-t border-white/10 px-5 py-4 flex flex-col gap-2 bg-[#0A0A0A]">
+          <div className="lg:hidden border-t border-[#D4CBB8] px-5 py-4 flex flex-col gap-2 bg-[#F0E9DB]">
             {["Home", "How It Works", "Work OS", "Projects", "Pricing"].map((l) => (
-              <a key={l} className="py-2 text-[15px] text-white/70" href="#">
+              <a key={l} className="py-2 text-[15px] text-[#5B6470]" href="#">
                 {l}
               </a>
             ))}
@@ -228,7 +228,7 @@ export default function HowItWorksPage() {
         {/* HERO MINI */}
         <section className="mx-auto max-w-[1280px] px-5 md:px-8 pt-16 md:pt-24 pb-10">
           <div className="max-w-[980px]">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.06] border border-white/[0.08] font-mono text-[10px] tracking-[0.18em] text-white/60 uppercase">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[10px] tracking-[0.18em] text-[#5B6470] uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
               How It Works • The Work Graph • No.2 of 24
             </div>
@@ -245,17 +245,17 @@ export default function HowItWorksPage() {
               Trust Is Commerce.
             </h1>
 
-            <p className="mt-6 text-[17px] md:text-[20px] leading-[1.4] text-white/55 max-w-[680px]">
+            <p className="mt-6 text-[17px] md:text-[20px] leading-[1.4] text-[#5B6470] max-w-[680px]">
               Not another marketplace. An OS where your real work becomes your storefront. No ads. No followers tax. Just{" "}
-              <span className="text-white font-medium">SHOW → CONNECT → GROW.</span>
+              <span className="text-[#0A1931] font-medium">SHOW → CONNECT → GROW.</span>
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 text-[13px] font-mono text-white/40">
+              <div className="flex items-center gap-2 text-[13px] font-mono text-[#5B6470]">
                 <span className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[11px] font-bold">1</span> Built for tailors, mechanics, builders, chefs
               </div>
-              <div className="h-6 w-px bg-white/10 hidden md:block" />
-              <div className="flex items-center gap-2 text-[13px] font-mono text-white/40">
+              <div className="h-6 w-px bg-[#F0E9DB] hidden md:block" />
+              <div className="flex items-center gap-2 text-[13px] font-mono text-[#5B6470]">
                 <span className="w-6 h-6 rounded-full bg-[#8FFF4A] text-black grid place-items-center text-[11px] font-bold">↗</span> Work Graph = 4.9 avg TrustScore
               </div>
             </div>
@@ -328,15 +328,15 @@ export default function HowItWorksPage() {
                   <div className="rounded-[19px] glass-strong p-4">
                     <div className="flex items-center justify-between">
                       <div className={`w-8 h-8 rounded-full grid place-items-center text-[13px] font-black text-black bg-gradient-to-br ${node.gradient}`}>{node.label[0]}</div>
-                      <span className="font-mono text-[10px] tracking-widest text-white/30">{LOOP_NODES.findIndex((n) => n.id === node.id) + 1 < 10 ? `0${LOOP_NODES.findIndex((n) => n.id === node.id) + 1}` : LOOP_NODES.findIndex((n) => n.id === node.id) + 1}</span>
+                      <span className="font-mono text-[10px] tracking-widest text-[#5B6470]">{LOOP_NODES.findIndex((n) => n.id === node.id) + 1 < 10 ? `0${LOOP_NODES.findIndex((n) => n.id === node.id) + 1}` : LOOP_NODES.findIndex((n) => n.id === node.id) + 1}</span>
                     </div>
                     <div className="mt-3">
                       <div className="font-[800] text-[15px] tracking-[-0.01em]">{node.label}</div>
-                      <div className="mt-1 font-mono text-[11px] leading-[1.3] text-white/55">{node.sub}</div>
+                      <div className="mt-1 font-mono text-[11px] leading-[1.3] text-[#5B6470]">{node.sub}</div>
                     </div>
                     <div className="mt-3 flex items-center gap-2">
                       <div className="h-[2px] flex-1 rounded-full" style={{ background: "var(--gradient-m)" }} />
-                      <span className="font-mono text-[10px] text-white/40">{node.metric}</span>
+                      <span className="font-mono text-[10px] text-[#5B6470]">{node.metric}</span>
                     </div>
                   </div>
                 </div>
@@ -351,26 +351,26 @@ export default function HowItWorksPage() {
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-full grid place-items-center font-black text-black bg-gradient-to-br ${activeData.gradient}`}>{activeData.label[0]}</div>
                     <div>
-                      <div className="text-[13px] font-mono tracking-widest text-white/40">NOW SHOWING</div>
+                      <div className="text-[13px] font-mono tracking-widest text-[#5B6470]">NOW SHOWING</div>
                       <div className="font-[800] text-[18px] -mt-1">{activeData.label} →</div>
                     </div>
                     <div className="ml-auto w-7 h-7 rounded-full bg-white text-black grid place-items-center text-[12px]">↗</div>
                   </div>
-                  <p className="mt-4 text-[14px] leading-[1.5] text-white/70">{activeData.desc}</p>
-                  <div className="mt-4 rounded-[14px] bg-white/[0.06] border border-white/[0.08] p-3 flex items-center gap-3">
+                  <p className="mt-4 text-[14px] leading-[1.5] text-[#5B6470]">{activeData.desc}</p>
+                  <div className="mt-4 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-[10px] bg-black grid place-items-center overflow-hidden">
                       <div className="w-full h-full" style={{ background: "var(--gradient-m)", opacity: 0.8 }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-mono text-[11px] text-white/50 truncate">{activeData.example}</div>
-                      <div className="mt-1 h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                      <div className="font-mono text-[11px] text-[#5B6470] truncate">{activeData.example}</div>
+                      <div className="mt-1 h-1.5 w-full rounded-full bg-[#F0E9DB] overflow-hidden">
                         <div className="h-full w-[72%] rounded-full" style={{ background: "var(--gradient-m)" }} />
                       </div>
                     </div>
                   </div>
                   <div className="mt-4 flex gap-2">
                     <span className="px-2.5 py-1 rounded-full bg-white text-black text-[11px] font-bold">LIVE</span>
-                    <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/10 text-[11px] font-mono text-white/60">{activeData.metric}</span>
+                    <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[11px] font-mono text-[#5B6470]">{activeData.metric}</span>
                   </div>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function HowItWorksPage() {
                   <div className="absolute left-[18px] top-6 w-[18px] h-[18px] rounded-full border-2 border-[#050505] bg-[#8FFF4A] grid place-items-center shadow-[0_0_0_6px_rgba(143,255,74,0.15)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-black" />
                   </div>
-                  {i !== LOOP_NODES.length - 1 && <div className="absolute left-[26px] top-[42px] w-px h-[calc(100%+24px)] bg-white/10" />}
+                  {i !== LOOP_NODES.length - 1 && <div className="absolute left-[26px] top-[42px] w-px h-[calc(100%+24px)] bg-[#F0E9DB]" />}
                   <button onClick={() => setActiveNode(node.id)} className="w-full text-left">
                     <div className={`rounded-[20px] p-[1px] ${activeNode === node.id ? "" : "opacity-90"}`} style={{ background: activeNode === node.id ? "var(--gradient-m)" : "rgba(255,255,255,0.1)" }}>
                       <div className="rounded-[19px] glass p-4">
@@ -396,16 +396,16 @@ export default function HowItWorksPage() {
                             <div className={`w-9 h-9 rounded-full grid place-items-center font-black text-black bg-gradient-to-br ${node.gradient}`}>{node.label[0]}</div>
                             <div>
                               <div className="font-bold text-[14px]">{node.label}</div>
-                              <div className="font-mono text-[11px] text-white/50">{node.sub}</div>
+                              <div className="font-mono text-[11px] text-[#5B6470]">{node.sub}</div>
                             </div>
                           </div>
-                          <span className="font-mono text-[11px] text-white/30">0{i + 1}</span>
+                          <span className="font-mono text-[11px] text-[#5B6470]">0{i + 1}</span>
                         </div>
                         {activeNode === node.id && (
-                          <div className="mt-3 pt-3 border-t border-white/10">
-                            <p className="text-[13px] leading-[1.5] text-white/70">{node.desc}</p>
-                            <div className="mt-3 rounded-xl bg-black/50 border border-white/10 p-3">
-                              <div className="font-mono text-[11px] text-white/60">{node.example}</div>
+                          <div className="mt-3 pt-3 border-t border-[#D4CBB8]">
+                            <p className="text-[13px] leading-[1.5] text-[#5B6470]">{node.desc}</p>
+                            <div className="mt-3 rounded-xl bg-black/50 border border-[#D4CBB8] p-3">
+                              <div className="font-mono text-[11px] text-[#5B6470]">{node.example}</div>
                             </div>
                           </div>
                         )}
@@ -433,7 +433,7 @@ export default function HowItWorksPage() {
                 <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#8FFF4A] flex-shrink-0" />
                 <div>
                   <div className="text-[13px] font-bold">{c.t}</div>
-                  <div className="text-[12px] text-white/50 leading-[1.4] mt-1">{c.d}</div>
+                  <div className="text-[12px] text-[#5B6470] leading-[1.4] mt-1">{c.d}</div>
                 </div>
               </div>
             ))}
@@ -441,14 +441,14 @@ export default function HowItWorksPage() {
         </section>
 
         {/* SECOND SECTION — 5 Steps */}
-        <section className="relative border-t border-white/[0.06] bg-[#080808]">
+        <section className="relative border-t border-[#D4CBB8] bg-[#080808]">
           <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-20 md:py-28">
             <div className="flex flex-wrap items-end justify-between gap-6 mb-14">
               <div>
-                <div className="font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase">Deep Dive • 5 Steps</div>
+                <div className="font-mono text-[11px] tracking-[0.2em] text-[#5B6470] uppercase">Deep Dive • 5 Steps</div>
                 <h2 className="mt-3 font-display text-[32px] md:text-[52px] leading-[0.95] tracking-[-0.02em]">Every step is software.<br />Every software is proof.</h2>
               </div>
-              <div className="font-mono text-[12px] text-white/40 max-w-[320px]">Scroll. Each card drops in like a Linear issue — built for makers, not marketers.</div>
+              <div className="font-mono text-[12px] text-[#5B6470] max-w-[320px]">Scroll. Each card drops in like a Linear issue — built for makers, not marketers.</div>
             </div>
 
             <div className="flex flex-col gap-20 md:gap-28">
@@ -469,34 +469,34 @@ export default function HowItWorksPage() {
                             <div className="absolute inset-0 p-6">
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                  <div className="w-8 h-8 rounded-full bg-white/10" />
-                                  <div className="h-3 w-24 rounded-full bg-white/10" />
+                                  <div className="w-8 h-8 rounded-full bg-[#F0E9DB]" />
+                                  <div className="h-3 w-24 rounded-full bg-[#F0E9DB]" />
                                 </div>
                                 <div className="px-2 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">LIVE • {row.visual}</div>
                               </div>
 
                               <div className="mt-8 grid grid-cols-12 gap-3 h-[260px]">
-                                <div className="col-span-8 rounded-[18px] bg-[#0A0A0A] border border-white/10 p-3">
+                                <div className="col-span-8 rounded-[18px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                                   <div className="flex items-center gap-2 mb-3">
                                     <div className="w-2 h-2 rounded-full bg-[#FF5F56]" />
                                     <div className="w-2 h-2 rounded-full bg-[#FFBD2E]" />
                                     <div className="w-2 h-2 rounded-full bg-[#27C93F]" />
-                                    <span className="ml-2 font-mono text-[10px] text-white/30">{row.k} • {row.title}.studio</span>
+                                    <span className="ml-2 font-mono text-[10px] text-[#5B6470]">{row.k} • {row.title}.studio</span>
                                   </div>
                                   {row.k === "01" && (
                                     <div className="space-y-3">
-                                      <div className="h-[140px] rounded-[14px] bg-gradient-to-br from-[#8FFF4A]/20 to-[#00E5C0]/20 border border-white/10 grid place-items-center">
+                                      <div className="h-[140px] rounded-[14px] bg-gradient-to-br from-[#8FFF4A]/20 to-[#00E5C0]/20 border border-[#D4CBB8] grid place-items-center">
                                         <div className="text-center">
                                           <div className="w-12 h-12 rounded-full mx-auto bg-white grid place-items-center text-black">▶</div>
-                                          <div className="mt-2 font-mono text-[11px] text-white/50">Aisha_sowing_07:42.mp4</div>
+                                          <div className="mt-2 font-mono text-[11px] text-[#5B6470]">Aisha_sowing_07:42.mp4</div>
                                         </div>
                                       </div>
                                       <div className="flex gap-2">
                                         {["Timeline", "Live", "WorkCut"].map((b) => (
-                                          <div key={b} className="px-3 py-1 rounded-full bg-white/10 text-[11px] font-mono">{b}</div>
+                                          <div key={b} className="px-3 py-1 rounded-full bg-[#F0E9DB] text-[11px] font-mono">{b}</div>
                                         ))}
                                       </div>
-                                      <div className="h-2 w-full rounded-full bg-white/10">
+                                      <div className="h-2 w-full rounded-full bg-[#F0E9DB]">
                                         <div className="h-full w-[68%] rounded-full" style={{ background: "var(--gradient-m)" }} />
                                       </div>
                                     </div>
@@ -504,13 +504,13 @@ export default function HowItWorksPage() {
                                   {row.k === "02" && (
                                     <div className="space-y-2">
                                       {[1, 2, 3].map((i) => (
-                                        <div key={i} className="flex gap-3 p-2 rounded-[12px] bg-white/[0.04] border border-white/[0.06]">
-                                          <div className="w-12 h-12 rounded-[10px] bg-white/10" />
+                                        <div key={i} className="flex gap-3 p-2 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8]">
+                                          <div className="w-12 h-12 rounded-[10px] bg-[#F0E9DB]" />
                                           <div className="flex-1">
                                             <div className="h-2 w-3/4 rounded-full bg-white/20" />
                                             <div className="mt-2 flex gap-2">
                                               <span className="px-2 py-0.5 rounded-full bg-[#8FFF4A]/20 text-[9px] font-mono text-[#8FFF4A]">0.8mi</span>
-                                              <span className="px-2 py-0.5 rounded-full bg-white/10 text-[9px] font-mono">Trust 4.9</span>
+                                              <span className="px-2 py-0.5 rounded-full bg-[#F0E9DB] text-[9px] font-mono">Trust 4.9</span>
                                             </div>
                                           </div>
                                         </div>
@@ -521,17 +521,17 @@ export default function HowItWorksPage() {
                                     <div className="space-y-3">
                                       <div className="grid grid-cols-3 gap-2">
                                         {["Before", "Process", "After"].map((s) => (
-                                          <div key={s} className="rounded-[10px] bg-white/5 border border-white/10 p-2 text-center">
-                                            <div className="h-12 rounded-[8px] bg-white/10" />
-                                            <div className="mt-1 font-mono text-[9px] text-white/40">{s}</div>
+                                          <div key={s} className="rounded-[10px] bg-[#F0E9DB] border border-[#D4CBB8] p-2 text-center">
+                                            <div className="h-12 rounded-[8px] bg-[#F0E9DB]" />
+                                            <div className="mt-1 font-mono text-[9px] text-[#5B6470]">{s}</div>
                                           </div>
                                         ))}
                                       </div>
-                                      <div className="rounded-[10px] bg-white/5 p-2">
-                                        <div className="font-mono text-[10px] text-white/50">MILESTONES • 4/5 verified</div>
+                                      <div className="rounded-[10px] bg-[#F0E9DB] p-2">
+                                        <div className="font-mono text-[10px] text-[#5B6470]">MILESTONES • 4/5 verified</div>
                                         <div className="mt-2 flex gap-1">
                                           {[1, 1, 1, 1, 0].map((f, idx) => (
-                                            <div key={idx} className={`h-1.5 flex-1 rounded-full ${f ? "bg-[#8FFF4A]" : "bg-white/10"}`} />
+                                            <div key={idx} className={`h-1.5 flex-1 rounded-full ${f ? "bg-[#8FFF4A]" : "bg-[#F0E9DB]"}`} />
                                           ))}
                                         </div>
                                       </div>
@@ -545,10 +545,10 @@ export default function HowItWorksPage() {
                                           { l: "Shop", p: "$85", c: "from-[#FFE600] to-[#FF8A00]" },
                                           { l: "Gift", p: "MFC", c: "from-[#FF8A00] to-[#8FFF4A]" },
                                         ].map((b) => (
-                                          <div key={b.l} className="rounded-[12px] bg-white/[0.06] border border-white/10 p-3 text-center">
+                                          <div key={b.l} className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 text-center">
                                             <div className={`w-8 h-8 mx-auto rounded-full bg-gradient-to-br ${b.c}`} />
                                             <div className="mt-2 font-bold text-[12px]">{b.l}</div>
-                                            <div className="font-mono text-[11px] text-white/50">{b.p}</div>
+                                            <div className="font-mono text-[11px] text-[#5B6470]">{b.p}</div>
                                           </div>
                                         ))}
                                       </div>
@@ -559,25 +559,25 @@ export default function HowItWorksPage() {
                                     <div className="space-y-2">
                                       <div className="flex gap-2">
                                         {["Backlog", "In Progress", "Completed", "Repeat"].map((col, idx) => (
-                                          <div key={col} className="flex-1 rounded-[10px] bg-white/[0.04] border border-white/10 p-2">
-                                            <div className="font-mono text-[9px] text-white/40">{col}</div>
-                                            <div className={`mt-2 h-10 rounded-[8px] ${idx === 2 ? "bg-[#8FFF4A]/30" : "bg-white/5"}`} />
-                                            <div className={`mt-1 h-6 rounded-[6px] ${idx === 1 ? "bg-[#FFE600]/30" : "bg-white/5"}`} />
+                                          <div key={col} className="flex-1 rounded-[10px] bg-[#F0E9DB] border border-[#D4CBB8] p-2">
+                                            <div className="font-mono text-[9px] text-[#5B6470]">{col}</div>
+                                            <div className={`mt-2 h-10 rounded-[8px] ${idx === 2 ? "bg-[#8FFF4A]/30" : "bg-[#F0E9DB]"}`} />
+                                            <div className={`mt-1 h-6 rounded-[6px] ${idx === 1 ? "bg-[#FFE600]/30" : "bg-[#F0E9DB]"}`} />
                                           </div>
                                         ))}
                                       </div>
-                                      <div className="flex items-center gap-2 text-[10px] font-mono text-white/40">
+                                      <div className="flex items-center gap-2 text-[10px] font-mono text-[#5B6470]">
                                         <span className="w-2 h-2 rounded-full bg-[#8FFF4A]" /> UPRM auto-schedules next slot
                                       </div>
                                     </div>
                                   )}
                                 </div>
                                 <div className="col-span-4 space-y-3">
-                                  <div className="rounded-[14px] bg-[#0A0A0A] border border-white/10 p-3">
-                                    <div className="font-mono text-[10px] text-white/30">FEATURES</div>
+                                  <div className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
+                                    <div className="font-mono text-[10px] text-[#5B6470]">FEATURES</div>
                                     <div className="mt-2 space-y-2">
                                       {row.features.map((f) => (
-                                        <div key={f} className="text-[11px] leading-[1.3] text-white/60 flex gap-2">
+                                        <div key={f} className="text-[11px] leading-[1.3] text-[#5B6470] flex gap-2">
                                           <span className="text-[#8FFF4A]">•</span> {f}
                                         </div>
                                       ))}
@@ -601,14 +601,14 @@ export default function HowItWorksPage() {
                     <div className="order-1 md:order-2">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-white text-black grid place-items-center font-black text-[14px]">{row.k}</div>
-                        <div className="h-px flex-1 bg-white/10" />
-                        <div className="font-mono text-[11px] tracking-[0.2em] text-white/30 uppercase">{row.title}</div>
+                        <div className="h-px flex-1 bg-[#F0E9DB]" />
+                        <div className="font-mono text-[11px] tracking-[0.2em] text-[#5B6470] uppercase">{row.title}</div>
                       </div>
                       <h3 className="mt-6 font-display text-[28px] md:text-[36px] leading-[0.95]">{row.headline}</h3>
-                      <p className="mt-4 text-[15px] leading-[1.6] text-white/60">{row.desc}</p>
+                      <p className="mt-4 text-[15px] leading-[1.6] text-[#5B6470]">{row.desc}</p>
                       <div className="mt-6 flex flex-wrap gap-2">
                         {row.features.map((f) => (
-                          <span key={f} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-[12px] font-mono text-white/60">
+                          <span key={f} className="px-3 py-1.5 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[12px] font-mono text-[#5B6470]">
                             {f.split("—")[0]}
                           </span>
                         ))}
@@ -627,30 +627,30 @@ export default function HowItWorksPage() {
         {/* THIRD — Comparison */}
         <section className="relative mx-auto max-w-[1280px] px-5 md:px-8 py-20 md:py-28">
           <div className="max-w-[760px] mx-auto text-center">
-            <div className="inline-flex px-3 py-1 rounded-full bg-white/5 border border-white/10 font-mono text-[10px] tracking-widest text-white/40 uppercase">Old World vs Work Graph OS</div>
+            <div className="inline-flex px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[10px] tracking-widest text-[#5B6470] uppercase">Old World vs Work Graph OS</div>
             <h2 className="mt-6 font-display text-[32px] md:text-[56px] leading-[0.9]">Everyone nailed one piece.<br />We connected the loop.</h2>
-            <p className="mt-4 text-white/50 text-[15px]">Instagram has content but no trust. Fiverr has service but no content. TikTok Shop has product but no work. We have the loop.</p>
+            <p className="mt-4 text-[#5B6470] text-[15px]">Instagram has content but no trust. Fiverr has service but no content. TikTok Shop has product but no work. We have the loop.</p>
           </div>
 
           <div className="mt-12 grid md:grid-cols-4 gap-4">
             {[
-              { name: "Instagram", tag: "Content but no trust", bullets: ["Likes > proof", "Followers tax", "No escrow", "No work object"], accent: "border-white/10 opacity-60" },
-              { name: "Fiverr / Upwork", tag: "Service but no content", bullets: ["Text gigs", "No workshop feed", "Race to bottom", "20% take, no trust ledger"], accent: "border-white/10 opacity-60" },
-              { name: "TikTok Shop", tag: "Product but no work", bullets: ["Viral > verified", "No before/after", "No team, no milestones", "Product not person"], accent: "border-white/10 opacity-60" },
+              { name: "Instagram", tag: "Content but no trust", bullets: ["Likes > proof", "Followers tax", "No escrow", "No work object"], accent: "border-[#D4CBB8] opacity-60" },
+              { name: "Fiverr / Upwork", tag: "Service but no content", bullets: ["Text gigs", "No workshop feed", "Race to bottom", "20% take, no trust ledger"], accent: "border-[#D4CBB8] opacity-60" },
+              { name: "TikTok Shop", tag: "Product but no work", bullets: ["Viral > verified", "No before/after", "No team, no milestones", "Product not person"], accent: "border-[#D4CBB8] opacity-60" },
               { name: "My Face Profile", tag: "Work → Content → Trust → Commerce", bullets: ["Work = content auto", "Discovery = proximity + proof", "Trust = verified ledger", "Commerce = escrow + shop + gifts"], accent: "border-[#8FFF4A]/50 bg-[#8FFF4A]/[0.04] ring-1 ring-[#8FFF4A]/20", highlight: true },
             ].map((c) => (
               <div key={c.name} className={`relative rounded-[24px] p-[1px] ${c.highlight ? "md:-mt-4 md:mb-4" : ""}`} style={{ background: c.highlight ? "var(--gradient-m)" : "rgba(255,255,255,0.08)" }}>
-                <div className={`rounded-[23px] p-6 h-full ${c.highlight ? "bg-[#0C0C0C]" : "bg-[#0A0A0A]"} ${c.accent}`}>
+                <div className={`rounded-[23px] p-6 h-full ${c.highlight ? "bg-[#0C0C0C]" : "bg-[#F0E9DB]"} ${c.accent}`}>
                   {c.highlight && <div className="absolute -top-3 left-6 px-3 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">YOU ARE HERE • OS</div>}
                   <div className="flex items-center justify-between">
                     <div className="font-bold text-[16px]">{c.name}</div>
-                    {c.highlight ? <div className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[12px]">✓</div> : <div className="w-6 h-6 rounded-full bg-white/10" />}
+                    {c.highlight ? <div className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[12px]">✓</div> : <div className="w-6 h-6 rounded-full bg-[#F0E9DB]" />}
                   </div>
-                  <div className={`mt-2 inline-flex px-2.5 py-1 rounded-full text-[11px] font-mono ${c.highlight ? "bg-[#8FFF4A] text-black font-bold" : "bg-white/10 text-white/50"}`}>{c.tag}</div>
+                  <div className={`mt-2 inline-flex px-2.5 py-1 rounded-full text-[11px] font-mono ${c.highlight ? "bg-[#8FFF4A] text-black font-bold" : "bg-[#F0E9DB] text-[#5B6470]"}`}>{c.tag}</div>
                   <div className="mt-5 space-y-2.5">
                     {c.bullets.map((b) => (
-                      <div key={b} className="flex gap-2 text-[13px] leading-[1.4] text-white/60">
-                        <span className={`${c.highlight ? "text-[#8FFF4A]" : "text-white/20"}`}>—</span> {b}
+                      <div key={b} className="flex gap-2 text-[13px] leading-[1.4] text-[#5B6470]">
+                        <span className={`${c.highlight ? "text-[#8FFF4A]" : "text-[#5B6470]"}`}>—</span> {b}
                       </div>
                     ))}
                   </div>
@@ -667,11 +667,11 @@ export default function HowItWorksPage() {
         </section>
 
         {/* FOURTH — UPRM + Bots + Coins */}
-        <section className="border-y border-white/[0.06] bg-[#0A0A0A]">
+        <section className="border-y border-[#D4CBB8] bg-[#F0E9DB]">
           <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-16 md:py-20">
             <div className="flex flex-wrap gap-3 mb-8">
               <span className="px-3 py-1 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-widest">NEXT UP • No.3-5 of 24</span>
-              <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 font-mono text-[10px] tracking-widest text-white/40">THE OS LAYERS</span>
+              <span className="px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[10px] tracking-widest text-[#5B6470]">THE OS LAYERS</span>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
@@ -681,13 +681,13 @@ export default function HowItWorksPage() {
               ].map((card) => (
                 <a key={card.k} href="#cta" className="group relative rounded-[24px] p-[1px] hover:scale-[1.01] transition">
                   <div className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition" style={{ background: `linear-gradient(135deg, var(--lime), var(--orange))` }} />
-                  <div className="relative rounded-[23px] bg-[#111] p-6 h-full">
+                  <div className="relative rounded-[23px] bg-[#F0E9DB] p-6 h-full">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[11px] tracking-widest text-white/30">{card.k}</span>
+                      <span className="font-mono text-[11px] tracking-widest text-[#5B6470]">{card.k}</span>
                       <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${card.grad}`} />
                     </div>
                     <h4 className="mt-4 font-display text-[22px] leading-[1]">{card.title}</h4>
-                    <p className="mt-3 text-[13px] leading-[1.5] text-white/55">{card.desc}</p>
+                    <p className="mt-3 text-[13px] leading-[1.5] text-[#5B6470]">{card.desc}</p>
                     <div className="mt-6 inline-flex items-center gap-2 text-[13px] font-bold">
                       {card.cta} <span className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[12px] group-hover:translate-x-0.5 transition">↗</span>
                     </div>
@@ -717,14 +717,14 @@ export default function HowItWorksPage() {
                         free.
                       </span>
                     </h2>
-                    <p className="mt-5 text-[16px] leading-[1.5] text-white/60 max-w-[520px]">
+                    <p className="mt-5 text-[16px] leading-[1.5] text-[#5B6470] max-w-[520px]">
                       Join 2,400+ pros already turning workshop clips into bookings. No credit card. Your first Project becomes content in 11 seconds.
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
                       <a href="#" className="h-[48px] px-7 rounded-full bg-white text-black font-bold text-[14px] grid place-items-center">
                         Create Your Work Profile →
                       </a>
-                      <a href="#" className="h-[48px] px-6 rounded-full bg-white/10 border border-white/15 text-white font-mono text-[13px] grid place-items-center">
+                      <a href="#" className="h-[48px] px-6 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#0A1931] font-mono text-[13px] grid place-items-center">
                         Watch 45-sec Loop Demo
                       </a>
                     </div>
@@ -734,23 +734,23 @@ export default function HowItWorksPage() {
                           <div key={i} className="w-8 h-8 rounded-full border-2 border-[#050505] bg-white/20 grid place-items-center text-[10px]">★</div>
                         ))}
                       </div>
-                      <div className="font-mono text-[12px] text-white/50">
-                        <span className="text-white font-bold">4.9/5 TrustScore</span> • 12k verified jobs
+                      <div className="font-mono text-[12px] text-[#5B6470]">
+                        <span className="text-[#0A1931] font-bold">4.9/5 TrustScore</span> • 12k verified jobs
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-[20px] bg-[#0F0F0F] border border-white/10 p-5">
+                    <div className="rounded-[20px] bg-[#0F0F0F] border border-[#D4CBB8] p-5">
                       <div className="flex items-center justify-between">
-                        <div className="font-mono text-[11px] tracking-widest text-white/30">APP COMING SOON</div>
+                        <div className="font-mono text-[11px] tracking-widest text-[#5B6470]">APP COMING SOON</div>
                         <div className="px-2 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">QR • SCAN TO JOIN WAITLIST</div>
                       </div>
                       <div className="mt-5 grid grid-cols-2 gap-3">
                         <div className="rounded-[14px] bg-white p-3">
                           <div className="h-[88px] rounded-[10px] bg-black grid place-items-center">
                             <div className="w-16 h-16 rounded-[6px] border-2 border-white grid place-items-center">
-                              <div className="font-mono text-[8px] text-white">QR</div>
+                              <div className="font-mono text-[8px] text-[#0A1931]">QR</div>
                             </div>
                           </div>
                           <div className="mt-2 text-center font-bold text-[11px] text-black">iOS Waitlist</div>
@@ -758,15 +758,15 @@ export default function HowItWorksPage() {
                         <div className="rounded-[14px] bg-white p-3">
                           <div className="h-[88px] rounded-[10px] bg-black grid place-items-center">
                             <div className="w-16 h-16 rounded-[6px] border-2 border-white grid place-items-center">
-                              <div className="font-mono text-[8px] text-white">QR</div>
+                              <div className="font-mono text-[8px] text-[#0A1931]">QR</div>
                             </div>
                           </div>
                           <div className="mt-2 text-center font-bold text-[11px] text-black">Android</div>
                         </div>
                       </div>
                       <div className="mt-4 flex gap-2">
-                        <div className="flex-1 h-10 rounded-full bg-white/5 border border-white/10 grid place-items-center font-mono text-[11px] text-white/50"> iOS TestFlight</div>
-                        <div className="flex-1 h-10 rounded-full bg-white/5 border border-white/10 grid place-items-center font-mono text-[11px] text-white/50">▶ Play Beta</div>
+                        <div className="flex-1 h-10 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] grid place-items-center font-mono text-[11px] text-[#5B6470]"> iOS TestFlight</div>
+                        <div className="flex-1 h-10 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] grid place-items-center font-mono text-[11px] text-[#5B6470]">▶ Play Beta</div>
                       </div>
                     </div>
 
@@ -777,7 +777,7 @@ export default function HowItWorksPage() {
                         </div>
                         <div className="flex-1">
                           <div className="font-bold text-[13px]">My Face Profile OS</div>
-                          <div className="font-mono text-[11px] text-white/40">SHOW • CONNECT • GROW</div>
+                          <div className="font-mono text-[11px] text-[#5B6470]">SHOW • CONNECT • GROW</div>
                         </div>
                         <div className="w-8 h-8 rounded-full bg-white text-black grid place-items-center">↗</div>
                       </div>
@@ -785,12 +785,12 @@ export default function HowItWorksPage() {
                   </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-between gap-4 font-mono text-[11px] text-white/30">
+                <div className="mt-12 pt-8 border-t border-[#D4CBB8] flex flex-wrap justify-between gap-4 font-mono text-[11px] text-[#5B6470]">
                   <span>© 2026 My Face Profile • Work Graph OS • No.2 of 24</span>
                   <span className="flex gap-4">
-                    <a href="#" className="hover:text-white">Privacy</a>
-                    <a href="#" className="hover:text-white">Terms</a>
-                    <a href="#" className="hover:text-white">Manifesto</a>
+                    <a href="#" className="hover:text-[#0A1931]">Privacy</a>
+                    <a href="#" className="hover:text-[#0A1931]">Terms</a>
+                    <a href="#" className="hover:text-[#0A1931]">Manifesto</a>
                   </span>
                 </div>
               </div>

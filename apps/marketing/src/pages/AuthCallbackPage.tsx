@@ -36,7 +36,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] grid place-items-center px-4">
       <div className="text-center space-y-3">
-        <p className="text-white/70">{error ?? 'Finishing sign-in…'}</p>
+        <p className="text-[#5B6470]">{error ?? 'Finishing sign-in…'}</p>
         {error ? (
           <Link to="/login" className="text-[#8FFF4A] font-bold">
             Back to login

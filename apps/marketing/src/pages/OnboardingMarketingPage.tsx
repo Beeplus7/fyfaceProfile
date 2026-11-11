@@ -121,7 +121,7 @@ const CompanionMessage = ({ message, isTyping }: { message:string, isTyping?:boo
       <img src={logoM1} alt="My Face Profile M logo" className="h-7 w-7 rounded-full object-cover" />
     </div>
     <div className="glass rounded-[18px] rounded-tl-[6px] px-4 py-3 max-w-[92%]">
-      <div className="mono text-[10px] tracking-widest text-white/40 uppercase mb-1">Why we ask this</div>
+      <div className="mono text-[10px] tracking-widest text-[#5B6470] uppercase mb-1">Why we ask this</div>
       <div className="text-[13px] leading-[1.5] text-white/85 font-medium break-words">{message}</div>
       {isTyping && (
         <div className="mt-2 flex gap-1">
@@ -138,23 +138,23 @@ const OnboardingStep: React.FC<{ field: FieldDef, value:any, onChange:(v:any)=>v
   return (
     <div className="space-y-4">
       <div>
-        <div className="mono text-[10px] tracking-[0.18em] text-white/30 uppercase mb-2 break-words">Field • {field.id} • Phase {field.phase} • {field.type}</div>
-        <h3 className="text-[22px] md:text-[26px] leading-[1.15] text-white break-words">{field.label}</h3>
-        {field.help && <div className="mt-2 text-[12px] text-white/45 font-mono leading-snug break-words">{field.help}</div>}
+        <div className="mono text-[10px] tracking-[0.18em] text-[#5B6470] uppercase mb-2 break-words">Field • {field.id} • Phase {field.phase} • {field.type}</div>
+        <h3 className="text-[22px] md:text-[26px] leading-[1.15] text-[#0A1931] break-words">{field.label}</h3>
+        {field.help && <div className="mt-2 text-[12px] text-[#5B6470] font-mono leading-snug break-words">{field.help}</div>}
       </div>
       {field.type==='text' && (
         <input value={value||''} onChange={e=>onChange(e.target.value)} placeholder={field.placeholder}
-          className="w-full rounded-[14px] bg-white/[0.06] border border-white/10 px-4 py-3 text-[15px] text-white placeholder:text-white/30 outline-none focus:border-[#8FFF4A]/50 focus:bg-white/[0.08] transition" />
+          className="w-full rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 text-[15px] text-[#0A1931] placeholder:text-[#5B6470] outline-none focus:border-[#8FFF4A]/50 focus:bg-[#F0E9DB] transition" />
       )}
       {field.type==='number' && (
         <input type="number" value={value||''} onChange={e=>onChange(e.target.value=== '' ? '' : Number(e.target.value))} placeholder={field.placeholder}
-          className="w-full rounded-[14px] bg-white/[0.06] border border-white/10 px-4 py-3 text-[15px] text-white placeholder:text-white/30 outline-none focus:border-[#00E5C0]/50" />
+          className="w-full rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 text-[15px] text-[#0A1931] placeholder:text-[#5B6470] outline-none focus:border-[#00E5C0]/50" />
       )}
       {field.type==='select' && (
         <div className="grid grid-cols-1 gap-2">
           {field.options?.map(opt=>(
             <button key={opt} onClick={()=>onChange(opt)}
-              className={`text-left rounded-[12px] px-4 py-3 border text-[14px] font-medium transition break-words ${value===opt ? 'bg-white text-black border-white' : 'bg-white/[0.04] border-white/10 text-white/80 hover:bg-white/[0.08] hover:border-white/20'}`}>
+              className={`text-left rounded-[12px] px-4 py-3 border text-[14px] font-medium transition break-words ${value===opt ? 'bg-white text-black border-white' : 'bg-[#F0E9DB] border-[#D4CBB8] text-[#5B6470] hover:bg-[#F0E9DB] hover:border-[#D4CBB8]'}`}>
               {opt} {value===opt && <Check className="inline ml-2 h-4 w-4" />}
             </button>
           ))}
@@ -170,7 +170,7 @@ const OnboardingStep: React.FC<{ field: FieldDef, value:any, onChange:(v:any)=>v
                 if(selected) onChange(cur.filter((x:string)=>x!==opt));
                 else onChange([...cur, opt]);
               }}
-                className={`text-left rounded-[12px] px-4 py-3 border text-[13px] leading-snug font-medium transition flex justify-between items-center break-words ${selected ? 'bg-[#8FFF4A] text-black border-[#8FFF4A]' : 'bg-white/[0.04] border-white/10 text-white/70 hover:bg-white/[0.08]'}`}>
+                className={`text-left rounded-[12px] px-4 py-3 border text-[13px] leading-snug font-medium transition flex justify-between items-center break-words ${selected ? 'bg-[#8FFF4A] text-black border-[#8FFF4A]' : 'bg-[#F0E9DB] border-[#D4CBB8] text-[#5B6470] hover:bg-[#F0E9DB]'}`}>
                 <span className="break-words pr-2">{opt}</span>
                 {selected && <Check className="h-4 w-4 shrink-0" />}
               </button>
@@ -184,7 +184,7 @@ const OnboardingStep: React.FC<{ field: FieldDef, value:any, onChange:(v:any)=>v
             const sel = value===o;
             return (
               <button key={o} onClick={()=>onChange(o)}
-                className={`rounded-[14px] py-4 border text-[15px] font-bold uppercase tracking-wide transition ${sel ? 'bg-white text-black border-white' : 'bg-white/[0.04] border-white/10 text-white/60 hover:text-white hover:bg-white/[0.08]'}`}>
+                className={`rounded-[14px] py-4 border text-[15px] font-bold uppercase tracking-wide transition ${sel ? 'bg-white text-black border-white' : 'bg-[#F0E9DB] border-[#D4CBB8] text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB]'}`}>
                 {o}
               </button>
             )
@@ -274,11 +274,11 @@ export default function OnboardingMarketingPage(){
   };
 
   return (
-    <div data-safe-area-inset-root className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip relative selection:bg-[#8FFF4A]/30"
+    <div data-safe-area-inset-root className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip relative selection:bg-[#FFC300]/35"
       style={{boxSizing:'border-box', paddingTop:'var(--safe-area-inset-top)'}}>
       <QuantumBackground />
 
-      <header data-safe-area-sticky-top className="sticky z-40 backdrop-blur-2xl border-b border-white/[0.07] bg-black/40 overflow-x-clip"
+      <header data-safe-area-sticky-top className="sticky z-40 backdrop-blur-2xl border-b border-[#D4CBB8] bg-black/40 overflow-x-clip"
         style={{top:'var(--safe-area-inset-top)'}}>
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
@@ -289,10 +289,10 @@ export default function OnboardingMarketingPage(){
             </div>
             <div className="leading-none min-w-0">
               <div className="font-[Poppins] font-black text-[14px] tracking-tight flex gap-1.5 items-center"><span className="truncate">My Face Profile</span><span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A] animate-pulse shrink-0" /></div>
-              <div className="mono text-[9px] tracking-[0.18em] text-white/40 uppercase -mt-0.5 truncate">UPRM • PID 1 • Page 25</div>
+              <div className="mono text-[9px] tracking-[0.18em] text-[#5B6470] uppercase -mt-0.5 truncate">UPRM • PID 1 • Page 25</div>
             </div>
             <div className="hidden md:flex items-center gap-2 ml-4">
-              <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] mono uppercase tracking-wide">Onboarding Active</span>
+              <span className="rounded-full bg-[#F0E9DB] px-2.5 py-1 text-[10px] mono uppercase tracking-wide">Onboarding Active</span>
               <span className="rounded-full m-gradient-bg px-2.5 py-1 text-[10px] mono uppercase tracking-wide text-black font-bold">NEW</span>
             </div>
           </div>
@@ -301,7 +301,7 @@ export default function OnboardingMarketingPage(){
           </div>
         </div>
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 pb-3">
-          <div className="mono text-[10px] leading-[1.4] text-white/45 uppercase tracking-[0.12em] border-t border-white/[0.06] pt-2 mt-1 break-words whitespace-normal">
+          <div className="mono text-[10px] leading-[1.4] text-[#5B6470] uppercase tracking-[0.12em] border-t border-[#D4CBB8] pt-2 mt-1 break-words whitespace-normal">
             Page 25 • NEW • UPRM Onboarding Companion • From VisaguideOS → My Face Profile • Craft Data → COMMAND CENTER — VisaguideOS Companion Memory → My Face Profile UPRM Onboarding — 32 Fields → COMMAND CENTER — Ship Oldham Test
           </div>
         </div>
@@ -311,18 +311,18 @@ export default function OnboardingMarketingPage(){
         <div className="space-y-6 min-w-0">
           <div className="inline-flex max-w-full items-center gap-2 rounded-full glass px-3 py-1 flex-wrap">
             <span className="h-2 w-2 rounded-full bg-[#8FFF4A] animate-pulse shrink-0" />
-            <span className="mono text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/60 break-words">Replicated Architecture • Documents/passport-paper/src/onboarding/companion/OnboardingCompanion.tsx</span>
+            <span className="mono text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#5B6470] break-words">Replicated Architecture • Documents/passport-paper/src/onboarding/companion/OnboardingCompanion.tsx</span>
           </div>
           <h1 className="text-[30px] md:text-[52px] leading-[0.95] tracking-[-0.03em] font-black break-words">
             VisaguideOS Companion →<br/>
-            <span className="text-white">My Face Profile UPRM</span><br/>
+            <span className="text-[#0A1931]">My Face Profile UPRM</span><br/>
             <span className="m-gradient-text">Onboarding — Same Brain,</span><br/>
             <span className="m-gradient-text">New Craft.</span>
           </h1>
           <div className="glass rounded-[20px] p-4 md:p-5 overflow-hidden">
-            <div className="mono text-[11px] uppercase tracking-[0.18em] text-white/35 mb-2 break-words">One Question At A Time — Deterministically Gated</div>
+            <div className="mono text-[11px] uppercase tracking-[0.18em] text-[#5B6470] mb-2 break-words">One Question At A Time — Deterministically Gated</div>
             <div className="font-[Poppins] font-bold text-[18px] md:text-[22px] leading-[1.2] m-gradient-text break-words">Work → Content → Discovery → Trust → Commerce</div>
-            <p className="mt-3 text-[14px] leading-[1.6] text-white/65 break-words">Replicated from <span className="text-white font-mono text-[12px] bg-white/10 px-1.5 py-0.5 rounded">OnboardingCompanion.tsx</span> — Adapted for <span className="text-white">UPRM COMMAND CENTER DASHBOARD</span> — Collecting comprehensive users craft data for better user production. Touch of GOD in every stitch — craft as worship, not SaaS.</p>
+            <p className="mt-3 text-[14px] leading-[1.6] text-white/65 break-words">Replicated from <span className="text-[#0A1931] font-mono text-[12px] bg-[#F0E9DB] px-1.5 py-0.5 rounded">OnboardingCompanion.tsx</span> — Adapted for <span className="text-[#0A1931]">UPRM COMMAND CENTER DASHBOARD</span> — Collecting comprehensive users craft data for better user production. Touch of GOD in every stitch — craft as worship, not SaaS.</p>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
@@ -332,7 +332,7 @@ export default function OnboardingMarketingPage(){
               {k:'UPRM PID 1', v:'UNLOCKED'},
             ].map(s=>(
               <div key={s.k} className="glass rounded-[16px] p-3 min-w-0">
-                <div className="mono text-[10px] uppercase tracking-wide text-white/30 break-words">{s.v}</div>
+                <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470] break-words">{s.v}</div>
                 <div className="font-black text-[13px] md:text-[14px] mt-1 break-words">{s.k}</div>
               </div>
             ))}
@@ -357,27 +357,27 @@ export default function OnboardingMarketingPage(){
                 <div className="h-8 w-8 rounded-full m-gradient-bg flex items-center justify-center shrink-0">M</div>
                 <div className="min-w-0">
                   <div className="font-black text-[13px] leading-none truncate">My Face Profile UPRM</div>
-                  <div className="mono text-[9px] uppercase tracking-wide text-white/40 truncate">Live Companion • Deterministically Gated</div>
+                  <div className="mono text-[9px] uppercase tracking-wide text-[#5B6470] truncate">Live Companion • Deterministically Gated</div>
                 </div>
               </div>
-              <div className="mono text-[10px] text-white/40 shrink-0">{progressCount} of {ALL_FIELDS.length} confirmed</div>
+              <div className="mono text-[10px] text-[#5B6470] shrink-0">{progressCount} of {ALL_FIELDS.length} confirmed</div>
             </div>
 
             <div className="mb-4">
               <CompanionMessage message={whyText || "Getting your next question ready — To show your work in Work Feed within 10mi of Oldham — not posts."} isTyping={isThinking} />
             </div>
 
-            <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden mb-5">
+            <div className="h-1.5 w-full rounded-full bg-[#F0E9DB] overflow-hidden mb-5">
               <div className="h-full m-gradient-bg transition-all duration-500" style={{width:`${(progressCount/ALL_FIELDS.length)*100}%`}} />
             </div>
 
             {!showCompletion ? (
               currentField ? (
                 <div key={currentField.id} className="animate-[slideIn_0.4s_ease]">
-                  <div className="glass bg-white/[0.05] backdrop-blur-xl rounded-[20px] p-5 md:p-6 border border-white/10 overflow-hidden">
+                  <div className="glass bg-[#F0E9DB] backdrop-blur-xl rounded-[20px] p-5 md:p-6 border border-[#D4CBB8] overflow-hidden">
                     <OnboardingStep field={currentField} value={inputValue} onChange={setInputValue} />
-                    <div className="flex items-center justify-between mt-6 pt-5 border-t border-white/10 gap-3">
-                      <button onClick={handleSkipToComplete} className="mono text-[11px] uppercase tracking-wide text-white/40 hover:text-white/70">Skip to preview</button>
+                    <div className="flex items-center justify-between mt-6 pt-5 border-t border-[#D4CBB8] gap-3">
+                      <button onClick={handleSkipToComplete} className="mono text-[11px] uppercase tracking-wide text-[#5B6470] hover:text-[#5B6470]">Skip to preview</button>
                       <button onClick={handleSubmit} disabled={isThinking} className="flex items-center gap-2 px-5 py-2.5 m-gradient-bg text-black font-bold rounded-[12px] hover:brightness-110 disabled:opacity-50 shadow-[0_0_20px_rgba(143,255,74,0.3)] transition shrink-0">
                         {isThinking ? <><Loader2 className="h-4 w-4 animate-spin" /> Thinking…</> : <>Continue <ArrowRight className="h-4 w-4" /></>}
                       </button>
@@ -385,22 +385,22 @@ export default function OnboardingMarketingPage(){
                   </div>
                 </div>
               ) : (
-                <div className="py-10 flex flex-col items-center justify-center text-white/40 mono text-[12px]"><Loader2 className="h-6 w-6 animate-spin mb-2" />Loading eligible fields…</div>
+                <div className="py-10 flex flex-col items-center justify-center text-[#5B6470] mono text-[12px]"><Loader2 className="h-6 w-6 animate-spin mb-2" />Loading eligible fields…</div>
               )
             ) : (
               <div className="space-y-4">
                 <div className="rounded-[20px] m-gradient-bg p-[1px]">
-                  <div className="rounded-[19px] bg-[#0A0A0A] p-5">
+                  <div className="rounded-[19px] bg-[#F0E9DB] p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center"><Check className="h-5 w-5 text-black" /></div>
                       <div className="font-black text-[16px]">Your workshop is ready!</div>
                     </div>
-                    <div className="mono text-[11px] text-white/60 leading-[1.5] break-words">3 projects will be created from your answers. UPRM COMMAND CENTER unlocked. <span className="text-white">Touch of GOD</span> — craft as worship.</div>
+                    <div className="mono text-[11px] text-[#5B6470] leading-[1.5] break-words">3 projects will be created from your answers. UPRM COMMAND CENTER unlocked. <span className="text-[#0A1931]">Touch of GOD</span> — craft as worship.</div>
                     <div className="mt-4 grid grid-cols-2 gap-2">
                       {Object.entries(completedData||{}).slice(0,6).map(([k,v])=>(
                         <div key={k} className="glass rounded-[10px] px-3 py-2 min-w-0">
-                          <div className="mono text-[9px] uppercase text-white/30 truncate">{k}</div>
-                          <div className="text-[11px] truncate text-white/80">{Array.isArray(v)? v.join(', ') : String(v)}</div>
+                          <div className="mono text-[9px] uppercase text-[#5B6470] truncate">{k}</div>
+                          <div className="text-[11px] truncate text-[#5B6470]">{Array.isArray(v)? v.join(', ') : String(v)}</div>
                         </div>
                       ))}
                     </div>
@@ -418,7 +418,7 @@ export default function OnboardingMarketingPage(){
               ].map(c=>(
                 <div key={c.label} className="shrink-0 flex items-center gap-2 glass rounded-full pl-1 pr-3 py-1">
                   <c.icon className="h-4 w-4 text-[#8FFF4A] ml-1" />
-                  <span className="mono text-[9px] uppercase tracking-wide text-white/60 whitespace-nowrap">{c.label}</span>
+                  <span className="mono text-[9px] uppercase tracking-wide text-[#5B6470] whitespace-nowrap">{c.label}</span>
                 </div>
               ))}
             </div>
@@ -428,7 +428,7 @@ export default function OnboardingMarketingPage(){
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-white/[0.06] overflow-x-clip">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="flex items-center gap-3 mb-6">
           <div className="h-7 w-7 rounded-full bg-white text-black flex items-center justify-center font-black text-[12px]">1</div>
           <h2 className="text-[22px] md:text-[32px] break-words">Reusable Format Adapted — 5-Piece Stack</h2>
@@ -438,10 +438,10 @@ export default function OnboardingMarketingPage(){
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[640px]">
               <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03]">
-                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-white/40 px-5 py-3">Piece</th>
-                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-white/40 px-5 py-3">Path</th>
-                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-white/40 px-5 py-3">What you change for My Face Profile</th>
+                <tr className="border-b border-[#D4CBB8] bg-[#F0E9DB]">
+                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-[#5B6470] px-5 py-3">Piece</th>
+                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-[#5B6470] px-5 py-3">Path</th>
+                  <th className="mono text-[11px] uppercase tracking-[0.18em] text-[#5B6470] px-5 py-3">What you change for My Face Profile</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.06]">
@@ -464,7 +464,7 @@ export default function OnboardingMarketingPage(){
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-white/[0.06] overflow-x-clip">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="flex items-center gap-3 mb-8">
           <div className="h-7 w-7 rounded-full m-gradient-bg text-black flex items-center justify-center font-black text-[12px]">2</div>
           <h2 className="text-[22px] md:text-[32px] break-words">Craft Field Schema — 32 Fields — 4 Phases</h2>
@@ -483,23 +483,23 @@ export default function OnboardingMarketingPage(){
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                   <div className="h-7 w-7 rounded-full bg-black/70 backdrop-blur flex items-center justify-center mono text-[11px] font-bold" style={{border:`1px solid ${p.color}`}}>{p.phase}</div>
-                  <div className="rounded-full bg-black/60 backdrop-blur px-3 py-1 mono text-[10px] uppercase tracking-wide text-white/70">{p.fields.length} fields</div>
+                  <div className="rounded-full bg-black/60 backdrop-blur px-3 py-1 mono text-[10px] uppercase tracking-wide text-[#5B6470]">{p.fields.length} fields</div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4">
                   <h3 className="text-[22px] leading-none break-words">{p.title}</h3>
-                  <div className="mono text-[10px] uppercase tracking-wide text-white/50 mt-1 break-words">{p.subtitle}</div>
+                  <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470] mt-1 break-words">{p.subtitle}</div>
                 </div>
               </div>
               <div className="p-4 space-y-2 max-h-[320px] overflow-y-auto scrollbar-hide">
                 {p.fields.map(f=>(
-                  <div key={f.id} className="flex items-start justify-between gap-3 rounded-[12px] bg-white/[0.03] border border-white/[0.06] px-3 py-2.5 min-w-0">
+                  <div key={f.id} className="flex items-start justify-between gap-3 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-2.5 min-w-0">
                     <div className="min-w-0">
-                      <div className="mono text-[10px] text-white/30 break-words">{f.id} • {f.type}</div>
+                      <div className="mono text-[10px] text-[#5B6470] break-words">{f.id} • {f.type}</div>
                       <div className="text-[12px] font-medium leading-tight mt-0.5 break-words">{f.label}</div>
-                      {f.options && <div className="mono text-[9px] text-white/35 mt-1 line-clamp-2 break-words">{f.options.slice(0,4).join(' • ')}{f.options.length>4 ? ' •…' : ''}</div>}
+                      {f.options && <div className="mono text-[9px] text-[#5B6470] mt-1 line-clamp-2 break-words">{f.options.slice(0,4).join(' • ')}{f.options.length>4 ? ' •…' : ''}</div>}
                     </div>
                     <div className="shrink-0">
-                      {f.required ? <span className="rounded-full bg-[#FF8A00] text-black mono text-[8px] px-2 py-1 font-bold uppercase">req</span> : <span className="rounded-full bg-white/10 mono text-[8px] px-2 py-1 uppercase text-white/40">opt</span>}
+                      {f.required ? <span className="rounded-full bg-[#FF8A00] text-black mono text-[8px] px-2 py-1 font-bold uppercase">req</span> : <span className="rounded-full bg-[#F0E9DB] mono text-[8px] px-2 py-1 uppercase text-[#5B6470]">opt</span>}
                     </div>
                   </div>
                 ))}
@@ -513,17 +513,17 @@ export default function OnboardingMarketingPage(){
             <img src={mechanicImg} alt="Female mechanic J Martinez OBD2 P0302 Toyota Corolla" className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10" />
             <div className="relative p-5">
-              <div className="mono text-[10px] uppercase tracking-wide text-white/50">Phase 2 Work DNA • Mechanic Speciality • Female mechanic J Martinez</div>
+              <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470]">Phase 2 Work DNA • Mechanic Speciality • Female mechanic J Martinez</div>
               <div className="mt-2 text-[18px] font-black leading-tight max-w-[520px] break-words">OBD2 P0302 Toyota Corolla misfire • Tool stack proves craft • Before/After slider for Project killer object</div>
-              <div className="mt-2 mono text-[10px] text-white/40 break-words">Materials: brake pads • Tools: OBD2 scanner lift • Avg job £150 • Availability Mon-Sun</div>
+              <div className="mt-2 mono text-[10px] text-[#5B6470] break-words">Materials: brake pads • Tools: OBD2 scanner lift • Avg job £150 • Availability Mon-Sun</div>
             </div>
           </div>
         </div>
 
         <div className="mt-8 glass rounded-[20px] p-1 overflow-hidden">
           <div className="rounded-[19px] bg-[#0D0D0D] p-4 md:p-6 overflow-x-auto">
-            <div className="mono text-[10px] uppercase tracking-[0.2em] text-white/30 mb-3 flex items-center gap-2"><Sparkles className="h-3 w-3" /> config/onboardingSteps.ts — 32 fields — copyable</div>
-            <pre className="text-[11px] leading-[1.6] text-white/70 whitespace-pre-wrap break-words">{`// config/onboardingSteps.ts — My Face Profile Craft Schema
+            <div className="mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-3 flex items-center gap-2"><Sparkles className="h-3 w-3" /> config/onboardingSteps.ts — 32 fields — copyable</div>
+            <pre className="text-[11px] leading-[1.6] text-[#5B6470] whitespace-pre-wrap break-words">{`// config/onboardingSteps.ts — My Face Profile Craft Schema
 export const CRAFT_STEPS: FieldDef[] = [
   ${ALL_FIELDS.map(f=>`{ id:'${f.id}', type:'${f.type}', label:'${f.label.replace(/'/g,"\\'")}', ${f.options?`options:[${f.options.map(o=>`'${o}'`).join(', ')}],`:''} phase:${f.phase}, required:${!!f.required} ${f.appliesIf?`, appliesIf: (a)=>... // gated` : ''} }`).join('\n  ')}
 ];
@@ -533,7 +533,7 @@ export const CRAFT_STEPS: FieldDef[] = [
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-white/[0.06] overflow-x-clip">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="flex items-center gap-3 mb-6">
           <div className="h-7 w-7 rounded-full bg-white text-black flex items-center justify-center font-black text-[12px]">3</div>
           <h2 className="text-[22px] md:text-[32px] break-words">Gating Logic — fieldGating.ts — “No” Genuinely Removes</h2>
@@ -542,7 +542,7 @@ export const CRAFT_STEPS: FieldDef[] = [
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
           <div className="glass rounded-[20px] p-1 overflow-hidden">
             <div className="rounded-[19px] bg-[#0D0D0D] p-4 md:p-6 overflow-x-auto">
-              <div className="mono text-[10px] uppercase tracking-[0.2em] text-white/30 mb-3">rules/fieldGating.ts — deterministic — no AI invents fields</div>
+              <div className="mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-3">rules/fieldGating.ts — deterministic — no AI invents fields</div>
               <pre className="text-[11px] leading-[1.7] text-white/75 whitespace-pre-wrap break-words">{`// rules/fieldGating.ts — My Face Profile adapted
 export function getEligibleFields(answers: Record<string,any>){
   const autoAnswered: Record<string,any> = {};
@@ -573,7 +573,7 @@ export function getEligibleFields(answers: Record<string,any>){
 
           <div className="space-y-4 min-w-0">
             <div className="glass rounded-[20px] p-5">
-              <div className="mono text-[10px] uppercase tracking-wide text-white/30 mb-3">Live gating example — try in demo</div>
+              <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470] mb-3">Live gating example — try in demo</div>
               <div className="space-y-3 text-[12px]">
                 {[
                   {if:'tradeType ≠ Tailor', then:'remove Aso-Ebi fabrics', icon:Scissors},
@@ -582,11 +582,11 @@ export function getEligibleFields(answers: Record<string,any>){
                   {if:'trade = Electrician', then:'ask consumer unit 230V RCD 30mA BS 7671', icon:Zap},
                   {if:'trade = Plumber', then:'ask Worcester Bosch boiler 68C 1.2 bar', icon:Droplets},
                 ].map(r=>(
-                  <div key={r.if} className="flex gap-3 items-start rounded-[12px] bg-white/[0.04] border border-white/10 px-3 py-2.5">
+                  <div key={r.if} className="flex gap-3 items-start rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-2.5">
                     <r.icon className="h-4 w-4 mt-0.5 text-[#8FFF4A] shrink-0" />
                     <div className="min-w-0">
-                      <div className="mono text-[11px] text-white break-words">if {r.if}</div>
-                      <div className="text-[11px] text-white/50 break-words">→ {r.then}</div>
+                      <div className="mono text-[11px] text-[#0A1931] break-words">if {r.if}</div>
+                      <div className="text-[11px] text-[#5B6470] break-words">→ {r.then}</div>
                     </div>
                   </div>
                 ))}
@@ -594,15 +594,15 @@ export function getEligibleFields(answers: Record<string,any>){
             </div>
 
             <div className="relative rounded-[20px] overflow-hidden glass p-5 bg-gradient-to-br from-[#8FFF4A]/10 via-[#00E5C0]/10 to-[#FFE600]/10">
-              <div className="mono text-[10px] uppercase tracking-wide text-white/40">Why we ask this — craft example</div>
+              <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470]">Why we ask this — craft example</div>
               <div className="mt-2 text-[13px] leading-[1.5] font-medium break-words">To show your consumer unit 230V RCD 30mA installation within 0.8mi of customers searching electrician Oldham — not posts.</div>
-              <div className="mt-3 flex items-center gap-2 mono text-[9px] uppercase text-white/40"><MapPin className="h-3 w-3" /> Oldham OL1 • 0.8mi boost • TrustScore 4.9</div>
+              <div className="mt-3 flex items-center gap-2 mono text-[9px] uppercase text-[#5B6470]"><MapPin className="h-3 w-3" /> Oldham OL1 • 0.8mi boost • TrustScore 4.9</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-white/[0.06] overflow-x-clip">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="flex items-center gap-3 mb-6">
           <div className="h-7 w-7 rounded-full bg-white text-black flex items-center justify-center font-black text-[12px]">4</div>
           <h2 className="text-[22px] md:text-[32px] break-words">Orchestrator Diff — VisaguideOS → My Face Profile</h2>
@@ -618,8 +618,8 @@ export function getEligibleFields(answers: Record<string,any>){
             {from:'OnboardingCompletion “Your journey has begun!”', to:'UPRM Completion “Your workshop is ready! 3 projects will be created from your answers. UPRM COMMAND CENTER unlocked.”', icon:Trophy},
           ].map(d=>(
             <div key={d.from} className="glass rounded-[16px] p-4 min-w-0">
-              <div className="flex gap-2 items-center mono text-[10px] uppercase tracking-wide text-white/30 mb-2"><d.icon className="h-3 w-3" /> Diff</div>
-              <div className="text-[11px] mono text-white/40 line-through break-words">- {d.from}</div>
+              <div className="flex gap-2 items-center mono text-[10px] uppercase tracking-wide text-[#5B6470] mb-2"><d.icon className="h-3 w-3" /> Diff</div>
+              <div className="text-[11px] mono text-[#5B6470] line-through break-words">- {d.from}</div>
               <div className="text-[11px] mono text-[#8FFF4A] mt-1 break-words">+ {d.to}</div>
             </div>
           ))}
@@ -627,8 +627,8 @@ export function getEligibleFields(answers: Record<string,any>){
 
         <div className="glass rounded-[20px] p-1 overflow-hidden">
           <div className="rounded-[19px] bg-[#0D0D0D] p-4 md:p-6 overflow-x-auto">
-            <div className="mono text-[10px] uppercase tracking-[0.2em] text-white/30 mb-3">companion/OnboardingCompanion.tsx — My Face Profile adapted — copyable</div>
-            <pre className="text-[11px] leading-[1.7] text-white/70 whitespace-pre-wrap break-words">{`// src/onboarding/companion/OnboardingCompanion.tsx — Adapted
+            <div className="mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-3">companion/OnboardingCompanion.tsx — My Face Profile adapted — copyable</div>
+            <pre className="text-[11px] leading-[1.7] text-[#5B6470] whitespace-pre-wrap break-words">{`// src/onboarding/companion/OnboardingCompanion.tsx — Adapted
 import { getEligibleFields, ALL_FIELDS } from '../rules/fieldGating';
 import { QuantumBackground } from './QuantumBackground'; // M gradient
 import { MLogo } from '@/assets/MLogo'; // #8FFF4A → #00E5C0 → #FFE600 → #FF8A00
@@ -661,7 +661,7 @@ export const OnboardingCompanion: React.FC = () => {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-white/[0.06] overflow-x-clip">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 md:px-6 py-12 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="flex items-center gap-3 mb-6">
           <div className="h-7 w-7 rounded-full m-gradient-bg text-black flex items-center justify-center font-black text-[12px]">5</div>
           <h2 className="text-[22px] md:text-[32px] break-words">Live Interactive Demo — Working State Machine — UPRM COMMAND CENTER Preview</h2>
@@ -669,8 +669,8 @@ export const OnboardingCompanion: React.FC = () => {
 
         {!showCompletion ? (
           <div className="glass rounded-[24px] p-6 md:p-8 text-center">
-            <div className="mono text-[11px] uppercase tracking-wide text-white/40 mb-2 break-words">Scroll up — Live demo is in Hero split — deterministic gating working</div>
-            <div className="text-[14px] text-white/60 break-words">Current: <span className="text-white font-bold">{currentField?.label}</span> • {progressCount} / {ALL_FIELDS.length} • Eligible next: {eligibleInfo.eligible.slice(0,3).map(f=>f.id).join(', ')}</div>
+            <div className="mono text-[11px] uppercase tracking-wide text-[#5B6470] mb-2 break-words">Scroll up — Live demo is in Hero split — deterministic gating working</div>
+            <div className="text-[14px] text-[#5B6470] break-words">Current: <span className="text-[#0A1931] font-bold">{currentField?.label}</span> • {progressCount} / {ALL_FIELDS.length} • Eligible next: {eligibleInfo.eligible.slice(0,3).map(f=>f.id).join(', ')}</div>
             <button onClick={()=> demoRef.current?.scrollIntoView({behavior:'smooth'})} className="mt-4 rounded-full bg-white text-black px-5 py-2.5 text-[12px] font-bold mono uppercase">Go to live companion ↑</button>
           </div>
         ) : (
@@ -682,12 +682,12 @@ export const OnboardingCompanion: React.FC = () => {
                     <div className="h-9 w-9 rounded-[12px] bg-white text-black flex items-center justify-center font-black shrink-0">M</div>
                     <div className="min-w-0">
                       <div className="font-black text-[15px] truncate">UPRM COMMAND CENTER • PID 1 UNLOCKED</div>
-                      <div className="mono text-[10px] text-white/40 uppercase tracking-wide truncate">Pipeline Inquiry → Booked → In Progress → Final → Review</div>
+                      <div className="mono text-[10px] text-[#5B6470] uppercase tracking-wide truncate">Pipeline Inquiry → Booked → In Progress → Final → Review</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <span className="rounded-full bg-[#8FFF4A] text-black px-2.5 py-1 mono text-[10px] font-bold">TrustScore 4.9</span>
-                    <span className="rounded-full bg-white/10 px-2.5 py-1 mono text-[10px]">Oldham OL1</span>
+                    <span className="rounded-full bg-[#F0E9DB] px-2.5 py-1 mono text-[10px]">Oldham OL1</span>
                   </div>
                 </div>
 
@@ -699,8 +699,8 @@ export const OnboardingCompanion: React.FC = () => {
                     {k:'Final', v:2, c:'#FF8A00'},
                     {k:'Review', v:4.9, c:'#fff'},
                   ].map((s,i)=>(
-                    <div key={i} className="rounded-[14px] bg-white/[0.04] border border-white/10 p-3 text-center min-w-0">
-                      <div className="mono text-[9px] uppercase text-white/40 truncate">{s.k}</div>
+                    <div key={i} className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 text-center min-w-0">
+                      <div className="mono text-[9px] uppercase text-[#5B6470] truncate">{s.k}</div>
                       <div className="font-black text-[16px] md:text-[18px] mt-1 truncate" style={{color:s.c}}>{s.v}</div>
                     </div>
                   ))}
@@ -712,10 +712,10 @@ export const OnboardingCompanion: React.FC = () => {
                     {title:'Shop', desc:'Aso-Ebi £45/m • 6 colors', icon:Store, grad:'from-[#FFE600]/20 to-[#FF8A00]/20'},
                     {title:'Bookings', desc:'Instant + Escrow 10%', icon:Wallet, grad:'from-white/10 to-white/5'},
                   ].map(card=>(
-                    <div key={card.title} className={`rounded-[16px] overflow-hidden bg-gradient-to-br ${card.grad} border border-white/10 p-4`}>
-                      <div className="h-10 w-10 rounded-[12px] bg-black/50 flex items-center justify-center mb-3"><card.icon className="h-5 w-5 text-white" /></div>
+                    <div key={card.title} className={`rounded-[16px] overflow-hidden bg-gradient-to-br ${card.grad} border border-[#D4CBB8] p-4`}>
+                      <div className="h-10 w-10 rounded-[12px] bg-black/50 flex items-center justify-center mb-3"><card.icon className="h-5 w-5 text-[#0A1931]" /></div>
                       <div className="font-bold text-[13px]">{card.title}</div>
-                      <div className="mono text-[10px] text-white/50 mt-1 break-words">{card.desc}</div>
+                      <div className="mono text-[10px] text-[#5B6470] mt-1 break-words">{card.desc}</div>
                     </div>
                   ))}
                 </div>
@@ -726,10 +726,10 @@ export const OnboardingCompanion: React.FC = () => {
                     <div className="font-black text-[16px] mt-1 flex items-center gap-1"><Wallet className="h-4 w-4" /> £1,247</div>
                     <div className="mono text-[9px] mt-1 text-black/60">Gift rain enabled</div>
                   </div>
-                  <div className="rounded-[14px] bg-[#111] border border-white/10 p-3 min-w-0">
+                  <div className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 min-w-0">
                     <div className="mono text-[9px] uppercase">TrustScore</div>
                     <div className="font-black text-[16px] mt-1">4.9 ★</div>
-                    <div className="mono text-[9px] mt-1 text-white/40">Gas Safe • BS 7671 • Video</div>
+                    <div className="mono text-[9px] mt-1 text-[#5B6470]">Gas Safe • BS 7671 • Video</div>
                   </div>
                   <div className="rounded-[14px] m-gradient-bg text-black p-3 min-w-0">
                     <div className="mono text-[9px] uppercase font-bold">Live Gifts</div>
@@ -741,15 +741,15 @@ export const OnboardingCompanion: React.FC = () => {
 
               <div className="space-y-4 min-w-0">
                 <div className="glass rounded-[24px] p-5 overflow-hidden">
-                  <div className="mono text-[10px] uppercase tracking-wide text-white/30 mb-3">Onboarding turns • conversation history • public.onboarding_conversations</div>
+                  <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470] mb-3">Onboarding turns • conversation history • public.onboarding_conversations</div>
                   <div className="space-y-2 max-h-[220px] overflow-y-auto">
                     {turns.map((t,i)=>(
-                      <div key={i} className="rounded-[12px] bg-white/[0.04] border border-white/10 px-3 py-2">
-                        <div className="mono text-[9px] text-white/30 break-words">{t.q}</div>
-                        <div className="text-[11px] text-white/70 mt-1 break-words">{t.a}</div>
+                      <div key={i} className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-2">
+                        <div className="mono text-[9px] text-[#5B6470] break-words">{t.q}</div>
+                        <div className="text-[11px] text-[#5B6470] mt-1 break-words">{t.a}</div>
                       </div>
                     ))}
-                    {turns.length===0 && <div className="mono text-[11px] text-white/30">No turns yet — start in hero demo</div>}
+                    {turns.length===0 && <div className="mono text-[11px] text-[#5B6470]">No turns yet — start in hero demo</div>}
                   </div>
                 </div>
 
@@ -759,20 +759,20 @@ export const OnboardingCompanion: React.FC = () => {
                   <div className="relative p-5">
                     <div className="inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-1 mono text-[10px] uppercase"><Crown className="h-3 w-3 text-[#FFE600]" /> MFC Gift Economy</div>
                     <h4 className="mt-3 text-[18px] leading-[1.1] font-black break-words">Black velvet box exploding with coins hearts crowns trophies — MFC economy — Touch of GOD</h4>
-                    <div className="mt-2 mono text-[11px] text-white/60 break-words">Hammer 10 • Scissors 25 • Heart 50 • Crown 100 • Trophy 500 — Live gifts rain on phone</div>
+                    <div className="mt-2 mono text-[11px] text-[#5B6470] break-words">Hammer 10 • Scissors 25 • Heart 50 • Crown 100 • Trophy 500 — Live gifts rain on phone</div>
                   </div>
                 </div>
 
                 <div className="glass rounded-[20px] p-4">
-                  <div className="mono text-[10px] uppercase tracking-wide text-white/30 mb-2 break-words">Saved craft records • onboarding_craft collection • {dbRecords.length} saved</div>
+                  <div className="mono text-[10px] uppercase tracking-wide text-[#5B6470] mb-2 break-words">Saved craft records • onboarding_craft collection • {dbRecords.length} saved</div>
                   <div className="grid grid-cols-1 gap-2 max-h-[140px] overflow-y-auto">
                     {dbRecords.slice(-5).reverse().map((r:any)=>(
-                      <div key={r.id} className="rounded-[10px] bg-white/[0.04] border border-white/10 px-3 py-2 flex justify-between items-center gap-2">
-                        <div className="mono text-[10px] text-white/60 truncate">{r.value?.tradeType || 'craft'} • {r.value?.location || 'Oldham'} • £{r.value?.avgJobPrice || '—'}</div>
-                        <div className="mono text-[9px] text-white/30 shrink-0">{new Date(r.created_at).toLocaleDateString()}</div>
+                      <div key={r.id} className="rounded-[10px] bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-2 flex justify-between items-center gap-2">
+                        <div className="mono text-[10px] text-[#5B6470] truncate">{r.value?.tradeType || 'craft'} • {r.value?.location || 'Oldham'} • £{r.value?.avgJobPrice || '—'}</div>
+                        <div className="mono text-[9px] text-[#5B6470] shrink-0">{new Date(r.created_at).toLocaleDateString()}</div>
                       </div>
                     ))}
-                    {dbRecords.length===0 && <div className="mono text-[11px] text-white/30">No records yet — complete onboarding to persist</div>}
+                    {dbRecords.length===0 && <div className="mono text-[11px] text-[#5B6470]">No records yet — complete onboarding to persist</div>}
                   </div>
                 </div>
               </div>
@@ -780,8 +780,8 @@ export const OnboardingCompanion: React.FC = () => {
 
             <div className="glass rounded-[20px] p-1 overflow-hidden">
               <div className="rounded-[19px] bg-[#0D0D0D] p-4 md:p-6 overflow-x-auto">
-                <div className="mono text-[10px] uppercase tracking-[0.2em] text-white/30 mb-3">supabase/functions/onboarding-chat/index.ts — My Face Profile — copyable</div>
-                <pre className="text-[11px] leading-[1.7] text-white/70 whitespace-pre-wrap break-words">{`// supabase/functions/onboarding-chat/index.ts
+                <div className="mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-3">supabase/functions/onboarding-chat/index.ts — My Face Profile — copyable</div>
+                <pre className="text-[11px] leading-[1.7] text-[#5B6470] whitespace-pre-wrap break-words">{`// supabase/functions/onboarding-chat/index.ts
 // Payload: { answersSoFar, eligibleFields, conversationHistory, latestUserReply }
 // → { done, nextFieldId, questionText, whyText }
 
@@ -804,13 +804,13 @@ export async function handler(req: Request){
         )}
       </section>
 
-      <footer className="relative z-10 mt-8 border-t border-white/[0.08] overflow-x-clip">
+      <footer className="relative z-10 mt-8 border-t border-[#D4CBB8] overflow-x-clip">
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 py-12">
           <div className="rounded-[32px] m-gradient-bg p-[1px] m-glow-soft overflow-hidden">
             <div className="rounded-[31px] bg-[#070707] p-6 md:p-10 text-center relative overflow-hidden">
               <QuantumBackground />
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-4 max-w-full flex-wrap justify-center">Page 25 • UPRM Onboarding Companion • Production-ready</div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#F0E9DB] px-3 py-1 mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-4 max-w-full flex-wrap justify-center">Page 25 • UPRM Onboarding Companion • Production-ready</div>
                 <h2 className="text-[26px] md:text-[46px] leading-[0.95] tracking-[-0.03em] font-black max-w-[900px] mx-auto break-words">
                   From VisaguideOS Companion Memory →<br/>
                   <span className="m-gradient-text">My Face Profile UPRM Onboarding — 32 Fields → COMMAND CENTER — Ship Oldham Test</span>
@@ -823,7 +823,7 @@ export async function handler(req: Request){
                     'src/onboarding/rules/fieldGating.ts',
                     'config/onboardingSteps.ts',
                   ].map(p=>(
-                    <span key={p} className="rounded-full glass px-3 py-1.5 text-white/60 break-words">{p}</span>
+                    <span key={p} className="rounded-full glass px-3 py-1.5 text-[#5B6470] break-words">{p}</span>
                   ))}
                 </div>
 
@@ -846,7 +846,7 @@ export async function handler(req: Request){
                       </div>
                     ))}
                   </div>
-                  <div className="mono text-[11px] text-white/40 break-words">32 fields • 4 phases • 6 trades • 1247 pros • Touch of GOD — UPRM PID 1 UNLOCKED</div>
+                  <div className="mono text-[11px] text-[#5B6470] break-words">32 fields • 4 phases • 6 trades • 1247 pros • Touch of GOD — UPRM PID 1 UNLOCKED</div>
                 </div>
 
                 <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-[800px] mx-auto">
@@ -856,9 +856,9 @@ export async function handler(req: Request){
                     {icon:Droplets, t:'Plumber • Worcester 68C'},
                     {icon:Wrench, t:'Mechanic • OBD2 P0302'},
                   ].map(c=>(
-                    <div key={c.t} className="rounded-[16px] overflow-hidden bg-white/[0.04] border border-white/10 p-4 flex flex-col items-start gap-2">
+                    <div key={c.t} className="rounded-[16px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] p-4 flex flex-col items-start gap-2">
                       <div className="h-8 w-8 rounded-[10px] m-gradient-bg flex items-center justify-center"><c.icon className="h-4 w-4 text-black" /></div>
-                      <div className="mono text-[9px] uppercase tracking-wide text-white/60 break-words">{c.t}</div>
+                      <div className="mono text-[9px] uppercase tracking-wide text-[#5B6470] break-words">{c.t}</div>
                     </div>
                   ))}
                 </div>
@@ -878,7 +878,7 @@ export async function handler(req: Request){
           <div className="rounded-full m-gradient-bg px-1 py-1 shadow-[0_10px_40px_rgba(0,0,0,0.6)]">
             <div className="rounded-full bg-black px-5 py-2.5 flex items-center gap-2">
               <div className="h-5 w-5 rounded-full bg-[#8FFF4A] flex items-center justify-center"><Check className="h-3 w-3 text-black" /></div>
-              <span className="mono text-[11px] font-bold text-white tracking-wide break-words">{toastMsg}</span>
+              <span className="mono text-[11px] font-bold text-[#0A1931] tracking-wide break-words">{toastMsg}</span>
             </div>
           </div>
         </div>

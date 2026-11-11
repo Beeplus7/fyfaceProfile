@@ -25,12 +25,12 @@ export default function AboutPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: "border-box", paddingTop: "var(--safe-area-inset-top)" }}
-      className="min-h-screen w-full bg-[var(--bg)] text-[var(--text)] overflow-x-clip selection:bg-[#8FFF4A]/30"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A1931] overflow-x-clip selection:bg-[#FFC300]/35"
     >
       <header
         data-safe-area-sticky-top
         style={{ top: "var(--safe-area-inset-top)" }}
-        className="sticky z-50 w-full border-b border-[var(--border)] bg-[rgba(5,5,5,0.84)] backdrop-blur-[20px]"
+        className="sticky z-50 w-full border-b border-[#D4CBB8] bg-[#FFFDF7]/90 backdrop-blur-[20px]"
       >
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
@@ -40,7 +40,7 @@ export default function AboutPage() {
               </div>
             </div>
             <span className="font-poppins text-[15px] font-bold tracking-[-0.02em]">My Face Profile</span>
-            <span className="ml-2 hidden items-center rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-white/60 md:flex">
+            <span className="ml-2 hidden items-center rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-2.5 py-1 font-mono text-[10px] tracking-[0.12em] text-[#5B6470] md:flex">
               NO.10 OF 24
             </span>
           </a>
@@ -51,7 +51,7 @@ export default function AboutPage() {
                 key={l.label}
                 href={l.href}
                 className={`rounded-full px-3.5 py-2 font-mono text-[11px] tracking-[0.08em] transition ${
-                  l.active ? "bg-white text-black font-medium" : "text-white/60 hover:bg-white/[0.06] hover:text-white"
+                  l.active ? "bg-white text-black font-medium" : "text-[#5B6470] hover:bg-[#F0E9DB] hover:text-[#0A1931]"
                 }`}
               >
                 {l.label.toUpperCase()}
@@ -65,7 +65,7 @@ export default function AboutPage() {
             </a>
             <button
               onClick={() => setMobileOpen((v) => !v)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.06] lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#D4CBB8] bg-[#F0E9DB] lg:hidden"
               aria-label="Toggle menu"
             >
               <div className="space-y-1">
@@ -78,14 +78,14 @@ export default function AboutPage() {
         </div>
 
         {mobileOpen && (
-          <div className="border-t border-white/10 bg-black/95 px-6 py-6 lg:hidden">
+          <div className="border-t border-[#D4CBB8] bg-black/95 px-6 py-6 lg:hidden">
             <div className="grid gap-1">
               {navLinks.map((l) => (
                 <a
                   key={l.label}
                   href={l.href}
                   onClick={() => setMobileOpen(false)}
-                  className={`rounded-[12px] px-4 py-3 font-mono text-[12px] tracking-[0.08em] ${l.active ? "bg-white text-black" : "bg-white/[0.04] text-white/70"}`}
+                  className={`rounded-[12px] px-4 py-3 font-mono text-[12px] tracking-[0.08em] ${l.active ? "bg-white text-black" : "bg-[#F0E9DB] text-[#5B6470]"}`}
                 >
                   {l.label.toUpperCase()}
                 </a>
@@ -104,9 +104,9 @@ export default function AboutPage() {
 
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-8">
           <div className="flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3.5 py-1.5 backdrop-blur">
               <span className="h-2 w-2 animate-pulse rounded-full bg-[#8FFF4A]" />
-              <span className="font-mono text-[11px] tracking-[0.14em] text-white/70">NO.10 OF 24 • ABOUT • MISSION • TOUCH OF GOD</span>
+              <span className="font-mono text-[11px] tracking-[0.14em] text-[#5B6470]">NO.10 OF 24 • ABOUT • MISSION • TOUCH OF GOD</span>
             </div>
 
             <h1 className="font-poppins mt-8 max-w-[20ch] text-[40px] font-extrabold leading-[0.92] tracking-[-0.04em] sm:text-[54px] lg:text-[68px]">
@@ -125,7 +125,7 @@ export default function AboutPage() {
 
             <p className="mt-6 max-w-[48ch] text-[17px] leading-[1.6] text-[var(--muted)]">
               From VisaguideOS to My Face Profile — building the OS for real work, where tailors, mechanics, builders, barbers, electricians, plumbers{" "}
-              <span className="text-white">SHOW their work, CONNECT with need, and GROW with trust.</span>
+              <span className="text-[#0A1931]">SHOW their work, CONNECT with need, and GROW with trust.</span>
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -133,13 +133,13 @@ export default function AboutPage() {
                 Start Showing Free — Join OS
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-white">→</span>
               </a>
-              <a href="#story" className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-6 py-3.5 font-mono text-[12px] tracking-[0.08em] text-white/80 backdrop-blur transition hover:bg-white/[0.10]">
+              <a href="#story" className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-6 py-3.5 font-mono text-[12px] tracking-[0.08em] text-[#5B6470] backdrop-blur transition hover:bg-[#F0E9DB]">
                 <span className="h-2 w-2 rounded-full bg-white" />
                 WATCH FOUNDER STORY
               </a>
             </div>
 
-            <div className="mt-10 grid max-w-[560px] grid-cols-3 gap-4 border-t border-white/[0.08] pt-6">
+            <div className="mt-10 grid max-w-[560px] grid-cols-3 gap-4 border-t border-[#D4CBB8] pt-6">
               {[
                 { k: "1,247", v: "Pros in Oldham" },
                 { k: "12K", v: "Projects Live" },
@@ -147,24 +147,24 @@ export default function AboutPage() {
               ].map((s) => (
                 <div key={s.k}>
                   <div className="font-poppins text-[28px] font-extrabold leading-none tracking-[-0.03em]">{s.k}</div>
-                  <div className="mt-1 font-mono text-[11px] tracking-[0.08em] text-white/50">{s.v.toUpperCase()}</div>
+                  <div className="mt-1 font-mono text-[11px] tracking-[0.08em] text-[#5B6470]">{s.v.toUpperCase()}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10 flex items-center gap-3 rounded-[14px] border border-white/[0.08] bg-white/[0.04] px-4 py-3">
-              <div className="h-7 w-7 rounded-[8px] overflow-hidden bg-black border border-white/10 grid place-items-center">
+            <div className="mt-10 flex items-center gap-3 rounded-[14px] border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-3">
+              <div className="h-7 w-7 rounded-[8px] overflow-hidden bg-black border border-[#D4CBB8] grid place-items-center">
                 <div className="h-full w-full" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover", backgroundPosition: "center" }} aria-label="M mark" />
               </div>
-              <p className="font-mono text-[11px] leading-[1.4] tracking-[0.02em] text-white/60">
-                <span className="text-white/90">TOUCH OF GOD:</span> Craft as worship. Every stitch, wire, pipe, brick has God in it. From VisaguideOS → My Face Profile OS.
+              <p className="font-mono text-[11px] leading-[1.4] tracking-[0.02em] text-[#5B6470]">
+                <span className="text-[#0A1931]">TOUCH OF GOD:</span> Craft as worship. Every stitch, wire, pipe, brick has God in it. From VisaguideOS → My Face Profile OS.
               </p>
             </div>
           </div>
 
           <div className="relative flex-1 lg:max-w-[560px]">
             <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[32px] bg-gradient-to-br from-[#8FFF4A]/20 via-[#00E5C0]/16 to-[#FFE600]/14 blur-[28px]" />
-            <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-black drop-card">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black drop-card">
               <img src={imgFounder} alt="Founder live streaming workshop - touch of GOD moment" className="aspect-[4/5] w-full object-cover lg:aspect-[4/5]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -173,7 +173,7 @@ export default function AboutPage() {
                     <div className="flex items-center gap-2.5">
                       <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-m text-[11px] font-bold text-black">LIVE</div>
                       <div>
-                        <div className="font-mono text-[10px] tracking-[0.12em] text-white/60">FOUNDER WORKSHOP • OLDHAM</div>
+                        <div className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">FOUNDER WORKSHOP • OLDHAM</div>
                         <div className="font-poppins text-[13px] font-bold leading-tight">Showing work, not talking about work</div>
                       </div>
                     </div>
@@ -184,7 +184,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="absolute left-4 top-4 flex gap-2">
-                <span className="rounded-full bg-black/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-white/80 backdrop-blur border border-white/10">10mi NEARBY • VERIFIED</span>
+                <span className="rounded-full bg-black/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-[#5B6470] backdrop-blur border border-[#D4CBB8]">10mi NEARBY • VERIFIED</span>
               </div>
               <div className="absolute right-4 top-4 rounded-full bg-gradient-m px-3 py-1.5 font-poppins text-[11px] font-bold text-black">Touch of GOD</div>
             </div>
@@ -194,14 +194,14 @@ export default function AboutPage() {
                 <div className="h-10 w-10 rounded-[10px] bg-cover bg-center" style={{ backgroundImage: `url(${imgTailor})` }} aria-label="Craft detail" />
                 <div>
                   <div className="font-poppins text-[12px] font-bold leading-none">Holy Craft</div>
-                  <div className="font-mono text-[10px] text-white/50 mt-1">STITCH • 173924</div>
+                  <div className="font-mono text-[10px] text-[#5B6470] mt-1">STITCH • 173924</div>
                 </div>
               </div>
               <div className="glass rounded-[16px] p-3 flex items-center gap-3">
                 <div className="h-10 w-10 rounded-[10px] bg-cover bg-center" style={{ backgroundImage: `url(${imgElectric})` }} aria-label="Real work" />
                 <div>
                   <div className="font-poppins text-[12px] font-bold leading-none">Real Work OS</div>
-                  <div className="font-mono text-[10px] text-white/50 mt-1">VERIFIED • 190128</div>
+                  <div className="font-mono text-[10px] text-[#5B6470] mt-1">VERIFIED • 190128</div>
                 </div>
               </div>
             </div>
@@ -236,18 +236,18 @@ export default function AboutPage() {
                 { year: "2026", title: "My Face Profile OS — Revolutionary", desc: "TikTok live + LinkedIn timeline + YouTube portfolio + e-commerce shop. Kernel + UPRM + Apps. The OS for real work.", tag: "OS v1.0 • Touch of GOD" },
               ].map((item) => (
                 <div key={item.year} className="relative flex gap-4 sm:gap-6">
-                  <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/15 bg-black font-poppins text-[12px] font-bold">
+                  <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D4CBB8] bg-black font-poppins text-[12px] font-bold">
                     {item.year.slice(2)}
                   </div>
-                  <div className="flex-1 rounded-[16px] border border-white/[0.07] bg-white/[0.03] p-4 sm:p-5">
+                  <div className="flex-1 rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-4 sm:p-5">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-[11px] tracking-[0.14em] text-[#00E5C0]">{item.year}</span>
-                          <span className="rounded-full bg-white/[0.08] px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-white/60">{item.tag}</span>
+                          <span className="rounded-full bg-[#F0E9DB] px-2 py-0.5 font-mono text-[9px] tracking-[0.1em] text-[#5B6470]">{item.tag}</span>
                         </div>
                         <h4 className="font-poppins mt-2 text-[16px] font-bold leading-[1.15] tracking-[-0.01em]">{item.title}</h4>
-                        <p className="mt-2 text-[13px] leading-[1.5] text-white/60">{item.desc}</p>
+                        <p className="mt-2 text-[13px] leading-[1.5] text-[#5B6470]">{item.desc}</p>
                       </div>
                       <div className="hidden h-12 w-12 shrink-0 rounded-[10px] bg-gradient-m sm:grid place-items-center font-poppins text-[11px] font-bold text-black">
                         M
@@ -260,12 +260,12 @@ export default function AboutPage() {
           </div>
 
           <div className="grid gap-4">
-            <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-black drop-card">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black drop-card">
               <img src={imgTailor} alt="Tailor sewing lace close-up craft evolution" className="h-[380px] w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="glass rounded-[14px] px-4 py-3">
-                  <div className="font-mono text-[10px] tracking-[0.12em] text-white/50">CRAFT EVOLUTION</div>
+                  <div className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">CRAFT EVOLUTION</div>
                   <div className="font-poppins mt-1 text-[14px] font-bold leading-[1.2]">Every stitch is a ledger entry. Work Graph, not User Graph.</div>
                 </div>
               </div>
@@ -275,7 +275,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="glass rounded-[20px] p-5">
                 <div className="font-poppins text-[22px] font-extrabold leading-none tracking-[-0.02em] text-gradient">Work = Content</div>
-                <p className="mt-2 font-mono text-[11px] leading-[1.4] text-white/50">CONTENT IS DISCOVERY, DISCOVERY IS TRUST</p>
+                <p className="mt-2 font-mono text-[11px] leading-[1.4] text-[#5B6470]">CONTENT IS DISCOVERY, DISCOVERY IS TRUST</p>
               </div>
               <div className="rounded-[20px] bg-gradient-m p-5 text-black">
                 <div className="font-poppins text-[22px] font-extrabold leading-none tracking-[-0.02em]">Trust = Commerce</div>
@@ -291,28 +291,28 @@ export default function AboutPage() {
         <div className="flex flex-col gap-3">
           <div className="font-mono text-[11px] tracking-[0.18em] text-[#FFE600]">SECTION 02 — MISSION</div>
           <h2 className="font-poppins text-[40px] font-extrabold leading-[0.9] tracking-[-0.04em] sm:text-[56px]">
-            SHOW. <span className="text-white/30">CONNECT.</span> GROW.
+            SHOW. <span className="text-[#5B6470]">CONNECT.</span> GROW.
           </h2>
-          <p className="max-w-[56ch] text-[15px] leading-[1.6] text-white/60">Three verbs. One OS. Built for the person who fixes boilers at 7am, sews lace at midnight, wires a consumer unit in the rain.</p>
+          <p className="max-w-[56ch] text-[15px] leading-[1.6] text-[#5B6470]">Three verbs. One OS. Built for the person who fixes boilers at 7am, sews lace at midnight, wires a consumer unit in the rain.</p>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-[var(--bg-card)] drop-card">
+          <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[var(--bg-card)] drop-card">
             <div className="relative h-[320px] overflow-hidden">
               <div className="h-full w-full bg-cover bg-center transition duration-700 group-hover:scale-[1.04]" style={{ backgroundImage: `url(${imgTailor})` }} role="img" aria-label="Tailor sewing - show your work" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-white/10">
+              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
                 <span className="h-2 w-2 rounded-full bg-[#8FFF4A]" />
-                <span className="font-mono text-[10px] tracking-[0.12em] text-white/80">SHOW • LIVE WORKSHOP</span>
+                <span className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">SHOW • LIVE WORKSHOP</span>
               </div>
             </div>
             <div className="p-6">
               <h3 className="font-poppins text-[20px] font-bold tracking-[-0.02em]">SHOW Your Work</h3>
               <p className="font-poppins mt-1 text-[13px] font-bold text-[#8FFF4A]">“Show your work. Not your CV.”</p>
-              <p className="mt-3 text-[13px] leading-[1.6] text-white/60">Every pro gets timeline + shop + live workshop + project portfolio. Your lace, your wiring, your brickwork — is your profile.</p>
+              <p className="mt-3 text-[13px] leading-[1.6] text-[#5B6470]">Every pro gets timeline + shop + live workshop + project portfolio. Your lace, your wiring, your brickwork — is your profile.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {["Timeline", "Shop", "Live", "Portfolio"].map((t) => (
-                  <span key={t} className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-white/60">
+                  <span key={t} className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-[#5B6470]">
                     {t}
                   </span>
                 ))}
@@ -320,9 +320,9 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-[var(--bg-card)] drop-card">
-            <div className="relative h-[320px] overflow-hidden bg-[#0A0A0A]">
-              <div className="grid h-full grid-cols-2 gap-[1px] bg-white/10">
+          <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[var(--bg-card)] drop-card">
+            <div className="relative h-[320px] overflow-hidden bg-[#F0E9DB]">
+              <div className="grid h-full grid-cols-2 gap-[1px] bg-[#F0E9DB]">
                 <div className="relative">
                   <img src={imgElectric} alt="Electrician installing consumer unit - connect" className="h-full w-full object-cover" />
                   <div className="absolute bottom-2 left-2 rounded-full bg-white px-2 py-1 font-mono text-[9px] text-black">VERIFIED • NICEIC</div>
@@ -337,10 +337,10 @@ export default function AboutPage() {
             <div className="p-6">
               <h3 className="font-poppins text-[20px] font-bold tracking-[-0.02em]">CONNECT With Need</h3>
               <p className="font-poppins mt-1 text-[13px] font-bold text-[#00E5C0]">“Connect with customers who need real work, not likes”</p>
-              <p className="mt-3 text-[13px] leading-[1.6] text-white/60">10mi Nearby, Verified skills, Trust Ledger. Customers find craft, not content farming. Oldham first.</p>
+              <p className="mt-3 text-[13px] leading-[1.6] text-[#5B6470]">10mi Nearby, Verified skills, Trust Ledger. Customers find craft, not content farming. Oldham first.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {["10mi Nearby", "Verified", "Work Graph"].map((t) => (
-                  <span key={t} className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-white/60">
+                  <span key={t} className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-[#5B6470]">
                     {t}
                   </span>
                 ))}
@@ -348,13 +348,13 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="group relative overflow-hidden rounded-[24px] border border-white/10 bg-[var(--bg-card)] drop-card">
+          <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[var(--bg-card)] drop-card">
             <div className="relative h-[320px] overflow-hidden">
               <img src={imgDress} alt="Final wedding dress reveal - grow with trust" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-white/10">
+              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
                 <span className="h-2 w-2 rounded-full bg-[#FFE600]" />
-                <span className="font-mono text-[10px] tracking-[0.12em] text-white/80">GROW • FINAL RESULT</span>
+                <span className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">GROW • FINAL RESULT</span>
               </div>
               <div className="absolute bottom-3 right-3 rounded-[12px] bg-white px-3 py-2 text-black">
                 <div className="font-mono text-[9px] tracking-[0.1em]">TRUST LEDGER</div>
@@ -364,10 +364,10 @@ export default function AboutPage() {
             <div className="p-6">
               <h3 className="font-poppins text-[20px] font-bold tracking-[-0.02em]">GROW With Trust</h3>
               <p className="font-poppins mt-1 text-[13px] font-bold text-[#FFE600]">“Grow with gifts, bookings, trust, not hustle”</p>
-              <p className="mt-3 text-[13px] leading-[1.6] text-white/60">MFC Coins, Escrow, Trust Ledger — Touch of GOD. When the final dress reveals, trust converts to commerce.</p>
+              <p className="mt-3 text-[13px] leading-[1.6] text-[#5B6470]">MFC Coins, Escrow, Trust Ledger — Touch of GOD. When the final dress reveals, trust converts to commerce.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {["MFC Coins", "Escrow", "Trust Ledger"].map((t) => (
-                  <span key={t} className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-white/60">
+                  <span key={t} className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-2.5 py-1 font-mono text-[10px] tracking-[0.08em] text-[#5B6470]">
                     {t}
                   </span>
                 ))}
@@ -421,27 +421,27 @@ export default function AboutPage() {
                   { a: "Escrow", b: "Promise" },
                   { a: "Community", b: "Competition" },
                 ].map((r) => (
-                  <div key={r.a} className="flex items-center justify-between rounded-[12px] border border-white/[0.06] bg-white/[0.03] px-4 py-3">
+                  <div key={r.a} className="flex items-center justify-between rounded-[12px] border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-3">
                     <span className="font-poppins text-[14px] font-bold">{r.a}</span>
-                    <span className="font-mono text-[11px] tracking-[0.08em] text-white/40">&gt;</span>
-                    <span className="font-mono text-[12px] tracking-[0.06em] text-white/40 line-through">{r.b}</span>
+                    <span className="font-mono text-[11px] tracking-[0.08em] text-[#5B6470]">&gt;</span>
+                    <span className="font-mono text-[12px] tracking-[0.06em] text-[#5B6470] line-through">{r.b}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="flex-1">
-              <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-black">
+              <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black">
                 <div className="h-[420px] w-full bg-cover bg-center" style={{ backgroundImage: `url(${imgTailor})` }} role="img" aria-label="Tailor sewing lace - touch of GOD craft as worship" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="glass rounded-[16px] p-5">
                     <div className="inline-flex items-center gap-2 rounded-full bg-gradient-m px-3 py-1 font-poppins text-[11px] font-bold text-black">TOUCH OF GOD</div>
                     <h4 className="font-poppins mt-3 text-[18px] font-bold leading-[1.15] tracking-[-0.01em]">Craft as worship, details matter, every stitch, wire, pipe, brick has God in it.</h4>
-                    <p className="mt-2 text-[13px] leading-[1.5] text-white/60">Tailor sewing lace close-up — 173924 — this is not content. This is prayer. The OS honors the hand that makes.</p>
+                    <p className="mt-2 text-[13px] leading-[1.5] text-[#5B6470]">Tailor sewing lace close-up — 173924 — this is not content. This is prayer. The OS honors the hand that makes.</p>
                     <div className="mt-4 flex gap-2">
                       <span className="rounded-full bg-white px-2.5 py-1 font-mono text-[10px] text-black">LACE • 0.2mm STITCH</span>
-                      <span className="rounded-full bg-white/10 px-2.5 py-1 font-mono text-[10px] text-white/70">HOLY CRAFT</span>
+                      <span className="rounded-full bg-[#F0E9DB] px-2.5 py-1 font-mono text-[10px] text-[#5B6470]">HOLY CRAFT</span>
                     </div>
                   </div>
                 </div>
@@ -455,13 +455,13 @@ export default function AboutPage() {
       <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-8 lg:py-24">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <div className="font-mono text-[11px] tracking-[0.18em] text-white/50">SECTION 04 — WHERE WE BUILD</div>
+            <div className="font-mono text-[11px] tracking-[0.18em] text-[#5B6470]">SECTION 04 — WHERE WE BUILD</div>
             <h3 className="font-poppins mt-3 text-[34px] font-bold leading-[0.95] tracking-[-0.03em] sm:text-[42px]">
               Built in Oldham,
               <br />
               for Oldham first.
             </h3>
-            <p className="mt-4 max-w-[40ch] text-[15px] leading-[1.6] text-white/60">1,247 pros in OL1, OL2, OL8 — then Manchester, then UK, then world. We ship from a terraced workshop, not a WeWork.</p>
+            <p className="mt-4 max-w-[40ch] text-[15px] leading-[1.6] text-[#5B6470]">1,247 pros in OL1, OL2, OL8 — then Manchester, then UK, then world. We ship from a terraced workshop, not a WeWork.</p>
 
             <div className="mt-8 grid grid-cols-3 gap-3">
               {[
@@ -469,20 +469,20 @@ export default function AboutPage() {
                 { code: "OL2", count: "388 pros", street: "Royton • Shaw" },
                 { code: "OL8", count: "447 pros", street: "Bardsley • Hollinwood" },
               ].map((o) => (
-                <div key={o.code} className="rounded-[14px] border border-white/10 bg-white/[0.04] p-3">
+                <div key={o.code} className="rounded-[14px] border border-[#D4CBB8] bg-[#F0E9DB] p-3">
                   <div className="font-poppins text-[14px] font-extrabold">{o.code}</div>
-                  <div className="font-mono text-[10px] text-white/60">{o.count}</div>
-                  <div className="mt-2 font-mono text-[9px] tracking-[0.06em] text-white/30">{o.street.toUpperCase()}</div>
+                  <div className="font-mono text-[10px] text-[#5B6470]">{o.count}</div>
+                  <div className="mt-2 font-mono text-[9px] tracking-[0.06em] text-[#5B6470]">{o.street.toUpperCase()}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 rounded-[20px] border border-white/10 bg-black p-5">
+            <div className="mt-8 rounded-[20px] border border-[#D4CBB8] bg-black p-5">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full overflow-hidden bg-black border border-white/10" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover" }} aria-label="Team logo" />
+                <div className="h-9 w-9 rounded-full overflow-hidden bg-black border border-[#D4CBB8]" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover" }} aria-label="Team logo" />
                 <div>
                   <div className="font-poppins text-[13px] font-bold">Team: Founder + Engineers + 1,247 pros who teach us</div>
-                  <div className="font-mono text-[11px] text-white/50">We don&apos;t build for pros. We build with pros.</div>
+                  <div className="font-mono text-[11px] text-[#5B6470]">We don&apos;t build for pros. We build with pros.</div>
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2">
@@ -506,15 +506,15 @@ export default function AboutPage() {
                   { name: "Ahmed • Plumber • OL8", cert: "Gas Safe • Worcester Bosch Expert", job: "Worcester Bosch fix — live workshop replay 1.2k views", trust: "5.0 • 127 Projects", bg: imgPlumber },
                   { name: "Fatima • Bridal Tailor • OL2", cert: "Final Dress Reveal • Lace Specialist", job: "Wedding dress — from stitch to reveal, project timeline", trust: "4.9 • 203 Projects", bg: imgDress },
                 ].map((p) => (
-                  <div key={p.name} className="flex gap-4 rounded-[16px] border border-white/[0.06] bg-white/[0.03] p-4">
+                  <div key={p.name} className="flex gap-4 rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-4">
                     <div className="h-16 w-16 shrink-0 rounded-[12px] bg-cover bg-center" style={{ backgroundImage: `url(${p.bg})` }} aria-label={p.name} />
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-poppins text-[13px] font-bold">{p.name}</span>
-                        <span className="rounded-full bg-white/10 px-2 py-0.5 font-mono text-[9px] text-white/60">{p.trust}</span>
+                        <span className="rounded-full bg-[#F0E9DB] px-2 py-0.5 font-mono text-[9px] text-[#5B6470]">{p.trust}</span>
                       </div>
                       <div className="mt-1 font-mono text-[10px] tracking-[0.06em] text-[#00E5C0]">{p.cert}</div>
-                      <div className="mt-1 text-[12px] leading-[1.4] text-white/60">{p.job}</div>
+                      <div className="mt-1 text-[12px] leading-[1.4] text-[#5B6470]">{p.job}</div>
                     </div>
                   </div>
                 ))}
@@ -533,7 +533,7 @@ export default function AboutPage() {
 
       {/* SECTION 5 — WHY NOW */}
       <section className="mx-auto max-w-[1280px] px-6 py-16 lg:px-8">
-        <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-6 sm:p-10">
+        <div className="rounded-[28px] border border-[#D4CBB8] bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-6 sm:p-10">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div>
               <div className="font-mono text-[11px] tracking-[0.18em] text-[#00E5C0]">SECTION 05 — WHY NOW • 2026 WINDOW</div>
@@ -543,7 +543,7 @@ export default function AboutPage() {
                 Real work becomes premium.
               </h3>
             </div>
-            <div className="rounded-full border border-white/10 bg-black px-4 py-2 font-mono text-[11px] tracking-[0.1em] text-white/60">WINDOW OPEN • 2026</div>
+            <div className="rounded-full border border-[#D4CBB8] bg-black px-4 py-2 font-mono text-[11px] tracking-[0.1em] text-[#5B6470]">WINDOW OPEN • 2026</div>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -553,13 +553,13 @@ export default function AboutPage() {
               { n: "03", t: "Stripe Connect + Mux + LiveKit makes OS possible", d: "We can now build Kernel + UPRM + Apps: escrow, live workshop, work graph, project SEO pages — all in one OS.", c: "#FFE600" },
               { n: "04", t: "Google needs real Project SEO pages, not AI spam", d: "A Project page: 12 images, timeline, materials, trust ledger. That's E-E-A-T Google can't fake. Real work ranks.", c: "#FF8A00" },
             ].map((card) => (
-              <div key={card.n} className="relative overflow-hidden rounded-[20px] border border-white/10 bg-black p-5 drop-card">
+              <div key={card.n} className="relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-black p-5 drop-card">
                 <div className="absolute right-0 top-0 h-[120px] w-[120px] rounded-full opacity-20" style={{ background: `radial-gradient(50%_50%_at_50%_50%,${card.c},transparent)` }} />
                 <div className="font-mono text-[11px] tracking-[0.14em]" style={{ color: card.c }}>
                   {card.n} • WHY NOW
                 </div>
                 <h4 className="font-poppins mt-3 text-[14px] font-bold leading-[1.25]">{card.t}</h4>
-                <p className="mt-2 text-[12px] leading-[1.5] text-white/55">{card.d}</p>
+                <p className="mt-2 text-[12px] leading-[1.5] text-[#5B6470]">{card.d}</p>
               </div>
             ))}
           </div>
@@ -568,7 +568,7 @@ export default function AboutPage() {
 
       {/* CTA FOOTER */}
       <section id="cta" className="relative mx-auto max-w-[1280px] px-6 pb-12 pt-8 lg:px-8">
-        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-black p-8 sm:p-12 lg:p-16 drop-card">
+        <div className="relative overflow-hidden rounded-[32px] border border-[#D4CBB8] bg-black p-8 sm:p-12 lg:p-16 drop-card">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-[#8FFF4A]/[0.14] via-[#00E5C0]/[0.10] via-[#FFE600]/[0.08] to-[#FF8A00]/[0.12]" />
             <div className="absolute -left-20 -top-20 h-[400px] w-[400px] rounded-full bg-[#8FFF4A]/20 blur-[48px]" />
@@ -576,8 +576,8 @@ export default function AboutPage() {
           </div>
 
           <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3.5 py-1.5 backdrop-blur">
-              <span className="font-mono text-[11px] tracking-[0.12em] text-white/70">NO.10 OF 24 — ABOUT — TOUCH OF GOD</span>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3.5 py-1.5 backdrop-blur">
+              <span className="font-mono text-[11px] tracking-[0.12em] text-[#5B6470]">NO.10 OF 24 — ABOUT — TOUCH OF GOD</span>
             </div>
 
             <h2 className="font-poppins mt-8 max-w-[14ch] text-[36px] font-extrabold leading-[0.9] tracking-[-0.04em] sm:text-[54px] lg:text-[64px]">
@@ -592,40 +592,40 @@ export default function AboutPage() {
               <a href="#" className="rounded-full bg-white px-8 py-4 font-poppins text-[15px] font-bold text-black shadow-[0_12px_32px_rgba(255,255,255,0.18)] transition hover:brightness-[0.96] active:scale-[0.98]">
                 Create Your Face Profile — Free
               </a>
-              <div className="flex items-center gap-3 rounded-full border border-white/15 bg-white/[0.06] px-5 py-3 backdrop-blur">
+              <div className="flex items-center gap-3 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-5 py-3 backdrop-blur">
                 <div className="flex -space-x-2">
                   <div className="h-7 w-7 rounded-full border-2 border-black bg-cover bg-center" style={{ backgroundImage: `url(${imgTailor})` }} aria-label="Tailor" />
                   <div className="h-7 w-7 rounded-full border-2 border-black bg-cover bg-center" style={{ backgroundImage: `url(${imgElectric})` }} aria-label="Electrician" />
                   <div className="h-7 w-7 rounded-full border-2 border-black bg-cover bg-center" style={{ backgroundImage: `url(${imgPlumber})` }} aria-label="Plumber" />
                 </div>
-                <span className="font-mono text-[11px] tracking-[0.08em] text-white/60">1,247 PROS ALREADY SHOWING</span>
+                <span className="font-mono text-[11px] tracking-[0.08em] text-[#5B6470]">1,247 PROS ALREADY SHOWING</span>
               </div>
             </div>
 
-            <div className="mt-12 grid gap-6 border-t border-white/10 pt-8 sm:grid-cols-3">
+            <div className="mt-12 grid gap-6 border-t border-[#D4CBB8] pt-8 sm:grid-cols-3">
               <div className="flex gap-4">
-                <div className="grid h-10 w-10 place-items-center rounded-[12px] bg-white/10 font-mono text-[12px]">iOS</div>
+                <div className="grid h-10 w-10 place-items-center rounded-[12px] bg-[#F0E9DB] font-mono text-[12px]">iOS</div>
                 <div>
                   <div className="font-poppins text-[13px] font-bold">iOS App — Coming Soon</div>
-                  <div className="font-mono text-[11px] text-white/50">Live workshop, project scanner</div>
+                  <div className="font-mono text-[11px] text-[#5B6470]">Live workshop, project scanner</div>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="grid h-10 w-10 place-items-center rounded-[12px] bg-white/10 font-mono text-[12px]">AND</div>
+                <div className="grid h-10 w-10 place-items-center rounded-[12px] bg-[#F0E9DB] font-mono text-[12px]">AND</div>
                 <div>
                   <div className="font-poppins text-[13px] font-bold">Android — Coming Soon</div>
-                  <div className="font-mono text-[11px] text-white/50">Work OS kernel in pocket</div>
+                  <div className="font-mono text-[11px] text-[#5B6470]">Work OS kernel in pocket</div>
                 </div>
               </div>
               <div className="rounded-[14px] bg-gradient-m p-[1px]">
                 <div className="rounded-[13px] bg-black px-4 py-3">
-                  <div className="font-mono text-[10px] tracking-[0.12em] text-white/50">FROM VISAGUIDEOS TO MY FACE PROFILE</div>
+                  <div className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">FROM VISAGUIDEOS TO MY FACE PROFILE</div>
                   <div className="mt-1 font-poppins text-[13px] font-bold leading-[1.2]">1,247 pros • 12K Projects • 4.9 Trust • Touch of GOD</div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/5 pt-6">
+            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#D4CBB8] pt-6">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-[10px] bg-gradient-m p-[1px]">
                   <div className="grid h-full w-full place-items-center rounded-[9px] bg-black overflow-hidden">
@@ -633,9 +633,9 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <span className="font-poppins text-[13px] font-bold">My Face Profile OS</span>
-                <span className="font-mono text-[11px] text-white/40">© 2026 Touch of GOD • Oldham • Manchester • UK</span>
+                <span className="font-mono text-[11px] text-[#5B6470]">© 2026 Touch of GOD • Oldham • Manchester • UK</span>
               </div>
-              <div className="flex gap-2 font-mono text-[10px] tracking-[0.08em] text-white/40">
+              <div className="flex gap-2 font-mono text-[10px] tracking-[0.08em] text-[#5B6470]">
                 <span>BUILT WITH CRAFT</span>
                 <span>•</span>
                 <span>NO.10 OF 24</span>
