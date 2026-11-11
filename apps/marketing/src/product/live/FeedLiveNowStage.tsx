@@ -118,6 +118,7 @@ function GuestTile({
   fileMedia,
   localStream,
   mirrorLocal = true,
+  boxed = false,
 }: {
   pane: Pane;
   frameUrl: string | null;
@@ -126,9 +127,15 @@ function GuestTile({
   localStream?: MediaStream | null;
   /** Mirror selfie preview (off for rear camera). */
   mirrorLocal?: boolean;
+  /** Rounded card tile (group live) vs edge-to-edge pane. */
+  boxed?: boolean;
 }) {
+  const shell = boxed
+    ? 'relative h-full min-h-0 min-w-0 overflow-hidden bg-black rounded-[18px] border border-white/25 shadow-[0_10px_32px_rgba(0,0,0,0.45)] ring-1 ring-white/10'
+    : 'relative h-full min-h-0 min-w-0 overflow-hidden bg-black border border-white/10';
+  const mediaCls = 'absolute inset-0 h-full w-full object-cover bg-black [image-rendering:-webkit-optimize-contrast]';
   return (
-    <div className="relative h-full min-h-0 min-w-0 overflow-hidden bg-black border border-white/10">
+    <div className={shell}>
       {pane.local && pane.kind === 'host' && fileMedia ? (
         <video
           key={fileMedia.src || 'file-live'}
@@ -140,7 +147,7 @@ function GuestTile({
             el.setAttribute('playsinline', 'true');
             void el.play().catch(() => undefined);
           }}
-          className="absolute inset-0 h-full w-full object-cover bg-black"
+          className={mediaCls}
           playsInline
           autoPlay
           muted
@@ -155,7 +162,7 @@ function GuestTile({
               void el.play().catch(() => undefined);
             }
           }}
-          className={`absolute inset-0 h-full w-full object-cover bg-black ${mirrorLocal ? 'scale-x-[-1]' : ''}`}
+          className={`${mediaCls} ${mirrorLocal ? 'scale-x-[-1]' : ''}`}
           playsInline
           autoPlay
           muted
@@ -164,7 +171,8 @@ function GuestTile({
         <img
           src={frameUrl}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover scale-x-[-1] bg-black"
+          decoding="async"
+          className={`${mediaCls} scale-x-[-1]`}
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1A7CFF]/40 via-black to-[#8FFF4A]/20">
@@ -176,14 +184,14 @@ function GuestTile({
           </div>
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute left-2 bottom-2 z-[2] flex items-center gap-1.5 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/25 pointer-events-none" />
+      <div className="absolute left-2 bottom-2 z-[2] flex items-center gap-1.5 pointer-events-none max-w-[92%]">
         {pane.kind === 'host' ? (
-          <span className="rounded-full bg-red-500 px-1.5 h-5 inline-flex items-center mono text-[9px] font-bold">
+          <span className="rounded-full bg-red-500 px-1.5 h-5 inline-flex items-center mono text-[9px] font-bold shrink-0">
             HOST
           </span>
         ) : null}
-        <span className="rounded-full bg-black/60 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold max-w-[70%] truncate">
+        <span className="rounded-full bg-black/65 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold truncate">
           {pane.label}
         </span>
       </div>
@@ -997,97 +1005,89 @@ export default function FeedLiveNowStage({
   const renderSplit = (panes: Pane[]) => {
     void guestStreamTick;
     const n = panes.length;
+    // Boxed group layout: portrait cards centred on stage (not full-height side strips).
     const gridClass =
-      n <= 1
-        ? 'grid-cols-1 grid-rows-1'
-        : n === 2
-          ? 'grid-cols-2 grid-rows-1'
-          : 'grid-cols-2 grid-rows-2';
+      n <= 1 ? 'grid-cols-1 max-w-[280px]' : n === 3 ? 'grid-cols-2 max-w-[400px]' : 'grid-cols-2 max-w-[400px]';
 
-    const wallpaperSplit = Boolean(wallpaperUrl);
     return (
-      <div
-        className={`absolute inset-0 grid ${gridClass} ${
-          wallpaperSplit ? 'gap-2 p-3 pt-[calc(var(--feed-chrome-h,72px)+48px)] pb-[108px] bg-transparent' : 'gap-px bg-white/10'
-        }`}
-      >
-        {panes.map((pane, idx) => {
-          const spanHostTop = n === 3 && idx === 0 ? 'col-span-2' : '';
-          const url =
-            pane.slot === 'host'
-              ? frameUrl
-              : pane.slot
-                ? guestFrames[pane.slot] || null
-                : null;
-          const bindVideo =
-            pane.local && pane.kind === 'host'
-              ? videoRef
-              : pane.local
-                ? (el: HTMLVideoElement | null) => {
-                    guestCamRef.current = el;
-                  }
-                : undefined;
-          // YouTube host + guests: keep YT playing in the host cell (no camera JPEG)
-          if (pane.kind === 'host' && ytLive && youtubeId) {
-            return (
-              <div
-                key={pane.key}
-                className={`relative min-h-0 min-w-0 overflow-hidden bg-black ${spanHostTop} ${
-                  wallpaperSplit ? 'rounded-2xl border border-white/25 shadow-lg' : ''
-                }`}
-              >
-                <YoutubeEmbed
-                  youtubeId={youtubeId}
-                  title={title || 'YouTube Live'}
-                  autoplay
-                  loop={ytLoop}
-                  playlistIds={youtubePlaylistIds}
-                  playlist={youtubePlaylist}
-                  showCaptions
-                  fill
-                />
-                <div className="absolute left-2 bottom-2 z-[2] flex items-center gap-1.5 pointer-events-none">
-                  <span className="rounded-full bg-red-500 px-1.5 h-5 inline-flex items-center mono text-[9px] font-bold">
-                    HOST
-                  </span>
-                  <span className="rounded-full bg-black/60 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold max-w-[70%] truncate">
-                    {pane.label}
-                  </span>
+      <div className="absolute inset-0 z-[1] flex items-center justify-center bg-gradient-to-b from-black/55 via-black/35 to-black/70 px-3 pt-[calc(var(--feed-chrome-h,72px)+56px)] pb-[118px]">
+        <div className={`grid ${gridClass} gap-2.5 w-full place-items-stretch`}>
+          {panes.map((pane, idx) => {
+            const isHostWide = n === 3 && idx === 0;
+            const tileAspect = isHostWide
+              ? 'col-span-2 aspect-[16/10]'
+              : n === 1
+                ? 'aspect-[3/4]'
+                : 'aspect-[3/4]';
+            const url =
+              pane.slot === 'host'
+                ? frameUrl
+                : pane.slot
+                  ? guestFrames[pane.slot] || null
+                  : null;
+            const bindVideo =
+              pane.local && pane.kind === 'host'
+                ? videoRef
+                : pane.local
+                  ? (el: HTMLVideoElement | null) => {
+                      guestCamRef.current = el;
+                    }
+                  : undefined;
+            // YouTube host + guests: keep YT playing in the host cell (no camera JPEG)
+            if (pane.kind === 'host' && ytLive && youtubeId) {
+              return (
+                <div
+                  key={pane.key}
+                  className={`relative min-h-0 min-w-0 overflow-hidden bg-black rounded-[18px] border border-white/25 shadow-[0_10px_32px_rgba(0,0,0,0.45)] ring-1 ring-white/10 ${tileAspect}`}
+                >
+                  <YoutubeEmbed
+                    youtubeId={youtubeId}
+                    title={title || 'YouTube Live'}
+                    autoplay
+                    loop={ytLoop}
+                    playlistIds={youtubePlaylistIds}
+                    playlist={youtubePlaylist}
+                    showCaptions
+                    fill
+                  />
+                  <div className="absolute left-2 bottom-2 z-[2] flex items-center gap-1.5 pointer-events-none max-w-[92%]">
+                    <span className="rounded-full bg-red-500 px-1.5 h-5 inline-flex items-center mono text-[9px] font-bold shrink-0">
+                      HOST
+                    </span>
+                    <span className="rounded-full bg-black/65 border border-white/15 px-2 h-5 inline-flex items-center mono text-[10px] font-bold truncate">
+                      {pane.label}
+                    </span>
+                  </div>
                 </div>
+              );
+            }
+            return (
+              <div key={pane.key} className={`relative min-h-0 min-w-0 ${tileAspect}`}>
+                <GuestTile
+                  pane={pane}
+                  frameUrl={pane.local ? null : url}
+                  bindVideo={bindVideo}
+                  fileMedia={pane.kind === 'host' && pane.local ? fileMedia : null}
+                  localStream={
+                    pane.local && pane.kind === 'self'
+                      ? guestStreamRef.current
+                      : pane.local && pane.kind === 'host'
+                        ? getSharedLiveStream()
+                        : null
+                  }
+                  mirrorLocal={
+                    pane.kind === 'host'
+                      ? facing !== 'environment'
+                      : pane.kind === 'self'
+                        ? guestFacing !== 'environment'
+                        : true
+                  }
+                  boxed
+                />
               </div>
             );
-          }
-          return (
-            <div
-              key={pane.key}
-              className={`relative min-h-0 min-w-0 ${spanHostTop} ${
-                wallpaperSplit ? 'rounded-2xl overflow-hidden border border-white/25 shadow-lg' : ''
-              }`}
-            >
-              <GuestTile
-                pane={pane}
-                frameUrl={pane.local ? null : url}
-                bindVideo={bindVideo}
-                fileMedia={pane.kind === 'host' && pane.local ? fileMedia : null}
-                localStream={
-                  pane.local && pane.kind === 'self'
-                    ? guestStreamRef.current
-                    : pane.local && pane.kind === 'host'
-                      ? getSharedLiveStream()
-                      : null
-                }
-                mirrorLocal={
-                  pane.kind === 'host'
-                    ? facing !== 'environment'
-                    : pane.kind === 'self'
-                      ? guestFacing !== 'environment'
-                      : true
-                }
-              />
-            </div>
-          );
-        })}
-        {n === 3 && !wallpaperSplit ? <div className="bg-black/80" aria-hidden /> : null}
+          })}
+        </div>
       </div>
     );
   };

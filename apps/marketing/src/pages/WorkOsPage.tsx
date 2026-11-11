@@ -680,7 +680,7 @@ enum ProjectStatus {
                   </div>
                 </div>
                 <div className="mt-6 flex items-center gap-3">
-                  <div className="h-16 w-16 rounded-[14px] bg-white p-1.5"><div className="w-full h-full bg-[#050505] rounded-[8px] flex items-center justify-center text-[20px] font-black poppins m-gradient-text">M</div></div>
+                  <div className="h-16 w-16 rounded-[14px] bg-white p-1.5"><div className="w-full h-full bg-[#FFFDF7] rounded-[8px] flex items-center justify-center text-[20px] font-black poppins m-gradient-text">M</div></div>
                   <div className="mono text-[11px] text-white/40 leading-[1.4]">Scan to join waitlist<br />apps/marketing/app/work-os<br />Same fonts as No.1 • Poppins 800</div>
                 </div>
               </div>

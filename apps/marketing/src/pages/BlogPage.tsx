@@ -73,7 +73,7 @@ export default function BlogPage() {
       <header
         data-safe-area-sticky-top
         style={{ top: 'var(--safe-area-inset-top)' }}
-        className="sticky z-50 w-full border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-2xl"
+        className="sticky z-50 w-full border-b border-white/[0.06] bg-[#FFFDF7]/90 backdrop-blur-2xl"
       >
         <div className="mx-auto max-w-[1280px] flex h-[64px] items-center justify-between px-5 md:px-8">
           <div className="flex items-center gap-3">
@@ -391,7 +391,7 @@ export default function BlogPage() {
                   ))}
                 </div>
 
-                <div className="rounded-[12px] bg-[#050505] border border-white/10 p-4">
+                <div className="rounded-[12px] bg-[#FFFDF7] border border-white/10 p-4">
                   <div className="font-mono text-[10px] text-zinc-500 tracking-widest">FLOW</div>
                   <div className="mt-2 flex items-center gap-2 font-mono text-[11px]">
                     <span className="px-2 py-1 rounded-full bg-white text-black font-bold">Buy £0.99/100</span>

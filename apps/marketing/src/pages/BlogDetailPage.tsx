@@ -400,7 +400,7 @@ export default function BlogDetailPage(){
       {/* CTA FOOTER */}
       <footer className="mx-auto max-w-[1240px] px-6 pb-16">
         <div className="rounded-[32px] p-[1px]" style={{background:"var(--grad)"}}>
-          <div className="rounded-[31px] bg-[#050505] p-8 md:p-12 relative overflow-hidden">
+          <div className="rounded-[31px] bg-[#FFFDF7] p-8 md:p-12 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.12]" style={{background:"radial-gradient(600px 400px at 20% 20%, #8FFF4A, transparent), radial-gradient(600px 400px at 80% 20%, #FF8A00, transparent)"}} />
             <div className="relative">
               <div className="flex flex-wrap gap-2 mb-6">

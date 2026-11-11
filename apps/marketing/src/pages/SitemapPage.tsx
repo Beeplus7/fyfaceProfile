@@ -68,13 +68,13 @@ export default function SitemapPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
-      className="min-h-screen bg-[#050505] text-white overflow-x-clip selection:bg-[#8FFF4A] selection:text-black"
+      className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#8FFF4A] selection:text-black"
     >
       {/* NAV */}
       <header
         data-safe-area-sticky-top
         style={{ top: 'var(--safe-area-inset-top)' }}
-        className="sticky z-50 border-b border-white/[0.08] backdrop-blur-[24px] bg-[#050505]/80"
+        className="sticky z-50 border-b border-white/[0.08] backdrop-blur-[24px] bg-[#FFFDF7]/90"
       >
         <div className="mx-auto max-w-[1440px] px-6 md:px-10 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-3">

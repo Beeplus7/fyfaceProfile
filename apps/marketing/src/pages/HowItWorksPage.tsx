@@ -147,7 +147,7 @@ export default function HowItWorksPage() {
   return (
     <div
       data-safe-area-inset-root
-      className="min-h-screen w-full bg-[#050505] text-white overflow-x-clip selection:bg-[#8FFF4A]/30"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#8FFF4A]/30"
       style={{ boxSizing: "border-box", paddingTop: "var(--safe-area-inset-top)" }}
     >
       {/* GRID + VIGNETTE */}
@@ -160,7 +160,7 @@ export default function HowItWorksPage() {
       {/* NAV */}
       <header
         data-safe-area-sticky-top
-        className="sticky z-50 border-b border-white/[0.07] backdrop-blur-[22px] bg-[#050505]/70"
+        className="sticky z-50 border-b border-white/[0.07] backdrop-blur-[22px] bg-[#FFFDF7]/90"
         style={{ top: "var(--safe-area-inset-top)" }}
       >
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 h-[64px] flex items-center justify-between">
@@ -704,7 +704,7 @@ export default function HowItWorksPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505]" />
           <div className="relative mx-auto max-w-[1280px] px-5 md:px-8 py-20 md:py-28">
             <div className="rounded-[32px] p-[1px]" style={{ background: "var(--gradient-m)" }}>
-              <div className="rounded-[31px] bg-[#050505] p-8 md:p-14">
+              <div className="rounded-[31px] bg-[#FFFDF7] p-8 md:p-14">
                 <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-widest">No.2 COMPLETE • LOOP REVEALED</div>

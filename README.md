@@ -46,6 +46,18 @@ See `OLDHAM_TEST_CHECKLIST.md` — AYO'S TAILORS Spindlegate OL1.
 
 Build `apps/marketing` → rsync/scp `dist/` to VPS `/var/www/myfaceprofile`.
 
+### Meta AI / crawler readability
+
+The marketing app is a JS SPA. Meta AI and most AI crawlers do **not** execute JavaScript,
+so they must receive static HTML. Ship / reload with:
+
+```bash
+bash scripts/deploy-ai-readable.sh
+```
+
+That uploads `llms.txt`, `robots.txt`, `myface-ai-readable.html`, OG image, and installs
+nginx bot routing so Meta/Facebook UAs get the no-JS mirror at `/`.
+
 ## Sprint map
 
 1. **Foundation** (this) — Turbo · schema · split UPRM · Stripe stub · onboarding memory

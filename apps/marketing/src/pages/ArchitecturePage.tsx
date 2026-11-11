@@ -394,10 +394,10 @@ export default function ArchitecturePage(){
   }
 
   return (
-    <div data-safe-area-inset-root className="min-h-screen bg-[#050505] text-white selection:bg-[var(--m-lime)] selection:text-black" style={{ boxSizing:'border-box', paddingTop:'var(--safe-area-inset-top)' }}>
+    <div data-safe-area-inset-root className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] selection:bg-[var(--m-lime)] selection:text-black" style={{ boxSizing:'border-box', paddingTop:'var(--safe-area-inset-top)' }}>
       {/* Top Stats Bar */}
       <div className="sticky top-0 z-30 border-b border-white/10 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'var(--safe-area-inset-top)' }}>
-        <div className="bg-[#050505]/90">
+        <div className="bg-[#FFFDF7]/92">
           <div className="flex flex-wrap items-center gap-2 px-3 md:px-5 py-2.5 text-[11px] font-mono">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg m-gradient flex items-center justify-center font-black text-black text-[14px]">M</div>
@@ -417,7 +417,7 @@ export default function ArchitecturePage(){
       </div>
 
       {/* Search + Filter */}
-      <div className="sticky z-20 backdrop-blur-xl bg-[#050505]/70 border-b border-white/5" style={{ top:'calc(var(--safe-area-inset-top) + 56px)' }} data-safe-area-sticky-top>
+      <div className="sticky z-20 backdrop-blur-xl bg-[#FFFDF7]/90 border-b border-white/5" style={{ top:'calc(var(--safe-area-inset-top) + 56px)' }} data-safe-area-sticky-top>
         <div className="flex flex-col md:flex-row gap-2 px-3 md:px-5 py-3">
           <div className="flex items-center gap-2 flex-1 glass rounded-xl px-3 py-2">
             <Search className="w-4 h-4 text-white/30" />
@@ -510,7 +510,7 @@ export default function ArchitecturePage(){
                   <div className="mt-6 space-y-4">
                     {/* Mini OS */}
                     <div className="grid grid-cols-12 gap-3">
-                      <div className="col-span-3 bg-[#050505] border border-white/10 rounded-xl p-3">
+                      <div className="col-span-3 bg-[#FFFDF7] border border-white/10 rounded-xl p-3">
                         <div className="text-[10px] font-bold tracking-widest text-white/20 mb-2">LEFT SIDEBAR 240px</div>
                         <div className="space-y-1.5 font-mono text-[10px] text-white/50">
                           <div className="flex items-center gap-2"><Box className="w-3 h-3" /> M logo</div>
@@ -696,7 +696,7 @@ export default function ArchitecturePage(){
                   </div>
                 ))}
                 <div className="col-span-2 md:col-span-4 rounded-xl m-gradient p-[1px]">
-                  <div className="rounded-[11px] bg-[#050505] px-4 py-3 flex flex-wrap items-center gap-3">
+                  <div className="rounded-[11px] bg-[#FFFDF7] px-4 py-3 flex flex-wrap items-center gap-3">
                     <span className="font-poppins font-extrabold text-[13px]">Total = 120+180+40+100 = 440 + assets 100 = 540 + tests 100 = 640 files — MVP 250 files — Full 620-650 files</span>
                     <span className="ml-auto px-3 py-1 rounded-full bg-white text-black font-mono text-[11px] font-bold">PRODUCTION-READY Turbo monorepo pnpm dev</span>
                   </div>
@@ -722,7 +722,7 @@ export default function ArchitecturePage(){
       </div>
 
       {/* Bottom sticky legend */}
-      <div className="sticky bottom-0 z-20 border-t border-white/10 bg-[#050505]/90 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'calc(100vh - 44px)' }}>
+      <div className="sticky bottom-0 z-20 border-t border-white/10 bg-[#FFFDF7]/92 backdrop-blur-2xl" data-safe-area-sticky-top style={{ top:'calc(100vh - 44px)' }}>
         <div className="px-3 md:px-5 py-2.5 flex flex-wrap items-center gap-3 text-[11px] font-mono">
           <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[var(--done)]" /> DONE green 26/26 marketing</span>
           <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-[var(--new)]" /> NEW yellow Page 25 26 onboarding UPRM</span>

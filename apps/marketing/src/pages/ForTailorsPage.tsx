@@ -43,7 +43,7 @@ export default function ForTailorsPage() {
       </div>
 
       {/* NAV */}
-      <header data-safe-area-sticky-top style={{ top: 'var(--safe-area-inset-top)' }} className="sticky z-50 w-full border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-xl">
+      <header data-safe-area-sticky-top style={{ top: 'var(--safe-area-inset-top)' }} className="sticky z-50 w-full border-b border-white/[0.06] bg-[#FFFDF7]/90 backdrop-blur-xl">
         <div className="max-w-[1280px] mx-auto px-5 md:px-8 h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl overflow-hidden bg-black border border-white/10 flex items-center justify-center">
@@ -268,7 +268,7 @@ export default function ForTailorsPage() {
       </section>
 
       {/* SECTION 2 ASO-EBI SPECIALIST */}
-      <section className="relative py-16 md:py-24 bg-[#050505] border-t border-white/[0.06]">
+      <section className="relative py-16 md:py-24 bg-[#FFFDF7] border-t border-white/[0.06]">
         <div className="max-w-[1280px] mx-auto px-5 md:px-8">
           <div className="inline-flex px-3 py-1 rounded-full bg-[#FFE600]/10 border border-[#FFE600]/20 text-[#FFE600] font-mono text-[10px] tracking-widest uppercase mb-6">
             Oldham's Culture • Aso-Ebi Packages • Wedding | Engagement | Event
@@ -405,7 +405,7 @@ export default function ForTailorsPage() {
       </section>
 
       {/* SECTION 4 HOW IT WORKS */}
-      <section className="relative py-16 md:py-24 bg-[#050505] border-t border-white/[0.06]">
+      <section className="relative py-16 md:py-24 bg-[#FFFDF7] border-t border-white/[0.06]">
         <div className="max-w-[1280px] mx-auto px-5 md:px-8">
           <MonoLabel>SECTION 04 • HOW IT WORKS FOR TAILORS • UPRM PIPELINE</MonoLabel>
           <h2 className="font-poppins font-bold text-[30px] md:text-[46px] leading-[0.95] tracking-[-0.02em] mt-3 max-w-[760px]">From Workshop Phone to <span className="text-gradient">Repeat Customer.</span> Six Holy Steps.</h2>

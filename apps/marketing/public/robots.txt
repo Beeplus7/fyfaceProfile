@@ -1,0 +1,84 @@
+# MyFace Profile — open to search engines and AI platforms
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Google AI / Search
+User-agent: Googlebot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: GoogleOther
+Allow: /
+
+# Microsoft
+User-agent: bingbot
+Allow: /
+User-agent: BingPreview
+Allow: /
+
+# Meta AI / Facebook (training, user fetch, previews, indexer)
+User-agent: meta-externalagent
+Allow: /
+User-agent: meta-externalfetcher
+Allow: /
+User-agent: Meta-WebIndexer
+Allow: /
+User-agent: FacebookBot
+Allow: /
+User-agent: Facebot
+Allow: /
+User-agent: FacebookExternalHit
+Allow: /
+
+# Others commonly used by AI products / indexes
+User-agent: PerplexityBot
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Diffbot
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: DuckAssistBot
+Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: LinkedInApp
+Allow: /
+User-agent: Slackbot
+Allow: /
+User-agent: Twitterbot
+Allow: /
+User-agent: Discordbot
+Allow: /
+User-agent: cohere-ai
+Allow: /
+User-agent: YouBot
+Allow: /
+
+Sitemap: https://myfaceprofile.aikova.co.uk/sitemap.xml
+# Machine-readable summary: https://myfaceprofile.aikova.co.uk/llms.txt
+# No-JS HTML mirror: https://myfaceprofile.aikova.co.uk/myface-ai-readable.html

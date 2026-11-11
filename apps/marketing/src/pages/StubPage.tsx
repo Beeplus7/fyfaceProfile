@@ -9,11 +9,11 @@ type StubPageProps = {
 export default function StubPage({ title, description }: StubPageProps) {
   return (
     <div
-      className="min-h-screen w-full bg-[#050505] text-white overflow-x-clip antialiased flex flex-col items-center justify-center px-6"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip antialiased flex flex-col items-center justify-center px-6"
       style={{ paddingTop: 'var(--safe-area-inset-top)' }}
     >
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#050505]" />
+        <div className="absolute inset-0 bg-[#FFFDF7]" />
         <div
           className="absolute top-[-20%] left-[-10%] w-[70%] h-[60%] rounded-full opacity-20 blur-[120px]"
           style={{

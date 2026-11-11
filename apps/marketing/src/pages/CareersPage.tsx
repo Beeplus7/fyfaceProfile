@@ -151,12 +151,12 @@ export default function CareersPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
-      className="min-h-screen bg-[#050505] text-[#f5f5f0] selection:bg-[#8FFF4A] selection:text-black overflow-x-clip"
+      className="min-h-screen bg-[#FFFDF7] text-[#f5f5f0] selection:bg-[#8FFF4A] selection:text-black overflow-x-clip"
     >
       <header
         data-safe-area-sticky-top
         style={{ top: 'var(--safe-area-inset-top)' }}
-        className="sticky z-50 border-b border-white/[0.06] bg-[#050505]/80 backdrop-blur-2xl"
+        className="sticky z-50 border-b border-white/[0.06] bg-[#FFFDF7]/90 backdrop-blur-2xl"
       >
         <div className="mx-auto max-w-[1440px] px-5 md:px-8 h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -321,7 +321,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <section id="roles" className="relative border-t border-white/[0.06] bg-[#050505]">
+      <section id="roles" className="relative border-t border-white/[0.06] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1440px] px-5 md:px-8 py-16 md:py-24">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
             <div>

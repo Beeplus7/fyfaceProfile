@@ -480,8 +480,8 @@ export default function ProjectsPage() {
   const [mobileMenu, setMobileMenu] = useState(false);
 
   return (
-    <div data-safe-area-inset-root className="min-h-screen bg-[#050505] text-white overflow-x-clip" style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}>
-      <header data-safe-area-sticky-top className="sticky z-[50] border-b border-white/[0.06] backdrop-blur-[20px] bg-[#050505]/80" style={{ top: 'var(--safe-area-inset-top)' }}>
+    <div data-safe-area-inset-root className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip" style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}>
+      <header data-safe-area-sticky-top className="sticky z-[50] border-b border-white/[0.06] backdrop-blur-[20px] bg-[#FFFDF7]/90" style={{ top: 'var(--safe-area-inset-top)' }}>
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-[36px] h-[36px] rounded-[10px] overflow-hidden bg-white flex items-center justify-center">

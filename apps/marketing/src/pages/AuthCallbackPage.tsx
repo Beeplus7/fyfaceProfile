@@ -34,7 +34,7 @@ export default function AuthCallbackPage() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white grid place-items-center px-4">
+    <div className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] grid place-items-center px-4">
       <div className="text-center space-y-3">
         <p className="text-white/70">{error ?? 'Finishing sign-in…'}</p>
         {error ? (

@@ -20,7 +20,7 @@ export default function StaticHtmlFramePage({
 
   return (
     <div
-      className="fixed inset-0 bg-[#050505] overflow-hidden"
+      className="fixed inset-0 bg-[#FFFDF7] overflow-hidden"
       style={{
         paddingTop: 'var(--safe-area-inset-top)',
         paddingBottom: 'var(--safe-area-inset-bottom)',

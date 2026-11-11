@@ -14,7 +14,7 @@ export default function MobileBottomNav() {
 
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-[100] border-t border-white/10 bg-black/80 backdrop-blur-xl"
+      className="md:hidden fixed bottom-0 inset-x-0 z-[100] border-t border-[#EDE7DA] bg-[#FFFDF7]/95 backdrop-blur-xl"
       style={{ paddingBottom: 'var(--safe-area-inset-bottom)' }}
       aria-label="Primary"
     >
@@ -29,7 +29,7 @@ export default function MobileBottomNav() {
               <Link
                 to={to}
                 className={`flex flex-col items-center justify-center gap-0.5 h-full text-[10px] font-medium transition ${
-                  active ? 'text-[#8FFF4A]' : 'text-white/50'
+                  active ? 'text-[#00C896]' : 'text-[#5B6470]'
                 }`}
               >
                 <Icon className="w-5 h-5" strokeWidth={active ? 2.5 : 2} />

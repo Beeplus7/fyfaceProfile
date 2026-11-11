@@ -46,10 +46,19 @@ function slotUrl(slot: string, qs: string) {
   return qs ? `${FRAME_URL}?slot=${s}&${qs}` : `${FRAME_URL}?slot=${s}`;
 }
 
+function activeGuestSlots(): number {
+  let n = 0;
+  for (const p of pubs.values()) {
+    if (p.publishing) n += 1;
+  }
+  return Math.max(1, n);
+}
+
 function drawToJpeg(p: SlotPub, source: CanvasImageSource, srcW: number, srcH: number): Promise<Blob | null> {
   if (!p.canvas) p.canvas = document.createElement('canvas');
   const c = p.canvas;
-  const maxW = liveEncodeMaxWidth('guest');
+  const guests = activeGuestSlots();
+  const maxW = liveEncodeMaxWidth('guest', guests);
   const scale = Math.min(1, maxW / srcW);
   c.width = Math.max(2, Math.round(srcW * scale));
   c.height = Math.max(2, Math.round(srcH * scale));
@@ -58,7 +67,7 @@ function drawToJpeg(p: SlotPub, source: CanvasImageSource, srcW: number, srcH: n
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(source, 0, 0, c.width, c.height);
-  const q = liveJpegQuality('guest');
+  const q = liveJpegQuality('guest', guests);
   return new Promise((resolve) => c.toBlob(resolve, 'image/jpeg', q));
 }
 
@@ -101,7 +110,7 @@ async function push(p: SlotPub) {
   if (!p.publishing || p.inFlight) return;
   p.inFlight = true;
   const started = Date.now();
-  const { fast, slow } = liveFrameIntervalMs('guest');
+  const { fast, slow } = liveFrameIntervalMs('guest', activeGuestSlots());
   try {
     const blob = await capture(p);
     if (!blob || blob.size < MIN_BYTES || !p.publishing) return;
@@ -160,8 +169,8 @@ function ensureHiddenVideo(p: SlotPub, stream: MediaStream) {
       position: 'fixed',
       left: '0',
       top: '0',
-      width: '960px',
-      height: '540px',
+      width: '540px',
+      height: '720px',
       opacity: '0.02',
       pointerEvents: 'none',
       zIndex: '-1',
@@ -184,17 +193,27 @@ export function startSlotFramePublish(
   if (!track) return;
   track.enabled = true;
   try {
+    // Portrait box tiles — do NOT force 16:9 landscape (was stretching group live horizontal).
     void track.applyConstraints({
       frameRate: { ideal: 30, max: 30 },
-      width: { ideal: 1280 },
-      height: { ideal: 720 },
+      width: { ideal: 900 },
+      height: { ideal: 1200 },
+      aspectRatio: { ideal: 0.75 },
     });
   } catch {
-    /* ignore */
+    try {
+      void track.applyConstraints({
+        frameRate: { ideal: 28, max: 30 },
+        width: { ideal: 720 },
+        height: { ideal: 960 },
+      });
+    } catch {
+      /* ignore */
+    }
   }
   p.stream = stream;
   p.publishing = true;
-  p.interval = liveFrameIntervalMs('guest').fast;
+  p.interval = liveFrameIntervalMs('guest', Math.max(1, pubs.size)).fast;
   // Always encode from a stable hidden <video> — tile remounts kill Safari publish
   ensureHiddenVideo(p, stream);
   if (fromVideo) {

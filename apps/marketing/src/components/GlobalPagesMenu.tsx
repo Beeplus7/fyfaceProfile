@@ -39,12 +39,12 @@ export default function GlobalPagesMenu() {
             onClick={() => setOpen(false)}
           />
           <div
-            className="absolute inset-x-0 bottom-0 md:inset-y-0 md:right-0 md:left-auto md:w-[420px] max-h-[88vh] md:max-h-none overflow-y-auto rounded-t-3xl md:rounded-none border border-white/10 bg-[#0A0A0A] text-white"
+            className="absolute inset-x-0 bottom-0 md:inset-y-0 md:right-0 md:left-auto md:w-[420px] max-h-[88vh] md:max-h-none overflow-y-auto rounded-t-3xl md:rounded-none border border-[#EDE7DA] bg-[#FFFDF7] text-[#0A1931]"
             style={{ paddingBottom: 'var(--safe-area-inset-bottom)' }}
           >
-            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-5 py-4 border-b border-white/10 bg-[#0A0A0A]/95 backdrop-blur">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-5 py-4 border-b border-[#EDE7DA] bg-[#FFFDF7]/95 backdrop-blur">
               <div>
-                <div className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#8FFF4A]">
+                <div className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#00C896]">
                   MyFace · {SITE_PAGES.length} pages
                 </div>
                 <div className="font-extrabold text-lg">Browse & open</div>
@@ -52,7 +52,7 @@ export default function GlobalPagesMenu() {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="h-10 w-10 rounded-full border border-white/15 grid place-items-center"
+                className="h-10 w-10 rounded-full border border-[#EDE7DA] bg-white grid place-items-center"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -64,7 +64,7 @@ export default function GlobalPagesMenu() {
                 const pages = SITE_PAGES.filter((p) => p.group === group.id);
                 return (
                   <div key={group.id}>
-                    <div className="mb-2 text-[11px] font-bold tracking-[0.16em] uppercase text-white/40">
+                    <div className="mb-2 text-[11px] font-bold tracking-[0.16em] uppercase text-[#5B6470]">
                       {group.label}
                     </div>
                     <div className="space-y-1.5">
@@ -76,12 +76,12 @@ export default function GlobalPagesMenu() {
                             to={page.path}
                             className={`flex items-center justify-between gap-3 rounded-xl px-3 py-3 border transition min-h-[48px] ${
                               active
-                                ? 'border-[#8FFF4A]/50 bg-[#8FFF4A]/10 text-[#8FFF4A]'
-                                : 'border-white/10 bg-white/[0.03] text-white hover:bg-white/[0.06]'
+                                ? 'border-[#00C896]/50 bg-[#EFFAF6] text-[#007A5C]'
+                                : 'border-[#EDE7DA] bg-white text-[#0A1931] hover:bg-[#FFF8E1]'
                             }`}
                           >
                             <span className="font-semibold text-sm">{page.label}</span>
-                            <span className="font-mono text-[10px] text-white/40">
+                            <span className="font-mono text-[10px] text-[#5B6470]">
                               {page.path}
                             </span>
                           </Link>

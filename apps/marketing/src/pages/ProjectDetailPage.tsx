@@ -646,7 +646,7 @@ export default function ProjectDetailPage() {
         </section>
 
         <section className="mt-20 lg:mt-28 rounded-[32px] gradient-m p-[1px]">
-          <div className="rounded-[31px] bg-[#050505] relative overflow-hidden p-8 lg:p-12">
+          <div className="rounded-[31px] bg-[#FFFDF7] relative overflow-hidden p-8 lg:p-12">
             <div className="absolute inset-0">
               <div className="absolute -top-20 -left-20 h-[300px] w-[300px] rounded-full bg-[#8FFF4A]/15 blur-[50px]" />
               <div className="absolute -bottom-20 -right-20 h-[400px] w-[400px] rounded-full bg-[#FF8A00]/15 blur-[60px]" />

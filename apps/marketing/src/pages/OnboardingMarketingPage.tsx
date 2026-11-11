@@ -274,7 +274,7 @@ export default function OnboardingMarketingPage(){
   };
 
   return (
-    <div data-safe-area-inset-root className="min-h-screen w-full bg-[#050505] text-[#F5F5F0] overflow-x-clip relative selection:bg-[#8FFF4A]/30"
+    <div data-safe-area-inset-root className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip relative selection:bg-[#8FFF4A]/30"
       style={{boxSizing:'border-box', paddingTop:'var(--safe-area-inset-top)'}}>
       <QuantumBackground />
 

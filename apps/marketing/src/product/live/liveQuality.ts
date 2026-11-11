@@ -22,7 +22,7 @@ export function liveNetClass(): LiveNetClass {
 }
 
 /** Max encode width for host / guest JPEG. */
-export function liveEncodeMaxWidth(role: 'host' | 'guest' = 'host'): number {
+export function liveEncodeMaxWidth(role: 'host' | 'guest' = 'host', guestCount = 0): number {
   const net = liveNetClass();
   const desktop = (() => {
     try {
@@ -31,27 +31,37 @@ export function liveEncodeMaxWidth(role: 'host' | 'guest' = 'host'): number {
       return false;
     }
   })();
-  if (net === 'low') return role === 'guest' ? 640 : 720;
-  if (net === 'mid') return role === 'guest' ? 848 : 1080;
-  if (desktop) return role === 'guest' ? 1080 : 1440;
-  return role === 'guest' ? 960 : 1280;
+  // Group / boxed tiles benefit from a touch more guest detail (smaller on-screen → needs sharper source).
+  const groupBump = guestCount >= 1 && role === 'guest' ? 80 : 0;
+  if (net === 'low') return (role === 'guest' ? 720 : 800) + Math.min(groupBump, 40);
+  if (net === 'mid') return (role === 'guest' ? 900 : 1120) + groupBump;
+  if (desktop) return (role === 'guest' ? 1120 : 1440) + groupBump;
+  return (role === 'guest' ? 1000 : 1280) + groupBump;
 }
 
 /** JPEG quality 0–1 */
-export function liveJpegQuality(role: 'host' | 'guest' = 'host'): number {
+export function liveJpegQuality(role: 'host' | 'guest' = 'host', guestCount = 0): number {
   const net = liveNetClass();
-  if (net === 'low') return 0.82;
-  if (net === 'mid') return role === 'guest' ? 0.88 : 0.9;
-  return role === 'guest' ? 0.92 : 0.94;
+  const group = guestCount >= 1;
+  if (net === 'low') return group ? 0.86 : 0.84;
+  if (net === 'mid') return role === 'guest' ? (group ? 0.9 : 0.88) : 0.91;
+  return role === 'guest' ? (group ? 0.94 : 0.92) : 0.95;
 }
 
 /** Frame push interval (ms). */
-export function liveFrameIntervalMs(role: 'host' | 'guest' = 'host'): { fast: number; slow: number } {
+export function liveFrameIntervalMs(
+  role: 'host' | 'guest' = 'host',
+  guestCount = 0,
+): { fast: number; slow: number } {
   const net = liveNetClass();
-  if (net === 'low') return { fast: 140, slow: 220 };
-  if (net === 'mid') return { fast: 95, slow: 150 };
-  // ~15–18 fps host, ~12–14 guest on good Wi‑Fi
-  return role === 'guest' ? { fast: 75, slow: 120 } : { fast: 55, slow: 95 };
+  // Slightly slower cadence when many slots to avoid decode thrash, but keep guest tiles snappy at 1–2.
+  if (net === 'low') return { fast: guestCount >= 2 ? 150 : 135, slow: 230 };
+  if (net === 'mid') return { fast: guestCount >= 2 ? 100 : 90, slow: 155 };
+  if (guestCount >= 2) {
+    return role === 'guest' ? { fast: 70, slow: 110 } : { fast: 55, slow: 95 };
+  }
+  // ~16–18 fps host, ~13–15 guest on good Wi‑Fi (boxed tiles)
+  return role === 'guest' ? { fast: 65, slow: 105 } : { fast: 50, slow: 90 };
 }
 
 /** WAV encode rate for speech + music beds (keep high for group clarity). */
@@ -81,29 +91,32 @@ export function liveAudioPollMs(guestCount = 0): number {
   return 130;
 }
 
-/** getUserMedia video constraints for guests in split live — portrait-friendly. */
+/** getUserMedia video constraints for guests in boxed group live — portrait 3:4 cards. */
 export function liveGuestVideoConstraints(): MediaTrackConstraints {
   const net = liveNetClass();
   if (net === 'low') {
     return {
       facingMode: { ideal: 'user' },
-      width: { ideal: 640 },
+      width: { ideal: 720 },
       height: { ideal: 960 },
-      frameRate: { ideal: 24, max: 24 },
+      aspectRatio: { ideal: 0.75 },
+      frameRate: { ideal: 24, max: 26 },
     };
   }
   if (net === 'mid') {
     return {
       facingMode: { ideal: 'user' },
-      width: { ideal: 720 },
-      height: { ideal: 1280 },
+      width: { ideal: 810 },
+      height: { ideal: 1080 },
+      aspectRatio: { ideal: 0.75 },
       frameRate: { ideal: 28, max: 30 },
     };
   }
   return {
     facingMode: { ideal: 'user' },
-    width: { ideal: 720 },
-    height: { ideal: 1280 },
+    width: { ideal: 900 },
+    height: { ideal: 1200 },
+    aspectRatio: { ideal: 0.75 },
     frameRate: { ideal: 30, max: 30 },
   };
 }

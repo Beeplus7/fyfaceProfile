@@ -20,7 +20,7 @@ function shouldShowGuide(pathname: string) {
 export default function AppLayout() {
   const { pathname } = useLocation();
   return (
-    <div className="app-shell app-shell--with-mobile-nav pb-[72px] md:pb-0">
+    <div className="marketing-surface app-shell app-shell--with-mobile-nav pb-[72px] md:pb-0">
       <Outlet />
       <MobileBottomNav />
       <GlobalPagesMenu />

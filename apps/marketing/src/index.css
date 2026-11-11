@@ -3,6 +3,7 @@
 @import 'tailwindcss';
 
 :root {
+  /* Product OS stays dark; marketing overrides via .marketing-surface */
   --bg: #050505;
   --bg-2: #0a0a0a;
   --bg-3: #121212;
@@ -16,6 +17,20 @@
   --blue: #00bfff;
   --yellow: #ffe600;
   --orange: #ff8a00;
+  /* Africa Pay You Live marketing palette */
+  --mkt-surface: #fffdf7;
+  --mkt-surface-2: #fff8e1;
+  --mkt-surface-3: #effaf6;
+  /* Dim card fill so panels read on cream (not white-on-white) */
+  --mkt-card: #f0e9db;
+  --mkt-card-2: #e8dfcc;
+  --mkt-ink: #0a0a0a;
+  --mkt-muted: #5b6470;
+  --mkt-gold: #ffc300;
+  --mkt-teal: #00c896;
+  --mkt-navy: #0a1931;
+  --mkt-line: #d4cbb8;
+  --mkt-red: #ff3b30;
   --gradient-m: linear-gradient(
     102deg,
     #8fff4a 0%,
@@ -36,10 +51,117 @@
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #050505;
-  }
+/* Marketing routes — exact Africa Pay You Live cream surface */
+.marketing-surface {
+  --bg: var(--mkt-surface);
+  --bg-2: var(--mkt-surface-2);
+  --bg-3: var(--mkt-surface-3);
+  --surface: #ffffff;
+  --surface-2: var(--mkt-surface-2);
+  --border: var(--mkt-line);
+  --text: var(--mkt-ink);
+  --text-dim: var(--mkt-muted);
+  background: var(--mkt-surface);
+  color: var(--mkt-ink);
+}
+
+.marketing-surface .glass {
+  background: var(--mkt-card);
+  border: 1px solid var(--mkt-line);
+  box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
+}
+
+.marketing-surface .glass-strong {
+  background: var(--mkt-card-2);
+  border: 1px solid var(--mkt-line);
+  box-shadow: 0 16px 40px rgba(10, 25, 49, 0.12);
+}
+
+.mkt-chip {
+  border-radius: 999px;
+  border: 1px solid var(--mkt-line);
+  padding: 7px 11px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--mkt-card);
+  color: var(--mkt-ink);
+}
+
+.mkt-card {
+  border: 1px solid var(--mkt-line);
+  border-radius: 20px;
+  background: var(--mkt-card);
+  box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
+}
+
+/* Pure white panels → dim sand so they separate from page cream */
+.marketing-surface .bg-white,
+.marketing-surface .\bg-white\/90,
+.marketing-surface .\bg-white\/95 {
+  background-color: var(--mkt-card) !important;
+}
+
+/* Near-white card fills that used to disappear on cream */
+.marketing-surface .\bg-\[\#FFFDF3\] {
+  background-color: var(--mkt-card-2) !important;
+}
+
+/* Flip legacy dark marketing shells to cream without rewriting every page */
+.marketing-surface .\bg-\[\#050505\],
+.marketing-surface .\bg-\[\#080808\],
+.marketing-surface .\bg-\[\#0a0a0a\],
+.marketing-surface .\bg-\[\#0A0A0A\],
+.marketing-surface .\bg-\[\#0e0e0e\],
+.marketing-surface .\bg-\[\#0f0f0f\],
+.marketing-surface .\bg-\[\#141414\] {
+  background-color: var(--mkt-surface) !important;
+}
+
+.marketing-surface .\bg-\[\#050505\]\/80,
+.marketing-surface .\bg-\[\#050505\]\/85 {
+  background-color: rgba(255, 253, 247, 0.92) !important;
+}
+
+.marketing-surface .\bg-black\/40,
+.marketing-surface .\bg-black\/60,
+.marketing-surface .\bg-black\/70,
+.marketing-surface .\bg-black\/80 {
+  background-color: rgba(255, 253, 247, 0.82) !important;
+  color: var(--mkt-ink);
+}
+
+.marketing-surface .\text-white {
+  color: var(--mkt-ink) !important;
+}
+
+.marketing-surface .\text-white\/80,
+.marketing-surface .\text-white\/70,
+.marketing-surface .\text-white\/60,
+.marketing-surface .\text-white\/55,
+.marketing-surface .\text-white\/50,
+.marketing-surface .\text-white\/40,
+.marketing-surface .\text-white\/30 {
+  color: var(--mkt-muted) !important;
+}
+
+.marketing-surface .\border-white\/10,
+.marketing-surface .\border-white\/12,
+.marketing-surface .\border-white\/15,
+.marketing-surface .\border-white\/\[0\.06\],
+.marketing-surface .\border-white\/\[0\.07\],
+.marketing-surface .\border-white\/\[0\.08\] {
+  border-color: var(--mkt-line) !important;
+}
+
+.marketing-surface .\bg-white\/\[0\.03\],
+.marketing-surface .\bg-white\/\[0\.04\],
+.marketing-surface .\bg-white\/\[0\.06\],
+.marketing-surface .\bg-white\/\[0\.10\] {
+  background-color: rgba(10, 25, 49, 0.04) !important;
+}
+
+.marketing-surface .\hover\:text-white:hover {
+  color: var(--mkt-navy) !important;
 }
 
 * {

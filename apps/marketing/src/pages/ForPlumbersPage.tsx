@@ -104,7 +104,7 @@ export default function ForPlumbersPage() {
   return (
     <div
       data-safe-area-inset-root
-      className="min-h-screen w-full bg-[#050505] text-[#F5F5F0] overflow-x-clip relative selection:bg-[#8FFF4A] selection:text-black"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip relative selection:bg-[#8FFF4A] selection:text-black"
       style={{ boxSizing: "border-box", paddingTop: "var(--safe-area-inset-top)" }}
     >
       {/* Ambient glows */}
@@ -117,7 +117,7 @@ export default function ForPlumbersPage() {
       {/* NAV */}
       <header
         data-safe-area-sticky-top
-        className="sticky z-50 border-b border-white/[0.06] bg-[#050505]/70 backdrop-blur-2xl"
+        className="sticky z-50 border-b border-white/[0.06] bg-[#FFFDF7]/90 backdrop-blur-2xl"
         style={{ top: "var(--safe-area-inset-top)" }}
       >
         <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between px-6 md:px-10">
@@ -484,7 +484,7 @@ export default function ForPlumbersPage() {
       </section>
 
       {/* SECTION 2 — REAL JOBS OLDHAM */}
-      <section id="jobs" className="relative border-t border-white/[0.06] bg-[#050505]">
+      <section id="jobs" className="relative border-t border-white/[0.06] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1440px] px-6 md:px-10 py-16 md:py-20">
           <div className="flex flex-wrap items-center gap-3">
             <span className="mono rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] tracking-[0.14em] text-white/60 uppercase">Section 02 • Real Jobs Oldham</span>
@@ -708,7 +708,7 @@ export default function ForPlumbersPage() {
       </section>
 
       {/* CTA FOOTER */}
-      <section id="join" className="relative overflow-hidden border-t border-white/[0.06] bg-[#050505]">
+      <section id="join" className="relative overflow-hidden border-t border-white/[0.06] bg-[#FFFDF7]">
         {/* Glow */}
         <div className="pointer-events-none absolute left-1/2 top-[-30%] h-[120%] w-[120%] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(143,255,74,0.14),transparent_60%)] blur-[20px]" />
 

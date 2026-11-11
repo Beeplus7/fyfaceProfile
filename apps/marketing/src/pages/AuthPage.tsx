@@ -58,7 +58,7 @@ export default function AuthPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#050505] text-white px-4 py-16 flex items-center justify-center"
+      className="min-h-screen bg-[#FFFDF7] text-[#0A0A0A] px-4 py-16 flex items-center justify-center"
       style={{ paddingTop: 'max(4rem, var(--safe-area-inset-top))' }}
     >
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 space-y-4">

@@ -54,6 +54,15 @@ const MONETIZATION = [
   },
   {
     id: 3,
+    title: "Video → Cash Dataset",
+    take: "Transparent split",
+    math: "Approved work video hrs × lab rate",
+    revenue: 4200,
+    note: "Consent-first AI training data • NEW",
+    color: "#FFC300",
+  },
+  {
+    id: 4,
     title: "Boosted Discovery",
     take: "£5 per boost",
     math: "300 pros × £5 = £1,500",
@@ -62,7 +71,7 @@ const MONETIZATION = [
     color: "#FFE600",
   },
   {
-    id: 4,
+    id: 5,
     title: "Supplier Ads in WorkCut",
     take: "£2.5 CPM",
     math: "WorkCut exports + templates",
@@ -71,7 +80,7 @@ const MONETIZATION = [
     color: "#FF8A00",
   },
   {
-    id: 5,
+    id: 6,
     title: "Lead Unlock",
     take: "£3 per lead",
     math: "100 leads × £3",
@@ -469,7 +478,7 @@ export default function PricingPage() {
       </section>
 
       {/* SECTION 2 — PRICING TIERS */}
-      <section id="pricing" className="relative border-t border-white/[0.06] bg-[#050505]">
+      <section id="pricing" className="relative border-t border-white/[0.06] bg-[#FFFDF7]">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(600px 400px at 20% 0%, rgba(143,255,74,0.08), transparent), radial-gradient(500px 400px at 80% 100%, rgba(255,138,0,0.06), transparent)" }} />
         <div className="relative mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
           <div className="max-w-[760px]">
@@ -681,7 +690,7 @@ export default function PricingPage() {
       </section>
 
       {/* SECTION 4 — ESCROW + TRUST */}
-      <section id="trust" className="relative border-t border-white/[0.06] bg-[#050505]">
+      <section id="trust" className="relative border-t border-white/[0.06] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
             <div>
