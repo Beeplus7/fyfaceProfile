@@ -67,7 +67,7 @@ export default function BlogPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', background: 'var(--bg)' }}
-      className="min-h-screen w-full text-zinc-100 overflow-x-clip selection:bg-[#FFC300]/35"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A1931] overflow-x-clip selection:bg-[#FFC300]/35"
     >
       {/* NAV */}
       <header
@@ -126,7 +126,7 @@ export default function BlogPage() {
                 Blog, Careers, Contact, Help, Legal — All in One OS.
               </h2>
               <p className="max-w-[560px] text-[16px] md:text-[18px] leading-relaxed text-[#5B6470] font-medium">
-                From Aisha's 47 wedding dresses to J. Martinez's 89 engine fixes — every story is a Project, every Project is SEO, every hire is craft. <span className="text-zinc-200">30K Project pages + 100 blog posts = free traffic forever.</span>
+                From Aisha's 47 wedding dresses to J. Martinez's 89 engine fixes — every story is a Project, every Project is SEO, every hire is craft. <span className="text-[#0A1931]">30K Project pages + 100 blog posts = free traffic forever.</span>
               </p>
               <div className="flex items-center gap-4 pt-2">
                 <a href="#blog" className="h-[48px] px-7 rounded-full font-poppins font-bold text-[14px] tracking-wide text-black flex items-center justify-center transition hover:scale-[1.02]" style={{ background: 'var(--gradient-m)' }}>
@@ -146,7 +146,7 @@ export default function BlogPage() {
                       <span className="font-mono text-[10px] tracking-widest text-[#5B6470]">LIVE NOW • AISHA • 142 VIEWERS • £15K REVENUE</span>
                     </div>
                   </div>
-                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur font-mono text-[10px] text-[#0A1931] border border-[#D4CBB8]">REC • 47 DRESSES</div>
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-[#0A1931]/85 backdrop-blur font-mono text-[10px] text-white border border-[#D4CBB8]">REC • 47 DRESSES</div>
                 </div>
               </div>
               {/* floating stats */}
@@ -182,7 +182,7 @@ export default function BlogPage() {
                 <img src={b.img} alt={b.title} className="h-full w-full object-cover group-hover:scale-105 transition duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                 <div className="absolute top-3 left-3 right-3 flex justify-between">
-                  <span className="px-2.5 py-1 rounded-full bg-black/60 backdrop-blur border border-[#D4CBB8] font-mono text-[9px] tracking-widest text-[#0A1931]">{b.kicker}</span>
+                  <span className="px-2.5 py-1 rounded-full bg-[#0A1931]/85 backdrop-blur border border-[#D4CBB8] font-mono text-[9px] tracking-widest text-white">{b.kicker}</span>
                   <span className="px-2 py-1 rounded-full text-black font-mono text-[9px] font-bold" style={{ background: 'var(--gradient-m)' }}>{b.tag}</span>
                 </div>
                 <div className="absolute bottom-3 left-3 flex gap-2">
@@ -209,7 +209,7 @@ export default function BlogPage() {
         </div>
 
         <div className="mt-8 rounded-[24px] glass p-[1px]">
-          <div className="rounded-[23px] bg-[#0e0e0e] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="rounded-[23px] bg-[#F0E9DB] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 rounded-[12px] flex items-center justify-center font-poppins font-[800] text-black" style={{ background: 'var(--gradient-m)' }}>SEO</div>
               <div>
@@ -419,7 +419,7 @@ export default function BlogPage() {
 
               <div className="rounded-[16px] overflow-hidden border border-[#D4CBB8]">
                 <img src={reviewImg} alt="Verified review custom wallet" className="h-[160px] w-full object-cover" />
-                <div className="p-4 bg-[#0e0e0e]">
+                <div className="p-4 bg-[#F0E9DB]">
                   <div className="flex items-center gap-2">
                     <span className="px-2 py-0.5 rounded-full bg-[#8FFF4A] text-black font-mono text-[9px] font-bold">VERIFIED</span>
                     <span className="font-mono text-[10px] text-[#5B6470]">Custom wallet • £45 • Verified purchase</span>
@@ -480,7 +480,7 @@ export default function BlogPage() {
               <div className="h-8 w-8 rounded-[10px] flex items-center justify-center font-poppins font-[800] text-black text-[14px]" style={{ background: 'var(--gradient-m)' }}>M</div>
               <span className="font-poppins font-bold text-[14px]">My Face Profile • Oldham OL1 • Real Work OS</span>
             </div>
-            <div className="font-mono text-[10px] tracking-widest text-[#5B6470]">© 2026 MY FACE PROFILE • BLOG + CAREERS + CONTACT + HELP + LEGAL HUB • NO.11 OF 24 • TOUCH OF GOD • Poppins Bold + Inter + JetBrains Mono • Black #050505 • M #8FFF4A→#00E5C0→#FFE600→#FF8A00</div>
+            <div className="font-mono text-[10px] tracking-widest text-[#5B6470]">© 2026 MY FACE PROFILE • BLOG + CAREERS + CONTACT + HELP + LEGAL HUB • NO.11 OF 24 • TOUCH OF GOD • Poppins Bold + Inter + JetBrains Mono • cream #FFFDF7 • M #8FFF4A→#00E5C0→#FFE600→#FF8A00</div>
           </div>
         </div>
       </footer>

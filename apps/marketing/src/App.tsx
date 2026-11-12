@@ -22,7 +22,7 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProductionReadinessPage from './pages/readiness/ProductionReadinessPage';
 import SitemapPage from './pages/SitemapPage';
-import StaticHtmlFramePage from './pages/StaticHtmlFramePage';
+import LegalDocumentPage from './pages/LegalDocumentPage';
 import StubPage from './pages/StubPage';
 import VerticalsPage from './pages/VerticalsPage';
 import VideoToCashPage from './pages/VideoToCashPage';
@@ -131,26 +131,9 @@ export default function App() {
                 />
               }
             />
+            <Route path="legal/privacy" element={<LegalDocumentPage kind="privacy" />} />
+            <Route path="legal/terms" element={<LegalDocumentPage kind="terms" />} />
           </Route>
-
-          <Route
-            path="legal/privacy"
-            element={
-              <StaticHtmlFramePage
-                src="/legal/privacy.html"
-                title="Privacy Policy — MyFace"
-              />
-            }
-          />
-          <Route
-            path="legal/terms"
-            element={
-              <StaticHtmlFramePage
-                src="/legal/terms.html"
-                title="Terms of Service — MyFace"
-              />
-            }
-          />
 
           <Route path="*" element={<Navigate to="/sitemap" replace />} />
         </Routes>

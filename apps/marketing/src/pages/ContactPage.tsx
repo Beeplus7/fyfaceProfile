@@ -107,7 +107,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', background: '#050505', minHeight: '100vh' }} className="w-full overflow-x-clip antialiased selection:bg-[#FFC300]/35 selection:text-[#0A1931]">
+    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', background: '#FFFDF7', minHeight: '100vh' }} className="w-full overflow-x-clip antialiased selection:bg-[#FFC300]/35 selection:text-[#0A1931]">
       
       <div className="pointer-events-none fixed inset-0 z-0">
         <div className="absolute -top-[30%] left-[10%] w-[70%] h-[60%] rounded-full blur-[120px] opacity-[0.12]" style={{background: 'var(--m-gradient)'}} />
@@ -177,7 +177,7 @@ export default function ContactPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <a href="#contact" className="group relative inline-flex items-center gap-3 rounded-full bg-white text-black px-6 py-3.5 font-poppins text-[14px] tracking-[-0.02em] overflow-hidden">
                 <span className="relative z-10">Contact Us Now</span>
-                <span className="relative z-10 w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-[14px] group-hover:rotate-45 transition-transform">↗</span>
+                <span className="relative z-10 w-7 h-7 rounded-full bg-[#0A1931] text-white flex items-center justify-center text-[14px] group-hover:rotate-45 transition-transform">↗</span>
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-r from-[#8FFF4A] to-[#FFE600]" />
               </a>
               <div className="inline-flex items-center gap-3 rounded-full glass px-5 py-3">
@@ -277,8 +277,8 @@ export default function ContactPage() {
                   </div>
                   <form onSubmit={handleSubmit} className="mt-4 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <input value={form.name} onChange={e=>setForm({...form, name: e.target.value})} placeholder="Your name" className="w-full rounded-[14px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
-                      <input value={form.email} onChange={e=>setForm({...form, email: e.target.value})} placeholder="Email — Oldham pro?" className="w-full rounded-[14px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
+                      <input value={form.name} onChange={e=>setForm({...form, name: e.target.value})} placeholder="Your name" className="w-full rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
+                      <input value={form.email} onChange={e=>setForm({...form, email: e.target.value})} placeholder="Email — Oldham pro?" className="w-full rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50" />
                     </div>
                     <div className="flex gap-2 flex-wrap">
                       {[
@@ -300,7 +300,7 @@ export default function ContactPage() {
                           className={`rounded-full px-3 py-1.5 font-mono text-[11px] tracking-[0.08em] uppercase border transition ${form.intent===o.k ? 'bg-white text-black border-white' : 'bg-[#F0E9DB] text-[#5B6470] border-[#D4CBB8] hover:text-[#0A1931] hover:border-[#D4CBB8]'}`}>{o.l}</button>
                       ))}
                     </div>
-                    <textarea value={form.message} onChange={e=>setForm({...form, message: e.target.value})} placeholder="Tell us about your trade, job, or story in Oldham..." rows={4} className="w-full rounded-[16px] bg-black/40 border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50 resize-none" />
+                    <textarea value={form.message} onChange={e=>setForm({...form, message: e.target.value})} placeholder="Tell us about your trade, job, or story in Oldham..." rows={4} className="w-full rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 font-mono text-[13px] text-[#0A1931] placeholder:text-[#5B6470] focus:outline-none focus:border-[#8FFF4A]/50 resize-none" />
                     <button disabled={busy} className="w-full rounded-full bg-gradient-m text-black font-poppins text-[14px] py-3.5 disabled:opacity-50 hover:opacity-90 transition">
                       {busy ? 'Securing...' : `Send to Oldham — ${form.intent.toUpperCase()}`}
                     </button>
@@ -360,7 +360,7 @@ export default function ContactPage() {
                       {k:'Walk-ins today', v:'38'},
                       {k:'Aso-Ebi fits', v:'12K+'},
                     ].map(i=>(
-                      <div key={i.k} className="rounded-[12px] bg-black/40 border border-[#D4CBB8] p-3">
+                      <div key={i.k} className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                         <div className="font-poppins text-[16px] text-[#0A1931] leading-none">{i.v}</div>
                         <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{i.k}</div>
                       </div>
@@ -527,7 +527,7 @@ export default function ContactPage() {
                     {k:'OBD2 Certified', v:'189 mechanics • J Martinez', icon:'◑'},
                     {k:'Face + Work', v:'No stock • Real hands', icon:'◎'},
                   ].map(t=>(
-                    <div key={t.k} className="flex items-center gap-3 rounded-[14px] bg-black/40 border border-[#D4CBB8] p-3">
+                    <div key={t.k} className="flex items-center gap-3 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                       <div className="w-8 h-8 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] flex items-center justify-center text-[#5B6470] text-[14px]">{t.icon}</div>
                       <div className="flex-1">
                         <div className="font-poppins text-[12px] leading-none text-[#0A1931]">{t.k}</div>
@@ -559,7 +559,7 @@ export default function ContactPage() {
               </div>
 
               <div className="rounded-[20px] bg-gradient-m p-[1px]">
-                <div className="rounded-[19px] bg-black p-4 flex items-center gap-3">
+                <div className="rounded-[19px] bg-[#F0E9DB] p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black font-poppins">M</div>
                   <div className="flex-1">
                     <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470]">My Face Profile • VisaguideOS</div>
@@ -577,7 +577,7 @@ export default function ContactPage() {
             <div className="absolute top-0 right-0 w-[60%] h-[100%] opacity-[0.15] pointer-events-none" style={{background: 'var(--m-gradient)'}} />
             <div className="relative z-10">
               <div className="flex flex-wrap items-center gap-3 mb-6">
-                <div className="inline-flex items-center gap-2 rounded-full bg-black text-white px-3 py-1.5">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#0A1931] text-white px-3 py-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
                   <span className="font-mono text-[10px] tracking-[0.16em] uppercase">Contact Us — Oldham Is Waiting</span>
                 </div>
@@ -592,20 +592,20 @@ export default function ContactPage() {
 
               <div className="mt-8 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-8 items-end">
                 <div className="flex flex-wrap gap-3">
-                  <a href="#contact" className="inline-flex items-center gap-3 rounded-full bg-black text-white px-7 py-4 font-poppins text-[14px] hover:bg-black/90 transition">
+                  <a href="#contact" className="inline-flex items-center gap-3 rounded-full bg-[#0A1931] text-white px-7 py-4 font-poppins text-[14px] hover:bg-[#0A1931]/90 transition">
                     <span>Email Now</span>
                     <span className="w-7 h-7 rounded-full bg-white text-black flex items-center justify-center">↗</span>
                   </a>
                   <div className="flex items-center gap-2">
-                    <div className="rounded-[14px] bg-black/5 border border-black/10 px-4 py-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-[6px] bg-black text-white flex items-center justify-center text-[10px]"></div>
+                    <div className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-[6px] bg-[#0A1931] text-white flex items-center justify-center text-[10px]"></div>
                       <div className="leading-[1.1]">
                         <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-black/40">Download</div>
                         <div className="font-poppins text-[12px] leading-none">iOS App</div>
                       </div>
                     </div>
-                    <div className="rounded-[14px] bg-black/5 border border-black/10 px-4 py-3 flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-[6px] bg-black text-white flex items-center justify-center text-[10px]">▶</div>
+                    <div className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-[6px] bg-[#0A1931] text-white flex items-center justify-center text-[10px]">▶</div>
                       <div className="leading-[1.1]">
                         <div className="font-mono text-[9px] uppercase tracking-[0.12em] text-black/40">Download</div>
                         <div className="font-poppins text-[12px] leading-none">Android</div>
@@ -620,7 +620,7 @@ export default function ContactPage() {
                     {k:'Projects', v:'12K'},
                     {k:'Trust', v:'4.9'},
                   ].map(s=>(
-                    <div key={s.k} className="rounded-[16px] bg-black text-white p-4">
+                    <div key={s.k} className="rounded-[16px] bg-[#0A1931] text-white p-4">
                       <div className="font-poppins text-[22px] leading-none">{s.v}</div>
                       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#5B6470] mt-1">{s.k}</div>
                     </div>

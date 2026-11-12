@@ -143,7 +143,7 @@ export default function BlogDetailPage(){
                 <img src={imgFinal} alt="Final wedding dress reveal on mannequin Alterations Complete" className="w-full h-[520px] md:h-[640px] object-cover" />
                 {/* overlay labels */}
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-black/70 backdrop-blur text-[#0A1931] border border-[#D4CBB8]">DAY 5 FINAL REVEAL</span>
+                  <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-[#0A1931]/85 backdrop-blur text-white border border-[#D4CBB8]">DAY 5 FINAL REVEAL</span>
                   <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-[var(--lime)] text-black font-bold">ALTERATIONS COMPLETE 12.09.2024</span>
                 </div>
                 <div className="absolute bottom-0 inset-x-0 p-4">
@@ -202,7 +202,7 @@ export default function BlogDetailPage(){
                   <h4 className="text-[26px] leading-[0.95] max-w-[520px]">{timeline[activeDay].title}</h4>
                   <p className="mt-3 text-[13px] leading-[1.6] text-[#5B6470] max-w-[560px]">{timeline[activeDay].desc}</p>
                 </div>
-                <div className="absolute top-4 right-4 mono text-[10px] px-3 py-1.5 rounded-full bg-black/60 backdrop-blur border border-[#D4CBB8]">TOUCH OF GOD IN EVERY STITCH</div>
+                <div className="absolute top-4 right-4 mono text-[10px] px-3 py-1.5 rounded-full bg-[#0A1931]/85 backdrop-blur border border-[#D4CBB8] text-white">TOUCH OF GOD IN EVERY STITCH</div>
               </div>
             </div>
           </div>
@@ -390,7 +390,7 @@ export default function BlogDetailPage(){
               <div className="h-14 w-14 rounded-[14px] overflow-hidden bg-white shrink-0"><img src={logoM1} alt="M" className="h-full w-full object-cover" /></div>
               <div>
                 <div className="mono text-[10px] text-[#5B6470]">BRAND • MY FACE PROFILE</div>
-                <div className="text-[13px] font-bold">M Gradient #8FFF4A → #FF8A00 • Black #050505 • Glassmorphism • Holy Blog Feel</div>
+                <div className="text-[13px] font-bold">M Gradient #8FFF4A → #FF8A00 • cream #FFFDF7 • Glassmorphism • Holy Blog Feel</div>
               </div>
             </div>
           </div>
@@ -443,7 +443,7 @@ export default function BlogDetailPage(){
                   <div className="h-8 w-8 rounded-[10px] overflow-hidden bg-white"><img src={logoM2} alt="logo" className="h-full w-full object-cover" /></div>
                   <span className="mono text-[11px] text-[#5B6470]">My Face Profile © 2026 • Spindlegate Oldham OL1 • Built with Touch of GOD</span>
                 </div>
-                <div className="mono text-[10px] text-[#5B6470]">apps/marketing/app/blog/[slug]/page.tsx • Production-ready Tailwind • Black #050505 • M #8FFF4A→#FF8A00 • Poppins 800 • Inter • JetBrains Mono</div>
+                <div className="mono text-[10px] text-[#5B6470]">apps/marketing/app/blog/[slug]/page.tsx • Production-ready Tailwind • cream #FFFDF7 • M #8FFF4A→#FF8A00 • Poppins 800 • Inter • JetBrains Mono</div>
               </div>
             </div>
           </div>

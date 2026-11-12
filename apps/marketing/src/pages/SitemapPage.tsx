@@ -107,7 +107,7 @@ export default function SitemapPage() {
 
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#8FFF4A] text-black font-mono text-[11px] font-bold">
-              <span className="h-2 w-2 rounded-full bg-black animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-[#0A1931] animate-pulse" />
               No.12 LIVE • 24 PAGES READY
             </div>
             <button className="lg:hidden h-9 w-9 grid place-items-center rounded-full glass">
@@ -126,7 +126,7 @@ export default function SitemapPage() {
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-[30%] left-1/2 -translate-x-1/2 h-[900px] w-[1200px] rounded-full blur-[120px] opacity-30"
             style={{ background: 'radial-gradient(60% 60% at 50% 30%, #8FFF4A 0%, #00E5C0 25%, #FFE600 55%, #FF8A00 85%, transparent 100%)' }} />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,rgba(5,5,5,1))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent,#FFFDF7)]" />
         </div>
 
         <div className="relative mx-auto max-w-[1440px] px-6 md:px-10 pt-16 md:pt-24 pb-12 md:pb-16">
@@ -297,7 +297,7 @@ export default function SitemapPage() {
                       ) : card.path.includes('tailors') ? (
                         <img src={dressReveal} alt="Final wedding dress reveal" className="w-full h-full object-cover group-hover:scale-[1.03] transition" />
                       ) : (
-                        <div className="w-full h-full bg-[#0e0e0e] relative">
+                        <div className="w-full h-full bg-[#F0E9DB] relative">
                           <div className="absolute inset-0 opacity-40" style={{ background: `linear-gradient(135deg, ${card.path.includes('mechanic') ? '#8FFF4A22, #00E5C022' : card.path.includes('builder') ? '#FFE60022, #FF8A0022' : card.path.includes('barber') ? '#00E5C022, #8FFF4A22' : card.path.includes('electric') ? '#FFE60022, #8FFF4A22' : '#111, #222'})` }} />
                           <div className="absolute inset-0 grid place-items-center">
                             <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#5B6470]">{card.path}</div>
@@ -427,18 +427,18 @@ vercel --prod — ship Oldham`}
               <div className="rounded-[24px] bg-white text-black p-6 md:p-8 divine-glow card-drop">
                 <div className="flex items-center justify-between">
                   <div className="font-poppins font-extrabold text-[22px] leading-[0.9] tracking-[-0.02em]">iOS & Android<br />Coming Soon</div>
-                  <div className="h-10 w-10 rounded-full bg-black text-white grid place-items-center font-mono text-[12px]">QR</div>
+                  <div className="h-10 w-10 rounded-full bg-[#0A1931] text-white grid place-items-center font-mono text-[12px]">QR</div>
                 </div>
 
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <div className="rounded-[14px] bg-black text-white p-3 flex items-center gap-3">
+                  <div className="rounded-[14px] bg-[#0A1931] text-white p-3 flex items-center gap-3">
                     <div className="h-8 w-8 rounded-[8px] bg-white text-black grid place-items-center font-poppins font-bold text-[14px]"></div>
                     <div>
                       <div className="font-mono text-[9px] uppercase tracking-[0.12em]">Download on</div>
                       <div className="font-poppins font-bold text-[13px] leading-none">App Store</div>
                     </div>
                   </div>
-                  <div className="rounded-[14px] bg-black text-white p-3 flex items-center gap-3">
+                  <div className="rounded-[14px] bg-[#0A1931] text-white p-3 flex items-center gap-3">
                     <div className="h-8 w-8 rounded-[8px] bg-white text-black grid place-items-center font-poppins font-bold text-[10px]">▶</div>
                     <div>
                       <div className="font-mono text-[9px] uppercase tracking-[0.12em]">Get it on</div>
@@ -449,7 +449,7 @@ vercel --prod — ship Oldham`}
 
                 {/* QR mock */}
                 <div className="mt-6 rounded-[16px] bg-[#f5f5f5] p-4 flex gap-4 items-center">
-                  <div className="h-[88px] w-[88px] rounded-[12px] bg-black grid grid-cols-5 gap-0.5 p-2">
+                  <div className="h-[88px] w-[88px] rounded-[12px] bg-[#0A1931] grid grid-cols-5 gap-0.5 p-2">
                     {Array.from({ length: 25 }).map((_, i) => (
                       <div key={i} className={`rounded-[1px] ${Math.random() > 0.4 ? 'bg-white' : 'bg-black'}`} />
                     ))}
@@ -457,7 +457,7 @@ vercel --prod — ship Oldham`}
                   <div className="flex-1">
                     <div className="font-poppins font-bold text-[13px]">TestFlight • Ready for QA</div>
                     <div className="font-mono text-[11px] text-black/60 mt-1 leading-[1.4]">Scan to join Oldham test group — 1,247 pros already in — 4.9 Trust</div>
-                    <div className="mt-2 inline-flex px-2 py-1 rounded-full bg-black text-white font-mono text-[10px] font-bold">myfaceprofile.com/testflight</div>
+                    <div className="mt-2 inline-flex px-2 py-1 rounded-full bg-[#0A1931] text-white font-mono text-[10px] font-bold">myfaceprofile.com/testflight</div>
                   </div>
                 </div>
 
@@ -518,7 +518,7 @@ vercel --prod — ship Oldham`}
           </div>
 
           {/* colors */}
-          <div className="rounded-[24px] bg-[#0e0e0e] border border-[#D4CBB8] p-7 md:p-8">
+          <div className="rounded-[24px] bg-[#F0E9DB] border border-[#D4CBB8] p-7 md:p-8">
             <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#8FFF4A] to-[#FF8A00] grid place-items-center font-poppins font-extrabold text-black">M</div>
             <h4 className="font-poppins font-extrabold text-[20px] leading-[1.1] tracking-[-0.02em] mt-5">Colors — M Gradient Divine</h4>
             <div className="mt-6">
@@ -531,7 +531,7 @@ vercel --prod — ship Oldham`}
               </div>
             </div>
             <div className="mt-6 space-y-3 font-mono text-[12px] text-[#5B6470]">
-              <div className="flex justify-between"><span>Black base</span><span className="text-[#0A1931]">#050505</span></div>
+              <div className="flex justify-between"><span>Cream base</span><span className="text-[#0A1931]">#FFFDF7</span></div>
               <div className="flex justify-between"><span>Glass</span><span className="text-[#0A1931]">rgba(255,255,255,0.06)</span></div>
               <div className="flex justify-between"><span>Border</span><span className="text-[#0A1931]">rgba(255,255,255,0.10)</span></div>
               <div className="flex justify-between"><span>Radius</span><span className="text-[#0A1931]">24px — everywhere</span></div>
@@ -595,7 +595,7 @@ vercel --prod — ship Oldham`}
 
             <div className="flex flex-col lg:flex-row gap-10 items-start justify-between">
               <div className="max-w-[720px]">
-                <div className="inline-flex items-center gap-2 rounded-full bg-black text-white px-3 py-1.5">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#0A1931] text-white px-3 py-1.5">
                   <span className="h-2 w-2 rounded-full bg-[#8FFF4A] animate-pulse" />
                   <span className="font-mono text-[11px] tracking-[0.14em] uppercase">No.12 of 24 — Master Sitemap — Production Handover — Touch of GOD</span>
                 </div>
@@ -617,13 +617,13 @@ vercel --prod — ship Oldham`}
                     '4.9 Trust',
                     '£618K ARR',
                   ].map(stat => (
-                    <span key={stat} className="px-3 py-1.5 rounded-full bg-black text-white font-mono text-[11px] font-bold tracking-[0.06em]">{stat}</span>
+                    <span key={stat} className="px-3 py-1.5 rounded-full bg-[#0A1931] text-white font-mono text-[11px] font-bold tracking-[0.06em]">{stat}</span>
                   ))}
                 </div>
               </div>
 
               <div className="lg:w-[340px] w-full space-y-4">
-                <div className="rounded-[20px] bg-black text-white p-6">
+                <div className="rounded-[20px] bg-[#0A1931] text-white p-6">
                   <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Ready to Wire — Command</div>
                   <div className="mt-3 font-mono text-[13px] leading-[1.6]">
                     <div className="text-[#5B6470]">$ pnpm dev</div>
@@ -634,7 +634,7 @@ vercel --prod — ship Oldham`}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <Link to="/" className="rounded-full bg-black text-white h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-[#F0E9DB] transition">Go Home ↗</Link>
+                  <Link to="/" className="rounded-full bg-[#0A1931] text-white h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-[#F0E9DB] transition">Go Home ↗</Link>
                   <Link to="/how-it-works" className="rounded-full bg-transparent border-2 border-black h-12 grid place-items-center font-poppins font-bold text-[14px] hover:bg-black hover:text-white transition">Work OS</Link>
                 </div>
 

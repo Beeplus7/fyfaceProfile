@@ -151,7 +151,7 @@ export default function CareersPage() {
     <div
       data-safe-area-inset-root
       style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
-      className="min-h-screen bg-[#FFFDF7] text-[#f5f5f0] selection:bg-[#FFC300]/35 selection:text-[#0A1931] overflow-x-clip"
+      className="min-h-screen bg-[#FFFDF7] text-[#0A1931] selection:bg-[#FFC300]/35 selection:text-[#0A1931] overflow-x-clip"
     >
       <header
         data-safe-area-sticky-top
@@ -208,7 +208,7 @@ export default function CareersPage() {
           </div>
         </div>
         {mobileMenu && (
-          <div className="md:hidden border-t border-[#D4CBB8] bg-[#0c0c0c] px-5 py-4 flex flex-col gap-3">
+          <div className="md:hidden border-t border-[#D4CBB8] bg-[#FFFDF7] px-5 py-4 flex flex-col gap-3">
             {['Home', 'Pros', 'Projects', 'Careers', 'OS'].map((i) => (
               <button key={i} onClick={() => { setMobileMenu(false); if(i==='Careers') document.querySelector('#roles')?.scrollIntoView({behavior:'smooth'}); }} className={`font-mono text-left text-[12px] uppercase tracking-[0.14em] ${i === 'Careers' ? 'text-[#0A1931]' : 'text-[#5B6470]'}`}>{i} {i==='Careers'?'• Active':''}</button>
             ))}
@@ -217,10 +217,10 @@ export default function CareersPage() {
         )}
       </header>
 
-      <div className="border-b border-[#D4CBB8] bg-[#0c0c0c]">
+      <div className="border-b border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1440px] px-5 md:px-8 h-10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-[#141414] border border-[#D4CBB8] px-3 py-1">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] px-3 py-1">
               <span className="h-1.5 w-1.5 rounded-full bg-[#FFE600]" />
               <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#5B6470]">Page 19 of 24 • Careers Standalone • Touch of GOD</span>
             </span>
@@ -231,7 +231,7 @@ export default function CareersPage() {
       </div>
 
       <section id="top" className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0c0c0c] via-[#050505] to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDF7] via-[#FFFDF7] to-[#FFF8E1]" />
         <div className="absolute -top-[30%] left-1/2 -translate-x-1/2 w-[120%] h-[80%] bg-[radial-gradient(ellipse_at_center,_rgba(143,255,74,0.12),_transparent_60%)] blur-[40px]" />
         <div className="absolute top-[10%] right-[-10%] w-[50%] h-[60%] bg-[radial-gradient(ellipse_at_center,_rgba(0,229,192,0.10),_transparent_60%)] blur-[40px]" />
         <div className="absolute bottom-[0%] left-[-10%] w-[50%] h-[50%] bg-[radial-gradient(ellipse_at_center,_rgba(255,230,0,0.08),_transparent_60%)] blur-[50px]" />
@@ -275,11 +275,11 @@ export default function CareersPage() {
               <div className="absolute -inset-6 bg-[var(--m-gradient)] opacity-[0.08] blur-[40px] rounded-[32px] pointer-events-none" />
               <div className="relative grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
                 {TRADES.map((t)=>(
-                  <div key={t.id} className="group relative rounded-[24px] overflow-hidden bg-[#141414] border border-[#D4CBB8] aspect-[4/5] md:aspect-[3/4] glow">
+                  <div key={t.id} className="group relative rounded-[24px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] aspect-[4/5] md:aspect-[3/4] glow">
                     <img src={t.image} alt={`${t.name} ${t.count} Oldham`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]" />
                     <div className={`absolute inset-0 bg-gradient-to-t ${t.tint} via-black/20 to-transparent opacity-80`} />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                    <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#D4CBB8] px-2.5 py-1">
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-[#0A1931]/85 backdrop-blur-md border border-[#D4CBB8] px-2.5 py-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A]" />
                       <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-[#0A1931]">{t.tag}</span>
                     </div>
@@ -292,7 +292,7 @@ export default function CareersPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 rounded-[16px] bg-[#0c0c0c] border border-[#D4CBB8] px-4 py-3 flex items-center justify-between">
+              <div className="mt-4 rounded-[16px] bg-[#FFFDF7] border border-[#D4CBB8] px-4 py-3 flex items-center justify-between">
                 <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">All Skills Verified • Touch of GOD • Real Work OS</span>
                 <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">OL1 OL2 OL8</span>
               </div>
@@ -309,9 +309,9 @@ export default function CareersPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
             {VALUES.map((v)=>(
-              <div key={v.k} className="group relative rounded-[24px] overflow-hidden bg-[#141414] border border-[#D4CBB8] min-h-[320px] p-6 flex flex-col justify-between glow hover:glow-m transition">
+              <div key={v.k} className="group relative rounded-[24px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] min-h-[320px] p-6 flex flex-col justify-between glow hover:glow-m transition">
                 <div className="absolute inset-0 opacity-[0.18] group-hover:opacity-[0.28] transition duration-700 bg-cover bg-center" style={{ backgroundImage: `url(${v.image})` }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-[#050505]/80 to-[#141414]/60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/70 via-[#0A1931]/30 to-transparent" />
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-700 bg-[radial-gradient(ellipse_at_top,_rgba(143,255,74,0.10),_transparent_60%)]" />
                 <div className="relative"><div className="flex items-center justify-between"><span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#5B6470]">{v.k}</span><span className="h-8 w-8 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] grid place-items-center font-mono text-[11px] text-[#5B6470]">{v.k}</span></div><h3 className="mt-10 font-['Poppins'] font-bold text-[26px] leading-[0.95] tracking-[-0.02em] text-[#0A1931] max-w-[220px]">{v.title}</h3></div>
                 <div className="relative"><p className="font-['Inter'] text-[14px] leading-[1.5] text-[#5B6470]">{v.desc}</p><div className="mt-4 h-px w-full bg-gradient-to-r from-white/10 via-white/5 to-transparent" /></div>
@@ -339,13 +339,13 @@ export default function CareersPage() {
 
           <div className="grid gap-6">
             {ROLES.map((role)=>(
-              <div key={role.id} className={`group relative rounded-[24px] overflow-hidden border ${activeRole===role.id?'border-[#D4CBB8] bg-[#141414]':'border-[#D4CBB8] bg-[#0e0e0e]'} transition-all`}>
+              <div key={role.id} className={`group relative rounded-[24px] overflow-hidden border ${activeRole===role.id?'border-[#D4CBB8] bg-[#F0E9DB]':'border-[#D4CBB8] bg-[#F0E9DB]'} transition-all`}>
                 <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
                   <div className="p-6 md:p-8 lg:p-10">
                     <div className="flex flex-wrap items-center gap-2 mb-4">
                       <span className={`inline-flex h-7 px-3 rounded-full bg-gradient-to-r ${role.color} text-black font-mono text-[10px] font-bold tracking-[0.14em] uppercase items-center`}>{role.dept}</span>
                       <span className="inline-flex h-7 px-3 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#5B6470] font-mono text-[10px] tracking-[0.12em] uppercase items-center">{role.type}</span>
-                      <span className="inline-flex h-7 px-3 rounded-full bg-[#141414] border border-[#D4CBB8] text-[#5B6470] font-mono text-[10px] tracking-[0.12em] uppercase items-center">{role.salary}</span>
+                      <span className="inline-flex h-7 px-3 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#5B6470] font-mono text-[10px] tracking-[0.12em] uppercase items-center">{role.salary}</span>
                     </div>
                     <h3 className="font-['Poppins'] font-extrabold text-[24px] md:text-[32px] leading-[0.95] tracking-[-0.02em] text-[#0A1931]">{role.title}</h3>
                     <p className="mt-4 font-['Inter'] text-[14px] md:text-[15px] leading-[1.6] text-[#5B6470] max-w-[560px]">{role.blurb}</p>
@@ -355,7 +355,7 @@ export default function CareersPage() {
                       <button onClick={()=>setActiveRole(activeRole===role.id?null:role.id)} className="h-11 w-11 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] grid place-items-center text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB] transition"><span className={`transition ${activeRole===role.id?'rotate-45':''} text-[18px] leading-none`}>+</span></button>
                     </div>
                     {activeRole===role.id && (
-                      <div className="mt-8 rounded-[16px] bg-black/40 border border-[#D4CBB8] p-5">
+                      <div className="mt-8 rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] p-5">
                         <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-[#5B6470] mb-3">What You’ll Ship First 90 Days</div>
                         <ul className="space-y-2 font-['Inter'] text-[13px] leading-[1.5] text-[#5B6470]">
                           <li>• Ship 1 real trade flow — e.g., tailor lace measurement → project post → escrow</li>
@@ -366,7 +366,7 @@ export default function CareersPage() {
                       </div>
                     )}
                   </div>
-                  <div className="relative min-h-[280px] lg:min-h-full bg-[#141414] overflow-hidden">
+                  <div className="relative min-h-[280px] lg:min-h-full bg-[#F0E9DB] overflow-hidden">
                     <div className="absolute inset-0 grid" style={{ gridTemplateColumns: role.images.length>2?'repeat(3,1fr)':'repeat(2,1fr)' }}>
                       {role.images.slice(0,6).map((img,i)=>(
                         <div key={i} className="relative overflow-hidden border-r border-b border-[#D4CBB8] last:border-r-0">
@@ -376,7 +376,7 @@ export default function CareersPage() {
                       ))}
                     </div>
                     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-black/70 backdrop-blur-md border border-[#D4CBB8] px-3 py-1.5">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#0A1931]/85 backdrop-blur-md border border-[#D4CBB8] px-3 py-1.5">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A]" />
                         <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Real Work Images • {role.images.length} trades</span>
                       </span>
@@ -394,7 +394,7 @@ export default function CareersPage() {
       <section id="pros" className="relative border-t border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-cover bg-center opacity-[0.12]" style={{ backgroundImage: `url(${imgBuilders})` }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a]/80 to-[#050505]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDF7] via-[#FFFDF7]/90 to-[#FFF8E1]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(143,255,74,0.10),_transparent_60%)]" />
         </div>
         <div className="relative mx-auto max-w-[1440px] px-5 md:px-8 py-16 md:py-28">
@@ -402,11 +402,11 @@ export default function CareersPage() {
             <div className="lg:sticky lg:top-[88px]">
               <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#5B6470] mb-4">Section 03 — How We Build • Brick by Brick</div>
               <h2 className="font-['Poppins'] font-extrabold text-[36px] md:text-[52px] leading-[0.9] tracking-[-0.04em] text-[#0A1931]">Oldham First.<br />Then World.</h2>
-              <div className="mt-8 rounded-[24px] overflow-hidden border border-[#D4CBB8] bg-[#141414]/80 backdrop-blur-xl">
+              <div className="mt-8 rounded-[24px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB]/80 backdrop-blur-xl">
                 <div className="aspect-[4/3] relative overflow-hidden">
                   <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${imgBuilders})` }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4"><div className="rounded-[16px] bg-black/70 backdrop-blur-md border border-[#D4CBB8] p-4"><div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Live Site • OL8 • 06:14 AM</div><div className="mt-1 font-['Poppins'] font-bold text-[18px] text-[#0A1931] leading-tight">Oldham Builders laying bricks — This is our OS metaphor</div></div></div>
+                  <div className="absolute bottom-4 left-4 right-4"><div className="rounded-[16px] bg-[#FFFDF7]/95 backdrop-blur-md border border-[#D4CBB8] p-4"><div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Live Site • OL8 • 06:14 AM</div><div className="mt-1 font-['Poppins'] font-bold text-[18px] text-[#0A1931] leading-tight">Oldham Builders laying bricks — This is our OS metaphor</div></div></div>
                   <div className="absolute top-4 left-4 rounded-full bg-[#8FFF4A] text-black px-3 py-1 font-mono text-[10px] font-bold tracking-[0.12em] uppercase">Holy Build • Real Work</div>
                 </div>
                 <div className="p-5 grid grid-cols-3 gap-3">
@@ -417,7 +417,7 @@ export default function CareersPage() {
               </div>
             </div>
             <div className="space-y-6">
-              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#141414]/90 backdrop-blur-xl p-6 md:p-8">
+              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB]/90 backdrop-blur-xl p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="h-10 w-10 rounded-[10px] bg-white p-[2px] overflow-hidden"><div className="h-full w-full rounded-[8px] bg-cover bg-center" style={{ backgroundImage: `url(${logoM})` }} /></div>
                   <div><div className="font-['Poppins'] font-bold text-[16px] text-[#0A1931]">From VisaguideOS → My Face Profile</div><div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">2019 • Single Skill → 2025 • All Skills OS</div></div>
@@ -440,20 +440,20 @@ export default function CareersPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 {TRADES.map((t)=>(
-                  <div key={`mini-${t.id}`} className="rounded-[20px] bg-[#141414] border border-[#D4CBB8] overflow-hidden flex gap-3 p-3">
+                  <div key={`mini-${t.id}`} className="rounded-[20px] bg-[#F0E9DB] border border-[#D4CBB8] overflow-hidden flex gap-3 p-3">
                     <div className="h-14 w-14 rounded-[12px] bg-cover bg-center shrink-0" style={{ backgroundImage: `url(${t.image})` }} />
                     <div><div className="font-['Poppins'] font-bold text-[13px] text-[#0A1931]">{t.name}</div><div className="font-mono text-[9px] tracking-[0.12em] uppercase text-[#5B6470] mt-1">{t.count} pros • Real Work</div><div className="mt-2 inline-flex rounded-full bg-[#F0E9DB] border border-[#D4CBB8] px-2 py-0.5 font-mono text-[8px] uppercase text-[#5B6470]">{t.tag}</div></div>
                   </div>
                 ))}
               </div>
 
-              <div className="rounded-[20px] bg-[var(--m-gradient)] p-[1px]"><div className="rounded-[19px] bg-[#0c0c0c] p-5 flex items-center justify-between gap-4"><div><div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#5B6470]">Live OS Stats • Oldham</div><div className="mt-1 font-['Poppins'] font-bold text-[18px] text-[#0A1931]">1,247 pros • 12K Projects • 4.9 Trust • Touch of GOD</div></div><div className="hidden md:grid h-12 w-12 rounded-full bg-white place-items-center font-mono text-[12px] font-bold text-black">OL</div></div></div>
+              <div className="rounded-[20px] bg-[var(--m-gradient)] p-[1px]"><div className="rounded-[19px] bg-[#FFFDF7] p-5 flex items-center justify-between gap-4"><div><div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#5B6470]">Live OS Stats • Oldham</div><div className="mt-1 font-['Poppins'] font-bold text-[18px] text-[#0A1931]">1,247 pros • 12K Projects • 4.9 Trust • Touch of GOD</div></div><div className="hidden md:grid h-12 w-12 rounded-full bg-white place-items-center font-mono text-[12px] font-bold text-black">OL</div></div></div>
             </div>
           </div>
         </div>
       </section>
 
-      <footer id="os" className="relative border-t border-[#D4CBB8] bg-black overflow-hidden">
+      <footer id="os" className="relative border-t border-[#D4CBB8] bg-[#FFF8E1] overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(143,255,74,0.14),_transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(255,138,0,0.10),_transparent_60%)]" />
         <div className="relative mx-auto max-w-[1440px] px-5 md:px-8 py-16 md:py-24">
@@ -467,19 +467,19 @@ export default function CareersPage() {
               </div>
             </div>
             <div className="space-y-4">
-              <div className="rounded-[24px] bg-[#141414] border border-[#D4CBB8] p-6">
+              <div className="rounded-[24px] bg-[#F0E9DB] border border-[#D4CBB8] p-6">
                 <div className="flex items-center justify-between mb-6"><span className="font-mono text-[11px] tracking-[0.16em] uppercase text-[#5B6470]">My Face Profile OS • Live</span><span className="inline-flex items-center gap-1.5 rounded-full bg-[#8FFF4A]/10 border border-[#8FFF4A]/20 px-2.5 py-1"><span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A] animate-pulse" /><span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#8FFF4A]">Hiring</span></span></div>
                 <div className="grid grid-cols-2 gap-3">
                   {[{k:'5',l:'Open Roles'},{k:'1247',l:'Pros Live'},{k:'12K',l:'Projects'},{k:'4.9',l:'TrustScore'}].map((s)=>(
                     <div key={s.l} className="rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] p-4"><div className="font-['Poppins'] font-extrabold text-[28px] leading-none text-[#0A1931]">{s.k}</div><div className="mt-2 font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">{s.l}</div></div>
                   ))}
                 </div>
-                <div className="mt-6 rounded-[12px] bg-black border border-[#D4CBB8] p-3 flex items-center gap-3">
+                <div className="mt-6 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center gap-3">
                   <div className="h-8 w-8 rounded-[8px] bg-white p-[2px] overflow-hidden shrink-0"><img src={logoFull} alt="My Face Profile full" className="h-full w-full object-cover rounded-[6px]" /></div>
                   <div><div className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">Touch of GOD • Craft as Worship</div><div className="font-['Inter'] text-[12px] text-[#5B6470]">We build holy, not hustle. Real work &gt; filter.</div></div>
                 </div>
               </div>
-              <div className="rounded-[16px] bg-[#0c0c0c] border border-[#D4CBB8] px-4 py-3 flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">© 2025 My Face Profile • Oldham • Touch of GOD</span><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Page 19 / 24</span></div>
+              <div className="rounded-[16px] bg-[#FFFDF7] border border-[#D4CBB8] px-4 py-3 flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">© 2025 My Face Profile • Oldham • Touch of GOD</span><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470]">Page 19 / 24</span></div>
             </div>
           </div>
 
@@ -488,7 +488,7 @@ export default function CareersPage() {
             {apps.length===0?(
               <div className="rounded-[16px] border border-dashed border-[#D4CBB8] bg-white/[0.02] p-8 text-center"><div className="font-mono text-[11px] tracking-[0.16em] uppercase text-[#5B6470]">No applications yet • Be first to build brick by brick • Oldham waits</div></div>
             ):(
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">{apps.slice(0,6).map((a,i)=>(<div key={i} className="rounded-[16px] bg-[#141414] border border-[#D4CBB8] p-4"><div className="flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">{a.role} • {a.craft||'Craft'}</span><span className="h-2 w-2 rounded-full bg-[#8FFF4A]" /></div><div className="mt-2 font-['Poppins'] font-bold text-[14px] text-[#0A1931]">{a.name}</div><div className="mt-1 font-['Inter'] text-[12px] leading-[1.4] text-[#5B6470] line-clamp-2">{a.why}</div></div>))}</div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">{apps.slice(0,6).map((a,i)=>(<div key={i} className="rounded-[16px] bg-[#F0E9DB] border border-[#D4CBB8] p-4"><div className="flex items-center justify-between"><span className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#5B6470]">{a.role} • {a.craft||'Craft'}</span><span className="h-2 w-2 rounded-full bg-[#8FFF4A]" /></div><div className="mt-2 font-['Poppins'] font-bold text-[14px] text-[#0A1931]">{a.name}</div><div className="mt-1 font-['Inter'] text-[12px] leading-[1.4] text-[#5B6470] line-clamp-2">{a.why}</div></div>))}</div>
             )}
           </div>
         </div>
@@ -496,8 +496,8 @@ export default function CareersPage() {
 
       {showApply && (
         <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-6">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={()=>setShowApply(false)} />
-          <div className="relative w-full md:max-w-[640px] max-h-[92vh] md:max-h-[90vh] rounded-t-[32px] md:rounded-[32px] bg-[#0e0e0e] border border-white/[0.10] overflow-hidden flex flex-col shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_24px_80px_rgba(0,0,0,0.8),0_0_120px_rgba(143,255,74,0.10)]">
+          <div className="absolute inset-0 bg-[#0A1931]/70 backdrop-blur-xl" onClick={()=>setShowApply(false)} />
+          <div className="relative w-full md:max-w-[640px] max-h-[92vh] md:max-h-[90vh] rounded-t-[32px] md:rounded-[32px] bg-[#F0E9DB] border border-white/[0.10] overflow-hidden flex flex-col shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_24px_80px_rgba(0,0,0,0.8),0_0_120px_rgba(143,255,74,0.10)]">
             <div className="h-[3px] w-full bg-[var(--m-gradient)]" />
             <div className="p-6 md:p-8 overflow-y-auto">
               <div className="flex items-start justify-between gap-4">
@@ -513,14 +513,14 @@ export default function CareersPage() {
               </div>
               <div className="mt-6 space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
-                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Full Name *</span><input value={form.name} onChange={(e)=>setForm({...form,name:e.target.value})} placeholder="e.g. Aisha Khan — Tailor" className="w-full h-11 rounded-[12px] bg-[#141414] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
-                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Email *</span><input value={form.email} onChange={(e)=>setForm({...form,email:e.target.value})} placeholder="you@realwork.co.uk" className="w-full h-11 rounded-[12px] bg-[#141414] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
+                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Full Name *</span><input value={form.name} onChange={(e)=>setForm({...form,name:e.target.value})} placeholder="e.g. Aisha Khan — Tailor" className="w-full h-11 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
+                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Email *</span><input value={form.email} onChange={(e)=>setForm({...form,email:e.target.value})} placeholder="you@realwork.co.uk" className="w-full h-11 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Your Craft</span><input value={form.craft} onChange={(e)=>setForm({...form,craft:e.target.value})} placeholder="Mechanic, Builder, Barber..." className="w-full h-11 rounded-[12px] bg-[#141414] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
-                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Portfolio / Link</span><input value={form.link} onChange={(e)=>setForm({...form,link:e.target.value})} placeholder="github, figma, insta..." className="w-full h-11 rounded-[12px] bg-[#141414] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
+                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Your Craft</span><input value={form.craft} onChange={(e)=>setForm({...form,craft:e.target.value})} placeholder="Mechanic, Builder, Barber..." className="w-full h-11 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
+                  <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Portfolio / Link</span><input value={form.link} onChange={(e)=>setForm({...form,link:e.target.value})} placeholder="github, figma, insta..." className="w-full h-11 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none" /></label>
                 </div>
-                <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Why Real Work &gt; Filter? *</span><textarea value={form.why} onChange={(e)=>setForm({...form,why:e.target.value})} placeholder="Tell us about one real job you did brick by brick... Touch of GOD moment..." rows={4} className="w-full rounded-[12px] bg-[#141414] border border-[#D4CBB8] p-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none resize-none" /></label>
+                <label className="block"><span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#5B6470] mb-2 block">Why Real Work &gt; Filter? *</span><textarea value={form.why} onChange={(e)=>setForm({...form,why:e.target.value})} placeholder="Tell us about one real job you did brick by brick... Touch of GOD moment..." rows={4} className="w-full rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-4 font-['Inter'] text-[14px] text-[#0A1931] placeholder:text-[#5B6470] focus:border-[#8FFF4A]/50 focus:outline-none resize-none" /></label>
                 {submitResult && (<div className={`rounded-[12px] border p-3 font-mono text-[11px] ${submitResult.error?'bg-red-500/10 border-red-500/20 text-red-300':'bg-[#8FFF4A]/10 border-[#8FFF4A]/20 text-[#8FFF4A]'}`}>{submitResult.error?`Error: ${submitResult.error}`:`Saved ${submitResult.saved} • Ledger updated • Oldham welcomes you`}</div>)}
                 <div className="flex gap-3 pt-2">
                   <button disabled={submitting||!form.name||!form.email||!form.why} onClick={handleSubmit} className="flex-1 h-12 rounded-full bg-[var(--m-gradient)] text-black font-mono text-[12px] font-bold tracking-[0.14em] uppercase disabled:opacity-40 hover:scale-[1.01] transition">{submitting?'Saving to Ledger...':'Submit — Build Brick by Brick →'}</button>

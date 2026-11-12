@@ -35,7 +35,7 @@ export default function AboutPage() {
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
             <div className="relative h-9 w-9 overflow-hidden rounded-[11px] bg-gradient-m p-[1px] drop-card">
-              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-black">
+              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#0A1931]">
                 <img src={logoM1} alt="My Face Profile M" className="h-6 w-6 object-contain" />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function AboutPage() {
         </div>
 
         {mobileOpen && (
-          <div className="border-t border-[#D4CBB8] bg-black/95 px-6 py-6 lg:hidden">
+          <div className="border-t border-[#D4CBB8] bg-[#FFFDF7] px-6 py-6 lg:hidden">
             <div className="grid gap-1">
               {navLinks.map((l) => (
                 <a
@@ -131,7 +131,7 @@ export default function AboutPage() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#cta" className="inline-flex items-center gap-2 rounded-full bg-gradient-m px-7 py-3.5 font-poppins text-[14px] font-bold tracking-[-0.01em] text-black shadow-[0_8px_32px_rgba(143,255,74,0.28)] transition hover:brightness-[1.08] active:scale-[0.98]">
                 Start Showing Free — Join OS
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-white">→</span>
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[#0A1931] text-white">→</span>
               </a>
               <a href="#story" className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-6 py-3.5 font-mono text-[12px] tracking-[0.08em] text-[#5B6470] backdrop-blur transition hover:bg-[#F0E9DB]">
                 <span className="h-2 w-2 rounded-full bg-white" />
@@ -153,7 +153,7 @@ export default function AboutPage() {
             </div>
 
             <div className="mt-10 flex items-center gap-3 rounded-[14px] border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-3">
-              <div className="h-7 w-7 rounded-[8px] overflow-hidden bg-black border border-[#D4CBB8] grid place-items-center">
+              <div className="h-7 w-7 rounded-[8px] overflow-hidden bg-[#0A1931] border border-[#D4CBB8] grid place-items-center">
                 <div className="h-full w-full" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover", backgroundPosition: "center" }} aria-label="M mark" />
               </div>
               <p className="font-mono text-[11px] leading-[1.4] tracking-[0.02em] text-[#5B6470]">
@@ -164,7 +164,7 @@ export default function AboutPage() {
 
           <div className="relative flex-1 lg:max-w-[560px]">
             <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[32px] bg-gradient-to-br from-[#8FFF4A]/20 via-[#00E5C0]/16 to-[#FFE600]/14 blur-[28px]" />
-            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black drop-card">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] drop-card">
               <img src={imgFounder} alt="Founder live streaming workshop - touch of GOD moment" className="aspect-[4/5] w-full object-cover lg:aspect-[4/5]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -184,7 +184,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="absolute left-4 top-4 flex gap-2">
-                <span className="rounded-full bg-black/70 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-[#5B6470] backdrop-blur border border-[#D4CBB8]">10mi NEARBY • VERIFIED</span>
+                <span className="rounded-full bg-[#0A1931]/85 px-3 py-1.5 font-mono text-[10px] tracking-[0.12em] text-[#5B6470] backdrop-blur border border-[#D4CBB8]">10mi NEARBY • VERIFIED</span>
               </div>
               <div className="absolute right-4 top-4 rounded-full bg-gradient-m px-3 py-1.5 font-poppins text-[11px] font-bold text-black">Touch of GOD</div>
             </div>
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 { year: "2026", title: "My Face Profile OS — Revolutionary", desc: "TikTok live + LinkedIn timeline + YouTube portfolio + e-commerce shop. Kernel + UPRM + Apps. The OS for real work.", tag: "OS v1.0 • Touch of GOD" },
               ].map((item) => (
                 <div key={item.year} className="relative flex gap-4 sm:gap-6">
-                  <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D4CBB8] bg-black font-poppins text-[12px] font-bold">
+                  <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#D4CBB8] bg-[#E8DFCC] font-poppins text-[12px] font-bold text-[#0A1931]">
                     {item.year.slice(2)}
                   </div>
                   <div className="flex-1 rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-4 sm:p-5">
@@ -260,7 +260,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid gap-4">
-            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black drop-card">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] drop-card">
               <img src={imgTailor} alt="Tailor sewing lace close-up craft evolution" className="h-[380px] w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
@@ -301,7 +301,7 @@ export default function AboutPage() {
             <div className="relative h-[320px] overflow-hidden">
               <div className="h-full w-full bg-cover bg-center transition duration-700 group-hover:scale-[1.04]" style={{ backgroundImage: `url(${imgTailor})` }} role="img" aria-label="Tailor sewing - show your work" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
+              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-[#0A1931]/85 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
                 <span className="h-2 w-2 rounded-full bg-[#8FFF4A]" />
                 <span className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">SHOW • LIVE WORKSHOP</span>
               </div>
@@ -352,7 +352,7 @@ export default function AboutPage() {
             <div className="relative h-[320px] overflow-hidden">
               <img src={imgDress} alt="Final wedding dress reveal - grow with trust" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
+              <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-[#0A1931]/85 px-3 py-1.5 backdrop-blur border border-[#D4CBB8]">
                 <span className="h-2 w-2 rounded-full bg-[#FFE600]" />
                 <span className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">GROW • FINAL RESULT</span>
               </div>
@@ -431,7 +431,7 @@ export default function AboutPage() {
             </div>
 
             <div className="flex-1">
-              <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-black">
+              <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB]">
                 <div className="h-[420px] w-full bg-cover bg-center" style={{ backgroundImage: `url(${imgTailor})` }} role="img" aria-label="Tailor sewing lace - touch of GOD craft as worship" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -477,9 +477,9 @@ export default function AboutPage() {
               ))}
             </div>
 
-            <div className="mt-8 rounded-[20px] border border-[#D4CBB8] bg-black p-5">
+            <div className="mt-8 rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] p-5">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-full overflow-hidden bg-black border border-[#D4CBB8]" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover" }} aria-label="Team logo" />
+                <div className="h-9 w-9 rounded-full overflow-hidden bg-[#0A1931] border border-[#D4CBB8]" style={{ backgroundImage: `url(${logoM2})`, backgroundSize: "cover" }} aria-label="Team logo" />
                 <div>
                   <div className="font-poppins text-[13px] font-bold">Team: Founder + Engineers + 1,247 pros who teach us</div>
                   <div className="font-mono text-[11px] text-[#5B6470]">We don&apos;t build for pros. We build with pros.</div>
@@ -543,7 +543,7 @@ export default function AboutPage() {
                 Real work becomes premium.
               </h3>
             </div>
-            <div className="rounded-full border border-[#D4CBB8] bg-black px-4 py-2 font-mono text-[11px] tracking-[0.1em] text-[#5B6470]">WINDOW OPEN • 2026</div>
+            <div className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-2 font-mono text-[11px] tracking-[0.1em] text-[#5B6470]">WINDOW OPEN • 2026</div>
           </div>
 
           <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -553,7 +553,7 @@ export default function AboutPage() {
               { n: "03", t: "Stripe Connect + Mux + LiveKit makes OS possible", d: "We can now build Kernel + UPRM + Apps: escrow, live workshop, work graph, project SEO pages — all in one OS.", c: "#FFE600" },
               { n: "04", t: "Google needs real Project SEO pages, not AI spam", d: "A Project page: 12 images, timeline, materials, trust ledger. That's E-E-A-T Google can't fake. Real work ranks.", c: "#FF8A00" },
             ].map((card) => (
-              <div key={card.n} className="relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-black p-5 drop-card">
+              <div key={card.n} className="relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] p-5 drop-card">
                 <div className="absolute right-0 top-0 h-[120px] w-[120px] rounded-full opacity-20" style={{ background: `radial-gradient(50%_50%_at_50%_50%,${card.c},transparent)` }} />
                 <div className="font-mono text-[11px] tracking-[0.14em]" style={{ color: card.c }}>
                   {card.n} • WHY NOW
@@ -568,7 +568,7 @@ export default function AboutPage() {
 
       {/* CTA FOOTER */}
       <section id="cta" className="relative mx-auto max-w-[1280px] px-6 pb-12 pt-8 lg:px-8">
-        <div className="relative overflow-hidden rounded-[32px] border border-[#D4CBB8] bg-black p-8 sm:p-12 lg:p-16 drop-card">
+        <div className="relative overflow-hidden rounded-[32px] border border-[#D4CBB8] bg-[#F0E9DB] p-8 sm:p-12 lg:p-16 drop-card">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-[#8FFF4A]/[0.14] via-[#00E5C0]/[0.10] via-[#FFE600]/[0.08] to-[#FF8A00]/[0.12]" />
             <div className="absolute -left-20 -top-20 h-[400px] w-[400px] rounded-full bg-[#8FFF4A]/20 blur-[48px]" />
@@ -618,7 +618,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="rounded-[14px] bg-gradient-m p-[1px]">
-                <div className="rounded-[13px] bg-black px-4 py-3">
+                <div className="rounded-[13px] bg-[#F0E9DB] px-4 py-3">
                   <div className="font-mono text-[10px] tracking-[0.12em] text-[#5B6470]">FROM VISAGUIDEOS TO MY FACE PROFILE</div>
                   <div className="mt-1 font-poppins text-[13px] font-bold leading-[1.2]">1,247 pros • 12K Projects • 4.9 Trust • Touch of GOD</div>
                 </div>
@@ -628,7 +628,7 @@ export default function AboutPage() {
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-[#D4CBB8] pt-6">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-[10px] bg-gradient-m p-[1px]">
-                  <div className="grid h-full w-full place-items-center rounded-[9px] bg-black overflow-hidden">
+                  <div className="grid h-full w-full place-items-center rounded-[9px] bg-[#0A1931] overflow-hidden">
                     <div className="h-5 w-5 bg-cover bg-center" style={{ backgroundImage: `url(${logoM1})` }} aria-label="M" />
                   </div>
                 </div>
