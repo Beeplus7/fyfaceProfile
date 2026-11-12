@@ -107,7 +107,7 @@ export default function WorkOsPage() {
       <header
         data-safe-area-sticky-top
         className="sticky z-50 border-b border-[#D4CBB8] backdrop-blur-xl"
-        style={{ top: 'var(--safe-area-inset-top)', background: 'rgba(5,5,5,0.78)' }}
+        style={{ top: 'var(--safe-area-inset-top)', background: 'rgba(255,253,247,0.92)' }}
       >
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -157,7 +157,7 @@ export default function WorkOsPage() {
         )}
       </header>
 
-      <div className="w-full border-b border-[#D4CBB8] bg-[#080808]">
+      <div className="w-full border-b border-[#D4CBB8] bg-[#FFF8E1]">
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 h-9 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="inline-flex h-5 px-2 rounded-full items-center text-[10px] font-medium tracking-[0.12em] mono text-black" style={{ background: 'var(--gradient-m)' }}>PRODUCTION ARTIFACT</span>
@@ -197,7 +197,7 @@ export default function WorkOsPage() {
 
               <div className="reveal mt-8 flex flex-wrap items-center gap-3" ref={addReveal}>
                 <a href="#architecture" className="h-11 px-6 rounded-full inline-flex items-center justify-center text-[14px] font-semibold text-black poppins" style={{ background: 'var(--gradient-m)' }}>Explore OS Architecture ↓</a>
-                <a href="#technical" className="h-11 px-5 rounded-full glass inline-flex items-center gap-2 text-[13px] text-[#5B6470]"><span className="h-5 w-5 rounded-full bg-[#F0E9DB] flex items-center justify-center">◫</span> See Prisma Schema</a>
+                <a href="#architecture" className="h-11 px-5 rounded-full glass inline-flex items-center gap-2 text-[13px] text-[#5B6470]"><span className="h-5 w-5 rounded-full bg-[#F0E9DB] flex items-center justify-center">◫</span> See OS Architecture</a>
               </div>
 
               <div className="reveal mt-10 grid grid-cols-3 gap-3 max-w-[520px]" ref={addReveal}>
@@ -216,7 +216,7 @@ export default function WorkOsPage() {
 
             <div className="reveal relative" ref={addReveal}>
               <div className="relative rounded-[28px] overflow-hidden glass-strong p-3 md:p-4">
-                <div className="rounded-[20px] overflow-hidden bg-[#0E0E0E] border border-[#D4CBB8]">
+                <div className="rounded-[20px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8]">
                   <div className="h-9 flex items-center justify-between px-4 border-b border-[#D4CBB8]">
                     <div className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" /><span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" /><span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" /></div>
                     <span className="mono text-[10px] text-[#5B6470]">myfaceprofile-os://kernel</span>
@@ -230,7 +230,7 @@ export default function WorkOsPage() {
                   <div className="px-4 pb-4 flex items-center justify-between">
                     <div className="flex -space-x-2">
                       {[imgTailor, imgMechanic, imgBuilder, imgBarber].map((im,i) => (
-                        <div key={i} className="h-7 w-7 rounded-full border-2 border-[#0E0E0E]" style={{ backgroundImage: `url(${im})`, backgroundSize: 'cover' }} />
+                        <div key={i} className="h-7 w-7 rounded-full border-2 border-[#FFFDF7]" style={{ backgroundImage: `url(${im})`, backgroundSize: 'cover' }} />
                       ))}
                     </div>
                     <span className="mono text-[10px] text-[#5B6470]">4 jobs → UPRM → live</span>
@@ -248,7 +248,7 @@ export default function WorkOsPage() {
         </div>
       </section>
 
-      <section id="architecture" className="relative border-t border-[#D4CBB8] bg-[#080808]">
+      <section id="architecture" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-16 md:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -273,12 +273,12 @@ export default function WorkOsPage() {
                   <div
                     key={layer.id}
                     ref={addReveal}
-                    className={`reveal relative rounded-[24px] overflow-hidden transition-all duration-500 cursor-pointer ${isActive ? 'ring-1 ring-white/20 scale-[1.01]' : 'hover:scale-[1.005]'}`}
+                    className={`reveal relative rounded-[24px] overflow-hidden transition-all duration-500 cursor-pointer ${isActive ? 'ring-1 ring-[#D4CBB8] scale-[1.01] shadow-[0_12px_32px_rgba(10,25,49,0.08)]' : 'hover:scale-[1.005]'}`}
                     style={{
                       background: layer.highlight
-                        ? 'linear-gradient(180deg, rgba(143,255,74,0.14) 0%, rgba(0,229,192,0.10) 35%, rgba(255,230,0,0.08) 70%, rgba(255,138,0,0.06) 100%), linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%)'
-                        : `linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)`,
-                      border: layer.highlight ? '1px solid transparent' : '1px solid rgba(255,255,255,0.08)',
+                        ? 'linear-gradient(180deg, rgba(143,255,74,0.18) 0%, rgba(0,229,192,0.12) 35%, #F0E9DB 100%)'
+                        : 'linear-gradient(180deg, #F0E9DB 0%, #FFFDF7 100%)',
+                      border: layer.highlight ? '1px solid transparent' : '1px solid #D4CBB8',
                       backgroundClip: 'padding-box',
                     }}
                     onClick={() => setActiveLayer(layer.id)}
@@ -289,7 +289,7 @@ export default function WorkOsPage() {
 
                     <div className="relative flex flex-wrap md:flex-nowrap items-center justify-between gap-4 p-5 md:p-7">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-[14px] flex items-center justify-center text-black font-black poppins text-[18px] shrink-0" style={{ background: layer.highlight ? 'var(--gradient-m)' : 'rgba(255,255,255,0.08)', color: layer.highlight ? '#000' : '#fff' }}>{idx + 1}</div>
+                        <div className="h-12 w-12 rounded-[14px] flex items-center justify-center text-black font-black poppins text-[18px] shrink-0" style={{ background: layer.highlight ? 'var(--gradient-m)' : '#E8DFCC', color: layer.highlight ? '#000' : '#0A1931' }}>{idx + 1}</div>
                         <div>
                           <div className="mono text-[10px] tracking-[0.16em] text-[#5B6470] uppercase">{layer.label}</div>
                           <div className="poppins font-bold text-[18px] md:text-[22px] tracking-[-0.02em] text-[#0A1931]">{layer.title}</div>
@@ -319,14 +319,14 @@ export default function WorkOsPage() {
 
                           {layer.id === 'uprm' ? (
                             <div className="md:col-span-5">
-                              <div className="rounded-[18px] overflow-hidden bg-[#0F0F0F] border border-[#D4CBB8] p-3">
+                              <div className="rounded-[18px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                                 <div className="mono text-[10px] tracking-[0.14em] text-[#5B6470] uppercase mb-3">Real Work Nodes → UPRM → Apps → Coins</div>
                                 <div className="grid grid-cols-2 gap-2">
                                   <div className="relative rounded-xl overflow-hidden">
                                     <img src={imgTailor} alt="Tailor sewing wedding dress lace" className="w-full aspect-[4/3] object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                                     <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between">
-                                      <span className="text-[9px] mono bg-black/70 text-[#0A1931] px-1.5 py-0.5 rounded-full">Tailor • Wedding Lace</span>
+                                      <span className="text-[9px] mono bg-[#0A1931]/85 text-white px-1.5 py-0.5 rounded-full">Tailor • Wedding Lace</span>
                                       <span className="text-[9px] mono px-1.5 py-0.5 rounded-full text-black font-bold" style={{ background: 'var(--gradient-m)' }}>98%</span>
                                     </div>
                                   </div>
@@ -334,7 +334,7 @@ export default function WorkOsPage() {
                                     <img src={imgMechanic} alt="Female mechanic J Martinez diagnosing engine" className="w-full aspect-[4/3] object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                                     <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between">
-                                      <span className="text-[9px] mono bg-black/70 text-[#0A1931] px-1.5 py-0.5 rounded-full">J. Martinez • OBD2</span>
+                                      <span className="text-[9px] mono bg-[#0A1931]/85 text-white px-1.5 py-0.5 rounded-full">J. Martinez • OBD2</span>
                                       <span className="text-[9px] mono px-1.5 py-0.5 rounded-full text-black font-bold" style={{ background: 'var(--gradient-m)' }}>96%</span>
                                     </div>
                                   </div>
@@ -342,7 +342,7 @@ export default function WorkOsPage() {
                                     <img src={imgBuilder} alt="Builders laying bricks Oldham Builders van" className="w-full aspect-[4/3] object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                                     <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between">
-                                      <span className="text-[9px] mono bg-black/70 text-[#0A1931] px-1.5 py-0.5 rounded-full">Oldham Builders • Brick</span>
+                                      <span className="text-[9px] mono bg-[#0A1931]/85 text-white px-1.5 py-0.5 rounded-full">Oldham Builders • Brick</span>
                                       <span className="text-[9px] mono px-1.5 py-0.5 rounded-full text-black font-bold" style={{ background: 'var(--gradient-m)' }}>99%</span>
                                     </div>
                                   </div>
@@ -350,7 +350,7 @@ export default function WorkOsPage() {
                                     <img src={imgBarber} alt="Barber giving fade haircut" className="w-full aspect-[4/3] object-cover" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
                                     <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between">
-                                      <span className="text-[9px] mono bg-black/70 text-[#0A1931] px-1.5 py-0.5 rounded-full">Fade Cut • Live</span>
+                                      <span className="text-[9px] mono bg-[#0A1931]/85 text-white px-1.5 py-0.5 rounded-full">Fade Cut • Live</span>
                                       <span className="text-[9px] mono px-1.5 py-0.5 rounded-full text-black font-bold" style={{ background: 'var(--gradient-m)' }}>97%</span>
                                     </div>
                                   </div>
@@ -451,7 +451,7 @@ export default function WorkOsPage() {
                   <BgImg src={imgTailor} alt="Tailor sewing wedding dress lace" className="relative rounded-[14px] overflow-hidden aspect-[4/3] w-full" />
                   <BgImg src={imgMechanic} alt="Female mechanic diagnosing engine" className="relative rounded-[14px] overflow-hidden aspect-[4/3] w-full" />
                 </div>
-                <div className="rounded-[14px] bg-[#0F0F0F] border border-[#D4CBB8] p-3">
+                <div className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                   <div className="mono text-[10px] text-[#5B6470] uppercase">Includes</div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {['Before/After','Milestones','Team','TrustScore','Booking','Escrow'].map(w => (
@@ -466,7 +466,7 @@ export default function WorkOsPage() {
         </div>
       </section>
 
-      <section id="projects" className="border-t border-[#D4CBB8] bg-[#080808]">
+      <section id="projects" className="border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-16 md:py-24">
           <div className="mono text-[11px] tracking-[0.2em] text-[#5B6470] uppercase">UPRM In Action • Live Pipelines</div>
           <h2 className="mt-3 poppins font-extrabold text-[30px] md:text-[44px] leading-[0.95] tracking-[-0.03em]">Every job is a<br /><span className="m-gradient-text">pipeline, not a post</span></h2>
@@ -500,7 +500,7 @@ export default function WorkOsPage() {
                 ))}
               </div>
 
-              <div className="mt-4 rounded-[14px] bg-[#0E0E0E] border border-[#D4CBB8] p-3 flex items-center justify-between">
+              <div className="mt-4 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center justify-between">
                 <div className="mono text-[11px] text-[#5B6470]">Event bus • BullMQ • 47 events today</div>
                 <div className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#8FFF4A] animate-pulse" /><span className="mono text-[10px] text-[#5B6470]">live</span></div>
               </div>
@@ -512,7 +512,7 @@ export default function WorkOsPage() {
                   <BgImg src={imgTailor} alt="Tailor sewing wedding dress lace" className="w-full aspect-[16/10]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
                   <div className="absolute top-3 left-3 flex items-center gap-2">
-                    <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-black/60 border border-[#D4CBB8] text-[#0A1931]">WorkCut • Auto-trimmed</span>
+                    <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-[#0A1931]/85 border border-[#D4CBB8] text-white">WorkCut • Auto-trimmed</span>
                     <span className="mono text-[10px] px-2 py-1 rounded-full text-black font-bold" style={{ background: 'var(--gradient-m)' }}>Captions ON</span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -527,7 +527,7 @@ export default function WorkOsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 flex items-center justify-between bg-[#0F0F0F]">
+                <div className="p-4 flex items-center justify-between bg-[#E8DFCC]">
                   <span className="mono text-[11px] text-[#5B6470]">Auto: trim silence, add captions, blur background</span>
                   <span className="mono text-[10px] text-[#5B6470]">Mux • HLS</span>
                 </div>
@@ -560,85 +560,10 @@ export default function WorkOsPage() {
         </div>
       </section>
 
-      <section id="technical" className="border-t border-[#D4CBB8]">
-        <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-16 md:py-24">
-          <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 items-start">
-            <div>
-              <div className="mono text-[11px] tracking-[0.2em] text-[#5B6470] uppercase">Technical Specs • React Dev Ready</div>
-              <h2 className="mt-3 poppins font-extrabold text-[30px] md:text-[40px] leading-[0.95] tracking-[-0.03em]">Production Stack.<br /><span className="m-gradient-text">Turbo monorepo</span></h2>
-              <p className="mt-4 mono text-[12px] text-[#5B6470] leading-[1.6] max-w-[420px]">apps/marketing/app/work-os/page.tsx — Tailwind, glassmorphism, IntersectionObserver card drops, real work images as nodes. Copy-paste ready.</p>
-
-              <div className="mt-8 grid grid-cols-2 gap-2">
-                {[
-                  { k: 'Next.js 14', v: 'App Router • RSC' },
-                  { k: 'NestJS', v: 'API • BullMQ' },
-                  { k: 'Postgres+Prisma+PostGIS', v: 'Geo + vector' },
-                  { k: 'Redis+BullMQ', v: 'Event bus' },
-                  { k: 'Typesense+pgvector', v: 'Hybrid search' },
-                  { k: 'Stripe Connect', v: 'Escrow payouts' },
-                  { k: 'Mux+LiveKit', v: 'Video + Live' },
-                  { k: 'Turbo', v: 'Monorepo' },
-                ].map(t => (
-                  <div key={t.k} className="rounded-[14px] glass px-3 py-3">
-                    <div className="poppins font-semibold text-[12px] text-[#0A1931] tracking-[-0.01em]">{t.k}</div>
-                    <div className="mono text-[10px] text-[#5B6470]">{t.v}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div ref={addReveal} className="reveal rounded-[24px] overflow-hidden glass-strong">
-              <div className="h-10 flex items-center justify-between px-5 border-b border-[#D4CBB8] bg-[#0E0E0E]">
-                <div className="flex items-center gap-2">
-                  <span className="mono text-[11px] text-[#5B6470]">prisma/schema.prisma</span>
-                  <span className="h-4 px-1.5 rounded bg-[#F0E9DB] mono text-[9px] text-[#5B6470]">Project</span>
-                </div>
-                <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#8FFF4A]" /><span className="mono text-[10px] text-[#5B6470]">Typesafe</span></div>
-              </div>
-              <pre className="p-5 overflow-x-auto text-[12px] leading-[1.6] mono text-[#5B6470] bg-[#F0E9DB]">
-{`model Project {
-  id          String   @id @default(cuid())
-  ownerId     String
-  title       String
-  status      ProjectStatus // INQUIRY | QUOTED | IN_PROGRESS | DONE
-  priceCents  Int
-  currency    String   @default("GBP")
-  location    Unsupported("geography(Point,4326)")?
-  trustDelta  Int      @default(0)
-  milestones  Milestone[]
-  workMedias  WorkMedia[] // tailor / mechanic / builder / barber
-  events      ProjectEvent[] // event sourcing → UPRM
-
-  @@index([ownerId, status])
-  @@index([location], type: Gist)
-}
-
-model WorkMedia {
-  id         String @id
-  projectId  String
-  url        String // R2 signed, Mux playbackId
-  kind       MediaKind // BEFORE | AFTER | LIVE | WORKCUT
-  metadata   Json // OBD2 P0302, lace #3, etc
-  trustScore Int
-}
-
-enum ProjectStatus {
-  INQUIRY
-  QUOTED
-  MILESTONE_1
-  MILESTONE_2
-  MILESTONE_3
-  DONE
-  DISPUTED
-}`}
-              </pre>
-              <div className="px-5 py-3 border-t border-[#D4CBB8] bg-[#0F0F0F] flex items-center justify-between">
-                <span className="mono text-[10px] text-[#5B6470]">UPRM = Users Personal Relationship Manager — PID 1</span>
-                <span className="mono text-[10px] px-2.5 py-1 rounded-full bg-white text-black font-semibold">Production Ready</span>
-              </div>
-            </div>
-          </div>
-
+      <section id="work-gallery" className="border-t border-[#D4CBB8] bg-[#FFFDF7]">
+        <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-14 md:py-16">
+          <div className="mono text-[11px] tracking-[0.2em] text-[#5B6470] uppercase mb-2">Real Work • Live Nodes</div>
+          <h2 className="poppins font-extrabold text-[28px] md:text-[36px] tracking-[-0.03em] text-[#0A1931] mb-8">Tailors, mechanics, builders, barbers — proof on the OS.</h2>
           <div className="mt-12 grid md:grid-cols-4 gap-3">
             {[
               { img: imgTailor, label: 'Tailor • Oldham', meta: 'Lace • Wedding' },
@@ -655,6 +580,7 @@ enum ProjectStatus {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </section>
 
@@ -686,7 +612,7 @@ enum ProjectStatus {
               </div>
 
               <div className="grid gap-3">
-                <div className="rounded-[20px] overflow-hidden bg-[#0E0E0E] border border-[#D4CBB8] p-3 flex gap-3">
+                <div className="rounded-[20px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex gap-3">
                   <div className="h-20 w-20 rounded-[12px] shrink-0" style={{ backgroundImage: `url(${imgBuilder})`, backgroundSize: 'cover' }} />
                   <div className="flex-1">
                     <div className="mono text-[10px] text-[#5B6470] uppercase">Featured • Oldham Builders</div>
@@ -694,7 +620,7 @@ enum ProjectStatus {
                     <div className="mt-2 flex gap-1.5"><span className="mono text-[9px] px-2 py-1 rounded-full bg-[#F0E9DB] text-[#5B6470]">Trust 99%</span><span className="mono text-[9px] px-2 py-1 rounded-full text-black font-bold" style={{ background: '#8FFF4A' }}>Payout ready</span></div>
                   </div>
                 </div>
-                <div className="rounded-[20px] overflow-hidden bg-[#0E0E0E] border border-[#D4CBB8] p-3 flex gap-3">
+                <div className="rounded-[20px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex gap-3">
                   <div className="h-20 w-20 rounded-[12px] shrink-0" style={{ backgroundImage: `url(${imgBarber})`, backgroundSize: 'cover' }} />
                   <div className="flex-1">
                     <div className="mono text-[10px] text-[#5B6470] uppercase">Live Now • Barber</div>
@@ -703,7 +629,7 @@ enum ProjectStatus {
                   </div>
                 </div>
                 <div className="rounded-[16px] glass px-4 py-3 flex items-center justify-between">
-                  <span className="mono text-[11px] text-[#5B6470]">Production brand artifact • black #050505</span>
+                  <span className="mono text-[11px] text-[#5B6470]">Production brand artifact • cream #FFFDF7</span>
                   <span className="h-6 w-6 rounded-full flex items-center justify-center text-black font-black poppins" style={{ background: 'var(--gradient-m)' }}>M</span>
                 </div>
               </div>
