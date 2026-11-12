@@ -155,7 +155,7 @@ export default function LiveWorkshopPage(){
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <button className="group relative rounded-full p-[1px]" style={{ background:'var(--grad-m)' }}>
-                <span className="flex items-center gap-2 rounded-full bg-black px-6 py-[13px] text-[14px] font-semibold">
+                <span className="flex items-center gap-2 rounded-full bg-[#0A1931] px-6 py-[13px] text-[14px] font-semibold text-white">
                   <span className="h-2 w-2 rounded-full bg-[#FF3B3B] animate-pulse" /> Start Live Workshop
                   <span className="transition group-hover:translate-x-0.5">→</span>
                 </span>
@@ -188,22 +188,22 @@ export default function LiveWorkshopPage(){
 
           {/* HERO RIGHT IMAGE */}
           <div className="relative lg:sticky lg:top-[88px]">
-            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0F0F0F] shadow-[0_24px_80px_rgba(0,0,0,0.6)]">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] shadow-[0_20px_50px_rgba(10,25,49,0.10)]">
               <div className="absolute inset-0 z-10 rounded-[24px] p-[1px]" style={{ background:'var(--grad-m)', WebkitMask:'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite:'xor', maskComposite:'exclude' }} />
               
               <img src={liveGirl} alt="young female entrepreneur live streaming workshop on tripod, authentic" className="aspect-[4/5] w-full object-cover" />
 
               {/* Glass overlays */}
-              <div className="absolute left-3 top-3 z-20 flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 backdrop-blur-xl border border-[#D4CBB8]">
+              <div className="absolute left-3 top-3 z-20 flex items-center gap-2 rounded-full bg-[#0A1931]/85 px-3 py-1.5 backdrop-blur-xl border border-[#D4CBB8]">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                <span className="mono text-[11px] font-bold text-[#0A1931]">LIVE</span>
-                <span className="mono text-[11px] text-[#5B6470]">{liveViewers} watching</span>
+                <span className="mono text-[11px] font-bold text-white">LIVE</span>
+                <span className="mono text-[11px] text-white/75">{liveViewers} watching</span>
               </div>
 
               <div className="absolute right-3 top-3 z-20 rounded-full bg-white px-3 py-1.5 mono text-[11px] font-bold text-black shadow-lg">Atelier No.12 • Tailoring Live</div>
 
               <div className="absolute bottom-0 left-0 right-0 z-20 p-3">
-                <div className="rounded-[16px] border border-[#D4CBB8] bg-black/60 p-3 backdrop-blur-xl">
+                <div className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-3 backdrop-blur-xl">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <img src={tailorSew} alt="tailor sewing lace close-up inset" className="h-9 w-9 rounded-full object-cover border border-[#D4CBB8]" />
@@ -265,16 +265,16 @@ export default function LiveWorkshopPage(){
 
         <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-6">
           {/* Big phone image */}
-          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#101010]">
+          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB]">
             <img src={phoneGift} alt="phone showing Atelier No.12 Tailoring Live Custom Suit Fitting live chat with gifts raining" className="aspect-[16/10] w-full object-cover lg:aspect-[16/11]" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
             
-            <div className="absolute left-4 top-4 rounded-full border border-[#D4CBB8] bg-black/60 px-3 py-1.5 backdrop-blur mono text-[11px] text-[#0A1931] flex items-center gap-2">
+            <div className="absolute left-4 top-4 rounded-full border border-[#D4CBB8] bg-[#0A1931]/85 px-3 py-1.5 backdrop-blur mono text-[11px] text-white flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" /> Atelier No.12 Tailoring Live • Custom Suit Fitting
             </div>
 
             {/* Chat overlay like Figma */}
-            <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-[320px] rounded-[18px] border border-[#D4CBB8] bg-black/70 p-3 backdrop-blur-xl">
+            <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-[320px] rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] p-3 backdrop-blur-xl">
               <div className="mono text-[10px] tracking-widest text-[#5B6470] mb-2">LIVE CHAT</div>
               <div className="space-y-2 text-[12px]">
                 <div className="rounded-[10px] bg-[#F0E9DB] px-3 py-2"><span className="font-semibold">Emma •</span> This stitching is incredible! ❤️</div>
@@ -306,7 +306,7 @@ export default function LiveWorkshopPage(){
                   {label:'Gift Rate', value:'18%'},
                   {label:'Book Rate', value:'7.2%'},
                 ].map(k=>(
-                  <div key={k.label} className="rounded-[14px] bg-black/40 border border-[#D4CBB8] p-3">
+                  <div key={k.label} className="rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
                     <div className="mono text-[10px] text-[#5B6470] uppercase">{k.label}</div>
                     <div className="poppins text-[15px] font-bold mt-1">{k.value}</div>
                   </div>
@@ -321,13 +321,13 @@ export default function LiveWorkshopPage(){
                 {title:'Trust While Live', desc:'TrustScore overlay + verified bookings.', img: delivery, stat:'4.9 Trust'},
                 {title:'Shop Pinned', desc:'Silk Fabric £45/m pinned during live.', img: tailorSew, stat:'£45/m'},
               ].map(card=>(
-                <div key={card.title} className="group relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-[#131313]">
+                <div key={card.title} className="group relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB]">
                   <img src={card.img} alt={card.title} className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-[1.05]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-                  <div className="absolute left-3 top-3 rounded-full bg-black/60 border border-[#D4CBB8] px-2.5 py-1 mono text-[9px] text-[#5B6470] backdrop-blur">{card.stat}</div>
+                  <div className="absolute left-3 top-3 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] px-2.5 py-1 mono text-[9px] text-[#5B6470] backdrop-blur">{card.stat}</div>
                   <div className="absolute bottom-0 p-3.5">
-                    <div className="poppins text-[13px] font-bold leading-tight">{card.title}</div>
-                    <div className="mono text-[10px] text-[#5B6470] mt-1 leading-[1.4]">{card.desc}</div>
+                    <div className="poppins text-[13px] font-bold leading-tight text-white">{card.title}</div>
+                    <div className="mono text-[10px] text-white/80 mt-1 leading-[1.4]">{card.desc}</div>
                   </div>
                 </div>
               ))}
@@ -346,7 +346,7 @@ export default function LiveWorkshopPage(){
               <h2 className="poppins mt-4 text-[32px] md:text-[52px] font-extrabold leading-[0.95] tracking-[-0.03em]">Every View Becomes a Relationship. <GradientText>Every Relationship Becomes Revenue.</GradientText></h2>
               <p className="mt-4 text-[15px] leading-[1.6] text-[#5B6470]">UPRM listens to every InteractionEvent — video_viewed, gift_sent, inquiry_created, quote_sent, deposit_paid, milestone_completed — and turns it into pipeline.</p>
             </div>
-            <div className="rounded-[16px] border border-[#D4CBB8] bg-black p-4 mono text-[11px] leading-[1.6] text-[#5B6470] max-w-[360px]">
+            <div className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-4 mono text-[11px] leading-[1.6] text-[#5B6470] max-w-[360px]">
               <div className="text-[#5B6470] mb-2">InteractionEvent {`{`}</div>
               <div className="pl-3 space-y-1">
                 <div><span className="text-[#8FFF4A]">video_viewed</span> <span className="text-[#5B6470]">→ +1 intent</span></div>
@@ -361,7 +361,7 @@ export default function LiveWorkshopPage(){
 
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-6">
             {/* CRM visual */}
-            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0E0E0E]">
+            <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB]">
               <div className="flex items-center justify-between border-b border-[#D4CBB8] px-5 py-4">
                 <div className="flex items-center gap-3">
                   <div className="h-8 w-8 rounded-[10px] grid place-items-center bg-white text-black font-bold poppins">F</div>
@@ -377,7 +377,7 @@ export default function LiveWorkshopPage(){
               </div>
               <div className="relative">
                 <img src={crmPipe} alt="FlowCRM pipeline dashboard dark mode showing Customer Pipeline 1,248 leads, $284k pipeline — as UPRM reference" className="w-full aspect-[16/9] object-cover opacity-90" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0E0E0E] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A1931]/80 via-transparent to-transparent" />
               </div>
 
               {/* Kanban */}
@@ -430,7 +430,7 @@ export default function LiveWorkshopPage(){
                     {name:'James Park', job:'Suit Fitting • £180', status:'Confirmed', img:tailorSew, trust:'Deposit paid • £90'},
                     {name:'Aisha Khan', job:'Silk Lace Repair • £45', status:'In Make', img:tailorSew, trust:'Milestone: Lace pinned'},
                   ].map(row=>(
-                    <div key={row.name} className="group flex items-center gap-3 rounded-[16px] border border-[#D4CBB8] bg-black/40 p-3 hover:bg-black/60 transition cursor-pointer">
+                    <div key={row.name} className="group flex items-center gap-3 rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-3 hover:bg-[#E8DFCC] transition cursor-pointer">
                       <img src={row.img} alt={row.name} className="h-10 w-10 rounded-full object-cover border border-[#D4CBB8]" />
                       <div className="flex-1 min-w-0">
                         <div className="text-[13px] font-semibold leading-tight truncate">{row.name} • {row.job}</div>
@@ -441,7 +441,7 @@ export default function LiveWorkshopPage(){
                   ))}
                 </div>
 
-                <div className="mt-5 rounded-[14px] bg-black border border-[#D4CBB8] p-3 flex items-center justify-between">
+                <div className="mt-5 rounded-[14px] bg-[#E8DFCC] border border-[#D4CBB8] p-3 flex items-center justify-between">
                   <div>
                     <div className="mono text-[10px] text-[#5B6470] uppercase">Pipeline Value</div>
                     <div className="poppins text-[20px] font-extrabold">£18,400</div>
@@ -466,11 +466,11 @@ export default function LiveWorkshopPage(){
       <section id="story" className="mx-auto max-w-[1320px] px-5 md:px-8 py-12 md:py-20">
         <Badge>Section 03 • From Gift to Delivery — Image Story</Badge>
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-8 items-start">
-          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#101010]">
+          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB]">
             <img src={delivery} alt="diverse happy customers receiving custom wedding dress delivery, trust moment" className="aspect-[4/3] w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
             <div className="absolute bottom-0 p-5 w-full">
-              <div className="rounded-[16px] border border-[#D4CBB8] bg-black/60 backdrop-blur-xl p-4 flex items-center justify-between">
+              <div className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur-xl p-4 flex items-center justify-between">
                 <div className="flex -space-x-2">
                   {[tailorSew, liveGirl, delivery].map((im,i)=>(
                     <img key={i} src={im} alt="customer" className="h-8 w-8 rounded-full border-2 border-black object-cover" />
@@ -500,7 +500,7 @@ export default function LiveWorkshopPage(){
                   {step:'Review → Repeat', icon:'⭐', desc:'Review 5★ • Relationship strength +10 → Referral', meta:'Loop restarts • Lifetime value £1,240', img: delivery},
                 ].map((s, idx)=>(
                   <div key={s.step} className="relative flex gap-4 rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] p-4 backdrop-blur hover:bg-[#F0E9DB] transition">
-                    <div className="hidden md:grid h-9 w-9 place-items-center rounded-full border border-[#D4CBB8] bg-black text-[16px] z-10">{s.icon}</div>
+                    <div className="hidden md:grid h-9 w-9 place-items-center rounded-full border border-[#D4CBB8] bg-[#E8DFCC] text-[16px] text-[#0A1931] z-10">{s.icon}</div>
                     <div className="flex-1 flex gap-4">
                       <img src={s.img} alt={s.step} className="h-14 w-14 rounded-[12px] object-cover border border-[#D4CBB8] hidden sm:block" />
                       <div className="flex-1">
@@ -521,7 +521,7 @@ export default function LiveWorkshopPage(){
       </section>
 
       {/* SECTION 4 — WHY IMAGES > WORDS */}
-      <section className="border-t border-[#D4CBB8] bg-[#080808]">
+      <section className="border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1320px] px-5 md:px-8 py-12 md:py-20">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
             <div>
@@ -538,21 +538,21 @@ export default function LiveWorkshopPage(){
               {img: builders, name:'Oldham Build Co.', craft:'Builders • Extensions', stats:['24 active','£284k pipeline','On-site now'], live:false},
               {img: barber, name:'Fade House', craft:'Barber • Fades', stats:['312 fades','4.9 Trust','live now'], live:true},
             ].map(card=>(
-              <div key={card.name} data-reveal className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#121212] animate-slide">
+              <div key={card.name} data-reveal className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] animate-slide">
                 <div className="absolute inset-0 rounded-[24px] p-[1px] opacity-0 group-hover:opacity-100 transition" style={{ background:'var(--grad-m)' }}>
-                  <div className="h-full w-full rounded-[23px] bg-[#121212]" />
+                  <div className="h-full w-full rounded-[23px] bg-[#F0E9DB]" />
                 </div>
                 <div className="relative">
                   <img src={card.img} alt={`${card.name} ${card.craft}`} className="aspect-[4/3] w-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-                  {card.live && <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 mono text-[10px] font-bold text-[#0A1931]"><span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />LIVE</div>}
-                  <div className="absolute right-3 top-3 rounded-full border border-[#D4CBB8] bg-black/60 px-2.5 py-1 mono text-[10px] text-[#5B6470] backdrop-blur">Oldham • 0.8mi</div>
+                  {card.live && <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 mono text-[10px] font-bold text-white"><span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />LIVE</div>}
+                  <div className="absolute right-3 top-3 rounded-full border border-[#D4CBB8] bg-[#0A1931]/85 px-2.5 py-1 mono text-[10px] text-white/80 backdrop-blur">Oldham • 0.8mi</div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <div className="poppins text-[16px] font-bold leading-tight">{card.name}</div>
-                    <div className="mono text-[11px] text-[#5B6470]">{card.craft}</div>
+                    <div className="poppins text-[16px] font-bold leading-tight text-white">{card.name}</div>
+                    <div className="mono text-[11px] text-white/80">{card.craft}</div>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {card.stats.map(s=>(
-                        <span key={s} className="rounded-full border border-[#D4CBB8] bg-black/50 px-2.5 py-1 mono text-[10px] text-[#5B6470] backdrop-blur">{s}</span>
+                        <span key={s} className="rounded-full border border-[#D4CBB8] bg-[#0A1931]/80 px-2.5 py-1 mono text-[10px] text-white/80 backdrop-blur">{s}</span>
                       ))}
                     </div>
                     <button className="mt-3 w-full rounded-full bg-white py-2.5 text-[13px] font-bold text-black hover:bg-white/90 transition">Book This Pro</button>
@@ -572,7 +572,7 @@ export default function LiveWorkshopPage(){
               <div className="mt-2 flex items-center gap-2 text-[22px]"><span>🪙</span><span>❤️</span><span>🎁</span><span className="poppins text-[16px] font-bold ml-2">+£320 booked in 8 min live</span></div>
             </div>
             <div className="rounded-[20px] p-[1px]" style={{ background:'var(--grad-m)' }}>
-              <div className="rounded-[19px] bg-black p-5 flex justify-between items-center">
+              <div className="rounded-[19px] bg-[#F0E9DB] p-5 flex justify-between items-center">
                 <div><div className="mono text-[10px] text-[#5B6470] uppercase">Oldham Live Right Now</div><div className="poppins text-[18px] font-extrabold">1,247 pros • 142 viewers avg</div></div>
                 <div className="h-10 w-10 rounded-full grid place-items-center bg-white text-black font-bold">→</div>
               </div>
@@ -596,7 +596,7 @@ export default function LiveWorkshopPage(){
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button className="rounded-full px-7 py-4 text-[15px] font-bold text-black shadow-[0_12px_40px_rgba(143,255,74,0.35)]" style={{ background:'var(--grad-m)' }}>Start Live Workshop Free</button>
                 <div className="flex items-center gap-3">
-                  <div className="rounded-[12px] border border-[#D4CBB8] bg-white p-2"><div className="h-12 w-12 rounded-[8px] bg-black grid place-items-center text-[10px] mono text-white">QR<br/>OLDHAM</div></div>
+                  <div className="rounded-[12px] border border-[#D4CBB8] bg-white p-2"><div className="h-12 w-12 rounded-[8px] bg-[#0A1931] grid place-items-center text-[10px] mono text-white">QR<br/>OLDHAM</div></div>
                   <div className="mono text-[11px] leading-[1.4] text-[#5B6470]">Scan to join waitlist<br/>iOS / Android Coming Soon<br/><span className="text-[#0A1931]">1,247 pros live</span></div>
                 </div>
               </div>
@@ -613,7 +613,7 @@ export default function LiveWorkshopPage(){
                 <img src={liveGirl} alt="live workshop footer" className="aspect-[4/3] w-full object-cover opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <div className="rounded-[16px] border border-[#D4CBB8] bg-black/70 backdrop-blur p-4">
+                  <div className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-4">
                     <div className="flex justify-between items-center">
                       <div className="poppins text-[14px] font-bold">Today in Oldham</div>
                       <span className="rounded-full bg-[#8FFF4A] px-2.5 py-1 mono text-[10px] font-bold text-black">LIVE</span>

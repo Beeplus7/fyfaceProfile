@@ -144,7 +144,7 @@ export default function PricingPage() {
       >
         <div
           className="w-full border-b border-[#D4CBB8]"
-          style={{ background: "rgba(5,5,5,0.84)" }}
+          style={{ background: "rgba(255,253,247,0.92)" }}
         >
           <div className="mx-auto max-w-[1280px] px-5 lg:px-8 h-[64px] flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -227,7 +227,7 @@ export default function PricingPage() {
                   className="h-[48px] px-7 rounded-full bg-white text-black font-semibold text-[14px] hover:bg-zinc-100 transition flex items-center gap-2"
                 >
                   Start Showing — Free
-                  <span className="h-5 w-5 rounded-full bg-black text-white grid place-items-center text-[12px]">→</span>
+                  <span className="h-5 w-5 rounded-full bg-[#0A1931] text-white grid place-items-center text-[12px]">→</span>
                 </button>
                 <button
                   onClick={() => document.getElementById("mfc")?.scrollIntoView({ behavior: "smooth" })}
@@ -258,7 +258,7 @@ export default function PricingPage() {
                 style={{ background: "var(--m-gradient-soft)" }}
               />
               <div
-                className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#0E0E0E]/80 backdrop-blur-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.6)]"
+                className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB]/80 backdrop-blur-[18px] shadow-[0_20px_50px_rgba(10,25,49,0.10)]"
                 style={{ transform: `translate3d(${mouse.x}px, ${mouse.y}px, 0)` }}
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
@@ -288,9 +288,9 @@ export default function PricingPage() {
                     ))}
                   </div>
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                    <div className="rounded-full bg-black/70 border border-[#D4CBB8] backdrop-blur px-3 py-1.5 flex items-center gap-2">
+                    <div className="rounded-full bg-[#0A1931]/85 border border-[#D4CBB8] backdrop-blur px-3 py-1.5 flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-[#FFE600] animate-pulse" />
-                      <span className="mono text-[10px] text-[#0A1931]">GIFT ECONOMY • LIVE</span>
+                      <span className="mono text-[10px] text-white">GIFT ECONOMY • LIVE</span>
                     </div>
                     <div className="rounded-full bg-white text-black px-3 py-1 mono text-[10px] font-bold">NOT CRYPTO • NO RESALE</div>
                   </div>
@@ -335,7 +335,7 @@ export default function PricingPage() {
       </section>
 
       {/* SECTION 1 — MFC EXPLANATORY */}
-      <section id="mfc" className="relative border-t border-[#D4CBB8] bg-[#080808]">
+      <section id="mfc" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
           <div className="flex flex-wrap items-center gap-3 mb-10">
             <div className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-1 mono text-[10px] tracking-[0.14em]">SECTION 01 • MFC COIN ECONOMY</div>
@@ -347,12 +347,12 @@ export default function PricingPage() {
             {/* Left visual */}
             <div className="relative lg:sticky lg:top-[84px]">
               <div className="absolute -inset-4 rounded-[28px] blur-[32px] opacity-70" style={{ background: "radial-gradient(400px 300px at 50% 30%, rgba(143,255,74,0.22), transparent), radial-gradient(300px 300px at 80% 70%, rgba(255,230,0,0.18), transparent)" }} />
-              <div className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#101010]">
+              <div className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB]">
                 <img src={giftBox} alt="Gift Economy box exploding" className="w-full aspect-[4/3] object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                <div className="absolute top-4 left-4 rounded-full bg-black/60 border border-[#D4CBB8] px-3 py-1.5 backdrop-blur flex items-center gap-2">
+                <div className="absolute top-4 left-4 rounded-full bg-[#0A1931]/85 border border-[#D4CBB8] px-3 py-1.5 backdrop-blur flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[#FFE600]" />
-                  <span className="mono text-[10px]">GIFT ECONOMY • TAG</span>
+                  <span className="mono text-[10px] text-white">GIFT ECONOMY • TAG</span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
                   <div className="flex gap-2">
@@ -425,7 +425,7 @@ export default function PricingPage() {
                   {PACKS.map((p) => (
                     <div
                       key={p.mfc}
-                      className={`relative rounded-[18px] border bg-[#121212] p-4 overflow-hidden group hover:border-[#D4CBB8] transition ${p.popular ? "border-[#FFE600]/30" : "border-[#D4CBB8]"}`}
+                      className={`relative rounded-[18px] border bg-[#F0E9DB] p-4 overflow-hidden group hover:border-[#D4CBB8] transition ${p.popular ? "border-[#FFE600]/30" : "border-[#D4CBB8]"}`}
                     >
                       {p.popular && (
                         <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: "var(--m-gradient)" }} />
@@ -465,7 +465,7 @@ export default function PricingPage() {
                     </button>
                   ))}
                 </div>
-                <div className="mt-4 rounded-[12px] bg-black/50 border border-[#D4CBB8] p-3 flex items-center gap-3">
+                <div className="mt-4 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center gap-3">
                   <img src={tailorWork} alt="Tailor sewing" className="h-10 w-10 rounded-full object-cover" />
                   <div className="text-[11px] leading-[1.4] text-[#5B6470]">
                     <span className="text-[#0A1931] font-semibold">Why it works:</span> Like street performer, watching free, clapping with coins paid — emotional not transactional — live gift shower dopa hit, reverent appreciation.
@@ -523,7 +523,7 @@ export default function PricingPage() {
             </div>
 
             {/* PRO */}
-            <div className="relative rounded-[24px] border border-[#FFE600]/20 bg-[#121212] p-6 lg:p-8 overflow-hidden">
+            <div className="relative rounded-[24px] border border-[#FFE600]/20 bg-[#F0E9DB] p-6 lg:p-8 overflow-hidden">
               <div className="absolute top-0 inset-x-0 h-[1px]" style={{ background: "var(--m-gradient)" }} />
               <div className="absolute -top-20 -right-20 h-[240px] w-[240px] rounded-full blur-[40px] opacity-20" style={{ background: "var(--m-gradient)" }} />
               <div className="relative flex items-start justify-between">
@@ -588,7 +588,7 @@ export default function PricingPage() {
       </section>
 
       {/* SECTION 3 — 6 WAYS MONETIZE */}
-      <section className="relative border-t border-[#D4CBB8] bg-[#080808]">
+      <section className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -643,7 +643,7 @@ export default function PricingPage() {
           </div>
 
           {/* Bar chart summary */}
-          <div className="mt-8 rounded-[24px] border border-[#D4CBB8] bg-[#0F0F0F] p-6 lg:p-8 overflow-hidden">
+          <div className="mt-8 rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6 lg:p-8 overflow-hidden">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <h3 className="poppins font-bold text-[16px]">Weekly Revenue Breakdown at 10K WAU</h3>
               <div className="flex gap-2">
@@ -702,7 +702,7 @@ export default function PricingPage() {
               </h2>
 
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#101010] overflow-hidden">
+                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
                   <img src={escrowHold} alt="Booking confirmed escrow" className="w-full aspect-[4/3] object-cover" />
                   <div className="p-4">
                     <div className="mono text-[10px] text-[#5B6470]">STEP 01 • HOLD</div>
@@ -710,7 +710,7 @@ export default function PricingPage() {
                     <div className="text-[11px] text-[#5B6470] mt-1 leading-[1.4]">Customer pays deposit → Stripe Connect holds in escrow → Verified booking confirmed. Pro sees guarantee.</div>
                   </div>
                 </div>
-                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#101010] overflow-hidden">
+                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
                   <img src={payoutProof} alt="Payment received escrow released" className="w-full aspect-[4/3] object-cover" />
                   <div className="p-4">
                     <div className="mono text-[10px] text-[#5B6470]">STEP 02 • RELEASE</div>
@@ -746,7 +746,7 @@ export default function PricingPage() {
             </div>
 
             <div className="lg:sticky lg:top-[84px]">
-              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#0F0F0F] p-6">
+              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[#00E5C0] animate-pulse" />
                   <span className="mono text-[11px] tracking-[0.12em] text-[#5B6470]">HOW MONEY FLOWS • TOUCH OF GOD</span>
@@ -772,7 +772,7 @@ export default function PricingPage() {
                   ))}
                 </div>
 
-                <div className="mt-2 rounded-[14px] bg-black border border-[#D4CBB8] p-4 flex gap-3 items-center">
+                <div className="mt-2 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-4 flex gap-3 items-center">
                   <img src={tailorWork} alt="Tailor sewing" className="h-10 w-10 rounded-full object-cover border border-[#D4CBB8]" />
                   <div className="text-[11px] leading-[1.4] text-[#5B6470]">
                     Every transaction reverent — holy craft, not gig. Warm divine glow behind gift box. Touch of GOD in every release.
