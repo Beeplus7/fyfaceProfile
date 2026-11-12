@@ -25,6 +25,7 @@ const coreOS: PageCard[] = [
   { path: '/projects', label: 'No.5 Projects SEO', artifact: 'artifact 7', keyword: '12K projects grid Oldham', status: 'Built' },
   { path: '/projects/[id]', label: 'No.6 Project Detail', artifact: 'artifact 8', keyword: 'before/after slider blueprint', status: 'Built' },
   { path: '/pricing', label: 'No.7 Pricing MFC', artifact: 'artifact 9', keyword: 'MFC Coin economy gift box', status: 'Built' },
+  { path: '/revenue-model', label: 'Revenue Model 100→1k', artifact: 'artifact 9b', keyword: 'Dataset revenue · 3 months', status: 'Built' },
   { path: '/trust', label: 'No.8 Trust Ledger', artifact: 'artifact 10', keyword: 'TrustScore 4.9 verified reviews', status: 'Built' },
 ];
 
@@ -96,6 +97,7 @@ export default function SitemapPage() {
               { label: 'UPRM', href: '/uprm' },
               { label: 'Projects', href: '/projects' },
               { label: 'Pricing', href: '/pricing' },
+              { label: 'Revenue Model', href: '/revenue-model' },
               { label: 'Trust', href: '/trust' },
             ].map(l => (
               <a key={l.label} href={l.href} className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB] transition">

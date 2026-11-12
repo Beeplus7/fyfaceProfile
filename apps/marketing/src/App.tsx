@@ -21,6 +21,7 @@ import PricingPage from './pages/PricingPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProductionReadinessPage from './pages/readiness/ProductionReadinessPage';
+import RevenueModelPage from './pages/RevenueModelPage';
 import SitemapPage from './pages/SitemapPage';
 import LegalDocumentPage from './pages/LegalDocumentPage';
 import StubPage from './pages/StubPage';
@@ -85,6 +86,8 @@ export default function App() {
             <Route path="projects" element={<ProjectsPage />} />
             <Route path="projects/:id" element={<ProjectDetailPage />} />
             <Route path="pricing" element={<PricingPage />} />
+            <Route path="revenue-model" element={<RevenueModelPage />} />
+            <Route path="revenue" element={<Navigate to="/revenue-model" replace />} />
             <Route path="video-to-cash" element={<VideoToCashPage />} />
             <Route path="capture-guide" element={<Navigate to="/video-to-cash" replace />} />
             <Route path="verticals" element={<VerticalsPage />} />

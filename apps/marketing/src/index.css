@@ -115,6 +115,46 @@
   background: var(--mkt-card);
   box-shadow: 0 12px 32px rgba(10, 25, 49, 0.1);
 }
+
+/* Revenue Model page */
+.revenue-gradient-bar {
+  background: linear-gradient(90deg, #8fff4a 0%, #00e5c0 25%, #1a7cff 50%, #ffe600 75%, #ff8a00 100%);
+}
+.revenue-gradient-text {
+  background: linear-gradient(90deg, #00a66b, #1a7cff 45%, #ff8a00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.revenue-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fff4a, #00e5c0, #1a7cff, #ffe600, #ff8a00);
+  outline: none;
+}
+.revenue-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #fffdf7;
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.28);
+  cursor: pointer;
+}
+.revenue-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #fffdf7;
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.28);
+  cursor: pointer;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

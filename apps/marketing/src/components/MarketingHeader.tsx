@@ -7,6 +7,7 @@ const NAV = [
   { to: '/work-os', label: 'Work OS' },
   { to: '/verticals', label: 'Trades' },
   { to: '/video-to-cash', label: 'Video → Cash', badge: 'NEW' },
+  { to: '/revenue-model', label: 'Revenue' },
   { to: '/pricing', label: 'Pricing' },
 ] as const;
 

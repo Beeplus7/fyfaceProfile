@@ -660,9 +660,14 @@ export default function HomePage() {
                   ),
                 )}
               </ul>
-              <Link to="/pricing" className="mt-7 inline-flex h-11 items-center px-5 rounded-full bg-[#FFC300] text-[#0A1931] font-extrabold">
-                Open pricing →
-              </Link>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/pricing" className="inline-flex h-11 items-center px-5 rounded-full bg-[#FFC300] text-[#0A1931] font-extrabold">
+                  Open pricing →
+                </Link>
+                <Link to="/revenue-model" className="inline-flex h-11 items-center px-5 rounded-full border-2 border-[#0A1931] bg-white text-[#0A1931] font-extrabold">
+                  Revenue model 100→1k →
+                </Link>
+              </div>
             </div>
             <div className="mkt-card p-7 sm:p-9">
               <div className="text-xs font-extrabold tracking-widest text-[#5B6470]">B2B DATASET STORE</div>
@@ -795,6 +800,9 @@ export default function HomePage() {
                   </Link>
                   <Link to="/pricing" className="block hover:text-[#0A1931]">
                     Pricing
+                  </Link>
+                  <Link to="/revenue-model" className="block hover:text-[#0A1931]">
+                    Revenue Model
                   </Link>
                 </div>
               </div>
