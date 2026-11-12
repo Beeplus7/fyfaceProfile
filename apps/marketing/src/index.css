@@ -218,6 +218,71 @@
   font-weight: 700;
   white-space: nowrap;
 }
+
+/* B2B Dataset Store */
+.b2b-gradient {
+  background: linear-gradient(90deg, #8fff4a 0%, #00e5c0 28%, #1a7cff 55%, #ffe600 78%, #ff8a00 100%);
+}
+.b2b-text {
+  background: linear-gradient(90deg, #00a66c, #1a7cff, #ff8a00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.b2b-live-dot {
+  animation: b2bPulseDot 1.4s infinite;
+}
+@keyframes b2bPulseDot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes b2bRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.b2b-rise {
+  animation: b2bRise 0.35s ease both;
+}
+.b2b-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fff4a, #00e5c0, #1a7cff, #ffe600, #ff8a00);
+  outline: none;
+}
+.b2b-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #fffdf7;
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.28);
+  cursor: pointer;
+}
+.b2b-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #fffdf7;
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.28);
+  cursor: pointer;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

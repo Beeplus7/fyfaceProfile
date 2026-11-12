@@ -685,9 +685,14 @@ export default function HomePage() {
                   </span>
                 ))}
               </div>
-              <Link to="/contact" className="mt-7 inline-flex h-11 items-center px-5 rounded-full border-2 border-[#0A1931] font-extrabold text-[#0A1931]">
-                Talk to AiKOVA →
-              </Link>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/dataset-store" className="inline-flex h-11 items-center px-5 rounded-full bg-[#0A1931] font-extrabold text-white">
+                  Open Dataset Store →
+                </Link>
+                <Link to="/contact" className="inline-flex h-11 items-center px-5 rounded-full border-2 border-[#0A1931] font-extrabold text-[#0A1931]">
+                  Talk to AiKOVA →
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -806,6 +811,9 @@ export default function HomePage() {
                   </Link>
                   <Link to="/go-live-expenditure" className="block hover:text-[#0A1931]">
                     Go Live Expenditure
+                  </Link>
+                  <Link to="/dataset-store" className="block hover:text-[#0A1931]">
+                    B2B Dataset Store
                   </Link>
                 </div>
               </div>

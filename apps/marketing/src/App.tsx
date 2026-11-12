@@ -21,6 +21,7 @@ import PricingPage from './pages/PricingPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProductionReadinessPage from './pages/readiness/ProductionReadinessPage';
+import B2BDatasetStorePage from './pages/B2BDatasetStorePage';
 import GoLiveExpenditurePage from './pages/GoLiveExpenditurePage';
 import RevenueModelPage from './pages/RevenueModelPage';
 import SitemapPage from './pages/SitemapPage';
@@ -91,6 +92,8 @@ export default function App() {
             <Route path="revenue" element={<Navigate to="/revenue-model" replace />} />
             <Route path="go-live-expenditure" element={<GoLiveExpenditurePage />} />
             <Route path="go-live" element={<Navigate to="/go-live-expenditure" replace />} />
+            <Route path="dataset-store" element={<B2BDatasetStorePage />} />
+            <Route path="b2b-dataset-store" element={<Navigate to="/dataset-store" replace />} />
             <Route path="video-to-cash" element={<VideoToCashPage />} />
             <Route path="capture-guide" element={<Navigate to="/video-to-cash" replace />} />
             <Route path="verticals" element={<VerticalsPage />} />

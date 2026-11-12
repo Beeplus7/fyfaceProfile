@@ -232,3 +232,8 @@ create policy "pro_own" on public.professional_profiles for all using (auth.uid(
 -- Demo seed helper (run after creating a demo auth user, or use service role)
 -- Replace :demo_uid with real uuid when applying.
 -- Seed data file: supabase/seed_oldham.sql
+--
+-- B2B Dataset Marketplace (apply separately):
+--   supabase/dataset_store.sql
+-- Tables: dataset_catalog, dataset_listings, dataset_orders,
+--         dataset_order_items, dataset_wallets, dataset_payout_requests

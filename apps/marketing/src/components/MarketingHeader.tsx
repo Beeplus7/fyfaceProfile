@@ -7,9 +7,9 @@ const NAV = [
   { to: '/work-os', label: 'Work OS' },
   { to: '/verticals', label: 'Trades' },
   { to: '/video-to-cash', label: 'Video → Cash', badge: 'NEW' },
+  { to: '/dataset-store', label: 'Dataset Store' },
   { to: '/revenue-model', label: 'Revenue' },
   { to: '/go-live-expenditure', label: 'Go Live' },
-  { to: '/pricing', label: 'Pricing' },
 ] as const;
 
 export default function MarketingHeader() {
