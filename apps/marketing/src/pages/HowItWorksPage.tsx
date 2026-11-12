@@ -147,13 +147,13 @@ export default function HowItWorksPage() {
   return (
     <div
       data-safe-area-inset-root
-      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A0A0A] overflow-x-clip selection:bg-[#FFC300]/35"
+      className="min-h-screen w-full bg-[#FFFDF7] text-[#0A1931] overflow-x-clip selection:bg-[#FFC300]/35"
       style={{ boxSizing: "border-box", paddingTop: "var(--safe-area-inset-top)" }}
     >
       {/* GRID + VIGNETTE */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 grid-bg opacity-[0.35]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFDF7] via-transparent to-[#FFFDF7]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] m-glow opacity-60" />
       </div>
 
@@ -323,7 +323,7 @@ export default function HowItWorksPage() {
               >
                 <div
                   className={`relative w-[228px] rounded-[20px] p-[1px] transition-all duration-500 ${activeNode === node.id ? "scale-[1.06]" : "scale-100 opacity-80 hover:opacity-100"}`}
-                  style={{ background: activeNode === node.id ? "var(--gradient-m)" : "rgba(255,255,255,0.12)" }}
+                  style={{ background: activeNode === node.id ? "var(--gradient-m)" : "#E8DFCC" }}
                 >
                   <div className="rounded-[19px] glass-strong p-4">
                     <div className="flex items-center justify-between">
@@ -347,7 +347,7 @@ export default function HowItWorksPage() {
             {/* Center detail card */}
             <div className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[360px]">
               <div className="rounded-[24px] p-[1px]" style={{ background: "var(--gradient-m)" }}>
-                <div className="rounded-[23px] bg-[#0F0F0F] p-6">
+                <div className="rounded-[23px] bg-[#F0E9DB] p-6">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-full grid place-items-center font-black text-black bg-gradient-to-br ${activeData.gradient}`}>{activeData.label[0]}</div>
                     <div>
@@ -358,7 +358,7 @@ export default function HowItWorksPage() {
                   </div>
                   <p className="mt-4 text-[14px] leading-[1.5] text-[#5B6470]">{activeData.desc}</p>
                   <div className="mt-4 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-[10px] bg-black grid place-items-center overflow-hidden">
+                    <div className="w-10 h-10 rounded-[10px] bg-[#0A1931] grid place-items-center overflow-hidden">
                       <div className="w-full h-full" style={{ background: "var(--gradient-m)", opacity: 0.8 }} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -384,12 +384,12 @@ export default function HowItWorksPage() {
             <div className="flex flex-col gap-6">
               {LOOP_NODES.sort((a, b) => a.posMobile.order - b.posMobile.order).map((node, i) => (
                 <div key={node.id} className="relative pl-14">
-                  <div className="absolute left-[18px] top-6 w-[18px] h-[18px] rounded-full border-2 border-[#050505] bg-[#8FFF4A] grid place-items-center shadow-[0_0_0_6px_rgba(143,255,74,0.15)]">
+                  <div className="absolute left-[18px] top-6 w-[18px] h-[18px] rounded-full border-2 border-[#FFFDF7] bg-[#8FFF4A] grid place-items-center shadow-[0_0_0_6px_rgba(143,255,74,0.15)]">
                     <span className="w-1.5 h-1.5 rounded-full bg-black" />
                   </div>
                   {i !== LOOP_NODES.length - 1 && <div className="absolute left-[26px] top-[42px] w-px h-[calc(100%+24px)] bg-[#F0E9DB]" />}
                   <button onClick={() => setActiveNode(node.id)} className="w-full text-left">
-                    <div className={`rounded-[20px] p-[1px] ${activeNode === node.id ? "" : "opacity-90"}`} style={{ background: activeNode === node.id ? "var(--gradient-m)" : "rgba(255,255,255,0.1)" }}>
+                    <div className={`rounded-[20px] p-[1px] ${activeNode === node.id ? "" : "opacity-90"}`} style={{ background: activeNode === node.id ? "var(--gradient-m)" : "#D4CBB8" }}>
                       <div className="rounded-[19px] glass p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -404,7 +404,7 @@ export default function HowItWorksPage() {
                         {activeNode === node.id && (
                           <div className="mt-3 pt-3 border-t border-[#D4CBB8]">
                             <p className="text-[13px] leading-[1.5] text-[#5B6470]">{node.desc}</p>
-                            <div className="mt-3 rounded-xl bg-black/50 border border-[#D4CBB8] p-3">
+                            <div className="mt-3 rounded-xl bg-[#E8DFCC] border border-[#D4CBB8] p-3">
                               <div className="font-mono text-[11px] text-[#5B6470]">{node.example}</div>
                             </div>
                           </div>
@@ -441,7 +441,7 @@ export default function HowItWorksPage() {
         </section>
 
         {/* SECOND SECTION — 5 Steps */}
-        <section className="relative border-t border-[#D4CBB8] bg-[#080808]">
+        <section className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
           <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-20 md:py-28">
             <div className="flex flex-wrap items-end justify-between gap-6 mb-14">
               <div>
@@ -462,8 +462,8 @@ export default function HowItWorksPage() {
                   >
                     {/* Visual */}
                     <div className="relative order-2 md:order-1">
-                      <div className="rounded-[28px] p-[1px]" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04))" }}>
-                        <div className="rounded-[27px] bg-[#101010] overflow-hidden">
+                      <div className="rounded-[28px] p-[1px]" style={{ background: "linear-gradient(135deg, #D4CBB8, #F0E9DB)" }}>
+                        <div className="rounded-[27px] bg-[#F0E9DB] overflow-hidden">
                           <div className="h-[320px] md:h-[420px] relative">
                             {/* fake UI */}
                             <div className="absolute inset-0 p-6">
@@ -584,7 +584,7 @@ export default function HowItWorksPage() {
                                     </div>
                                   </div>
                                   <div className="rounded-[14px] p-[1px]" style={{ background: "var(--gradient-m)" }}>
-                                    <div className="rounded-[13px] bg-black px-3 py-2 flex items-center justify-between">
+                                    <div className="rounded-[13px] bg-[#0A1931] px-3 py-2 text-white flex items-center justify-between">
                                       <span className="font-mono text-[11px]">See example</span>
                                       <span className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[12px]">↗</span>
                                     </div>
@@ -639,8 +639,8 @@ export default function HowItWorksPage() {
               { name: "TikTok Shop", tag: "Product but no work", bullets: ["Viral > verified", "No before/after", "No team, no milestones", "Product not person"], accent: "border-[#D4CBB8] opacity-60" },
               { name: "My Face Profile", tag: "Work → Content → Trust → Commerce", bullets: ["Work = content auto", "Discovery = proximity + proof", "Trust = verified ledger", "Commerce = escrow + shop + gifts"], accent: "border-[#8FFF4A]/50 bg-[#8FFF4A]/[0.04] ring-1 ring-[#8FFF4A]/20", highlight: true },
             ].map((c) => (
-              <div key={c.name} className={`relative rounded-[24px] p-[1px] ${c.highlight ? "md:-mt-4 md:mb-4" : ""}`} style={{ background: c.highlight ? "var(--gradient-m)" : "rgba(255,255,255,0.08)" }}>
-                <div className={`rounded-[23px] p-6 h-full ${c.highlight ? "bg-[#0C0C0C]" : "bg-[#F0E9DB]"} ${c.accent}`}>
+              <div key={c.name} className={`relative rounded-[24px] p-[1px] ${c.highlight ? "md:-mt-4 md:mb-4" : ""}`} style={{ background: c.highlight ? "var(--gradient-m)" : "#D4CBB8" }}>
+                <div className={`rounded-[23px] p-6 h-full ${c.highlight ? "bg-[#FFFDF7]" : "bg-[#F0E9DB]"} ${c.accent}`}>
                   {c.highlight && <div className="absolute -top-3 left-6 px-3 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">YOU ARE HERE • OS</div>}
                   <div className="flex items-center justify-between">
                     <div className="font-bold text-[16px]">{c.name}</div>
@@ -701,7 +701,7 @@ export default function HowItWorksPage() {
         {/* CTA FOOTER */}
         <section id="cta" className="relative overflow-hidden">
           <div className="absolute inset-0" style={{ background: "var(--gradient-m)", opacity: 0.12 }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#050505]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#FFFDF7]" />
           <div className="relative mx-auto max-w-[1280px] px-5 md:px-8 py-20 md:py-28">
             <div className="rounded-[32px] p-[1px]" style={{ background: "var(--gradient-m)" }}>
               <div className="rounded-[31px] bg-[#FFFDF7] p-8 md:p-14">
@@ -731,7 +731,7 @@ export default function HowItWorksPage() {
                     <div className="mt-8 flex items-center gap-6">
                       <div className="flex -space-x-2">
                         {[0, 1, 2].map((i) => (
-                          <div key={i} className="w-8 h-8 rounded-full border-2 border-[#050505] bg-white/20 grid place-items-center text-[10px]">★</div>
+                          <div key={i} className="w-8 h-8 rounded-full border-2 border-[#FFFDF7] bg-[#F0E9DB] grid place-items-center text-[10px] text-[#0A1931]">★</div>
                         ))}
                       </div>
                       <div className="font-mono text-[12px] text-[#5B6470]">
@@ -741,14 +741,14 @@ export default function HowItWorksPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-[20px] bg-[#0F0F0F] border border-[#D4CBB8] p-5">
+                    <div className="rounded-[20px] bg-[#F0E9DB] border border-[#D4CBB8] p-5">
                       <div className="flex items-center justify-between">
                         <div className="font-mono text-[11px] tracking-widest text-[#5B6470]">APP COMING SOON</div>
                         <div className="px-2 py-1 rounded-full bg-[#8FFF4A] text-black font-mono text-[10px] font-bold">QR • SCAN TO JOIN WAITLIST</div>
                       </div>
                       <div className="mt-5 grid grid-cols-2 gap-3">
                         <div className="rounded-[14px] bg-white p-3">
-                          <div className="h-[88px] rounded-[10px] bg-black grid place-items-center">
+                          <div className="h-[88px] rounded-[10px] bg-[#E8DFCC] grid place-items-center">
                             <div className="w-16 h-16 rounded-[6px] border-2 border-white grid place-items-center">
                               <div className="font-mono text-[8px] text-[#0A1931]">QR</div>
                             </div>
@@ -756,7 +756,7 @@ export default function HowItWorksPage() {
                           <div className="mt-2 text-center font-bold text-[11px] text-black">iOS Waitlist</div>
                         </div>
                         <div className="rounded-[14px] bg-white p-3">
-                          <div className="h-[88px] rounded-[10px] bg-black grid place-items-center">
+                          <div className="h-[88px] rounded-[10px] bg-[#E8DFCC] grid place-items-center">
                             <div className="w-16 h-16 rounded-[6px] border-2 border-white grid place-items-center">
                               <div className="font-mono text-[8px] text-[#0A1931]">QR</div>
                             </div>
@@ -771,7 +771,7 @@ export default function HowItWorksPage() {
                     </div>
 
                     <div className="rounded-[20px] p-[1px]" style={{ background: "var(--gradient-m)" }}>
-                      <div className="rounded-[19px] bg-[#0F0F0F] p-4 flex items-center gap-3">
+                      <div className="rounded-[19px] bg-[#F0E9DB] p-4 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full overflow-hidden bg-white">
                           <img src={logoM} alt="M" className="w-full h-full object-cover" />
                         </div>
