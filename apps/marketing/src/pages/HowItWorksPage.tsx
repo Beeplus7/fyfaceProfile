@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import logoM from "../assets/1267bf6fbc31a56c-image_15C1A29E-A00E-4063-8F36-6B9DEFD3F3ED.jpeg";
 import logoWord from "../assets/37dd6990257bc05a-image_BB42B180-B8CD-4B6B-AC5B-C76D1CB32C77.jpeg";
 
@@ -63,9 +64,9 @@ const LOOP_NODES: LoopNode[] = [
     id: "commerce",
     label: "COMMERCE",
     sub: "Trust becomes commerce",
-    desc: "Book, Shop physical, Gift MFC Crown. Escrow 10%, Shop 5%, Gifts 30%. Money moves when work is done.",
-    example: "Booking + Shop + Gift Crown animation • Escrow protected",
-    metric: "$2.4k avg order",
+    desc: "Book, Shop, Gift MFC — plus Video → Cash. One workshop video pays twice: customer escrow and dataset wallet.",
+    example: "Escrow booking + Dataset wallet • Video → Cash",
+    metric: "2× pays / video",
     gradient: "from-[#FF8A00] to-[#8FFF4A]",
     pos: { x: 14, y: 32 },
     posMobile: { order: 4 },
@@ -103,11 +104,11 @@ const DEEP_DIVE = [
   {
     k: "04",
     title: "TRUST Becomes Commerce",
-    headline: "Three rails. One checkout.",
-    desc: "Book service (escrow 10%), Shop physical products (5%), Gift MFC Crowns (30% take). All native. No Stripe dashboard needed. Money only releases when client marks done.",
-    features: ["Escrow — 10% to start, 90% on approval", "Shop — inventory from your work", "MFC Gifts — fans fund your next project"],
+    headline: "Four rails. One video.",
+    desc: "Book (escrow), Shop, Gift MFC — and Video → Cash. Film once in WorkCut: customers gift and book you; AI labs buy approved work video into your dataset wallet. Consent first. Withdraw from £5 / ₦5,000.",
+    features: ["Escrow — 10% to start, 90% on approval", "Shop + MFC Gifts — native checkout", "Video → Cash — customer pay + dataset wallet"],
     visual: "COMMERCE",
-    cta: "View checkout flow",
+    cta: "See Video → Cash",
   },
   {
     k: "05",
@@ -228,9 +229,15 @@ export default function HowItWorksPage() {
         {/* HERO MINI */}
         <section className="mx-auto max-w-[1280px] px-5 md:px-8 pt-16 md:pt-24 pb-10">
           <div className="max-w-[980px]">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[10px] tracking-[0.18em] text-[#5B6470] uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
-              How It Works • The Work Graph • No.2 of 24
+            <div className="inline-flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-mono text-[10px] tracking-[0.18em] text-[#5B6470] uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
+                How It Works • The Work Graph • No.2 of 24
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFFAF6] border border-[#D4CBB8] font-mono text-[10px] tracking-[0.18em] text-[#007A5C] uppercase font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00C896] animate-pulse" />
+                NEW • Video → Cash
+              </div>
             </div>
 
             <h1 className="mt-6 font-display text-[34px] md:text-[64px] leading-[0.95] tracking-[-0.03em]">
@@ -242,13 +249,34 @@ export default function HowItWorksPage() {
               <br />
               Discovery Is Trust.
               <br />
-              Trust Is Commerce.
+              Trust Is Commerce —
+              <br />
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage: "var(--gradient-m)" }}>
+                Video → Cash.
+              </span>
             </h1>
 
             <p className="mt-6 text-[17px] md:text-[20px] leading-[1.4] text-[#5B6470] max-w-[680px]">
-              Not another marketplace. An OS where your real work becomes your storefront. No ads. No followers tax. Just{" "}
+              Not another marketplace. An OS where your real work becomes your storefront — and now your{" "}
+              <span className="text-[#0A1931] font-semibold">video-to-cash</span> paycheck. Film once. Get paid twice:
+              customers + dataset wallet.{" "}
               <span className="text-[#0A1931] font-medium">SHOW → CONNECT → GROW.</span>
             </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/video-to-cash"
+                className="inline-flex h-[44px] items-center gap-2 rounded-full bg-[#0A1931] px-5 text-[13px] font-extrabold text-white"
+              >
+                See Video → Cash →
+              </Link>
+              <a
+                href="#video-cash"
+                className="inline-flex h-[44px] items-center gap-2 rounded-full border-2 border-[#0A1931] bg-[#FFF8E1] px-5 text-[13px] font-extrabold text-[#0A1931]"
+              >
+                One video, two pays
+              </a>
+            </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <div className="flex items-center gap-2 text-[13px] font-mono text-[#5B6470]">
@@ -258,12 +286,16 @@ export default function HowItWorksPage() {
               <div className="flex items-center gap-2 text-[13px] font-mono text-[#5B6470]">
                 <span className="w-6 h-6 rounded-full bg-[#8FFF4A] text-black grid place-items-center text-[11px] font-bold">↗</span> Work Graph = 4.9 avg TrustScore
               </div>
+              <div className="h-6 w-px bg-[#F0E9DB] hidden md:block" />
+              <div className="flex items-center gap-2 text-[13px] font-mono text-[#5B6470]">
+                <span className="w-6 h-6 rounded-full bg-[#FFC300] text-black grid place-items-center text-[11px] font-bold">£</span> Dual pay • £ • ₦ • KSh • Cedis
+              </div>
             </div>
           </div>
         </section>
 
         {/* LOOP SECTION */}
-        <section ref={loopRef} className="relative mx-auto max-w-[1280px] px-5 md:px-8 pb-20 md:pb-28">
+        <section id="how" ref={loopRef} className="relative mx-auto max-w-[1280px] px-5 md:px-8 pb-20 md:pb-28">
           {/* Glow behind */}
           <div className="pointer-events-none absolute left-1/2 top-[40%] -translate-x-1/2 w-[900px] h-[900px] rounded-full blur-[120px] opacity-30" style={{ background: "radial-gradient(40% 40% at 50% 50%, #8FFF4A 0%, #00E5C0 35%, #FFE600 60%, transparent 75%)" }} />
 
@@ -427,7 +459,7 @@ export default function HowItWorksPage() {
             {[
               { t: "Not a marketplace", d: "Marketplaces rent attention. OS compounds proof." },
               { t: "Work = Storefront", d: "Your workshop feed is your SEO, portfolio, and shop in one." },
-              { t: "Trust > Followers", d: "We rank proof of work, not engagement bait." },
+              { t: "Video → Cash", d: "One clip. Two pays — customers + dataset wallet." },
             ].map((c) => (
               <div key={c.t} className="glass rounded-[16px] px-4 py-3 flex gap-3 items-start">
                 <div className="mt-1 w-1.5 h-1.5 rounded-full bg-[#8FFF4A] flex-shrink-0" />
@@ -437,6 +469,87 @@ export default function HowItWorksPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* VIDEO → CASH INTRO */}
+        <section id="video-cash" className="relative border-y border-[#D4CBB8] bg-[#FFFDF7]">
+          <div className="mx-auto max-w-[1280px] px-5 md:px-8 py-16 md:py-20">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3.5 py-1.5 text-[11px] tracking-widest uppercase text-[#5B6470] font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FFC300]" /> New • Video → Cash
+            </div>
+            <h2 className="mt-4 font-display text-[28px] md:text-[44px] leading-[1.02] tracking-[-0.02em] text-[#0A1931] max-w-[720px]">
+              We pay you for recording and going live while at work.
+            </h2>
+            <p className="mt-3 text-[15px] md:text-[17px] leading-relaxed text-[#5B6470] max-w-[640px]">
+              No extra chores. Camera ON. Money COMING. Customers gift and book you — AI labs buy approved work video as
+              training data. Film once with the Capture Guide; earn on both rails.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-5 mt-8">
+              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#E8DFCC] p-6">
+                <div className="text-[12px] font-extrabold tracking-widest text-[#5B6470]">PAY 01 • CUSTOMERS</div>
+                <h3 className="mt-3 text-[22px] font-extrabold text-[#0A1931]">Bookings, gifts & escrow</h3>
+                <p className="mt-2 text-[14px] text-[#5B6470] leading-relaxed">
+                  Viewers gift MFC, book into escrow, and rebook high TrustScores on the same live.
+                </p>
+                <ul className="mt-4 space-y-2 text-[13px] font-semibold text-[#0A1931]">
+                  {["MFC gift economy", "Escrow-protected bookings", "Boost when TrustScore rises"].map((t) => (
+                    <li key={t} className="flex gap-2 items-center">
+                      <span className="text-[#00C896]">✓</span> {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#EFFAF6] p-6">
+                <div className="text-[12px] font-extrabold tracking-widest text-[#5B6470]">PAY 02 • AI LABS</div>
+                <h3 className="mt-3 text-[22px] font-extrabold text-[#0A1931]">Dataset wallet · video-to-cash</h3>
+                <p className="mt-2 text-[14px] text-[#5B6470] leading-relaxed">
+                  Anonymized, quality-checked work video sells as training data. You approve each sale. Withdraw from £5 /
+                  ₦5,000.
+                </p>
+                <ul className="mt-4 space-y-2 text-[13px] font-semibold text-[#0A1931]">
+                  {["Consent first — you choose what sells", "Face-blur / hands-only", "Transparent dataset split"].map(
+                    (t) => (
+                      <li key={t} className="flex gap-2 items-center">
+                        <span className="text-[#00C896]">✓</span> {t}
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-4 mt-5">
+              {[
+                { n: "01", t: "Go Live In WorkCut", d: "Open Capture, tap Go Live. Hands in view. Steps called out." },
+                { n: "02", t: "Do What You Do Best", d: "Sew, fix, cook, build. Customers watch, gift MFC, and book you." },
+                { n: "03", t: "Get Paid Twice", d: "Customer escrow + Dataset wallet. Withdraw from £5 / ₦5,000." },
+              ].map((s) => (
+                <div key={s.n} className="relative overflow-hidden rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] p-6">
+                  <span className="absolute right-3 top-1 text-[64px] font-extrabold leading-none text-[#FFC300]/30">
+                    {s.n}
+                  </span>
+                  <h3 className="relative z-10 text-xl font-extrabold text-[#0A1931]">{s.t}</h3>
+                  <p className="relative z-10 mt-2 text-[13px] leading-relaxed text-[#5B6470]">{s.d}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/video-to-cash"
+                className="inline-flex h-[48px] items-center rounded-full bg-[#FFC300] px-7 text-[14px] font-extrabold text-[#0A1931] shadow-[0_12px_28px_rgba(255,195,0,0.35)]"
+              >
+                Open Video → Cash Capture Guide →
+              </Link>
+              <a
+                href="#how"
+                className="inline-flex h-[48px] items-center rounded-full border border-[#D4CBB8] bg-white px-6 text-[14px] font-medium text-[#5B6470]"
+              >
+                Back to the loop
+              </a>
+            </div>
           </div>
         </section>
 
@@ -539,20 +652,21 @@ export default function HowItWorksPage() {
                                   )}
                                   {row.k === "04" && (
                                     <div className="space-y-3">
-                                      <div className="grid grid-cols-3 gap-2">
+                                      <div className="grid grid-cols-2 gap-2">
                                         {[
-                                          { l: "Book", p: "$240", c: "from-[#8FFF4A] to-[#00E5C0]" },
-                                          { l: "Shop", p: "$85", c: "from-[#FFE600] to-[#FF8A00]" },
-                                          { l: "Gift", p: "MFC", c: "from-[#FF8A00] to-[#8FFF4A]" },
+                                          { l: "Customers", p: "Escrow + gifts", c: "from-[#8FFF4A] to-[#00E5C0]" },
+                                          { l: "Dataset", p: "Video → Cash", c: "from-[#FFE600] to-[#FF8A00]" },
                                         ].map((b) => (
-                                          <div key={b.l} className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 text-center">
+                                          <div key={b.l} className="rounded-[12px] bg-[#FFFDF7] border border-[#D4CBB8] p-3 text-center">
                                             <div className={`w-8 h-8 mx-auto rounded-full bg-gradient-to-br ${b.c}`} />
                                             <div className="mt-2 font-bold text-[12px]">{b.l}</div>
                                             <div className="font-mono text-[11px] text-[#5B6470]">{b.p}</div>
                                           </div>
                                         ))}
                                       </div>
-                                      <div className="rounded-[10px] bg-[#8FFF4A] text-black p-2 text-center font-bold text-[12px]">Escrow Protected • Pay after approval</div>
+                                      <div className="rounded-[10px] bg-[#FFC300] text-[#0A1931] p-2 text-center font-bold text-[12px]">
+                                        One video • Two pays • Consent first
+                                      </div>
                                     </div>
                                   )}
                                   {row.k === "05" && (
@@ -613,9 +727,18 @@ export default function HowItWorksPage() {
                           </span>
                         ))}
                       </div>
-                      <a href="#cta" className="mt-8 inline-flex items-center gap-2 px-5 h-11 rounded-full bg-white text-black font-bold text-[13px]">
-                        {row.cta} <span>→</span>
-                      </a>
+                      {row.k === "04" ? (
+                        <Link
+                          to="/video-to-cash"
+                          className="mt-8 inline-flex items-center gap-2 px-5 h-11 rounded-full bg-[#0A1931] text-white font-bold text-[13px]"
+                        >
+                          {row.cta} <span>→</span>
+                        </Link>
+                      ) : (
+                        <a href="#cta" className="mt-8 inline-flex items-center gap-2 px-5 h-11 rounded-full bg-white text-black font-bold text-[13px]">
+                          {row.cta} <span>→</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 );
@@ -637,7 +760,7 @@ export default function HowItWorksPage() {
               { name: "Instagram", tag: "Content but no trust", bullets: ["Likes > proof", "Followers tax", "No escrow", "No work object"], accent: "border-[#D4CBB8] opacity-60" },
               { name: "Fiverr / Upwork", tag: "Service but no content", bullets: ["Text gigs", "No workshop feed", "Race to bottom", "20% take, no trust ledger"], accent: "border-[#D4CBB8] opacity-60" },
               { name: "TikTok Shop", tag: "Product but no work", bullets: ["Viral > verified", "No before/after", "No team, no milestones", "Product not person"], accent: "border-[#D4CBB8] opacity-60" },
-              { name: "My Face Profile", tag: "Work → Content → Trust → Commerce", bullets: ["Work = content auto", "Discovery = proximity + proof", "Trust = verified ledger", "Commerce = escrow + shop + gifts"], accent: "border-[#8FFF4A]/50 bg-[#8FFF4A]/[0.04] ring-1 ring-[#8FFF4A]/20", highlight: true },
+              { name: "My Face Profile", tag: "Work → Content → Trust → Video → Cash", bullets: ["Work = content auto", "Discovery = proximity + proof", "Trust = verified ledger", "Commerce = escrow + Video → Cash"], accent: "border-[#8FFF4A]/50 bg-[#8FFF4A]/[0.04] ring-1 ring-[#8FFF4A]/20", highlight: true },
             ].map((c) => (
               <div key={c.name} className={`relative rounded-[24px] p-[1px] ${c.highlight ? "md:-mt-4 md:mb-4" : ""}`} style={{ background: c.highlight ? "var(--gradient-m)" : "#D4CBB8" }}>
                 <div className={`rounded-[23px] p-6 h-full ${c.highlight ? "bg-[#FFFDF7]" : "bg-[#F0E9DB]"} ${c.accent}`}>
@@ -675,11 +798,11 @@ export default function HowItWorksPage() {
             </div>
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { k: "No.3", title: "UPRM Orchestrator", desc: "Availability, pricing, pipeline — auto-adjusts when you complete work. Your calendar becomes a market.", cta: "Meet UPRM →", grad: "from-[#8FFF4A] to-[#00E5C0]" },
-                { k: "No.4", title: "Bots • Findy + WorkCut", desc: "AI that finds clients by intent, not keywords. And cuts your raw clips into viral proof.", cta: "See Bots in action →", grad: "from-[#00E5C0] to-[#FFE600]" },
-                { k: "No.5", title: "Coins • MFC + Crown", desc: "Fans gift MFC to fund your next project. You keep 70%. Culture funds work.", cta: "Explore Coins →", grad: "from-[#FFE600] to-[#FF8A00]" },
+                { k: "No.3", title: "UPRM Orchestrator", desc: "Availability, pricing, pipeline — auto-adjusts when you complete work. Your calendar becomes a market.", cta: "Meet UPRM →", grad: "from-[#8FFF4A] to-[#00E5C0]", href: "/uprm" },
+                { k: "No.4", title: "Bots • Findy + WorkCut", desc: "AI that finds clients by intent, not keywords. And cuts your raw clips into viral proof.", cta: "See Bots in action →", grad: "from-[#00E5C0] to-[#FFE600]", href: "/work-os" },
+                { k: "NEW", title: "Video → Cash", desc: "Film once. Get paid twice — customer escrow + AI dataset wallet. Consent first. Capture Guide included.", cta: "Open Capture Guide →", grad: "from-[#FFE600] to-[#FF8A00]", href: "/video-to-cash" },
               ].map((card) => (
-                <a key={card.k} href="#cta" className="group relative rounded-[24px] p-[1px] hover:scale-[1.01] transition">
+                <Link key={card.k} to={card.href} className="group relative rounded-[24px] p-[1px] hover:scale-[1.01] transition">
                   <div className="absolute inset-0 rounded-[24px] opacity-0 group-hover:opacity-100 transition" style={{ background: `linear-gradient(135deg, var(--lime), var(--orange))` }} />
                   <div className="relative rounded-[23px] bg-[#F0E9DB] p-6 h-full">
                     <div className="flex items-center justify-between">
@@ -692,7 +815,7 @@ export default function HowItWorksPage() {
                       {card.cta} <span className="w-6 h-6 rounded-full bg-white text-black grid place-items-center text-[12px] group-hover:translate-x-0.5 transition">↗</span>
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -707,26 +830,26 @@ export default function HowItWorksPage() {
               <div className="rounded-[31px] bg-[#FFFDF7] p-8 md:p-14">
                 <div className="grid md:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-widest">No.2 COMPLETE • LOOP REVEALED</div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-widest">No.2 COMPLETE • VIDEO → CASH LIVE</div>
                     <h2 className="mt-6 font-display text-[36px] md:text-[60px] leading-[0.9] tracking-[-0.03em]">
                       Start showing
                       <br />
                       your work —
                       <br />
                       <span className="text-transparent bg-clip-text" style={{ backgroundImage: "var(--gradient-m)" }}>
-                        free.
+                        get paid twice.
                       </span>
                     </h2>
                     <p className="mt-5 text-[16px] leading-[1.5] text-[#5B6470] max-w-[520px]">
-                      Join 2,400+ pros already turning workshop clips into bookings. No credit card. Your first Project becomes content in 11 seconds.
+                      Join pros turning workshop clips into bookings and dataset payouts. No credit card. Film once — customers + AI labs.
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
-                      <a href="#" className="h-[48px] px-7 rounded-full bg-white text-black font-bold text-[14px] grid place-items-center">
+                      <Link to="/signup" className="h-[48px] px-7 rounded-full bg-white text-black font-bold text-[14px] grid place-items-center">
                         Create Your Work Profile →
-                      </a>
-                      <a href="#" className="h-[48px] px-6 rounded-full bg-[#F0E9DB] border border-[#D4CBB8] text-[#0A1931] font-mono text-[13px] grid place-items-center">
-                        Watch 45-sec Loop Demo
-                      </a>
+                      </Link>
+                      <Link to="/video-to-cash" className="h-[48px] px-6 rounded-full bg-[#FFC300] text-[#0A1931] font-extrabold text-[13px] grid place-items-center">
+                        See Video → Cash →
+                      </Link>
                     </div>
                     <div className="mt-8 flex items-center gap-6">
                       <div className="flex -space-x-2">
