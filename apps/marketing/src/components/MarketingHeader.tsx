@@ -5,9 +5,9 @@ import logoM from '../assets/1267bf6fbc31a56c-image_15C1A29E-A00E-4063-8F36-6B9D
 const NAV = [
   { to: '/how-it-works', label: 'How it Works' },
   { to: '/work-os', label: 'Work OS' },
+  { to: '/verticals', label: 'Trades' },
   { to: '/video-to-cash', label: 'Video → Cash', badge: 'NEW' },
   { to: '/pricing', label: 'Pricing' },
-  { to: '/sitemap', label: 'All 24+' },
 ] as const;
 
 export default function MarketingHeader() {

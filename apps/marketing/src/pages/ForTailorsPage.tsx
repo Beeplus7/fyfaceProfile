@@ -31,7 +31,7 @@ export default function ForTailorsPage() {
   }, []);
 
   return (
-    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', minHeight: '100vh', background: '#050505' }} className="w-full overflow-x-clip antialiased selection:bg-[#FFC300]/35">
+    <div data-safe-area-inset-root style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)', minHeight: '100vh', background: '#FFFDF7' }} className="w-full overflow-x-clip antialiased selection:bg-[#FFC300]/35">
       
       {/* TOP BADGE BAR */}
       <div className="w-full bg-[#F0E9DB] border-b border-[#D4CBB8] py-2 px-4 flex justify-center">
@@ -138,8 +138,8 @@ export default function ForTailorsPage() {
               </div>
 
               <div className="absolute top-4 left-4 flex gap-2">
-                <div className="px-3 py-1.5 rounded-full bg-black/70 backdrop-blur text-[#0A1931] font-mono text-[10px] flex items-center gap-1.5"><span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />LIVE FITTING</div>
-                <div className="px-3 py-1.5 rounded-full bg-black/70 backdrop-blur text-[#0A1931] font-mono text-[10px] flex items-center gap-1"><Eye size={12}/> 142 watching</div>
+                <div className="px-3 py-1.5 rounded-full bg-[#0A1931]/85 backdrop-blur text-white font-mono text-[10px] flex items-center gap-1.5"><span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />LIVE FITTING</div>
+                <div className="px-3 py-1.5 rounded-full bg-[#0A1931]/85 backdrop-blur text-white font-mono text-[10px] flex items-center gap-1"><Eye size={12}/> 142 watching</div>
               </div>
             </div>
 
@@ -175,7 +175,7 @@ export default function ForTailorsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
                 {/* Before/After slider mock */}
                 <div className="absolute top-4 left-4 right-4 flex justify-between">
-                  <span className="px-2.5 py-1 rounded-full bg-black/60 text-[10px] font-mono text-[#0A1931]">BEFORE • Raw workshop</span>
+                  <span className="px-2.5 py-1 rounded-full bg-[#F0E9DB] text-[10px] font-mono text-[#0A1931]">BEFORE • Raw workshop</span>
                   <span className="px-2.5 py-1 rounded-full bg-white text-black text-[10px] font-mono font-bold">AFTER • Viral clip</span>
                 </div>
                 {/* slider line */}
@@ -363,7 +363,7 @@ export default function ForTailorsPage() {
                 <div key={s.step} className="group rounded-[20px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB] flex flex-col">
                   <div className="relative h-[180px] overflow-hidden">
                     <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url(${s.img})` }} role="img" aria-label={s.title} />
-                    <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-black/70 text-[9px] font-mono text-[#0A1931] flex items-center gap-1"><Clock size={10}/> {s.date}</div>
+                    <div className="absolute top-2 left-2 px-2 py-1 rounded-full bg-[#F0E9DB] text-[9px] font-mono text-[#0A1931] flex items-center gap-1"><Clock size={10}/> {s.date}</div>
                     <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-full bg-white text-black text-[10px] font-bold font-mono">{s.step}</div>
                     {i===3 && <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-gradient-to-r from-[#8FFF4A] to-[#FFE600] text-black text-[9px] font-bold font-mono">FINAL • Verified</div>}
                   </div>
@@ -397,7 +397,7 @@ export default function ForTailorsPage() {
               <div className="rounded-[20px] bg-gradient-to-br from-[#8FFF4A]/15 to-[#FFE600]/10 border border-[#8FFF4A]/20 p-5">
                 <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#8FFF4A]"><Award size={12}/> Trust Ledger Builds</div>
                 <div className="mt-3 flex items-baseline gap-2"><span className="font-poppins font-bold text-[28px]">4.9</span><span className="font-mono text-[12px] text-[#5B6470]">/5 • 63 verified jobs • £15K revenue</span></div>
-                <div className="mt-3 h-1.5 rounded-full bg-black/40 overflow-hidden"><div className="h-full w-[92%] bg-gradient-to-r from-[#8FFF4A] to-[#FFE600]" /></div>
+                <div className="mt-3 h-1.5 rounded-full bg-[#F0E9DB] overflow-hidden"><div className="h-full w-[92%] bg-gradient-to-r from-[#8FFF4A] to-[#FFE600]" /></div>
               </div>
             </div>
           </div>
@@ -424,7 +424,7 @@ export default function ForTailorsPage() {
                 <div key={step.n} className={`relative rounded-[20px] border p-5 transition-all duration-500 ${isActive ? 'bg-white text-black border-white shadow-glow-green scale-[1.02]' : 'bg-[#F0E9DB] border-[#D4CBB8] text-[#0A1931]'}`}>
                   <div className="flex items-center justify-between mb-4">
                     <span className={`font-mono text-[11px] tracking-widest ${isActive ? 'text-black/50' : 'text-[#5B6470]'}`}>{step.n}</span>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isActive ? 'bg-black text-white' : 'bg-[#F0E9DB] text-[#0A1931]'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isActive ? 'bg-[#0A1931] text-white' : 'bg-[#F0E9DB] text-[#0A1931]'}`}>
                       <step.icon size={16}/>
                     </div>
                   </div>

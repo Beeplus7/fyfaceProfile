@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import logo1 from "../assets/1267bf6fbc31a56c-image_15C1A29E-A00E-4063-8F36-6B9DEFD3F3ED.jpeg";
 import logo2 from "../assets/37dd6990257bc05a-image_BB42B180-B8CD-4B6B-AC5B-C76D1CB32C77.jpeg";
 import tailorSew from "../assets/840990accfbeab9d-image_20261029_173924.webp";
@@ -15,6 +16,7 @@ type Vertical = {
   kicker: string;
   title: string;
   subtitle: string;
+  href: string;
   stats: { v: string; l: string }[];
   features: { icon: string; text: string }[];
   seo: string[];
@@ -29,6 +31,7 @@ type Vertical = {
 const VERTICALS: Vertical[] = [
   {
     id: "tailors",
+    href: "/for-tailors",
     label: "FOR TAILORS",
     kicker: "Wedding Dress, Aso-Ebi, Alterations",
     title: "For Tailors",
@@ -55,6 +58,7 @@ const VERTICALS: Vertical[] = [
   },
   {
     id: "mechanics",
+    href: "/for-mechanics",
     label: "FOR MECHANICS",
     kicker: "Engine, MOT, Diagnostics",
     title: "For Mechanics",
@@ -81,6 +85,7 @@ const VERTICALS: Vertical[] = [
   },
   {
     id: "builders",
+    href: "/for-builders",
     label: "FOR BUILDERS",
     kicker: "Renovation, Extension, Brickwork",
     title: "For Builders",
@@ -107,6 +112,7 @@ const VERTICALS: Vertical[] = [
   },
   {
     id: "barbers",
+    href: "/for-barbers",
     label: "FOR BARBERS",
     kicker: "Fade, Line, Beard, Live Cutting",
     title: "For Barbers",
@@ -133,6 +139,7 @@ const VERTICALS: Vertical[] = [
   },
   {
     id: "electricians",
+    href: "/for-electricians",
     label: "FOR ELECTRICIANS",
     kicker: "Consumer Unit, Wiring, Safety Cert",
     title: "For Electricians",
@@ -159,6 +166,7 @@ const VERTICALS: Vertical[] = [
   },
   {
     id: "plumbers",
+    href: "/for-plumbers",
     label: "FOR PLUMBERS",
     kicker: "Boiler, Heating, Gas Safe",
     title: "For Plumbers",
@@ -272,13 +280,13 @@ export default function VerticalsPage() {
         className="sticky z-50 w-full border-b border-[#D4CBB8] backdrop-blur-[16px]"
         style={{
           top: "var(--safe-area-inset-top)",
-          background: "rgba(5,5,5,0.82)",
+          background: "rgba(255,253,247,0.92)",
         }}
       >
         <div className="mx-auto flex h-[64px] max-w-[1440px] items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-3">
             <div className="relative h-9 w-9 overflow-hidden rounded-[10px] shadow-drop">
-              <div className="absolute inset-0 bg-[var(--grad-m)]" />
+              <div className="absolute inset-0 bg-[var(--gradient-m)]" />
               <span className="absolute inset-0 grid place-items-center font-poppins text-[18px] font-[800] leading-none text-black">
                 M
               </span>
@@ -292,27 +300,34 @@ export default function VerticalsPage() {
           </div>
 
           <nav className="hidden items-center gap-6 md:flex">
-            {["Home", "How It Works", "Work OS", "UPRM", "Projects", "Pricing", "Trust"].map((l) => (
-              <a
-                key={l}
-                href="#"
+            {[
+              { l: "Home", to: "/" },
+              { l: "How It Works", to: "/how-it-works" },
+              { l: "Work OS", to: "/work-os" },
+              { l: "UPRM", to: "/uprm" },
+              { l: "Projects", to: "/projects" },
+              { l: "Pricing", to: "/pricing" },
+            ].map((item) => (
+              <Link
+                key={item.l}
+                to={item.to}
                 className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#5B6470] transition hover:text-[#0A1931]"
               >
-                {l}
-              </a>
+                {item.l}
+              </Link>
             ))}
-            <div className="relative">
+            <div className="relative group/nav">
               <button className="flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-black">
                 Verticals
-                <span className="grid h-4 w-4 place-items-center rounded-full bg-black text-[10px] text-white">▼</span>
+                <span className="grid h-4 w-4 place-items-center rounded-full bg-[#0A1931] text-[10px] text-white">▼</span>
               </button>
-              <div className="pointer-events-none absolute -right-2 top-full mt-2 hidden w-[200px] rounded-[16px] border border-[#D4CBB8] bg-[#141414] p-2 shadow-drop md:block">
+              <div className="pointer-events-none absolute -right-2 top-full mt-2 hidden w-[200px] rounded-[16px] border border-[#D4CBB8] bg-[#FFFDF7] p-2 shadow-drop group-hover/nav:pointer-events-auto group-hover/nav:block md:group-hover/nav:block">
                 <div className="grid gap-1">
                   {VERTICALS.map((v) => (
-                    <div key={v.id} className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-[12px] text-[#5B6470]">
+                    <Link key={v.id} to={v.href} className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-[12px] text-[#5B6470] hover:bg-[#F0E9DB] hover:text-[#0A1931]">
                       <span className="h-1.5 w-1.5 rounded-full" style={{ background: v.accent }} />
                       {v.title}
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -333,7 +348,7 @@ export default function VerticalsPage() {
       {/* HERO */}
       <section className="relative mx-auto max-w-[1440px] overflow-hidden px-4 pb-10 pt-10 md:px-8 md:pb-16 md:pt-16">
         {/* background glow */}
-        <div className="pointer-events-none absolute -top-24 left-1/2 h-[700px] w-[1200px] -translate-x-1/2 rounded-full opacity-[0.18] blur-[120px]" style={{ background: "var(--grad-m)" }} />
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-[700px] w-[1200px] -translate-x-1/2 rounded-full opacity-[0.18] blur-[120px]" style={{ background: "var(--gradient-m)" }} />
         <div className="pointer-events-none absolute right-[-120px] top-[20%] h-[420px] w-[420px] rounded-full bg-[#00E5C0]/[0.12] blur-[90px]" />
         <div className="pointer-events-none absolute left-[-80px] top-[40%] h-[360px] w-[360px] rounded-full bg-[#FF8A00]/[0.10] blur-[80px]" />
 
@@ -364,10 +379,10 @@ export default function VerticalsPage() {
               <button
                 onClick={scrollToGrid}
                 className="group relative inline-flex h-[48px] items-center justify-center gap-2 overflow-hidden rounded-full px-7 font-poppins text-[14px] font-[700] tracking-[-0.01em] text-black transition hover:scale-[1.02]"
-                style={{ background: "var(--grad-m)" }}
+                style={{ background: "var(--gradient-m)" }}
               >
                 <span>Find Your Trade</span>
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-black text-white transition group-hover:translate-x-0.5">→</span>
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0A1931] text-white transition group-hover:translate-x-0.5">→</span>
               </button>
               <div className="flex items-center gap-3 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-2">
                 <div className="flex -space-x-2">
@@ -412,7 +427,7 @@ export default function VerticalsPage() {
           {VERTICALS.map((v, idx) => (
             <article
               key={v.id}
-              className="group relative flex flex-col overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[var(--surface)] shadow-drop transition hover:border-[var(--border-strong)] hover:shadow-[0_16px_60px_rgba(0,0,0,0.6)]"
+              className="group relative flex flex-col overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[var(--surface)] shadow-drop transition hover:border-[var(--border-strong)] hover:shadow-[0_16px_40px_rgba(10,25,49,0.12)]"
               style={{ animation: `slideUp 0.8s cubic-bezier(0.16,1,0.3,1) ${idx * 0.08}s both` }}
             >
               {/* divine glow */}
@@ -433,13 +448,13 @@ export default function VerticalsPage() {
                   <div className="absolute bottom-3 right-3 h-[88px] w-[88px] overflow-hidden rounded-[16px] border border-[#D4CBB8] shadow-drop">
                     <img src={v.image2} alt={`${v.title} final`} className="h-full w-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    <span className="absolute bottom-1 left-1 rounded-full bg-black/70 px-1.5 py-0.5 font-mono text-[8px] uppercase text-[#0A1931]">Final</span>
+                    <span className="absolute bottom-1 left-1 rounded-full bg-[#0A1931]/85 px-1.5 py-0.5 font-mono text-[8px] uppercase text-white">Final</span>
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
                 {/* top badges */}
                 <div className="absolute left-3 top-3 flex items-center gap-2">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-black/70 px-2.5 py-1 backdrop-blur">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-[#F0E9DB] px-2.5 py-1 backdrop-blur">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ background: v.accent }} />
                     <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#0A1931]">{v.label}</span>
                   </div>
@@ -449,10 +464,10 @@ export default function VerticalsPage() {
                 </div>
                 {/* bottom title over image */}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <div className="glass inline-flex rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#5B6470]">
+                  <div className="inline-flex rounded-full border border-[#D4CBB8] bg-[#FFFDF7]/95 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#0A1931]">
                     {v.kicker}
                   </div>
-                  <h3 className="font-poppins mt-2 text-[20px] font-[800] leading-[1] tracking-[-0.02em] text-[#0A1931]">{v.title} • {v.kicker}</h3>
+                  <h3 className="font-poppins mt-2 text-[20px] font-[800] leading-[1] tracking-[-0.02em] text-white">{v.title}</h3>
                 </div>
               </div>
 
@@ -497,7 +512,7 @@ export default function VerticalsPage() {
 
                 <div className="mt-auto pt-5">
                   {activeJoin === v.id ? (
-                    <div className="rounded-[16px] border border-[#D4CBB8] bg-[#0F0F0F] p-3 animate-slide">
+                    <div className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-3 animate-slide">
                       <div className="mb-2 flex items-center justify-between">
                         <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#5B6470]">Join {v.title} waitlist</span>
                         <button onClick={() => setActiveJoin(null)} className="text-[12px] text-[var(--text-faint)]">✕</button>
@@ -518,20 +533,28 @@ export default function VerticalsPage() {
                         disabled={busy}
                         onClick={() => handleJoinSubmit(v.id)}
                         className="flex w-full items-center justify-center rounded-full px-4 py-2.5 font-poppins text-[13px] font-[700] text-black transition hover:scale-[1.01] disabled:opacity-50"
-                        style={{ background: "var(--grad-m)" }}
+                        style={{ background: "var(--gradient-m)" }}
                       >
                         {busy ? "Saving..." : `Join as ${v.title.split(" ")[1]} — Free`}
                       </button>
                     </div>
                   ) : (
-                    <button
-                      onClick={() => setActiveJoin(v.id)}
-                      className="group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-5 py-[13px] font-poppins text-[13px] font-[700] text-black transition hover:scale-[1.01]"
-                      style={{ background: "var(--grad-m)" }}
-                    >
-                      <span>{v.cta}</span>
-                      <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-[11px] text-white transition group-hover/btn:translate-x-0.5">↗</span>
-                    </button>
+                    <div className="grid gap-2">
+                      <Link
+                        to={v.href}
+                        className="group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-5 py-[13px] font-poppins text-[13px] font-[700] text-black transition hover:scale-[1.01]"
+                        style={{ background: "var(--gradient-m)" }}
+                      >
+                        <span>{v.cta}</span>
+                        <span className="grid h-5 w-5 place-items-center rounded-full bg-[#0A1931] text-[11px] text-white transition group-hover/btn:translate-x-0.5">↗</span>
+                      </Link>
+                      <button
+                        onClick={() => setActiveJoin(v.id)}
+                        className="w-full rounded-full border border-[#D4CBB8] bg-white px-4 py-2 font-mono text-[11px] text-[#5B6470] hover:text-[#0A1931]"
+                      >
+                        Join waitlist
+                      </button>
+                    </div>
                   )}
                   {showSuccess === v.id && (
                     <div className="mt-2 rounded-full bg-[#8FFF4A]/15 px-3 py-1 text-center font-mono text-[10px] text-[#8FFF4A]">✓ Added to Trust Ledger — touch of GOD recorded</div>
@@ -548,7 +571,7 @@ export default function VerticalsPage() {
       {/* WHY ONE OS */}
       <section className="relative mx-auto max-w-[1440px] px-4 pb-12 md:px-8 md:pb-20">
         <div className="relative overflow-hidden rounded-[28px] border border-[#D4CBB8] bg-[var(--surface)] p-6 md:p-10">
-          <div className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full opacity-[0.14] blur-[80px]" style={{ background: "var(--grad-m)" }} />
+          <div className="pointer-events-none absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full opacity-[0.14] blur-[80px]" style={{ background: "var(--gradient-m)" }} />
           <div className="grid gap-8 md:grid-cols-[1.1fr_0.9fr]">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#5B6470]">
@@ -607,7 +630,7 @@ export default function VerticalsPage() {
                     { n: "124", l: "Builders", c: "#FFE600" },
                     { n: "98", l: "Barbers", c: "#FF8A00" },
                   ].map((s) => (
-                    <div key={s.l} className="rounded-[14px] border border-[#D4CBB8] bg-[#0F0F0F] p-3">
+                    <div key={s.l} className="rounded-[14px] border border-[#D4CBB8] bg-[#F0E9DB] p-3">
                       <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full" style={{ background: s.c }} />
                         <span className="font-poppins text-[18px] font-[800] leading-none">{s.n}</span>
@@ -617,7 +640,7 @@ export default function VerticalsPage() {
                   ))}
                 </div>
 
-                <div className="rounded-[16px] bg-black p-3 font-mono text-[10px] leading-[1.5] text-[#5B6470]">
+                <div className="rounded-[16px] bg-[#F0E9DB] p-3 font-mono text-[10px] leading-[1.5] text-[#5B6470]">
                   <div className="text-[#0A1931]">UPRM_LOG // No.9 Verticals</div>
                   <div>{">"} tailor_oldham: WorkCut uploaded 173924.webp + 180641.webp ✓</div>
                   <div>{">"} mechanic_ol8: OBD2 scan P0301 fixed, video proof ✓</div>
@@ -635,7 +658,7 @@ export default function VerticalsPage() {
       {/* CTA FOOTER */}
       <section className="mx-auto max-w-[1440px] px-4 pb-10 md:px-8">
         <div className="relative overflow-hidden rounded-[32px] border border-[#D4CBB8] bg-[#F0E9DB] p-6 md:p-10">
-          <div className="absolute inset-0 opacity-[0.18]" style={{ background: "var(--grad-m)" }} />
+          <div className="absolute inset-0 opacity-[0.18]" style={{ background: "var(--gradient-m)" }} />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
           <div className="relative">
             <div className="mx-auto max-w-[900px] text-center">
@@ -655,7 +678,7 @@ export default function VerticalsPage() {
                 >
                   Browse 6 Trades →
                 </button>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-black/40 px-4 py-2 font-mono text-[11px] text-[#5B6470]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-2 font-mono text-[11px] text-[#5B6470]">
                   <span className="h-2 w-2 rounded-full bg-[#8FFF4A] animate-pulse" />
                   iOS / Android Coming Soon • Web Live Now
                 </div>

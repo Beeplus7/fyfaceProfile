@@ -218,11 +218,11 @@ export default function ForPlumbersPage() {
               className="group relative inline-flex h-[52px] items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-[#8FFF4A] via-[#00E5C0] to-[#FFE600] px-8 text-[14px] font-bold tracking-[-0.01em] text-black transition hover:scale-[1.02]"
             >
               <span>View Oldham Queue</span>
-              <span className="grid h-6 w-6 place-items-center rounded-full bg-black text-white text-[12px] font-bold">•</span>
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0A1931] text-white text-[12px] font-bold">•</span>
             </button>
             <div className="inline-flex h-[52px] items-center gap-3 rounded-full glass px-5">
               <div className="flex -space-x-2">
-                <div className="h-7 w-7 rounded-full border-2 border-black bg-[#1A1A1A] grid place-items-center text-[10px]">JM</div>
+                <div className="h-7 w-7 rounded-full border-2 border-black bg-[#E8DFCC] grid place-items-center text-[10px]">JM</div>
                 <div className="h-7 w-7 rounded-full border-2 border-black bg-[#2A2A2A] grid place-items-center text-[10px]">AK</div>
                 <div className="h-7 w-7 rounded-full border-2 border-black bg-[#8FFF4A] text-black grid place-items-center text-[10px] font-bold">+74</div>
               </div>
@@ -249,7 +249,7 @@ export default function ForPlumbersPage() {
 
         {/* Right hero image - glassmorphism card */}
         <div className="relative lg:sticky lg:top-[88px]">
-          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0F0F0F] glow-m">
+          <div className="relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] glow-m">
             {/* Top bar */}
             <div className="flex items-center justify-between border-b border-[#D4CBB8] px-5 py-3">
               <div className="flex items-center gap-2">
@@ -331,7 +331,7 @@ export default function ForPlumbersPage() {
       </section>
 
       {/* SECTION 1 — WHY PLUMBERS */}
-      <section id="why" className="relative border-t border-[#D4CBB8] bg-[#080808]">
+      <section id="why" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
         <div className="mx-auto max-w-[1440px] px-6 md:px-10 py-16 md:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
@@ -348,8 +348,8 @@ export default function ForPlumbersPage() {
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {/* SHOW */}
-            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0E0E0E] p-2">
-              <div className="rounded-[18px] overflow-hidden bg-[#121212]">
+            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-2">
+              <div className="rounded-[18px] overflow-hidden bg-[#F0E9DB]">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[12px] bg-[#F0E9DB]">
                   <div
                     role="img"
@@ -360,7 +360,7 @@ export default function ForPlumbersPage() {
                   <div className="absolute left-3 top-3 flex gap-2">
                     <button
                       onClick={() => setActiveImage("fix")}
-                      className={`mono rounded-full px-3 py-1 text-[10px] tracking-[0.12em] border transition ${activeImage === "fix" ? "bg-white text-black border-white" : "bg-black/50 text-[#5B6470] border-[#D4CBB8] backdrop-blur"}`}
+                      className={`mono rounded-full px-3 py-1 text-[10px] tracking-[0.12em] border transition ${activeImage === "fix" ? "bg-white text-black border-white" : "bg-[#F0E9DB] text-[#5B6470] border-[#D4CBB8] backdrop-blur"}`}
                     >
                       BEFORE / AFTER
                     </button>
@@ -390,8 +390,8 @@ export default function ForPlumbersPage() {
             </div>
 
             {/* SELL */}
-            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0E0E0E] p-2">
-              <div className="rounded-[18px] bg-[#101010] border border-white/[0.04] p-5">
+            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-2">
+              <div className="rounded-[18px] bg-[#F0E9DB] border border-white/[0.04] p-5">
                 <div className="flex items-center justify-between">
                   <span className="mono text-[10px] tracking-[0.14em] text-[#5B6470] uppercase">Materials • Checklist • Divine Detail</span>
                   <span className="mono rounded-full bg-white text-black px-2 py-0.5 text-[10px] font-bold">SELL</span>
@@ -431,8 +431,8 @@ export default function ForPlumbersPage() {
             </div>
 
             {/* GROW */}
-            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#0E0E0E] p-2">
-              <div className="rounded-[18px] overflow-hidden bg-[#0E0E0E] border border-white/[0.04]">
+            <div className="group relative overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-2">
+              <div className="rounded-[18px] overflow-hidden bg-[#F0E9DB] border border-white/[0.04]">
                 <div className="bg-[#F0E9DB] p-5">
                   <div className="flex items-center gap-3">
                     <img src={mLogoWhite} alt="M" className="h-8 w-8 rounded-[10px] object-cover" />
@@ -504,7 +504,7 @@ export default function ForPlumbersPage() {
                 <div className="space-y-4">
                   {pipelineSteps.map((step, i) => (
                     <div key={step.k} className="group relative flex gap-4 rounded-[18px] border border-[#D4CBB8] bg-white/[0.02] p-4 transition hover:bg-[#F0E9DB] hover:border-[#D4CBB8]">
-                      <div className="relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#0F0F0F] border border-[#D4CBB8] font-[Poppins] text-[12px] font-bold">
+                      <div className="relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#F0E9DB] border border-[#D4CBB8] font-[Poppins] text-[12px] font-bold">
                         {i + 1}
                         <span className="absolute inset-0 rounded-full bg-gradient-to-br from-[#8FFF4A]/30 to-[#00E5C0]/20 opacity-0 group-hover:opacity-100 transition" />
                       </div>
@@ -525,13 +525,13 @@ export default function ForPlumbersPage() {
 
             <div className="space-y-4">
               {/* Work Feed card */}
-              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#0F0F0F] overflow-hidden">
+              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
                 <div className="flex items-center justify-between border-b border-[#D4CBB8] px-5 py-3">
                   <span className="mono text-[10px] tracking-[0.14em] text-[#5B6470] uppercase">Work Feed • Oldham • 0.8mi</span>
                   <span className="mono inline-flex items-center gap-1 rounded-full bg-[#8FFF4A]/15 border border-[#8FFF4A]/20 px-2 py-1 text-[10px] text-[#8FFF4A]">LIVE • 3 BOOKING</span>
                 </div>
                 <div className="p-3">
-                  <div className="rounded-[16px] overflow-hidden border border-[#D4CBB8] bg-[#121212] flex gap-3 p-3">
+                  <div className="rounded-[16px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB] flex gap-3 p-3">
                     <div
                       role="img"
                       aria-label="Worcester Bosch boiler fix"
@@ -598,7 +598,7 @@ export default function ForPlumbersPage() {
               </h2>
 
               <div className="mt-8 space-y-4">
-                <div className="rounded-[18px] border border-[#D4CBB8] bg-[#121212] p-5">
+                <div className="rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] p-5">
                   <div className="flex items-center justify-between">
                     <span className="mono text-[10px] tracking-[0.12em] text-[#5B6470]">PROJECT STATS</span>
                     <span className="mono text-[10px] rounded-full bg-white text-black px-2 py-0.5 font-bold">LIVE DATA</span>
@@ -631,13 +631,13 @@ export default function ForPlumbersPage() {
               </div>
             </div>
 
-            <div className="relative rounded-[32px] border border-[#D4CBB8] bg-[#0E0E0E] p-2 md:p-3">
-              <div className="rounded-[24px] overflow-hidden bg-[#101010] border border-[#D4CBB8]">
+            <div className="relative rounded-[32px] border border-[#D4CBB8] bg-[#F0E9DB] p-2 md:p-3">
+              <div className="rounded-[24px] overflow-hidden bg-[#F0E9DB] border border-[#D4CBB8]">
                 <div className="relative aspect-[4/3] md:aspect-[16/10] bg-black">
                   <img src={heroPlumber} alt="Boiler fix Worcester Bosch 68C Central Heating Pressure 1.2 bar" className="absolute inset-0 h-full w-full object-cover" />
 
                   {/* Toggle */}
-                  <div className="absolute left-4 top-4 flex rounded-full bg-black/60 backdrop-blur border border-[#D4CBB8] p-1">
+                  <div className="absolute left-4 top-4 flex rounded-full bg-[#F0E9DB] backdrop-blur border border-[#D4CBB8] p-1">
                     <button
                       onClick={() => setActiveImage("fix")}
                       className={`mono rounded-full px-3 py-1.5 text-[10px] tracking-[0.08em] transition ${activeImage === "fix" ? "bg-white text-black" : "text-[#5B6470]"}`}
@@ -725,14 +725,14 @@ export default function ForPlumbersPage() {
 
                 <div className="mt-8 flex flex-wrap gap-3">
                   <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black text-white text-[12px]"></div>
+                    <div className="grid h-6 w-6 place-items-center rounded-full bg-[#0A1931] text-white text-[12px]"></div>
                     <div className="leading-none text-black">
                       <div className="mono text-[8px] tracking-[0.08em]">Download on the</div>
                       <div className="font-[Poppins] text-[13px] font-bold leading-none">App Store</div>
                     </div>
                   </div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2">
-                    <div className="grid h-6 w-6 place-items-center rounded-full bg-black text-white text-[10px]">▶</div>
+                    <div className="grid h-6 w-6 place-items-center rounded-full bg-[#0A1931] text-white text-[10px]">▶</div>
                     <div className="leading-none text-black">
                       <div className="mono text-[8px] tracking-[0.08em]">GET IT ON</div>
                       <div className="font-[Poppins] text-[13px] font-bold leading-none">Google Play</div>
@@ -760,7 +760,7 @@ export default function ForPlumbersPage() {
               </div>
 
               {/* Join form - uses persistence */}
-              <div className="border-t lg:border-t-0 lg:border-l border-[#D4CBB8] bg-[#0F0F0F] p-8 md:p-10">
+              <div className="border-t lg:border-t-0 lg:border-l border-[#D4CBB8] bg-[#F0E9DB] p-8 md:p-10">
                 <div className="flex items-center justify-between">
                   <h3 className="font-[Poppins] text-[20px] leading-none">Start Showing Free</h3>
                   <span className="mono rounded-full bg-[#8FFF4A] px-2.5 py-1 text-[10px] font-bold text-black">OLDHAM QUEUE</span>
@@ -791,7 +791,7 @@ export default function ForPlumbersPage() {
 
                   <button disabled={saving} className="mt-2 flex h-[48px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8FFF4A] via-[#00E5C0] to-[#FFE600] text-[14px] font-bold text-black transition hover:scale-[1.01] disabled:opacity-60">
                     {saving ? "Verifying Gas Safe..." : "Join as Plumber - Verify 123456"}
-                    <span className="grid h-6 w-6 place-items-center rounded-full bg-black text-white text-[12px] font-bold">+</span>
+                    <span className="grid h-6 w-6 place-items-center rounded-full bg-[#0A1931] text-white text-[12px] font-bold">+</span>
                   </button>
 
                   {saveMsg && <div className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] px-4 py-3 mono text-[11px] leading-[1.4] text-[#5B6470]">{saveMsg}</div>}
@@ -819,7 +819,7 @@ export default function ForPlumbersPage() {
                   </div>
                 </form>
 
-                <div className="mt-6 rounded-[14px] border border-[#D4CBB8] bg-[#080808] p-3 flex gap-3">
+                <div className="mt-6 rounded-[14px] border border-[#D4CBB8] bg-[#FFFDF7] p-3 flex gap-3">
                   <img src={mLogoWhite} alt="M logo white" className="h-9 w-9 rounded-[10px] object-cover" />
                   <div className="mono text-[10px] leading-[1.4] text-[#5B6470]">
                     <span className="text-[#0A1931]">Badge Page 18 of 24</span> • For Plumbers Standalone LP SEO Oldham Touch of GOD • Holy plumber feel — divine glow, rounded 24px, glass overlays.

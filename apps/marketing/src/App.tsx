@@ -7,6 +7,9 @@ import BlogDetailPage from './pages/BlogDetailPage';
 import BlogPage from './pages/BlogPage';
 import CareersPage from './pages/CareersPage';
 import ContactPage from './pages/ContactPage';
+import ForBarbersPage from './pages/ForBarbersPage';
+import ForBuildersPage from './pages/ForBuildersPage';
+import ForElectriciansPage from './pages/ForElectriciansPage';
 import ForMechanicsPage from './pages/ForMechanicsPage';
 import ForPlumbersPage from './pages/ForPlumbersPage';
 import ForTailorsPage from './pages/ForTailorsPage';
@@ -87,6 +90,9 @@ export default function App() {
             <Route path="verticals" element={<VerticalsPage />} />
             <Route path="for-tailors" element={<ForTailorsPage />} />
             <Route path="for-mechanics" element={<ForMechanicsPage />} />
+            <Route path="for-barbers" element={<ForBarbersPage />} />
+            <Route path="for-builders" element={<ForBuildersPage />} />
+            <Route path="for-electricians" element={<ForElectriciansPage />} />
             <Route path="for-plumbers" element={<ForPlumbersPage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="careers" element={<CareersPage />} />
@@ -127,33 +133,6 @@ export default function App() {
             />
           </Route>
 
-          <Route
-            path="for-barbers"
-            element={
-              <StaticHtmlFramePage
-                src="/pages/for-barbers.html"
-                title="For Barbers — MyFace"
-              />
-            }
-          />
-          <Route
-            path="for-builders"
-            element={
-              <StaticHtmlFramePage
-                src="/pages/for-builders.html"
-                title="For Builders — MyFace"
-              />
-            }
-          />
-          <Route
-            path="for-electricians"
-            element={
-              <StaticHtmlFramePage
-                src="/pages/for-electricians.html"
-                title="For Electricians — MyFace"
-              />
-            }
-          />
           <Route
             path="legal/privacy"
             element={
