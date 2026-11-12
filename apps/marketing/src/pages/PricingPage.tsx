@@ -1,873 +1,1008 @@
-import { useEffect, useRef, useState } from "react";
-import logo1 from "../assets/1267bf6fbc31a56c-image_15C1A29E-A00E-4063-8F36-6B9DEFD3F3ED.jpeg";
-import logo2 from "../assets/37dd6990257bc05a-image_BB42B180-B8CD-4B6B-AC5B-C76D1CB32C77.jpeg";
-import giftBox from "../assets/06d52eba7e0ac6c4-image_20261029_184125.webp";
-import phoneLive from "../assets/9d6013af7e4e2a36-image_20261029_175423.webp";
-import payoutProof from "../assets/1d451fa6796e3167-image_20261029_184126.webp";
-import escrowHold from "../assets/23253a68703eae99-image_20261029_181606.webp";
-import reviewVerified from "../assets/278ca298819af13d-image_20261029_181559.webp";
-import tailorWork from "../assets/840990accfbeab9d-image_20261029_173924.webp";
+import { useMemo, useState, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Calculator,
+  Gift,
+  Video,
+  Wallet,
+  Check,
+  ChevronDown,
+  Sparkles,
+  ShieldCheck,
+  Clock,
+  ArrowRight,
+  Coins,
+  Scissors,
+  Wrench,
+  ChefHat,
+  BadgeCheck,
+  Hand,
+  Mic,
+  Lightbulb,
+  Eye,
+  Banknote,
+  Smartphone,
+  Globe,
+} from 'lucide-react';
 
-const NAV = [
-  { label: "Home", href: "#home" },
-  { label: "How It Works", href: "#how" },
-  { label: "Work OS", href: "#work" },
-  { label: "UPRM", href: "#uprm" },
-  { label: "Projects", href: "#projects" },
-  { label: "Pricing", href: "#pricing", active: true },
-  { label: "Trust", href: "#trust" },
+const videoTypes = [
+  { id:"Standard", name:"Standard Work Video", film:"Tailor sewing, Mechanic fixing, Chef cooking", buyer:"$60/hr", you:"$18/hr", gbp:14, naira:"₦27,000", quality:"90%+ Quality", detail:"Hands in view • Clear audio", example:"1hr = £14" },
+  { id:"Premium", name:"Premium Work Video", film:"Rare trade, Tesla BMS, EV, Complex repair", buyer:"$97/hr", you:"$30/hr", gbp:23, naira:"₦45,000", quality:"95%+ Quality", detail:"Rare skill, precise steps", example:"1hr = £23" },
+  { id:"Language", name:"Language Video", film:"Work + Yoruba / Pidgin / Igbo / Hausa / Swahili voice", buyer:"$120/hr", you:"$38/hr", gbp:29, naira:"₦57,000", quality:"95%+ + Language clear", detail:"Speak your language while you work", example:"1hr = £29" },
+  { id:"Live", name:"Live Directed Video", film:"Lab directs you live, repeat moves", buyer:"$100/hr", you:"$32/hr", gbp:25, naira:"₦48,000", quality:"Live, follow spec", detail:"Directed session, live feedback", example:"1hr = £25" },
+  { id:"Clip", name:"Short Clip · 30-sec", film:"Language clip, tool use, one step", buyer:"$2–$4 / clip", you:"$1 / clip", gbp:0.77, naira:"₦1,500", quality:"Clear, 30 sec", detail:"One sharp step, well lit", example:"20 clips = £15.40" },
 ];
-
-const PACKS = [
-  { mfc: 100, price: "£0.99", save: "", popular: false },
-  { mfc: 500, price: "£4.49", save: "Save 10%", popular: false },
-  { mfc: 1500, price: "£12.99", save: "Save 13% • Most Gifted", popular: true },
-  { mfc: 5000, price: "£39.99", save: "Save 20% • Creator Choice", popular: false },
+const gifts = [
+  { name:"Clap", emoji:"👏", mcl:10, you:"£0.08", when:"Nice work" },
+  { name:"Rose", emoji:"🌹", mcl:50, you:"£0.40", when:"Love this" },
+  { name:"Star", emoji:"⭐", mcl:100, you:"£0.80", when:"Amazing skill" },
+  { name:"Fire", emoji:"🔥", mcl:250, you:"£2.00", when:"You’re on fire" },
+  { name:"Crown", emoji:"👑", mcl:500, you:"£4.00", when:"Master!" },
+  { name:"Diamond", emoji:"💎", mcl:1000, you:"£8.00", when:"GOAT" },
+  { name:"Golden Tool", emoji:"🛠️", mcl:2500, you:"£20.00", when:"Best in trade" },
 ];
-
-const GIFTS = [
-  { icon: "🔨", name: "Hammer", mfc: 10, desc: "Respect the grind" },
-  { icon: "✂️", name: "Scissors", mfc: 25, desc: "Clean cut" },
-  { icon: "❤️", name: "Craft Heart", mfc: 50, desc: "Made with love" },
-  { icon: "👑", name: "Crown", mfc: 100, desc: "Master work" },
-  { icon: "🏆", name: "Trophy", mfc: 500, desc: "Legendary" },
+const packs = [
+  { mcl:"100 MCL", price:"£1", bonus:"Starter pack" },
+  { mcl:"550 MCL", price:"£5", bonus:"10% bonus" },
+  { mcl:"1,200 MCL", price:"£10", bonus:"20% bonus" },
+  { mcl:"3,500 MCL", price:"£25", bonus:"40% bonus" },
 ];
-
-const MONETIZATION = [
-  {
-    id: 1,
-    title: "Gift Economy MFC",
-    take: "30% Take",
-    math: "1,000 gifters × 2.5 gifts × 80 MFC avg",
-    revenue: 600,
-    note: "Emotional, not transactional",
-    color: "#8FFF4A",
-  },
-  {
-    id: 2,
-    title: "Transaction Escrow",
-    take: "10% Jobs / 5% Shop",
-    math: "350 jobs × £180 × 10%",
-    revenue: 6300,
-    note: "Stripe Connect holds funds",
-    color: "#00E5C0",
-  },
-  {
-    id: 3,
-    title: "Video → Cash Dataset",
-    take: "Transparent split",
-    math: "Approved work video hrs × lab rate",
-    revenue: 4200,
-    note: "Consent-first AI training data • NEW",
-    color: "#FFC300",
-  },
-  {
-    id: 4,
-    title: "Boosted Discovery",
-    take: "£5 per boost",
-    math: "300 pros × £5 = £1,500",
-    revenue: 1500,
-    note: "500 reach within 10mi",
-    color: "#FFE600",
-  },
-  {
-    id: 5,
-    title: "Supplier Ads in WorkCut",
-    take: "£2.5 CPM",
-    math: "WorkCut exports + templates",
-    revenue: 500,
-    note: "Native, non-intrusive",
-    color: "#FF8A00",
-  },
-  {
-    id: 6,
-    title: "Lead Unlock",
-    take: "£3 per lead",
-    math: "100 leads × £3",
-    revenue: 300,
-    note: "Verified intent only",
-    color: "#8FFF4A",
-  },
-  {
-    id: 6,
-    title: "Pro Subscription",
-    take: "£29 / mo",
-    math: "450 pros × £29",
-    revenue: 3262,
-    note: "Later phase",
-    color: "#00E5C0",
-  },
+const faqs = [
+  { q:"Is it really free?", a:"Yes. Everything is free to join. We earn only when you earn — from a share of dataset sales, gifts and bookings. No subscription, no listing fee, no hidden fee." },
+  { q:"When do I get paid?", a:"Weekly on Monday, once your video is approved and you have given consent. Withdraw from £5 / ₦5,000." },
+  { q:"What is MCL?", a:"MCL is MyFace Coin — the digital gift coin in the system. 100 MCL = £1. Viewers tip you in MCL, you convert it to cash, and you keep 80% of gifts." },
+  { q:"Can I delete my video?", a:"Yes, anytime. Your rights are protected under GDPR + NDPC. You choose face-blur ON/OFF and Allow Sale YES/NO." },
+  { q:"Do I need to show my face?", a:"No. Choose hands-only, or use face-blur. Your work is your face — not your CV, and not a face reveal." },
+  { q:"What if my video is rejected?", a:"You get clear feedback, you re-film, and there is no penalty. Most rejections are audio, lighting or hands out of view." },
+  { q:"How do I withdraw in Nigeria? In the UK?", a:"Nigeria: Opay, PalmPay, Bank or Airtime. UK: Stripe or Bank. Also M-Pesa in supported regions." },
 ];
 
 export default function PricingPage() {
-  const [activeGift, setActiveGift] = useState(2);
-  const [showToast, setShowToast] = useState<string | null>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [activeVideo, setActiveVideo] = useState('Standard');
+  const [hours, setHours] = useState(3);
+  const [weeks, setWeeks] = useState(12);
+  const [calcType, setCalcType] = useState('Standard');
+  const [giftTab, setGiftTab] = useState<'menu' | 'packs' | 'split'>('menu');
+  const [giftFilter, setGiftFilter] = useState<'all' | 'small' | 'big'>('all');
+  const [openFaq, setOpenFaq] = useState(0);
+  const [withdrawNote, setWithdrawNote] = useState('');
+  const [joined, setJoined] = useState(false);
+  const [selectedGift, setSelectedGift] = useState('Crown');
 
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      setMouse({ x: (e.clientX / window.innerWidth - 0.5) * 20, y: (e.clientY / window.innerHeight - 0.5) * 20 });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
+  const calc = useMemo(() => {
+    const t = videoTypes.find((x) => x.id === calcType) || videoTypes[0];
+    const totalHours = hours * weeks;
+    const dataset = totalHours * t.gbp;
+    const giftsEst = Math.round(totalHours * 3.33);
+    const buyerUsd =
+      totalHours * (calcType === 'Standard' ? 60 : calcType === 'Premium' ? 97 : 120);
+    return { t, totalHours, dataset, giftsEst, total: dataset + giftsEst, buyerUsd };
+  }, [hours, weeks, calcType]);
 
-  useEffect(() => {
-    if (!showToast) return;
-    const t = setTimeout(() => setShowToast(null), 2400);
-    return () => clearTimeout(t);
-  }, [showToast]);
+  const visibleGifts = gifts.filter((g) =>
+    giftFilter === 'all' ? true : giftFilter === 'small' ? g.mcl <= 100 : g.mcl >= 250,
+  );
+
+  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+
+  const Tab = ({
+    active,
+    onClick,
+    children,
+  }: {
+    active: boolean;
+    onClick: () => void;
+    children: ReactNode;
+  }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full border px-4 py-2.5 text-sm font-bold ${
+        active
+          ? 'border-[#0A1931] bg-[#0A1931] text-white'
+          : 'border-[#D4CBB8] bg-[#FFFDF7] text-[#0A1931]'
+      }`}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <div
       data-safe-area-inset-root
-      style={{
-        boxSizing: "border-box",
-        paddingTop: "var(--safe-area-inset-top)",
-        background: "var(--bg)",
-        minHeight: "100vh",
-        color: "var(--text)",
-      }}
-      className="overflow-x-clip antialiased selection:bg-[#FFC300]/35"
+      className="pricing-public min-h-screen overflow-x-clip bg-[#FFFDF7] text-[#0A1931] selection:bg-[#FFC300]/35"
+      style={{ boxSizing: 'border-box', paddingTop: 'var(--safe-area-inset-top)' }}
     >
-      {/* Background grain */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-      }} />
+      <div className="bg-[#0A1931] px-4 py-3 text-center text-white">
+        <p className="mx-auto max-w-6xl text-[12px] font-semibold leading-snug tracking-wide sm:text-[13px]">
+          <span className="text-[#8FFF4A]">PUBLIC CREATOR PRICING —</span> EVERYTHING FREE TO JOIN ·{' '}
+          <span className="text-[#FFE600]">YOU GET PAID, YOU DON&apos;T PAY</span>
+        </p>
+      </div>
 
-      {/* NAV */}
-      <header
-        data-safe-area-sticky-top
-        style={{ top: "var(--safe-area-inset-top)" }}
-        className="sticky z-50 backdrop-blur-[22px] border-b"
-      >
-        <div
-          className="w-full border-b border-[#D4CBB8]"
-          style={{ background: "rgba(255,253,247,0.92)" }}
-        >
-          <div className="mx-auto max-w-[1280px] px-5 lg:px-8 h-[64px] flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="relative h-[36px] w-[36px] rounded-[10px] overflow-hidden flex items-center justify-center" style={{ background: "var(--m-gradient)" }}>
-                <span className="poppins font-[800] text-[20px] text-black leading-none">M</span>
-                <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ background: `url(${logo1})`, backgroundSize: "cover" }} />
-              </div>
-              <div className="leading-none">
-                <div className="poppins font-[700] text-[14px] tracking-[-0.02em]">My Face Profile</div>
-                <div className="mono text-[9px] tracking-[0.18em] text-[#5B6470] uppercase mt-[2px]">Craft • Work • Holy</div>
-              </div>
-            </div>
-
-            <nav className="hidden lg:flex items-center gap-1">
-              {NAV.map((n) => (
-                <a
-                  key={n.label}
-                  href={n.href}
-                  className={`px-3 py-[7px] rounded-full text-[13px] font-medium transition ${
-                    n.active
-                      ? "bg-white text-black"
-                      : "text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB]"
-                  }`}
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-1.5">
-                <span className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#8FFF4A" }} />
-                <span className="mono text-[10px] text-[#5B6470]">LIVE GIFTS • 1.2K</span>
-              </div>
-              <button
-                onClick={() => setShowToast("Pricing is active — Free tier live")}
-                className="h-[36px] px-4 rounded-full bg-white text-black text-[13px] font-semibold hover:bg-zinc-100 transition"
-              >
-                Start Free
-              </button>
-            </div>
+      <div className="sticky top-[calc(64px+var(--safe-area-inset-top))] z-30 border-b border-[#D4CBB8] bg-[#FFFDF7]/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <nav className="hidden items-center gap-5 text-[13px] font-semibold text-[#5B6470] lg:flex">
+            <button type="button" onClick={() => scrollTo('pay')} className="hover:text-[#0A1931]">
+              How you get paid
+            </button>
+            <button type="button" onClick={() => scrollTo('video')} className="hover:text-[#0A1931]">
+              Video pay
+            </button>
+            <button type="button" onClick={() => scrollTo('mcl')} className="hover:text-[#0A1931]">
+              MCL gifts
+            </button>
+            <button type="button" onClick={() => scrollTo('cash')} className="hover:text-[#0A1931]">
+              Video to Cash
+            </button>
+            <button type="button" onClick={() => scrollTo('faq')} className="hover:text-[#0A1931]">
+              FAQ
+            </button>
+          </nav>
+          <div className="ml-auto flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => scrollTo('calculator')}
+              className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-2.5 text-[13px] font-bold"
+            >
+              Calculate My Pay
+            </button>
+            <Link
+              to="/signup"
+              className="rounded-full bg-[#0A1931] px-4 py-2.5 text-[13px] font-bold text-white"
+            >
+              Join Free →
+            </Link>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* HERO */}
-      <section ref={heroRef} className="relative overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={giftBox} alt="Gift Economy box" className="w-full h-full object-cover opacity-[0.28] scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/20 via-[#050505]/70 to-[#050505]" />
-          <div className="absolute inset-0 opacity-60" style={{ background: "radial-gradient(800px 600px at 70% 10%, rgba(143,255,74,0.18), transparent 60%), radial-gradient(600px 500px at 20% 80%, rgba(255,230,0,0.12), transparent), radial-gradient(700px 500px at 90% 90%, rgba(255,138,0,0.16), transparent)" }} />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-[1280px] px-5 lg:px-8 pt-[48px] lg:pt-[84px] pb-[48px] lg:pb-[88px]">
-          <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-8 items-end">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur px-3 py-1.5 mb-6">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
-                <span className="mono text-[10px] tracking-[0.14em] text-[#5B6470] uppercase">No.7 of 24 • Pricing • MFC Coin Economy • Free to Enter, Pay to Appreciate</span>
-              </div>
-
-              <h1 className="poppins font-[800] tracking-[-0.04em] leading-[0.9] text-[40px] sm:text-[54px] lg:text-[74px]">
-                <span className="block">Free to Show.</span>
-                <span className="block">Paid to Appreciate.</span>
-                <span
-                  className="block mt-2 text-transparent bg-clip-text"
-                  style={{ backgroundImage: "var(--m-gradient)" }}
-                >
-                  Interface Free, Craft Paid.
-                </span>
-              </h1>
-
-              <p className="mt-6 max-w-[560px] text-[16px] lg:text-[18px] leading-[1.5] text-[#5B6470]">
-                From VisaguideOS VCG to MyFace Coins MFC — evolution of appreciation token. Watch free, gift to appreciate, book to grow.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <button
-                  onClick={() => setShowToast("Free profile created — welcome to gift economy")}
-                  className="h-[48px] px-7 rounded-full bg-white text-black font-semibold text-[14px] hover:bg-zinc-100 transition flex items-center gap-2"
-                >
-                  Start Showing — Free
-                  <span className="h-5 w-5 rounded-full bg-[#0A1931] text-white grid place-items-center text-[12px]">→</span>
-                </button>
-                <button
-                  onClick={() => document.getElementById("mfc")?.scrollIntoView({ behavior: "smooth" })}
-                  className="h-[48px] px-6 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur text-[#0A1931] font-medium text-[14px] hover:bg-white/[0.1] transition"
-                >
-                  Explore MFC Economy
-                </button>
-              </div>
-
-              <div className="mt-10 grid grid-cols-3 gap-4 max-w-[520px]">
-                {[
-                  { k: "Gift Take", v: "30%" },
-                  { k: "Escrow", v: "Stripe Connect" },
-                  { k: "Cashout", v: "70% Instant" },
-                ].map((s) => (
-                  <div key={s.k} className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-3">
-                    <div className="mono text-[10px] tracking-[0.12em] text-[#5B6470] uppercase">{s.k}</div>
-                    <div className="poppins font-bold text-[15px] mt-1">{s.v}</div>
-                  </div>
-                ))}
-              </div>
+      <section className="relative overflow-hidden">
+        <div className="pricing-grad absolute inset-0 opacity-[0.14]" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-8 px-4 pb-10 pt-10 sm:px-6 sm:pb-14 sm:pt-16 lg:grid-cols-[1.15fr_.85fr]">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#D4CBB8] bg-[#FFFDF7] px-3 py-1.5 text-[12px] font-bold shadow-sm">
+              <Sparkles className="h-4 w-4 text-[#FF8A00]" /> PUBLIC PRICING · FOR CREATORS & WORKERS · NOT
+              ADMIN PRICING
             </div>
-
-            {/* Gift box card */}
-            <div className="relative">
-              <div
-                className="absolute -inset-6 rounded-[32px] blur-[40px] opacity-60"
-                style={{ background: "var(--m-gradient-soft)" }}
-              />
-              <div
-                className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB]/80 backdrop-blur-[18px] shadow-[0_20px_50px_rgba(10,25,49,0.10)]"
-                style={{ transform: `translate3d(${mouse.x}px, ${mouse.y}px, 0)` }}
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img src={giftBox} alt="Gift Economy exploding box" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                  {/* floating emojis */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    {[
-                      { e: "🪙", x: 18, y: 22, d: 0 },
-                      { e: "👑", x: 74, y: 18, d: 0.8 },
-                      { e: "🏆", x: 82, y: 56, d: 1.2 },
-                      { e: "💛", x: 12, y: 66, d: 0.4 },
-                      { e: "🔨", x: 48, y: 12, d: 1.6 },
-                      { e: "✂️", x: 58, y: 74, d: 0.6 },
-                    ].map((f, i) => (
-                      <span
-                        key={i}
-                        className="absolute text-[22px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
-                        style={{
-                          left: `${f.x}%`,
-                          top: `${f.y}%`,
-                          animation: `floaty 3.2s ease-in-out ${f.d}s infinite`,
-                        }}
-                      >
-                        {f.e}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                    <div className="rounded-full bg-[#0A1931]/85 border border-[#D4CBB8] backdrop-blur px-3 py-1.5 flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-[#FFE600] animate-pulse" />
-                      <span className="mono text-[10px] text-white">GIFT ECONOMY • LIVE</span>
-                    </div>
-                    <div className="rounded-full bg-white text-black px-3 py-1 mono text-[10px] font-bold">NOT CRYPTO • NO RESALE</div>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-3">
-                    <img src={logo2} alt="M icon" className="h-9 w-9 rounded-full object-cover border border-[#D4CBB8]" />
-                    <div>
-                      <div className="poppins font-bold text-[14px]">Gift Shower Active</div>
-                      <div className="text-[12px] text-[#5B6470]">Tailor Atelier • 1.4k watching • £84 gifted in last 10m</div>
-                    </div>
-                  </div>
-                  <div className="mt-4 h-[56px] rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] overflow-hidden relative">
-                    <div className="absolute inset-y-0 left-0 w-[68%] bg-gradient-to-r from-[#8FFF4A]/30 via-[#00E5C0]/30 to-[#FFE600]/30" />
-                    <div className="relative z-10 h-full flex items-center justify-between px-4">
-                      <span className="mono text-[11px] text-[#5B6470]">GIFT RAIN • 24 gifts / min</span>
-                      <span className="mono text-[11px] text-[#0A1931] font-bold">+£600 / week at 10K WAU</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-3 flex gap-3 items-center">
-                  <img src={phoneLive} alt="Live gifting phone" className="h-[52px] w-[38px] rounded-[8px] object-cover" />
-                  <div>
-                    <div className="mono text-[10px] text-[#5B6470]">LIVE WORKSHOP</div>
-                    <div className="text-[12px] font-medium leading-tight">Atelier Tailoring<br/>gift rain 14 gifts</div>
-                  </div>
-                </div>
-                <div className="rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-3 flex gap-3 items-center">
-                  <img src={payoutProof} alt="Payout proof" className="h-[52px] w-[52px] rounded-[10px] object-cover" />
-                  <div>
-                    <div className="mono text-[10px] text-[#5B6470]">PAYOUT PROOF</div>
-                    <div className="text-[12px] font-medium leading-tight">$450 Escrow<br/>Released</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 1 — MFC EXPLANATORY */}
-      <section id="mfc" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
-        <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
-          <div className="flex flex-wrap items-center gap-3 mb-10">
-            <div className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-1 mono text-[10px] tracking-[0.14em]">SECTION 01 • MFC COIN ECONOMY</div>
-            <div className="h-px flex-1 bg-[#F0E9DB] hidden lg:block" />
-            <div className="mono text-[10px] text-[#5B6470]">TOUCH OF GOD • DIVINE GLOW BEHIND GIFT BOX</div>
-          </div>
-
-          <div className="grid lg:grid-cols-[0.95fr_1.05fr] gap-10 lg:gap-14 items-start">
-            {/* Left visual */}
-            <div className="relative lg:sticky lg:top-[84px]">
-              <div className="absolute -inset-4 rounded-[28px] blur-[32px] opacity-70" style={{ background: "radial-gradient(400px 300px at 50% 30%, rgba(143,255,74,0.22), transparent), radial-gradient(300px 300px at 80% 70%, rgba(255,230,0,0.18), transparent)" }} />
-              <div className="relative rounded-[28px] overflow-hidden border border-[#D4CBB8] bg-[#F0E9DB]">
-                <img src={giftBox} alt="Gift Economy box exploding" className="w-full aspect-[4/3] object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                <div className="absolute top-4 left-4 rounded-full bg-[#0A1931]/85 border border-[#D4CBB8] px-3 py-1.5 backdrop-blur flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#FFE600]" />
-                  <span className="mono text-[10px] text-white">GIFT ECONOMY • TAG</span>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
-                  <div className="flex gap-2">
-                    {GIFTS.map((g) => (
-                      <div key={g.name} className="flex-1 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] backdrop-blur py-2 text-center">
-                        <div className="text-[16px]">{g.icon}</div>
-                        <div className="mono text-[9px] text-[#5B6470] mt-1">{g.mfc} MFC</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 grid grid-cols-3 gap-3">
-                {[
-                  { l: "Not Crypto", v: "No resale, only gift or cashout" },
-                  { l: "Emotional", v: "Like street performer applause" },
-                  { l: "Instant", v: "Gift cashout 70% via Connect" },
-                ].map((c) => (
-                  <div key={c.l} className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-3">
-                    <div className="mono text-[9px] text-[#5B6470] uppercase tracking-[0.12em]">{c.l}</div>
-                    <div className="text-[11px] leading-[1.3] mt-1 text-[#5B6470]">{c.v}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right explanation */}
-            <div>
-              <h2 className="poppins font-[800] text-[28px] lg:text-[40px] leading-[0.95] tracking-[-0.03em]">
-                What is MFC? <br />
-                <span className="text-[#5B6470]">MyFace Coins, evolution of VCG.</span>
-              </h2>
-              <p className="mt-4 text-[14px] leading-[1.6] text-[#5B6470] max-w-[560px]">
-                Internal appreciation token. Not crypto. No resale. No speculation. You buy packs, you gift during live workshops. Pro receives, cashes out 70%. Platform keeps 30% via Stripe Connect. Warm, human, holy craft.
-              </p>
-
-              {/* Flow diagram */}
-              <div className="mt-8 rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-4 lg:p-6">
-                <div className="mono text-[10px] tracking-[0.14em] text-[#5B6470] mb-4">FLOW DIAGRAM • 4 STEPS</div>
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                  {[
-                    { step: "01", title: "Customer Buys", desc: "MFC Pack £0.99 → £39.99", img: null },
-                    { step: "02", title: "Wallet → Gift", desc: "During Live Workshop", img: phoneLive },
-                    { step: "03", title: "Pro Receives", desc: "Shower + Dopa hit", img: null },
-                    { step: "04", title: "Cashout 70%", desc: "Via Connect Instant", img: payoutProof },
-                  ].map((f) => (
-                    <div key={f.step} className="relative rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-3">
-                      <div className="mono text-[10px] text-[#5B6470]">{f.step}</div>
-                      <div className="poppins font-bold text-[13px] mt-1">{f.title}</div>
-                      <div className="text-[11px] text-[#5B6470] mt-1 leading-[1.3]">{f.desc}</div>
-                      {f.img && <img src={f.img} alt="" className="mt-3 h-[64px] w-full rounded-[10px] object-cover border border-[#D4CBB8]" />}
-                      {f.step !== "04" && <div className="hidden sm:block absolute top-1/2 -right-2 h-px w-4 bg-white/20" />}
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 flex items-center gap-2 text-[11px] text-[#5B6470]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A]" />
-                  Stripe Connect holds 30% — trusted, holy transaction
-                </div>
-              </div>
-
-              {/* Packs */}
-              <div className="mt-8">
-                <div className="flex items-center justify-between">
-                  <h3 className="poppins font-bold text-[16px]">MFC Packs</h3>
-                  <span className="mono text-[10px] text-[#5B6470]">CHEAPEST APPLAUSE ON INTERNET</span>
-                </div>
-                <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
-                  {PACKS.map((p) => (
-                    <div
-                      key={p.mfc}
-                      className={`relative rounded-[18px] border bg-[#F0E9DB] p-4 overflow-hidden group hover:border-[#D4CBB8] transition ${p.popular ? "border-[#FFE600]/30" : "border-[#D4CBB8]"}`}
-                    >
-                      {p.popular && (
-                        <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: "var(--m-gradient)" }} />
-                      )}
-                      <div className="mono text-[10px] text-[#5B6470]">{p.mfc} MFC</div>
-                      <div className="poppins font-[800] text-[22px] mt-1">{p.price}</div>
-                      <div className="mono text-[9px] text-[#5B6470] mt-2 min-h-[28px] leading-[1.3]">{p.save || "Starter"}</div>
-                      <button
-                        onClick={() => setActiveGift(p.mfc === 1500 ? 2 : 0)}
-                        className="mt-3 w-full h-[32px] rounded-full bg-white text-black text-[11px] font-semibold hover:bg-zinc-100 transition"
-                      >
-                        Buy Pack
-                      </button>
-                      <div className="absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-[18px] opacity-30" style={{ background: "var(--m-gradient)" }} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Gift icons */}
-              <div className="mt-8 rounded-[20px] border border-[#D4CBB8] bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-5">
-                <div className="flex items-center justify-between">
-                  <h3 className="poppins font-bold text-[14px]">Gift Icons • Work-Themed</h3>
-                  <span className="mono text-[10px] text-[#5B6470]">ANIMATED FLOATING</span>
-                </div>
-                <div className="mt-4 grid grid-cols-5 gap-2">
-                  {GIFTS.map((g, idx) => (
-                    <button
-                      key={g.name}
-                      onClick={() => setActiveGift(idx)}
-                      className={`rounded-[16px] border p-3 text-left transition group ${activeGift === idx ? "bg-white text-black border-white" : "bg-[#F0E9DB] border-[#D4CBB8] hover:bg-[#F0E9DB]"}`}
-                    >
-                      <div className="text-[22px]" style={{ animation: activeGift === idx ? "floaty 1.2s ease-in-out infinite" : undefined }}>{g.icon}</div>
-                      <div className={`poppins font-bold text-[12px] mt-2 ${activeGift === idx ? "text-black" : "text-[#0A1931]"}`}>{g.name}</div>
-                      <div className={`mono text-[10px] ${activeGift === idx ? "text-black/60" : "text-[#5B6470]"}`}>{g.mfc} MFC</div>
-                      <div className={`text-[10px] mt-1 leading-[1.2] ${activeGift === idx ? "text-black/60" : "text-[#5B6470]"}`}>{g.desc}</div>
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-4 rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3 flex items-center gap-3">
-                  <img src={tailorWork} alt="Tailor sewing" className="h-10 w-10 rounded-full object-cover" />
-                  <div className="text-[11px] leading-[1.4] text-[#5B6470]">
-                    <span className="text-[#0A1931] font-semibold">Why it works:</span> Like street performer, watching free, clapping with coins paid — emotional not transactional — live gift shower dopa hit, reverent appreciation.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2 — PRICING TIERS */}
-      <section id="pricing" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(600px 400px at 20% 0%, rgba(143,255,74,0.08), transparent), radial-gradient(500px 400px at 80% 100%, rgba(255,138,0,0.06), transparent)" }} />
-        <div className="relative mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
-          <div className="max-w-[760px]">
-            <div className="mono text-[10px] tracking-[0.16em] text-[#5B6470]">SECTION 02 • PRICING TIERS • FREE ENTRANCE</div>
-            <h2 className="mt-4 poppins font-[800] text-[32px] lg:text-[52px] leading-[0.9] tracking-[-0.04em]">
-              Free Forever.
+            <h1 className="font-display mt-5 text-[clamp(38px,7vw,72px)] font-black leading-[0.95] text-[#0A1931]">
+              Everything Free.
               <br />
-              <span className="text-[#5B6470]">Pay to Grow.</span>
-            </h2>
-            <p className="mt-4 text-[14px] text-[#5B6470] leading-[1.6]">Interface stays free. Craft stays paid. No paywall to show your work. Only paywall is to grow faster, with full bot army and boost.</p>
+              <span className="pricing-grad-text">You Get Paid</span>
+              <br />
+              For Your Work.
+            </h1>
+            <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-[#5B6470] sm:text-lg">
+              No subscription. No monthly fee. No CV. Join free, go live doing what you do best, get paid for
+              your video + gifts.{' '}
+              <strong className="text-[#0A1931]">We only earn when you earn.</strong>
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {['FREE TO JOIN', 'NO MONTHLY FEE', 'WITHDRAW £5 / ₦5,000 MIN', 'PAID WEEKLY · MONDAY'].map(
+                (b) => (
+                  <span
+                    key={b}
+                    className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-2 text-[11px] font-extrabold shadow-sm sm:text-xs"
+                  >
+                    {b}
+                  </span>
+                ),
+              )}
+            </div>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                to="/signup"
+                onClick={() => setJoined(true)}
+                className="flex items-center gap-2 rounded-full bg-[#0A1931] px-6 py-4 text-[15px] font-bold text-white"
+              >
+                Join Free — Start Filming <ArrowRight className="h-4 w-4" />
+              </Link>
+              <button
+                type="button"
+                onClick={() => scrollTo('calculator')}
+                className="flex items-center gap-2 rounded-full border-2 border-[#0A1931] bg-[#FFF8E1] px-6 py-4 text-[15px] font-bold"
+              >
+                <Calculator className="h-5 w-5" /> Calculate My Pay
+              </button>
+              <Link
+                to="/video-to-cash"
+                className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-6 py-4 text-[15px] font-bold"
+              >
+                Video → Cash guide
+              </Link>
+            </div>
+            {joined ? (
+              <p className="mt-4 rounded-xl border border-[#8FFF4A] bg-[#EFFFDF] px-4 py-3 text-sm font-semibold">
+                ✓ You&apos;re on the right page. Joining is free — create your profile, show your work, and film
+                your first video.
+              </p>
+            ) : null}
+            <p className="mt-4 text-xs text-[#5B6470]">
+              For first-time users in Africa + UK · Plain language · No hidden fees
+            </p>
           </div>
 
-          <div className="mt-10 grid lg:grid-cols-2 gap-6">
-            {/* FREE */}
-            <div className="relative rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur p-6 lg:p-8">
+          <div className="overflow-hidden rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7] shadow-[0_18px_50px_rgba(10,25,49,.10)]">
+            <div className="pricing-grad h-2" />
+            <div className="p-5 sm:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="mono text-[11px] tracking-[0.14em] text-[#5B6470]">FREE</div>
-                  <div className="poppins font-[800] text-[36px] leading-none mt-2">£0 <span className="text-[16px] font-[600] text-[#5B6470]">/ Forever</span></div>
+                  <p className="text-xs font-bold tracking-widest text-[#5B6470]">MY WALLET · SAMPLE</p>
+                  <p className="font-display mt-1 text-[26px] font-black">Total £171.50</p>
                 </div>
-                <div className="h-[48px] w-[48px] rounded-full border border-[#D4CBB8] bg-[#F0E9DB] grid place-items-center text-[18px]">✦</div>
-              </div>
-              <div className="mt-6 space-y-3">
-                {[
-                  "Profile, 3 Projects, 10 Posts",
-                  "Basic WorkCut (trim, captions)",
-                  "Basic Bots (Milo, Veri)",
-                  "Receive Gifts • MFC wallet",
-                  "Basic UPRM Pipeline",
-                  "Community Support",
-                ].map((f) => (
-                  <div key={f} className="flex gap-2 text-[13px] text-[#5B6470]">
-                    <span className="mt-[2px] h-4 w-4 rounded-full bg-[#F0E9DB] grid place-items-center text-[10px]">✓</span>
-                    {f}
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => setShowToast("Free tier activated — 3 projects live")} className="mt-8 w-full h-[44px] rounded-full bg-white text-black font-semibold text-[14px] hover:bg-zinc-100 transition">
-                Start Free
-              </button>
-              <div className="mt-3 text-center mono text-[10px] text-[#5B6470]">No card • No lock-in • Touch of GOD free</div>
-            </div>
-
-            {/* PRO */}
-            <div className="relative rounded-[24px] border border-[#FFE600]/20 bg-[#F0E9DB] p-6 lg:p-8 overflow-hidden">
-              <div className="absolute top-0 inset-x-0 h-[1px]" style={{ background: "var(--m-gradient)" }} />
-              <div className="absolute -top-20 -right-20 h-[240px] w-[240px] rounded-full blur-[40px] opacity-20" style={{ background: "var(--m-gradient)" }} />
-              <div className="relative flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="mono text-[11px] tracking-[0.14em] text-[#5B6470]">PRO</span>
-                    <span className="rounded-full px-2 py-0.5 text-[10px] font-bold text-black" style={{ background: "var(--m-gradient)" }}>MOST POPULAR</span>
-                  </div>
-                  <div className="poppins font-[800] text-[36px] leading-none mt-2">£29 <span className="text-[16px] font-[600] text-[#5B6470]">/ mo (later)</span></div>
-                </div>
-                <img src={logo1} alt="M" className="h-[44px] w-[44px] rounded-[12px] object-cover border border-[#D4CBB8]" />
-              </div>
-
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  "Unlimited Projects & Posts",
-                  "Advanced WorkCut 4K, Before/After, templates",
-                  "Full Bot Army: Milo, Cutty, Quoto, Timi, Findy, Helpy, Veri, Growy, Lingo",
-                  "Advanced UPRM + Analytics",
-                  "5 Boost Credits / mo",
-                  "Priority Support + Verified Pro Badge",
-                ].map((f) => (
-                  <div key={f} className="flex gap-2 text-[13px] text-[#5B6470]">
-                    <span className="mt-[3px] h-4 w-4 rounded-full grid place-items-center text-[10px] text-black shrink-0" style={{ background: "var(--m-gradient)" }}>✓</span>
-                    <span className="leading-[1.3]">{f}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button onClick={() => setShowToast("Pro coming soon — join waitlist")} className="mt-8 w-full h-[44px] rounded-full font-semibold text-[14px] text-black hover:opacity-90 transition" style={{ background: "var(--m-gradient)" }}>
-                Go Pro — Coming Soon
-              </button>
-              <div className="mt-3 text-center mono text-[10px] text-[#5B6470]">Interface stays free, Pro is for growth • Cancel anytime</div>
-            </div>
-          </div>
-
-          {/* Comparison table */}
-          <div className="mt-12 rounded-[20px] border border-[#D4CBB8] overflow-hidden">
-            <div className="grid grid-cols-[1.2fr_0.6fr_0.6fr] bg-[#F0E9DB] text-[11px] mono tracking-[0.12em] text-[#5B6470]">
-              <div className="px-5 py-3">FEATURE</div>
-              <div className="px-5 py-3 text-center">FREE</div>
-              <div className="px-5 py-3 text-center">PRO £29</div>
-            </div>
-            {[
-              ["Projects", "3", "Unlimited"],
-              ["Posts", "10", "Unlimited"],
-              ["WorkCut", "Basic trim", "4K + Before/After + Templates"],
-              ["Bots", "Milo + Veri", "Full Army 9 bots"],
-              ["UPRM Pipeline", "Basic", "Advanced + Analytics"],
-              ["Boost Credits", "0", "5 / mo"],
-              ["Receive Gifts", "✓", "✓ + Priority ranking"],
-              ["Support", "Community", "Priority + Verified Badge"],
-            ].map((row, i) => (
-              <div key={i} className={`grid grid-cols-[1.2fr_0.6fr_0.6fr] text-[13px] border-t border-[#D4CBB8] ${i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"}`}>
-                <div className="px-5 py-3 text-[#5B6470]">{row[0]}</div>
-                <div className="px-5 py-3 text-center text-[#5B6470]">{row[1]}</div>
-                <div className="px-5 py-3 text-center text-[#0A1931] font-medium">{row[2]}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3 — 6 WAYS MONETIZE */}
-      <section className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
-        <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <div className="mono text-[10px] tracking-[0.16em] text-[#5B6470]">SECTION 03 • 6 WAYS WE MONETIZE WITH 10K WAU</div>
-              <h2 className="mt-3 poppins font-[800] text-[28px] lg:text-[42px] leading-[0.95] tracking-[-0.03em]">
-                Without Charging Entrance.
-                <br />
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: "var(--m-gradient)" }}>£9.6K / week organic.</span>
-              </h2>
-            </div>
-            <div className="rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-4 py-2 mono text-[10px] text-[#5B6470]">
-              10K WAU → £51,528/mo → £618K ARR
-            </div>
-          </div>
-
-          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MONETIZATION.map((m) => (
-              <div key={m.id} className="group relative rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] p-5 overflow-hidden hover:border-[#D4CBB8] transition">
-                <div className="absolute top-0 left-0 h-[2px] w-full" style={{ background: m.color, opacity: 0.6 }} />
-                <div className="flex items-start justify-between">
-                  <div className="h-8 w-8 rounded-[10px] grid place-items-center text-black font-bold text-[12px]" style={{ background: m.color }}>{m.id}</div>
-                  <div className="rounded-full bg-[#F0E9DB] border border-[#D4CBB8] px-2.5 py-1 mono text-[9px] text-[#5B6470]">{m.take}</div>
-                </div>
-                <div className="poppins font-bold text-[15px] mt-4">{m.title}</div>
-                <div className="mono text-[11px] text-[#5B6470] mt-1 leading-[1.4]">{m.math}</div>
-                <div className="mt-4 flex items-end justify-between">
-                  <div>
-                    <div className="mono text-[10px] text-[#5B6470]">REVENUE / WEEK</div>
-                    <div className="poppins font-[800] text-[24px] leading-none mt-1">£{m.revenue.toLocaleString()}</div>
-                  </div>
-                  <div className="text-[11px] text-[#5B6470] max-w-[120px] leading-[1.3] text-right">{m.note}</div>
-                </div>
-                {/* tiny bar */}
-                <div className="mt-4 h-1.5 rounded-full bg-[#F0E9DB] overflow-hidden">
-                  <div className="h-full rounded-full transition-all duration-700 group-hover:w-full" style={{ width: `${Math.min(100, (m.revenue / 6300) * 100)}%`, background: m.color }} />
-                </div>
-
-                {m.id === 1 && (
-                  <div className="absolute right-3 bottom-[52px] flex gap-1 opacity-60">
-                    <img src={giftBox} alt="" className="h-8 w-8 rounded-full object-cover border border-[#D4CBB8]" />
-                    <img src={phoneLive} alt="" className="h-8 w-8 rounded-full object-cover border border-[#D4CBB8]" />
-                  </div>
-                )}
-                {m.id === 2 && (
-                  <div className="absolute right-3 bottom-[52px] flex gap-1 opacity-60">
-                    <img src={escrowHold} alt="" className="h-8 w-12 rounded-[6px] object-cover border border-[#D4CBB8]" />
-                    <img src={payoutProof} alt="" className="h-8 w-12 rounded-[6px] object-cover border border-[#D4CBB8]" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Bar chart summary */}
-          <div className="mt-8 rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6 lg:p-8 overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <h3 className="poppins font-bold text-[16px]">Weekly Revenue Breakdown at 10K WAU</h3>
-              <div className="flex gap-2">
-                <div className="rounded-full bg-white text-black px-3 py-1 mono text-[10px] font-bold">WITHOUT PRO: £9,620 / week</div>
-                <div className="rounded-full px-3 py-1 mono text-[10px] font-bold text-black" style={{ background: "var(--m-gradient)" }}>WITH PRO: £12,882 / week → £618K ARR</div>
-              </div>
-            </div>
-
-            <div className="mt-8 flex items-end gap-2 lg:gap-3 h-[160px]">
-              {MONETIZATION.map((m) => (
-                <div key={m.id} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full rounded-t-[8px] transition-all" style={{ height: `${(m.revenue / 6300) * 120 + 16}px`, background: m.color }} />
-                  <div className="mono text-[9px] text-[#5B6470] text-center leading-[1.2]">{m.title.split(" ")[0]}</div>
-                  <div className="mono text-[10px] font-bold">£{m.revenue}</div>
-                </div>
-              ))}
-              <div className="flex-1 flex flex-col items-center gap-2">
-                <div className="w-full rounded-t-[8px] bg-white" style={{ height: `148px` }} />
-                <div className="mono text-[9px] text-[#0A1931] text-center leading-[1.2] font-bold">TOTAL + PRO</div>
-                <div className="mono text-[10px] font-bold">£12,882</div>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3 text-[11px]">
-              <div className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
-                <div className="mono text-[#5B6470]">GIFT ECONOMY</div>
-                <div className="text-[#5B6470] mt-1">1k gifters × 2.5 gifts × 80 MFC = £600/week — emotional dopa</div>
-              </div>
-              <div className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
-                <div className="mono text-[#5B6470]">ESCROW 10%</div>
-                <div className="text-[#5B6470] mt-1">350 jobs × £180 — Stripe holds, releases on approval</div>
-              </div>
-              <div className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
-                <div className="mono text-[#5B6470]">DISCOVERY BOOST</div>
-                <div className="text-[#5B6470] mt-1">£5 → 500 reach within 10mi — local craft discovery</div>
-              </div>
-              <div className="rounded-[12px] bg-[#F0E9DB] border border-[#D4CBB8] p-3">
-                <div className="mono text-[#5B6470]">ARR MATH</div>
-                <div className="text-[#5B6470] mt-1">£9,620 × 4 = £38.5K/mo without Pro • With Pro £51.5K/mo → £618K ARR</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 4 — ESCROW + TRUST */}
-      <section id="trust" className="relative border-t border-[#D4CBB8] bg-[#FFFDF7]">
-        <div className="mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
-            <div>
-              <div className="mono text-[10px] tracking-[0.16em] text-[#5B6470]">SECTION 04 • ESCROW + TRUST • HOW MONEY IS SAFE</div>
-              <h2 className="mt-4 poppins font-[800] text-[30px] lg:text-[44px] leading-[0.9] tracking-[-0.03em]">
-                Stripe Trust.
-                <br />
-                <span className="text-[#5B6470]">Holy Transaction.</span>
-              </h2>
-
-              <div className="mt-8 grid sm:grid-cols-2 gap-4">
-                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
-                  <img src={escrowHold} alt="Booking confirmed escrow" className="w-full aspect-[4/3] object-cover" />
-                  <div className="p-4">
-                    <div className="mono text-[10px] text-[#5B6470]">STEP 01 • HOLD</div>
-                    <div className="poppins font-bold text-[13px] mt-1">£80 Held Securely</div>
-                    <div className="text-[11px] text-[#5B6470] mt-1 leading-[1.4]">Customer pays deposit → Stripe Connect holds in escrow → Verified booking confirmed. Pro sees guarantee.</div>
-                  </div>
-                </div>
-                <div className="rounded-[20px] border border-[#D4CBB8] bg-[#F0E9DB] overflow-hidden">
-                  <img src={payoutProof} alt="Payment received escrow released" className="w-full aspect-[4/3] object-cover" />
-                  <div className="p-4">
-                    <div className="mono text-[10px] text-[#5B6470]">STEP 02 • RELEASE</div>
-                    <div className="poppins font-bold text-[13px] mt-1">$450 Escrow Released</div>
-                    <div className="text-[11px] text-[#5B6470] mt-1 leading-[1.4]">Milestone approved → Release 90% to pro minus 10% platform. Gift cashout instant 70% via Connect.</div>
-                  </div>
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0A1931] text-white">
+                  <Wallet className="h-5 w-5" />
                 </div>
               </div>
-
-              <div className="mt-6 rounded-[18px] border border-[#D4CBB8] bg-[#F0E9DB] p-5">
+              <div className="mt-4 flex items-center justify-between rounded-2xl bg-[#F0E9DB] p-4">
                 <div className="flex items-center gap-3">
-                  <img src={reviewVerified} alt="Verified review" className="h-12 w-12 rounded-[10px] object-cover border border-[#D4CBB8]" />
-                  <div>
-                    <div className="poppins font-bold text-[13px]">Verified Reviews Only From Verified Purchase</div>
-                    <div className="text-[11px] text-[#5B6470] mt-1">No fake stars. Review unlocks only after escrow release + job completion. Trust badge shown.</div>
+                  <div className="pricing-grad flex h-10 w-10 items-center justify-center rounded-full">
+                    <Coins className="h-5 w-5" />
                   </div>
-                  <div className="ml-auto hidden sm:flex rounded-full bg-[#8FFF4A]/15 border border-[#8FFF4A]/20 px-2.5 py-1 mono text-[10px] text-[#8FFF4A]">5★ VERIFIED</div>
+                  <div>
+                    <p className="text-xs text-[#5B6470]">MCL BALANCE</p>
+                    <p className="font-mono2 text-lg font-extrabold">2,450 MCL</p>
+                  </div>
                 </div>
+                <p className="font-bold">= £24.50</p>
               </div>
-
-              <div className="mt-6 grid grid-cols-3 gap-3">
+              <div className="mt-4 space-y-3 text-sm">
                 {[
-                  { k: "Escrow Held", v: "Stripe Connect" },
-                  { k: "Release", v: "90% to Pro" },
-                  { k: "Platform", v: "10% Jobs / 5% Shop" },
-                ].map((s) => (
-                  <div key={s.k} className="rounded-[14px] border border-[#D4CBB8] bg-[#F0E9DB] p-3 text-center">
-                    <div className="mono text-[9px] text-[#5B6470] uppercase">{s.k}</div>
-                    <div className="poppins font-bold text-[12px] mt-1">{s.v}</div>
+                  ['Dataset pay', '£42.00'],
+                  ['Bookings', '£105.00'],
+                  ['Gifts (MCL)', '£24.50'],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex justify-between border-b border-dashed border-[#D4CBB8] pb-2">
+                    <span className="text-[#5B6470]">{k}</span>
+                    <strong className="font-mono2">{v}</strong>
                   </div>
                 ))}
               </div>
+              <button
+                type="button"
+                onClick={() =>
+                  setWithdrawNote(
+                    'Withdrawals are paid every Monday. Minimum £5 / ₦5,000. Choose Opay, PalmPay, M-Pesa, Bank, Stripe or Airtime.',
+                  )
+                }
+                className="mt-5 w-full rounded-full bg-[#0A1931] py-3.5 font-bold text-white"
+              >
+                Withdraw
+              </button>
+              {withdrawNote ? (
+                <p className="mt-3 rounded-xl bg-[#EFF7FF] p-3 text-[13px] leading-relaxed">{withdrawNote}</p>
+              ) : null}
+              <p className="mt-3 text-center text-[11px] text-[#5B6470]">
+                Sample wallet — your real balance appears after your first approved video.
+              </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="lg:sticky lg:top-[84px]">
-              <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-[#00E5C0] animate-pulse" />
-                  <span className="mono text-[11px] tracking-[0.12em] text-[#5B6470]">HOW MONEY FLOWS • TOUCH OF GOD</span>
+      <section id="pay" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <p className="text-xs font-extrabold tracking-[0.2em] text-[#1A7CFF]">SECTION 1 · HOW YOU GET PAID</p>
+        <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+          One video, <span className="pricing-grad-text">3 pays.</span>
+        </h2>
+        <p className="mt-2 max-w-2xl text-[#5B6470]">You do the work once. It can pay you three different ways.</p>
+        <div className="mt-7 grid gap-4 md:grid-cols-3">
+          {[
+            {
+              icon: <Video className="h-6 w-6" />,
+              n: '01',
+              t: 'PAY PER VIDEO',
+              s: 'Dataset Pay',
+              d: 'AI Labs buy your anonymized work video.',
+              big: '$18/hr',
+              sub: 'to you · Buyer pays $60/hr base',
+              tag: 'PAID WEEKLY',
+            },
+            {
+              icon: <Gift className="h-6 w-6" />,
+              n: '02',
+              t: 'GIFTS',
+              s: 'MCL Coins',
+              d: 'Viewers tip you live while you work.',
+              big: '80% to you',
+              sub: '100 MCL = £1 / ₦2,000 · We keep 20%',
+              tag: 'INSTANT TO WALLET',
+            },
+            {
+              icon: <Banknote className="h-6 w-6" />,
+              n: '03',
+              t: 'BOOKINGS',
+              s: 'Customer Books You',
+              d: 'Customer sees your live work, books you.',
+              big: '90% to you',
+              sub: 'Stripe escrow · We keep 10% service',
+              tag: 'SECURE ESCROW',
+            },
+          ].map((c) => (
+            <article
+              key={c.t}
+              className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6 shadow-[0_12px_32px_rgba(10,25,49,0.08)] transition-shadow hover:shadow-lg"
+            >
+              <div className="flex justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0A1931] text-white">
+                  {c.icon}
                 </div>
+                <span className="font-mono2 text-xs text-[#5B6470]">{c.n}</span>
+              </div>
+              <p className="mt-5 text-[11px] font-extrabold tracking-widest text-[#1A7CFF]">{c.t}</p>
+              <h3 className="font-display mt-1 text-2xl font-extrabold">{c.s}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#5B6470]">{c.d}</p>
+              <p className="font-display mt-4 text-[28px] font-black">{c.big}</p>
+              <p className="text-sm text-[#5B6470]">{c.sub}</p>
+              <span className="mt-4 inline-block rounded-full bg-[#EFF7FF] px-3 py-1.5 text-[11px] font-extrabold">
+                {c.tag}
+              </span>
+            </article>
+          ))}
+        </div>
+        <div className="mt-4 flex flex-col justify-between gap-4 rounded-[24px] bg-[#0A1931] p-5 text-white sm:flex-row sm:items-center sm:p-6">
+          <div>
+            <p className="text-xs font-extrabold tracking-widest text-[#8FFF4A]">EXAMPLE · SAME HOUR OF WORK</p>
+            <p className="font-display mt-1 text-xl font-extrabold sm:text-2xl">
+              1hr Tailor = £15 dataset + £8 gifts + £35 booking
+            </p>
+            <p className="mt-1 text-sm text-white/70">For work you already do.</p>
+          </div>
+          <p className="whitespace-nowrap font-display text-[36px] font-black sm:text-[44px]">= £58</p>
+        </div>
+      </section>
 
-                <div className="mt-6 space-y-4">
-                  {[
-                    { n: "Customer → Platform", d: "Pays £180 job deposit • Held in Stripe Connect escrow • Booking confirmed", c: "#8FFF4A" },
-                    { n: "Platform → Escrow", d: "£80 held securely • Pro notified • Work starts • No payout until approval", c: "#00E5C0" },
-                    { n: "Milestone → Release", d: "Client approves milestone • Release 90% to pro • Platform keeps 10% • Review unlocked", c: "#FFE600" },
-                    { n: "Gift → Instant", d: "Customer gifts 100 MFC 👑 during live • Pro gets 70% instantly • Platform 30% • Dopa hit", c: "#FF8A00" },
-                  ].map((step, i) => (
-                    <div key={i} className="flex gap-3">
-                      <div className="flex flex-col items-center">
-                        <div className="h-7 w-7 rounded-full grid place-items-center text-[11px] font-bold text-black" style={{ background: step.c }}>{i + 1}</div>
-                        {i < 3 && <div className="w-px h-10 bg-[#F0E9DB] mt-1" />}
-                      </div>
-                      <div className="pb-6">
-                        <div className="poppins font-bold text-[13px]">{step.n}</div>
-                        <div className="text-[11px] text-[#5B6470] leading-[1.4] mt-1 max-w-[300px]">{step.d}</div>
-                      </div>
+      <section id="video" className="border-y border-[#D4CBB8] bg-[#F0E9DB]">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[#00A66B]">
+            SECTION 2 · PAY PER VIDEO · THE CORE
+          </p>
+          <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+            Video Inclusion Pricing
+          </h2>
+          <p className="mt-2 max-w-3xl text-[#5B6470]">
+            Pick a video type below. The table shows what the buyer pays us, what you get, and the quality bar.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="Video types">
+            {videoTypes.slice(0, 4).map((v) => (
+              <Tab key={v.id} active={activeVideo === v.id} onClick={() => setActiveVideo(v.id)}>
+                {v.name}
+              </Tab>
+            ))}
+          </div>
+
+          {(() => {
+            const v = videoTypes.find((x) => x.id === activeVideo)!;
+            return (
+              <div className="mt-4 grid gap-5 rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7] p-5 sm:p-6 md:grid-cols-3">
+                <div>
+                  <p className="text-xs font-bold text-[#5B6470]">WHAT YOU FILM</p>
+                  <p className="mt-1 text-lg font-bold leading-snug">{v.film}</p>
+                  <p className="mt-2 text-sm text-[#5B6470]">{v.detail}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-2xl bg-[#F0E9DB] p-4">
+                    <p className="text-xs text-[#5B6470]">BUYER PAYS US</p>
+                    <p className="font-mono2 mt-1 text-xl font-extrabold">{v.buyer}</p>
+                  </div>
+                  <div className="rounded-2xl bg-[#0A1931] p-4 text-white">
+                    <p className="text-xs text-white/70">YOU GET</p>
+                    <p className="font-mono2 mt-1 text-xl font-extrabold">{v.you}</p>
+                    <p className="text-sm">
+                      £{v.gbp} / {v.naira}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#5B6470]">QUALITY NEEDED</p>
+                  <p className="mt-1 font-bold">{v.quality}</p>
+                  <p className="mt-3 rounded-xl bg-[#FFF7D6] px-3 py-2 text-sm font-bold">
+                    Example: {v.example}
+                  </p>
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="mt-5 overflow-x-auto rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7]">
+            <table className="w-full min-w-[760px] text-left text-sm">
+              <thead>
+                <tr className="bg-[#0A1931] text-white">
+                  <th className="p-4">Video Type</th>
+                  <th className="p-4">What You Film</th>
+                  <th className="p-4">Buyer Pays Us</th>
+                  <th className="p-4">You Get</th>
+                  <th className="p-4">Quality Needed</th>
+                  <th className="p-4">Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                {videoTypes.map((v) => (
+                  <tr key={v.id} className="border-t border-[#D4CBB8]">
+                    <td className="p-4 font-bold">{v.name}</td>
+                    <td className="p-4 text-[#5B6470]">{v.film}</td>
+                    <td className="p-4 font-mono2 font-bold">{v.buyer}</td>
+                    <td className="p-4 font-mono2 font-bold text-[#00A66B]">
+                      {v.you}
+                      <br />
+                      <span className="text-xs text-[#5B6470]">
+                        £{v.gbp} / {v.naira}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      {v.quality}
+                      <br />
+                      <span className="text-xs text-[#5B6470]">{v.detail}</span>
+                    </td>
+                    <td className="p-4 font-bold">{v.example}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 rounded-2xl border border-[#D4CBB8] bg-[#FFFDF7] p-4 text-[13px] leading-relaxed">
+            <strong>Market note:</strong> Prices based on 2026 market — Troveo $1–$4/min ($60–$240/hr),
+            Defined.ai $100–$300/hr, Mercor $12–$18/hr floor.{' '}
+            <strong>We pay ABOVE the Mercor floor</strong> because you are a professional, not chores.
+          </p>
+
+          <div
+            id="calculator"
+            className="mt-8 grid overflow-hidden rounded-[28px] border border-[#D4CBB8] bg-[#FFFDF7] shadow-lg lg:grid-cols-2"
+          >
+            <div className="p-6 sm:p-8">
+              <div className="flex items-center gap-2">
+                <Calculator className="h-5 w-5 text-[#1A7CFF]" />
+                <h3 className="font-display text-2xl font-extrabold">Calculate My Pay</h3>
+              </div>
+              <p className="mt-1 text-sm text-[#5B6470]">Move the sliders. See your pay instantly.</p>
+              <div className="mt-6">
+                <div className="flex justify-between text-sm font-bold">
+                  <span>Hours per week</span>
+                  <span className="font-mono2 text-lg">{hours} hrs</span>
+                </div>
+                <input
+                  aria-label="Hours per week"
+                  type="range"
+                  min={1}
+                  max={20}
+                  value={hours}
+                  onChange={(e) => setHours(+e.target.value)}
+                  className="pricing-range mt-2"
+                />
+                <p className="mt-1 text-xs text-[#5B6470]">1 to 20 hours per week</p>
+              </div>
+              <div className="mt-6">
+                <div className="flex justify-between text-sm font-bold">
+                  <span>Weeks</span>
+                  <span className="font-mono2 text-lg">{weeks} weeks</span>
+                </div>
+                <input
+                  aria-label="Weeks"
+                  type="range"
+                  min={1}
+                  max={12}
+                  value={weeks}
+                  onChange={(e) => setWeeks(+e.target.value)}
+                  className="pricing-range mt-2"
+                />
+                <p className="mt-1 text-xs text-[#5B6470]">1 to 12 weeks</p>
+              </div>
+              <div className="mt-6">
+                <p className="mb-2 text-sm font-bold">Video type</p>
+                <div className="flex flex-wrap gap-2">
+                  {['Standard', 'Premium', 'Language'].map((t) => (
+                    <Tab key={t} active={calcType === t} onClick={() => setCalcType(t)}>
+                      {t} · £{videoTypes.find((v) => v.id === t)?.gbp}/hr
+                    </Tab>
+                  ))}
+                </div>
+              </div>
+              <p className="mt-6 text-xs text-[#5B6470]">
+                Example default: 3 hrs/week × 12 weeks Standard = 36 hrs × £14 = £504 dataset + £120 gifts =
+                £624 total.
+              </p>
+            </div>
+            <div className="bg-[#0A1931] p-6 text-white sm:p-8">
+              <p className="text-xs font-extrabold tracking-widest text-[#8FFF4A]">
+                YOUR ESTIMATE · {calc.t.name.toUpperCase()}
+              </p>
+              <p className="font-display mt-3 text-[clamp(36px,6vw,54px)] font-black leading-none">
+                £{calc.total.toLocaleString()}
+              </p>
+              <p className="mt-1 text-sm text-white/70">
+                Total over {weeks} weeks · {calc.totalHours} hours
+              </p>
+              <div className="mt-6 space-y-3 text-sm">
+                <div className="flex justify-between border-b border-white/15 pb-2">
+                  <span>Dataset pay</span>
+                  <strong className="font-mono2">£{calc.dataset.toLocaleString()}</strong>
+                </div>
+                <div className="flex justify-between border-b border-white/15 pb-2">
+                  <span>Gifts estimate</span>
+                  <strong className="font-mono2">£{calc.giftsEst.toLocaleString()}</strong>
+                </div>
+                <div className="flex justify-between border-b border-white/15 pb-2">
+                  <span>Buyer pays (USD)</span>
+                  <strong className="font-mono2">${calc.buyerUsd.toLocaleString()}</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span>Your rate</span>
+                  <strong className="font-mono2">£{calc.t.gbp}/hr</strong>
+                </div>
+              </div>
+              <div className="pricing-grad mt-5 rounded-2xl p-[2px]">
+                <div className="rounded-2xl bg-[#0A1931] p-4 text-sm">
+                  At <strong>{hours} hrs/week</strong> for <strong>{weeks} weeks</strong>, you film{' '}
+                  <strong>{calc.totalHours} hours</strong>. Bookings are extra — on top of this estimate.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="mcl" className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <p className="text-xs font-extrabold tracking-[0.2em] text-[#FF8A00]">SECTION 3 · MCL GIFT COINS</p>
+        <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+          The Gift System, <span className="pricing-grad-text">explained.</span>
+        </h2>
+        <div className="mt-7 grid gap-4 lg:grid-cols-3">
+          <div className="rounded-[24px] border border-[#D4CBB8] bg-[#FFF9E6] p-6">
+            <Coins className="h-8 w-8" />
+            <h3 className="font-display mt-3 text-xl font-extrabold">What is MCL?</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[#4A4430]">
+              MyFace Coin / MyFaceProfile Coin — the digital gift coin in the system. Viewers buy MCL to tip
+              you, you convert MCL to cash.
+            </p>
+            <p className="font-mono2 mt-4 text-lg font-extrabold">100 MCL = £1 = ₦2,000 = $1.30</p>
+          </div>
+          <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6">
+            <h3 className="font-display text-xl font-extrabold">How it works</h3>
+            <ol className="mt-3 space-y-2 text-sm leading-relaxed">
+              {[
+                'Viewer buys an MCL pack',
+                'Watches you live',
+                'Taps a gift',
+                'MCL lands in your wallet instantly',
+                'You withdraw Monday — min 500 MCL = £5',
+              ].map((s, i) => (
+                <li key={s} className="flex gap-2">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0A1931] text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  {s}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="rounded-[24px] border border-[#D4CBB8] bg-[#EFF7FF] p-6">
+            <h3 className="font-display text-xl font-extrabold">MCL vs MFC</h3>
+            <p className="mt-2 text-sm leading-relaxed">
+              MFC was the old name. <strong>MCL is the new public name.</strong>
+            </p>
+            <p className="font-mono2 mt-3 font-extrabold">1 MCL = 1 MFC</p>
+            <p className="mt-2 text-sm">Same value, same wallet. If you had MFC, it is now MCL.</p>
+            <p className="mt-4 rounded-xl bg-[#FFFDF7] p-3 text-sm font-bold">
+              Boost with MCL: 100 MCL = £1 Boost. Optional — boosts your video to more viewers. Not required.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2" role="tablist" aria-label="Gift tabs">
+          {(['menu', 'packs', 'split'] as const).map((t) => (
+            <Tab key={t} active={giftTab === t} onClick={() => setGiftTab(t)}>
+              {t === 'menu' ? 'Gift Menu' : t === 'packs' ? 'MCL Packs for Viewers' : 'Your Split'}
+            </Tab>
+          ))}
+        </div>
+
+        {giftTab === 'menu' ? (
+          <div className="mt-4 rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7] p-5 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="font-display text-xl font-extrabold">Gift Menu</h3>
+              <div className="flex gap-2">
+                {(['all', 'small', 'big'] as const).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setGiftFilter(f)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-bold ${
+                      giftFilter === f
+                        ? 'border-[#0A1931] bg-[#0A1931] text-white'
+                        : 'border-[#D4CBB8] bg-[#F0E9DB]'
+                    }`}
+                  >
+                    {f === 'all' ? 'All gifts' : f === 'small' ? 'Small · ≤100 MCL' : 'Big · 250+ MCL'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {visibleGifts.map((g) => (
+                <button
+                  key={g.name}
+                  type="button"
+                  onClick={() => setSelectedGift(g.name)}
+                  className={`flex items-center justify-between gap-3 rounded-2xl border p-4 text-left ${
+                    selectedGift === g.name
+                      ? 'border-[#0A1931] ring-2 ring-[#0A1931]'
+                      : 'border-[#D4CBB8] bg-[#F0E9DB]'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">{g.emoji}</span>
+                    <div>
+                      <p className="font-bold">{g.name}</p>
+                      <p className="text-xs text-[#5B6470]">{g.when}</p>
+                    </div>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="font-mono2 font-extrabold">{g.mcl} MCL</p>
+                    <p className="text-sm font-bold text-[#00A66B]">You: {g.you}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <p className="mt-4 rounded-xl bg-[#F0E9DB] p-3 text-sm">
+              Selected: <strong>{selectedGift}</strong> — tap any gift to see it highlighted. Viewers send it
+              live; it lands in your wallet instantly.
+            </p>
+          </div>
+        ) : null}
+
+        {giftTab === 'packs' ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {packs.map((p) => (
+              <div key={p.mcl} className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-5">
+                <p className="font-mono2 text-xl font-extrabold">{p.mcl}</p>
+                <p className="font-display mt-1 text-2xl font-black">{p.price}</p>
+                <p className="mt-1 text-sm text-[#5B6470]">{p.bonus}</p>
+                <span className="mt-3 inline-block rounded-full bg-[#FFFDF7] px-3 py-1 text-xs font-bold">
+                  FOR VIEWERS
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {giftTab === 'split' ? (
+          <div className="mt-4 grid items-center gap-6 rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7] p-6 md:grid-cols-2">
+            <div>
+              <h3 className="font-display text-2xl font-extrabold">You keep 80% of gifts</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#5B6470]">
+                MyFaceProfile keeps 20% for platform + payment fees. Example: a 1,000 MCL gift = £10 bought,{' '}
+                <strong>you get £8</strong>.
+              </p>
+            </div>
+            <div>
+              <div className="flex h-12 overflow-hidden rounded-full text-sm font-bold">
+                <div className="flex items-center justify-center bg-[#8FFF4A] text-[#0A1931]" style={{ width: '80%' }}>
+                  YOU 80%
+                </div>
+                <div className="flex items-center justify-center bg-[#0A1931] text-white" style={{ width: '20%' }}>
+                  20%
+                </div>
+              </div>
+              <div className="mt-2 flex justify-between text-xs text-[#5B6470]">
+                <span>£8 to you</span>
+                <span>£2 platform + fees</span>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </section>
+
+      <section id="cash" className="bg-[#0A1931] text-white">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[#8FFF4A]">SECTION 4 · VIDEO TO CASH</p>
+          <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+            From filming to cash,
+            <br />
+            step by step.
+          </h2>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              { t: '1 · Join Free', d: 'No fee, create profile, show your work.', i: <Check className="h-5 w-5" /> },
+              {
+                t: '2 · Film',
+                d: 'Go Live or Record. Hands in view, say steps. 1hr video.',
+                i: <Video className="h-5 w-5" />,
+              },
+              {
+                t: '3 · Quality Check',
+                d: 'Hands ✓ Audio ✓ Lighting ✓ Steps ✓ Score 90%+ = Approved.',
+                i: <BadgeCheck className="h-5 w-5" />,
+              },
+              {
+                t: '4 · Consent',
+                d: 'Face-blur ON/OFF. Allow Sale YES/NO. You choose.',
+                i: <Eye className="h-5 w-5" />,
+              },
+              {
+                t: '5 · Get Paid',
+                d: 'Dataset $18/hr + Gifts + Bookings. Wallet shows MCL + £ + ₦.',
+                i: <Wallet className="h-5 w-5" />,
+              },
+            ].map((s) => (
+              <div key={s.t} className="rounded-[22px] border border-white/15 bg-white/10 p-5">
+                <div className="pricing-grad flex h-10 w-10 items-center justify-center rounded-xl text-[#0A1931]">
+                  {s.i}
+                </div>
+                <h3 className="mt-3 font-bold">{s.t}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-white/70">{s.d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 grid items-center gap-5 rounded-[24px] bg-[#FFFDF7] p-5 text-[#0A1931] sm:p-6 md:grid-cols-2">
+            <div>
+              <p className="text-xs font-extrabold tracking-widest text-[#1A7CFF]">TIMELINE</p>
+              <p className="font-display mt-1 text-2xl font-extrabold">
+                Day 1 Film → Day 2 Approved → Day 3 Paid + Sample
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2 text-sm">
+                {['Day 1 · Film', 'Day 2 · Approved', 'Day 3 · Paid'].map((x) => (
+                  <span key={x} className="rounded-full bg-[#EFF7FF] px-3 py-2 font-bold">
+                    {x}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-extrabold tracking-widest">WITHDRAW WITH</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {['Opay', 'PalmPay', 'M-Pesa', 'Bank', 'Stripe', 'Airtime'].map((x) => (
+                  <span
+                    key={x}
+                    className="flex items-center gap-1 rounded-full border border-[#D4CBB8] px-3 py-2 text-sm font-semibold"
+                  >
+                    <Smartphone className="h-4 w-4" />
+                    {x}
+                  </span>
+                ))}
+              </div>
+              <p className="mt-3 text-sm text-[#5B6470]">Min £5 / ₦5,000 · Paid weekly Monday</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <p className="text-xs font-extrabold tracking-[0.2em] text-[#1A7CFF]">SECTION 5 · TRANSPARENCY</p>
+        <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+          What is free vs what we take
+        </h2>
+        <div className="mt-7 grid gap-4 md:grid-cols-2">
+          <div className="rounded-[24px] border border-[#D4CBB8] bg-[#F0E9DB] p-6">
+            <h3 className="font-display flex items-center gap-2 text-xl font-extrabold">
+              <ShieldCheck className="text-[#00A66B]" /> Free, always
+            </h3>
+            <ul className="mt-4 space-y-3 text-sm">
+              {[
+                'Joining',
+                'Creating Profile',
+                'Going Live',
+                'Recording',
+                'WorkCut Editing',
+                'Quality Check',
+              ].map((x) => (
+                <li key={x} className="flex justify-between border-b border-dashed border-[#D4CBB8] pb-2">
+                  <span>{x}</span>
+                  <strong className="text-[#00A66B]">FREE</strong>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 rounded-xl bg-[#FFFDF7] p-3 text-sm">
+              <strong>Withdraw:</strong> FREE — except payment provider fee 1.5% Stripe / 1.5% Paystack.
+            </p>
+          </div>
+          <div className="rounded-[24px] bg-[#0A1931] p-6 text-white">
+            <h3 className="font-display text-xl font-extrabold">What we take — only when you earn</h3>
+            <ul className="mt-4 space-y-3 text-sm">
+              {[
+                ['Dataset', 'We keep $42 of $60 (labelling, QC, sales, storage)'],
+                ['Gifts', 'We keep 20%'],
+                ['Bookings', 'We keep 10% service'],
+              ].map(([k, v]) => (
+                <li key={k} className="border-b border-white/15 pb-3">
+                  <strong>{k}</strong>
+                  <span className="mt-0.5 block text-white/70">{v}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 rounded-xl bg-white/10 p-3 text-sm">
+              <strong>You NEVER pay:</strong> No monthly subscription · No listing fee · No hidden fee · No fee
+              to withdraw under £100.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-[#D4CBB8] bg-[#EFF7FF]">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[#1A7CFF]">SECTION 6 · EXAMPLE PAYCHECKS</p>
+          <h2 className="font-display mt-2 text-[clamp(28px,4.5vw,46px)] font-extrabold leading-tight">
+            What could a month look like?
+          </h2>
+          <div className="mt-7 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                icon: <Scissors className="h-6 w-6" />,
+                name: 'Tailor · Lagos',
+                line: '3 hrs/week · Standard',
+                hrs: '12 hrs/mo',
+                rows: [
+                  ['Dataset', '£168'],
+                  ['Gifts', '£60'],
+                  ['Bookings', '£140'],
+                ],
+                total: '£368/mo',
+                color: 'bg-[#FFF7D6]',
+              },
+              {
+                icon: <Wrench className="h-6 w-6" />,
+                name: 'Mechanic · Lagos',
+                line: '5 hrs/week · Premium',
+                hrs: '20 hrs/mo',
+                rows: [
+                  ['Dataset', '£460'],
+                  ['Gifts', '£80'],
+                  ['Bookings', '£300'],
+                ],
+                total: '£840/mo',
+                color: 'bg-[#EFFFDF]',
+              },
+              {
+                icon: <ChefHat className="h-6 w-6" />,
+                name: 'Chef · Accra',
+                line: '2 hrs/week · Language',
+                hrs: '8 hrs/mo',
+                rows: [
+                  ['Dataset', '£232'],
+                  ['Gifts', '£40'],
+                  ['Bookings', '£100'],
+                ],
+                total: '£372/mo',
+                color: 'bg-[#FFEDE6]',
+              },
+            ].map((p) => (
+              <article key={p.name} className="rounded-[24px] border border-[#D4CBB8] bg-[#FFFDF7] p-6">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${p.color}`}>
+                  {p.icon}
+                </div>
+                <h3 className="font-display mt-4 text-xl font-extrabold">{p.name}</h3>
+                <p className="text-sm text-[#5B6470]">
+                  {p.line} · {p.hrs}
+                </p>
+                <div className="mt-4 space-y-2 text-sm">
+                  {p.rows.map(([k, v]) => (
+                    <div key={k} className="flex justify-between border-b border-dashed border-[#D4CBB8] pb-2">
+                      <span>{k}</span>
+                      <strong className="font-mono2">{v}</strong>
                     </div>
                   ))}
                 </div>
+                <p className="font-display mt-4 text-[30px] font-black">{p.total}</p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 rounded-2xl border border-[#D4CBB8] bg-[#FFFDF7] p-4 text-[13px]">
+            These are examples using base rates, <strong>not guarantees</strong>. Your pay depends on Quality,
+            Hours, Trade demand.
+          </p>
+        </div>
+      </section>
 
-                <div className="mt-2 rounded-[14px] bg-[#F0E9DB] border border-[#D4CBB8] p-4 flex gap-3 items-center">
-                  <img src={tailorWork} alt="Tailor sewing" className="h-10 w-10 rounded-full object-cover border border-[#D4CBB8]" />
-                  <div className="text-[11px] leading-[1.4] text-[#5B6470]">
-                    Every transaction reverent — holy craft, not gig. Warm divine glow behind gift box. Touch of GOD in every release.
-                  </div>
-                </div>
+      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[.85fr_1.15fr]">
+        <div>
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[#1A7CFF]">SECTION 7 · FOR LABS / BUYERS</p>
+          <h2 className="font-display mt-2 text-[30px] font-extrabold leading-tight">Are you a lab?</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#5B6470]">
+            This page is for creators. If you buy datasets, go to the B2B Dataset Store.
+          </p>
+          <div className="mt-4 rounded-[24px] bg-[#0A1931] p-6 text-white">
+            <Globe className="h-6 w-6 text-[#8FFF4A]" />
+            <p className="font-display mt-2 text-xl font-extrabold">B2B Dataset Store</p>
+            <p className="mt-1 text-sm text-white/70">
+              Buy 1,000 hrs at $60–$300/hr. Quality-checked, consented, anonymized work video.
+            </p>
+            <Link
+              to="/dataset-store"
+              className="mt-4 inline-flex rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#0A1931]"
+            >
+              Open Dataset Store →
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 text-xs text-[#5B6470]">
+            <span className="flex items-center gap-1">
+              <Hand className="h-4 w-4" /> Hands in view
+            </span>
+            <span className="flex items-center gap-1">
+              <Mic className="h-4 w-4" /> Clear audio
+            </span>
+            <span className="flex items-center gap-1">
+              <Lightbulb className="h-4 w-4" /> Good lighting
+            </span>
+          </div>
+        </div>
+        <div id="faq">
+          <p className="text-xs font-extrabold tracking-[0.2em] text-[#FF8A00]">SECTION 8 · FAQ</p>
+          <h2 className="font-display mt-2 text-[30px] font-extrabold">Questions? Answered.</h2>
+          <div className="mt-4 space-y-2">
+            {faqs.map((f, i) => (
+              <div key={f.q} className="overflow-hidden rounded-2xl border border-[#D4CBB8] bg-[#F0E9DB]">
+                <button
+                  type="button"
+                  onClick={() => setOpenFaq(openFaq === i ? -1 : i)}
+                  aria-expanded={openFaq === i}
+                  className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left text-[15px] font-bold"
+                >
+                  {f.q}
+                  <ChevronDown
+                    className={`h-5 w-5 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`}
+                  />
+                </button>
+                {openFaq === i ? (
+                  <p className="px-5 pb-5 text-sm leading-relaxed text-[#5B6470]">{f.a}</p>
+                ) : null}
               </div>
-
-              <div className="mt-4 rounded-[18px] border border-[#FFE600]/20 bg-gradient-to-b from-[#FFE600]/10 to-transparent p-4 flex items-center justify-between">
-                <div>
-                  <div className="mono text-[10px] text-[#5B6470]">TRUST SCORE</div>
-                  <div className="poppins font-bold text-[14px] mt-1">Stripe + Verified + Escrow</div>
-                </div>
-                <div className="h-10 w-10 rounded-full grid place-items-center text-black font-bold" style={{ background: "var(--m-gradient)" }}>✓</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA FOOTER */}
-      <footer className="relative border-t border-[#D4CBB8] overflow-hidden">
-        <div className="absolute inset-0" style={{ background: "var(--m-gradient-soft)" }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-[1280px] px-5 lg:px-8 py-[56px] lg:py-[88px]">
-          <div className="rounded-[32px] border border-[#D4CBB8] bg-[#F0E9DB]/80 backdrop-blur p-8 lg:p-12 text-center overflow-hidden relative">
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-[300px] w-[600px] rounded-full blur-[60px] opacity-30" style={{ background: "var(--m-gradient)" }} />
-            <div className="relative">
-              <div className="inline-flex rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-3 py-1 mono text-[10px] tracking-[0.14em] text-[#5B6470]">
-                No.7 of 24 — Pricing + MFC — Touch of GOD
-              </div>
-              <h2 className="mt-6 poppins font-[800] text-[30px] lg:text-[56px] leading-[0.9] tracking-[-0.04em]">
-                Start Showing —
-                <br />
-                <span className="text-transparent bg-clip-text" style={{ backgroundImage: "var(--m-gradient)" }}>Free Forever, Appreciate with Coins</span>
-              </h2>
-              <p className="mt-4 max-w-[640px] mx-auto text-[14px] lg:text-[15px] text-[#5B6470] leading-[1.6]">
-                10K WAU → £618K ARR — Touch of GOD in every transaction. Gift economy, escrow trust, holy craft. Interface free, craft paid. Join the work revolution.
-              </p>
-
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <button onClick={() => setShowToast("Free forever — profile live")} className="h-[48px] px-8 rounded-full bg-white text-black font-semibold text-[14px] hover:bg-zinc-100 transition">
-                  Start Free Forever
-                </button>
-                <div className="flex gap-2">
-                  <div className="h-[48px] px-4 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur flex items-center gap-2">
-                    <span className="text-[16px]"></span>
-                    <span className="text-[11px] leading-[1.1] text-left">iOS<br/><span className="font-semibold">Coming Soon</span></span>
-                  </div>
-                  <div className="h-[48px] px-4 rounded-full border border-[#D4CBB8] bg-[#F0E9DB] backdrop-blur flex items-center gap-2">
-                    <span className="text-[14px]">▶</span>
-                    <span className="text-[11px] leading-[1.1] text-left">Android<br/><span className="font-semibold">Coming Soon</span></span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 max-w-[800px] mx-auto">
-                {[
-                  { k: "WAU", v: "10K", sub: "Target community" },
-                  { k: "Weekly", v: "£12,882", sub: "With Pro subs" },
-                  { k: "Monthly", v: "£51,528", sub: "Organic + Pro" },
-                  { k: "ARR", v: "£618K", sub: "Touch of GOD" },
-                ].map((s) => (
-                  <div key={s.k} className="rounded-[16px] border border-[#D4CBB8] bg-[#F0E9DB] p-4">
-                    <div className="mono text-[10px] text-[#5B6470]">{s.k}</div>
-                    <div className="poppins font-[800] text-[20px] mt-1">{s.v}</div>
-                    <div className="mono text-[10px] text-[#5B6470] mt-1">{s.sub}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-[11px] text-[#5B6470] mono">
-                <span>© My Face Profile • Craft • Work • Holy</span>
-                <span className="h-1 w-1 rounded-full bg-white/20" />
-                <span>Stripe Connect • Not Crypto • Escrow Secured</span>
-                <span className="h-1 w-1 rounded-full bg-white/20" />
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-[#8FFF4A] inline-block" /> Touch of GOD</span>
-              </div>
+      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6">
+        <div className="pricing-grad rounded-[28px] p-[2px]">
+          <div className="rounded-[26px] bg-[#0A1931] p-6 text-center text-white sm:p-10">
+            <p className="font-display text-[clamp(28px,4vw,44px)] font-black leading-tight">
+              Your work is already valuable.
+              <br />
+              Now it pays you three ways.
+            </p>
+            <p className="mt-3 text-white/70">Join free · Film · Get paid weekly Monday</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <Link to="/signup" className="rounded-full bg-white px-6 py-4 font-bold text-[#0A1931]">
+                Join Free — Start Filming
+              </Link>
+              <button
+                type="button"
+                onClick={() => scrollTo('calculator')}
+                className="rounded-full border border-white/30 px-6 py-4 font-bold"
+              >
+                Calculate My Pay
+              </button>
+              <Link
+                to="/revenue-model"
+                className="rounded-full border border-white/30 px-6 py-4 font-bold"
+              >
+                Board Revenue Model
+              </Link>
             </div>
+            <p className="mt-4 flex items-center justify-center gap-1 text-xs text-white/50">
+              <Clock className="h-4 w-4" /> Paid weekly Monday · Min £5 / ₦5,000
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-[#D4CBB8]">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 px-4 py-8 sm:flex-row sm:px-6">
+          <div>
+            <p className="font-display text-lg font-extrabold">
+              MyFaceProfile <span className="text-sm font-medium text-[#5B6470]">· AiKOVA</span>
+            </p>
+            <p className="mt-1 text-sm text-[#5B6470]">“Your Work Is Your Face. Not Your CV.”</p>
+          </div>
+          <div className="text-sm text-[#5B6470]">
+            <p>hello@myfaceprofile.com</p>
+            <p className="mt-1">Oldham OL1 · Lagos</p>
+            <p className="mt-1 text-xs">
+              Public user pricing. Admin / agricultural architecture pricing no longer applies here.
+            </p>
           </div>
         </div>
       </footer>
-
-      {showToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] rounded-full bg-white text-black px-5 py-2.5 text-[13px] font-medium shadow-[0_12px_40px_rgba(0,0,0,0.4)] border border-black/10 flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A] animate-pulse" />
-          {showToast}
-        </div>
-      )}
-
-      <style>{`
-        @keyframes floaty {
-          0%,100% { transform: translateY(0) }
-          50% { transform: translateY(-8px) }
-        }
-      `}</style>
     </div>
   );
 }

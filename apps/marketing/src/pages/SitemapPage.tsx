@@ -24,7 +24,7 @@ const coreOS: PageCard[] = [
   { path: '/live-workshop', label: 'No.4 Live Workshop', artifact: 'artifact 6b', keyword: 'hands-free gift rain live', status: 'Built' },
   { path: '/projects', label: 'No.5 Projects SEO', artifact: 'artifact 7', keyword: '12K projects grid Oldham', status: 'Built' },
   { path: '/projects/[id]', label: 'No.6 Project Detail', artifact: 'artifact 8', keyword: 'before/after slider blueprint', status: 'Built' },
-  { path: '/pricing', label: 'No.7 Pricing MFC', artifact: 'artifact 9', keyword: 'MFC Coin economy gift box', status: 'Built' },
+  { path: '/pricing', label: 'Public Pricing', artifact: 'artifact 9', keyword: 'Free join · 3 pays · MCL', status: 'Built' },
   { path: '/revenue-model', label: 'Revenue Model 100→1k', artifact: 'artifact 9b', keyword: 'Dataset revenue · 3 months', status: 'Built' },
   { path: '/go-live-expenditure', label: 'Go Live Expenditure', artifact: 'artifact 9c', keyword: 'UK + NG · 10k users', status: 'Built' },
   { path: '/dataset-store', label: 'B2B Dataset Store', artifact: 'artifact 10', keyword: 'Physical AI marketplace', status: 'Built' },

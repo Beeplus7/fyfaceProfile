@@ -14,7 +14,7 @@ export const SITE_PAGES: SitePage[] = [
   { path: '/live-workshop', label: 'Live Workshop', group: 'core', blurb: 'Hands-free gift rain' },
   { path: '/projects', label: 'Projects', group: 'core', blurb: 'SEO project grid' },
   { path: '/projects/demo', label: 'Project Detail', group: 'core', blurb: 'Before/after blueprint' },
-  { path: '/pricing', label: 'Pricing · MFC', group: 'core', blurb: 'Coin economy' },
+  { path: '/pricing', label: 'Public Pricing', group: 'core', blurb: 'Free to join · 3 pays' },
   { path: '/revenue-model', label: 'Revenue Model', group: 'core', blurb: '100 → 1,000 in 3 months' },
   { path: '/go-live-expenditure', label: 'Go Live Expenditure', group: 'core', blurb: '10k users · UK + Nigeria' },
   { path: '/dataset-store', label: 'B2B Dataset Store', group: 'core', blurb: 'Physical AI marketplace' },

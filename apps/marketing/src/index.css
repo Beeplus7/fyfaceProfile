@@ -283,6 +283,45 @@
   box-shadow: 0 4px 14px rgba(10, 25, 49, 0.28);
   cursor: pointer;
 }
+
+/* Public Pricing */
+.pricing-grad {
+  background: linear-gradient(90deg, #8fff4a 0%, #00e5c0 28%, #1a7cff 58%, #ffe600 82%, #ff8a00 100%);
+}
+.pricing-grad-text {
+  background: linear-gradient(90deg, #00a66b, #1a7cff, #ff8a00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.pricing-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #e8dfcc;
+  outline: none;
+}
+.pricing-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #8fff4a;
+  box-shadow: 0 4px 14px rgba(10, 25, 49, 0.2);
+  cursor: pointer;
+}
+.pricing-range::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0a1931;
+  border: 4px solid #8fff4a;
+  cursor: pointer;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

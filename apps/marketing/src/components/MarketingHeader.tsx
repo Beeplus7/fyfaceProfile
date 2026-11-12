@@ -8,7 +8,7 @@ const NAV = [
   { to: '/verticals', label: 'Trades' },
   { to: '/video-to-cash', label: 'Video → Cash', badge: 'NEW' },
   { to: '/dataset-store', label: 'Dataset Store' },
-  { to: '/revenue-model', label: 'Revenue' },
+  { to: '/pricing', label: 'Pricing' },
   { to: '/go-live-expenditure', label: 'Go Live' },
 ] as const;
 
