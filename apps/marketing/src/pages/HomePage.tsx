@@ -804,6 +804,9 @@ export default function HomePage() {
                   <Link to="/revenue-model" className="block hover:text-[#0A1931]">
                     Revenue Model
                   </Link>
+                  <Link to="/go-live-expenditure" className="block hover:text-[#0A1931]">
+                    Go Live Expenditure
+                  </Link>
                 </div>
               </div>
               <div>

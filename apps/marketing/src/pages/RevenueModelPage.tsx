@@ -1129,6 +1129,12 @@ export default function RevenueModelPage() {
                   Open Video → Cash →
                 </Link>
                 <Link
+                  to="/go-live-expenditure"
+                  className="inline-flex h-11 items-center rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-5 text-sm font-bold text-[#0A1931]"
+                >
+                  Go Live Expenditure
+                </Link>
+                <Link
                   to="/pricing"
                   className="inline-flex h-11 items-center rounded-full border border-[#D4CBB8] bg-[#F0E9DB] px-5 text-sm font-bold text-[#0A1931]"
                 >

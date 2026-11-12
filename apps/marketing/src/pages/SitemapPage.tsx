@@ -26,6 +26,7 @@ const coreOS: PageCard[] = [
   { path: '/projects/[id]', label: 'No.6 Project Detail', artifact: 'artifact 8', keyword: 'before/after slider blueprint', status: 'Built' },
   { path: '/pricing', label: 'No.7 Pricing MFC', artifact: 'artifact 9', keyword: 'MFC Coin economy gift box', status: 'Built' },
   { path: '/revenue-model', label: 'Revenue Model 100→1k', artifact: 'artifact 9b', keyword: 'Dataset revenue · 3 months', status: 'Built' },
+  { path: '/go-live-expenditure', label: 'Go Live Expenditure', artifact: 'artifact 9c', keyword: 'UK + NG · 10k users', status: 'Built' },
   { path: '/trust', label: 'No.8 Trust Ledger', artifact: 'artifact 10', keyword: 'TrustScore 4.9 verified reviews', status: 'Built' },
 ];
 
@@ -98,6 +99,7 @@ export default function SitemapPage() {
               { label: 'Projects', href: '/projects' },
               { label: 'Pricing', href: '/pricing' },
               { label: 'Revenue Model', href: '/revenue-model' },
+              { label: 'Go Live Expenditure', href: '/go-live-expenditure' },
               { label: 'Trust', href: '/trust' },
             ].map(l => (
               <a key={l.label} href={l.href} className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#5B6470] hover:text-[#0A1931] hover:bg-[#F0E9DB] transition">

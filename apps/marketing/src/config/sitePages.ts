@@ -16,6 +16,7 @@ export const SITE_PAGES: SitePage[] = [
   { path: '/projects/demo', label: 'Project Detail', group: 'core', blurb: 'Before/after blueprint' },
   { path: '/pricing', label: 'Pricing · MFC', group: 'core', blurb: 'Coin economy' },
   { path: '/revenue-model', label: 'Revenue Model', group: 'core', blurb: '100 → 1,000 in 3 months' },
+  { path: '/go-live-expenditure', label: 'Go Live Expenditure', group: 'core', blurb: '10k users · UK + Nigeria' },
   { path: '/video-to-cash', label: 'Video → Cash', group: 'core', blurb: 'Capture guide · dual pay' },
   { path: '/trust', label: 'Trust Ledger', group: 'core', blurb: 'TrustScore 4.9' },
   { path: '/verticals', label: 'Verticals Hub', group: 'verticals', blurb: 'All trades' },
