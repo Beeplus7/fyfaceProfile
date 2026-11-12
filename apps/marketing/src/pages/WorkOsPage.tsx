@@ -581,7 +581,6 @@ export default function WorkOsPage() {
             ))}
           </div>
         </div>
-        </div>
       </section>
 
       <section id="cta" className="relative border-t border-[#D4CBB8] overflow-hidden">
