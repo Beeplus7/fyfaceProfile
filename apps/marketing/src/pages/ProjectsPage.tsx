@@ -65,7 +65,7 @@ function BeforeAfterSlider() {
       >
         {/* AFTER - primary img tag for KitchenAfter */}
         <img src={imgKitchenAfter} alt="After Modern Kitchen 2024" className="absolute inset-0 w-full h-full object-cover" draggable={false} />
-        <div className="absolute top-4 right-4 z-10 glass px-3 py-1.5 rounded-full flex items-center gap-2">
+        <div className="absolute top-4 right-4 z-10 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full flex items-center gap-2 backdrop-blur">
           <span className="w-2 h-2 rounded-full bg-[var(--lime)] shadow-[0_0_12px_var(--lime)]" />
           <span className="mono text-[11px] tracking-widest text-[#0A1931] font-medium">AFTER • 2024 • Oldham Builders</span>
         </div>
@@ -82,7 +82,7 @@ function BeforeAfterSlider() {
             }}
           />
           <div className="absolute inset-0 bg-[#1a0f00]/20 mix-blend-multiply" />
-          <div className="absolute top-4 left-4 z-10 glass px-3 py-1.5 rounded-full flex items-center gap-2">
+          <div className="absolute top-4 left-4 z-10 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full flex items-center gap-2 backdrop-blur">
             <span className="w-2 h-2 rounded-full bg-[var(--orange)]" />
             <span className="mono text-[11px] tracking-widest text-[#0A1931] font-medium">BEFORE • 1990s • Floral Wallpaper</span>
           </div>
@@ -98,7 +98,7 @@ function BeforeAfterSlider() {
         </div>
 
         <div className="glow-divine w-[520px] h-[520px] -bottom-40 left-1/2 -translate-x-1/2 rounded-full" />
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 glass px-4 py-2 rounded-full flex items-center gap-2 z-20">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-4 py-2 rounded-full flex items-center gap-2 z-20 backdrop-blur">
           <span className="mono text-[10px] tracking-[0.15em] text-[#5B6470]">DRAG TO REVEAL • TOUCH OF GOD TRANSFORMATION</span>
         </div>
       </div>
@@ -129,7 +129,7 @@ function MilestoneTimeline() {
         {/* M1 Blueprint - primary img */}
         <div className="relative flex gap-4 md:gap-8 drop-in">
           <div className="relative z-10 flex-shrink-0">
-            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#0f0f0f] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#050505]">
+            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#E8DFCC] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#FFFDF7]">
               <span className="mono text-[11px] md:text-[13px] font-medium text-[#0A1931]">01</span>
             </div>
             <div className="absolute -bottom-1 -right-1 w-[18px] h-[18px] rounded-full bg-[var(--lime)] flex items-center justify-center text-[10px]">✓</div>
@@ -139,11 +139,11 @@ function MilestoneTimeline() {
               <div className="relative h-[220px] md:h-full min-h-[220px] overflow-hidden bg-[#F0E9DB]">
                 <img src={imgBlueprint} alt="Foundation Plan Blueprint" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3 glass px-2.5 py-1 rounded-full">
+                <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-2.5 py-1 rounded-full backdrop-blur">
                   <span className="mono text-[10px] tracking-widest text-[#0A1931]">✓ Complete</span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="mono text-[10px] text-[#5B6470]">18 Oct 2024 • $2,480 materials list</span>
+                  <span className="mono text-[10px] text-white/85">18 Oct 2024 • $2,480 materials list</span>
                   <span className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-[10px]">▶</span>
                 </div>
               </div>
@@ -157,8 +157,8 @@ function MilestoneTimeline() {
                 </div>
                 <div className="flex items-center gap-3 mt-5">
                   <div className="flex -space-x-2">
-                    <div className="w-[28px] h-[28px] rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-[#050505] flex items-center justify-center text-[10px] text-[#5B6470]">A</div>
-                    <div className="w-[28px] h-[28px] rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-[#050505] flex items-center justify-center text-[10px] text-[#5B6470]">P</div>
+                    <div className="w-[28px] h-[28px] rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-[#D4CBB8] flex items-center justify-center text-[10px] text-[#5B6470]">A</div>
+                    <div className="w-[28px] h-[28px] rounded-full bg-gradient-to-br from-white/20 to-white/5 border border-[#D4CBB8] flex items-center justify-center text-[10px] text-[#5B6470]">P</div>
                   </div>
                   <span className="mono text-[10px] text-[#5B6470]">Architect • PM</span>
                 </div>
@@ -170,7 +170,7 @@ function MilestoneTimeline() {
         {/* M2 Demolition - uses background div for KitchenBeforeAfter */}
         <div className="relative flex gap-4 md:gap-8 drop-in" style={{ animationDelay: '120ms' }}>
           <div className="relative z-10 flex-shrink-0">
-            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#0f0f0f] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#050505]">
+            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#E8DFCC] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#FFFDF7]">
               <span className="mono text-[11px] md:text-[13px] font-medium text-[#0A1931]">02</span>
             </div>
             <div className="absolute -bottom-1 -right-1 w-[18px] h-[18px] rounded-full bg-[var(--lime)] flex items-center justify-center text-[10px]">✓</div>
@@ -180,11 +180,11 @@ function MilestoneTimeline() {
               <div className="relative h-[220px] md:h-full min-h-[220px] overflow-hidden bg-[#F0E9DB]">
                 <div className="absolute inset-0" style={{ backgroundImage: `url(${imgKitchenBeforeAfter})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3 glass px-2.5 py-1 rounded-full">
+                <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-2.5 py-1 rounded-full backdrop-blur">
                   <span className="mono text-[10px] tracking-widest text-[#0A1931]">✓ Complete</span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="mono text-[10px] text-[#5B6470]">22 Oct 2024 • 2 days • £420</span>
+                  <span className="mono text-[10px] text-white/85">22 Oct 2024 • 2 days • £420</span>
                   <span className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-[10px]">▶</span>
                 </div>
               </div>
@@ -204,7 +204,7 @@ function MilestoneTimeline() {
         {/* M3 Build - primary img Builders */}
         <div className="relative flex gap-4 md:gap-8 drop-in" style={{ animationDelay: '240ms' }}>
           <div className="relative z-10 flex-shrink-0">
-            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#0f0f0f] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#050505]">
+            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#E8DFCC] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#FFFDF7]">
               <span className="mono text-[11px] md:text-[13px] font-medium text-[#0A1931]">03</span>
             </div>
           </div>
@@ -217,7 +217,7 @@ function MilestoneTimeline() {
                   <span className="mono text-[10px] tracking-widest text-black font-bold">● In Progress • Live Video</span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="mono text-[10px] text-[#5B6470]">24-30 Oct 2024 • Live • Video</span>
+                  <span className="mono text-[10px] text-white/85">24-30 Oct 2024 • Live • Video</span>
                   <span className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-[10px]">▶</span>
                 </div>
               </div>
@@ -237,7 +237,7 @@ function MilestoneTimeline() {
         {/* M4 Final Reveal - primary img DressFinal */}
         <div className="relative flex gap-4 md:gap-8 drop-in" style={{ animationDelay: '360ms' }}>
           <div className="relative z-10 flex-shrink-0">
-            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#0f0f0f] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#050505]">
+            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#E8DFCC] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#FFFDF7]">
               <span className="mono text-[11px] md:text-[13px] font-medium text-[#0A1931]">04</span>
             </div>
             <div className="absolute -bottom-1 -right-1 w-[18px] h-[18px] rounded-full bg-[var(--lime)] flex items-center justify-center text-[10px]">✓</div>
@@ -248,11 +248,11 @@ function MilestoneTimeline() {
                 <img src={imgDressFinal} alt="Final Reveal wedding dress lace" className="w-full h-full object-cover" />
                 <div className="absolute bottom-2 right-2 w-[96px] h-[72px] rounded-[12px] overflow-hidden border-2 border-[#D4CBB8] shadow-xl" style={{ backgroundImage: `url(${imgKitchenAfter})`, backgroundSize: 'cover' }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute top-3 left-3 glass px-2.5 py-1 rounded-full">
+                <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-2.5 py-1 rounded-full backdrop-blur">
                   <span className="mono text-[10px] tracking-widest text-[#0A1931]">✓ Complete • Divine Light</span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="mono text-[10px] text-[#5B6470]">12 Nov 2024 • Final Photos • 4K</span>
+                  <span className="mono text-[10px] text-white/85">12 Nov 2024 • Final Photos • 4K</span>
                   <span className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-[10px]">▶</span>
                 </div>
               </div>
@@ -272,7 +272,7 @@ function MilestoneTimeline() {
         {/* M5 Client Approval - primary img GiftRain */}
         <div className="relative flex gap-4 md:gap-8 drop-in" style={{ animationDelay: '480ms' }}>
           <div className="relative z-10 flex-shrink-0">
-            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#0f0f0f] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#050505]">
+            <div className="w-[36px] h-[36px] md:w-[60px] md:h-[60px] rounded-full bg-[#E8DFCC] border border-[#D4CBB8] flex items-center justify-center shadow-[0_0_0_6px_#FFFDF7]">
               <span className="mono text-[11px] md:text-[13px] font-medium text-[#0A1931]">05</span>
             </div>
             <div className="absolute -bottom-1 -right-1 w-[18px] h-[18px] rounded-full bg-[var(--yellow)] flex items-center justify-center text-[10px]">★</div>
@@ -287,7 +287,7 @@ function MilestoneTimeline() {
                   <span className="mono text-[10px] tracking-widest text-black font-bold">✓ 5★ Approved</span>
                 </div>
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                  <span className="mono text-[10px] text-[#5B6470]">13 Nov 2024 • TrustScore +18</span>
+                  <span className="mono text-[10px] text-white/85">13 Nov 2024 • TrustScore +18</span>
                   <span className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center text-[10px]">▶</span>
                 </div>
               </div>
@@ -317,7 +317,7 @@ function ProjectsGrid() {
           <div className="glow-divine w-[300px] h-[300px] -top-20 -right-20 rounded-full opacity-40 group-hover:opacity-60 transition-opacity" />
           <div className="absolute inset-0" style={{ backgroundImage: `url(${imgDressFinal})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
-            <div className="glass px-3 py-1.5 rounded-full">
+            <div className="bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
               <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Final Reveal • Divine</span>
             </div>
           </div>
@@ -334,9 +334,9 @@ function ProjectsGrid() {
           <div className="mt-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-1.5">
-                <div className="w-6 h-6 rounded-full bg-[#1a1a1a] border border-[#050505]" />
-                <div className="w-6 h-6 rounded-full bg-[#222] border border-[#050505]" />
-                <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#050505] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
+                <div className="w-6 h-6 rounded-full bg-[#E8DFCC] border border-[#D4CBB8]" />
+                <div className="w-6 h-6 rounded-full bg-[#D4CBB8] border border-[#D4CBB8]" />
+                <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#D4CBB8] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
               </div>
               <span className="mono text-[10px] text-[#5B6470]">Team • Cost</span>
             </div>
@@ -350,7 +350,7 @@ function ProjectsGrid() {
         <div className="relative h-[240px] overflow-hidden bg-[#F0E9DB]">
           <div className="glow-divine w-[300px] h-[300px] -top-20 -right-20 rounded-full opacity-40" />
           <img src={imgKitchenBeforeAfter} alt="Kitchen Renovation Before After" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
-          <div className="absolute top-3 left-3 glass px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
             <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Before → After • £8,400</span>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[88px] bg-gradient-to-t from-black/80 to-transparent" />
@@ -365,9 +365,9 @@ function ProjectsGrid() {
           <div className="mono text-[10px] text-[#5B6470] mt-1">14 days • 4 pros • 5★ review • Google ranks</div>
           <div className="mt-4 flex items-center justify-between">
             <div className="flex -space-x-1.5">
-              <div className="w-6 h-6 rounded-full bg-[#1a1a1a] border border-[#050505]" />
-              <div className="w-6 h-6 rounded-full bg-[#222] border border-[#050505]" />
-              <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#050505] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
+              <div className="w-6 h-6 rounded-full bg-[#E8DFCC] border border-[#D4CBB8]" />
+              <div className="w-6 h-6 rounded-full bg-[#D4CBB8] border border-[#D4CBB8]" />
+              <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#D4CBB8] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
             </div>
             <button className="mono text-[11px] tracking-wide px-3 py-1.5 rounded-full bg-white text-black font-medium">View Project →</button>
           </div>
@@ -378,7 +378,7 @@ function ProjectsGrid() {
       <div className="group relative glass rounded-[24px] overflow-hidden border border-[#D4CBB8] hover:border-white/[0.14] transition-all duration-500 drop-in flex flex-col" style={{ animationDelay: '180ms' }}>
         <div className="relative h-[240px] overflow-hidden bg-[#F0E9DB]">
           <img src={imgMechanic} alt="Toyota Misfire Fix diagnosing" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
-          <div className="absolute top-3 left-3 glass px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
             <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Diagnostic • OBD2 Live</span>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[88px] bg-gradient-to-t from-black/80 to-transparent" />
@@ -393,8 +393,8 @@ function ProjectsGrid() {
           <div className="mono text-[10px] text-[#5B6470] mt-1">£195 • 45 min • TrustScore +8</div>
           <div className="mt-4 flex items-center justify-between">
             <div className="flex -space-x-1.5">
-              <div className="w-6 h-6 rounded-full bg-[#1a1a1a] border border-[#050505]" />
-              <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#050505] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
+              <div className="w-6 h-6 rounded-full bg-[#E8DFCC] border border-[#D4CBB8]" />
+              <div className="w-6 h-6 rounded-full bg-[var(--lime)] border border-[#D4CBB8] flex items-center justify-center text-[9px] text-black font-bold">✓</div>
             </div>
             <button className="mono text-[11px] tracking-wide px-3 py-1.5 rounded-full bg-white text-black font-medium">View Project →</button>
           </div>
@@ -405,7 +405,7 @@ function ProjectsGrid() {
       <div className="group relative glass rounded-[24px] overflow-hidden border border-[#D4CBB8] hover:border-white/[0.14] transition-all duration-500 drop-in flex flex-col" style={{ animationDelay: '270ms' }}>
         <div className="relative h-[240px] overflow-hidden bg-[#F0E9DB]">
           <div className="absolute inset-0" style={{ backgroundImage: `url(${imgBuilders})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div className="absolute top-3 left-3 glass px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
             <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Build • £2,480 Materials</span>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[88px] bg-gradient-to-t from-black/80 to-transparent" />
@@ -428,7 +428,7 @@ function ProjectsGrid() {
       <div className="group relative glass rounded-[24px] overflow-hidden border border-[#D4CBB8] hover:border-white/[0.14] transition-all duration-500 drop-in flex flex-col" style={{ animationDelay: '360ms' }}>
         <div className="relative h-[240px] overflow-hidden bg-[#F0E9DB]">
           <img src={imgBarber} alt="Fade with Line barber" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
-          <div className="absolute top-3 left-3 glass px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
             <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Live Now • 24 watching</span>
           </div>
           <div className="absolute bottom-0 left-0 right-0 h-[88px] bg-gradient-to-t from-black/80 to-transparent" />
@@ -452,7 +452,7 @@ function ProjectsGrid() {
       <div className="group relative glass rounded-[24px] overflow-hidden border border-[#D4CBB8] hover:border-white/[0.14] transition-all duration-500 drop-in flex flex-col" style={{ animationDelay: '450ms' }}>
         <div className="relative h-[240px] overflow-hidden bg-[#F0E9DB]">
           <img src={imgLiveWorkshop} alt="Girl live streaming workshop tripod" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
-          <div className="absolute top-3 left-3 glass px-3 py-1.5 rounded-full">
+          <div className="absolute top-3 left-3 bg-[#FFFDF7]/95 border border-[#D4CBB8] px-3 py-1.5 rounded-full backdrop-blur">
             <span className="mono text-[10px] tracking-widest text-[#0A1931] font-medium">Live Workshop • 142 watching</span>
           </div>
           <div className="absolute top-3 right-3 w-[64px] h-[64px] rounded-[14px] overflow-hidden border-2 border-[#D4CBB8] shadow-xl" style={{ backgroundImage: `url(${imgSewing})`, backgroundSize: 'cover' }} />
@@ -539,8 +539,8 @@ export default function ProjectsPage() {
             <button className="poppins font-bold text-[14px] px-7 h-[48px] rounded-full bg-gradient-to-r from-[#8FFF4A] via-[#00E5C0] via-[#FFE600] to-[#FF8A00] text-black hover:opacity-95 transition-opacity">Explore 1,247 Projects in Oldham →</button>
             <div className="flex items-center gap-2 glass rounded-full px-4 h-[48px]">
               <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-[#1a1a1a] border-2 border-[#050505]" />
-                <div className="w-7 h-7 rounded-full bg-[#222] border-2 border-[#050505]" />
+                <div className="w-7 h-7 rounded-full bg-[#E8DFCC] border-2 border-[#D4CBB8]" />
+                <div className="w-7 h-7 rounded-full bg-[#D4CBB8] border-2 border-[#D4CBB8]" />
                 <div className="w-7 h-7 rounded-full bg-[var(--lime)] border-2 border-[#050505]" />
               </div>
               <span className="mono text-[11px] text-[#5B6470]">12K Projects live • SEO goldmine</span>
@@ -587,7 +587,7 @@ export default function ProjectsPage() {
             <div className="w-14 h-14 rounded-[12px] overflow-hidden" style={{ backgroundImage: `url(${imgBlueprint})`, backgroundSize: 'cover' }} />
           </div>
           <div className="rounded-[20px] p-[1px] bg-gradient-to-r from-[#8FFF4A] to-[#FF8A00]">
-            <div className="rounded-[19px] bg-[#0f0f0f] p-5 flex items-center justify-between">
+            <div className="rounded-[19px] bg-[#F0E9DB] p-5 flex items-center justify-between">
               <div>
                 <div className="poppins font-bold text-[13px]">Client Approval 5★</div>
                 <div className="mono text-[11px] text-[#5B6470]">Verified • Google SEO boost • Trust +18</div>
@@ -679,7 +679,7 @@ export default function ProjectsPage() {
           </div>
 
           <div className="rounded-[28px] p-[1px] bg-gradient-to-br from-[#8FFF4A] via-[#00E5C0] to-[#FF8A00]">
-            <div className="rounded-[27px] bg-[#0c0c0c] p-6 md:p-8 relative overflow-hidden">
+            <div className="rounded-[27px] bg-[#FFFDF7] p-6 md:p-8 relative overflow-hidden">
               <div className="glow-divine w-[400px] h-[400px] -top-20 -right-20 opacity-30" />
               <div className="relative flex items-center justify-between mb-6">
                 <h3 className="poppins font-bold text-[20px]">Project • Proof of Work</h3>
@@ -716,7 +716,7 @@ export default function ProjectsPage() {
       <section className="relative overflow-hidden border-t border-[#D4CBB8] mt-8">
         <div className="absolute inset-0">
           <div className="glow-divine w-[900px] h-[600px] left-1/2 -translate-x-1/2 top-0 opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FFFDF7] via-[#FFFDF7]/80 to-transparent" />
         </div>
         <div className="relative mx-auto max-w-[1280px] px-4 md:px-6 py-16 md:py-24 text-center">
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 mb-6">
