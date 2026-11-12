@@ -109,65 +109,9 @@ export default function HomePage() {
         />
       </div>
 
-      {/* NAV */}
-      <header
-        data-safe-area-sticky-top
-        className="sticky z-50 top-[var(--safe-area-inset-top)] border-b border-[#EDE7DA] backdrop-blur-[20px] bg-[#FFFDF7]/85"
-      >
-        <div className="mx-auto max-w-[1280px] px-5 lg:px-8 h-[64px] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative h-9 w-9 rounded-[10px] overflow-hidden bg-[#0A1931] border border-[#D4CBB8] shadow-[0_8px_24px_rgba(10,25,49,0.12)]">
-              <img src={logoM} alt="M logo" className="h-full w-full object-cover scale-[1.7]" />
-            </div>
-            <div className="flex items-baseline gap-[1px] tracking-[-0.02em]">
-              <span className="text-[18px] font-bold text-[#0A1931]">My</span>
-              <span className="text-[18px] font-bold gradient-text-m">Face</span>
-              <span className="text-[18px] font-bold text-[#0A1931] ml-[2px]">Profile</span>
-              <span className="ml-2 hidden lg:inline-flex text-[10px] font-medium tracking-[0.18em] text-[#5B6470] uppercase border border-[#D4CBB8] rounded-full px-2 py-[2px] bg-white">
-                OS
-              </span>
-            </div>
-          </div>
-
-          <nav className="hidden lg:flex items-center gap-6 text-[13.5px] font-medium tracking-[-0.01em] text-[#5B6470]">
-            <Link to="/how-it-works" className="hover:text-[#0A1931] transition">
-              How it Works
-            </Link>
-            <Link to="/work-os" className="hover:text-[#0A1931] transition">
-              Work OS
-            </Link>
-            <Link to="/video-to-cash" className="hover:text-[#0A1931] transition flex items-center gap-1.5">
-              Video → Cash{" "}
-              <span className="h-4 px-1.5 rounded-full bg-[#FFC300] text-[10px] text-[#0A1931] font-bold flex items-center">NEW</span>
-            </Link>
-            <Link to="/pricing" className="hover:text-[#0A1931] transition">
-              Pricing
-            </Link>
-            <Link to="/sitemap" className="hover:text-[#0A1931] transition">
-              All 24+
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 text-[11px] text-[#5B6470]">
-              <span className="h-2 w-2 rounded-full bg-[#00C896] animate-pulse" />
-              Oldham → Lagos → Nairobi
-            </div>
-            <Link
-              to="/signup"
-              className="group relative inline-flex items-center justify-center h-9 px-5 rounded-full bg-[#FFC300] text-[#0A1931] text-[13.5px] font-extrabold tracking-[-0.01em] shadow-[0_8px_20px_rgba(255,195,0,0.35)] hover:brightness-[1.03] transition-all"
-            >
-              <span className="relative z-10 flex items-center gap-1.5">
-                Go Live & Earn <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-[1px] group-hover:-translate-y-[1px] transition-transform" />
-              </span>
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <main className="mx-auto max-w-[1280px] px-5 lg:px-8">
         {/* ═══ BANNER 1 — Euro classic ═══ */}
-        <section className="relative grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-6 pt-10 lg:pt-[64px] pb-14 lg:pb-20 items-start">
+        <section className="relative grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-6 pt-10 lg:pt-14 pb-14 lg:pb-20 items-start">
           <div className="relative z-10">
             <div className="inline-flex flex-wrap items-center gap-2">
               <span className="mkt-chip bg-[#FFF8E1]">✦ 1,000+ Pros</span>

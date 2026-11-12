@@ -122,7 +122,7 @@ const CompanionMessage = ({ message, isTyping }: { message:string, isTyping?:boo
     </div>
     <div className="glass rounded-[18px] rounded-tl-[6px] px-4 py-3 max-w-[92%]">
       <div className="mono text-[10px] tracking-widest text-[#5B6470] uppercase mb-1">Why we ask this</div>
-      <div className="text-[13px] leading-[1.5] text-white/85 font-medium break-words">{message}</div>
+      <div className="text-[13px] leading-[1.5] text-[#0A1931] font-medium break-words">{message}</div>
       {isTyping && (
         <div className="mt-2 flex gap-1">
           <span className="h-1.5 w-1.5 rounded-full bg-white/40 animate-bounce [animation-delay:-0.3s]" />
@@ -322,7 +322,7 @@ export default function OnboardingMarketingPage(){
           <div className="glass rounded-[20px] p-4 md:p-5 overflow-hidden">
             <div className="mono text-[11px] uppercase tracking-[0.18em] text-[#5B6470] mb-2 break-words">One Question At A Time — Deterministically Gated</div>
             <div className="font-[Poppins] font-bold text-[18px] md:text-[22px] leading-[1.2] m-gradient-text break-words">Work → Content → Discovery → Trust → Commerce</div>
-            <p className="mt-3 text-[14px] leading-[1.6] text-white/65 break-words">Replicated from <span className="text-[#0A1931] font-mono text-[12px] bg-[#F0E9DB] px-1.5 py-0.5 rounded">OnboardingCompanion.tsx</span> — Adapted for <span className="text-[#0A1931]">UPRM COMMAND CENTER DASHBOARD</span> — Collecting comprehensive users craft data for better user production. Touch of GOD in every stitch — craft as worship, not SaaS.</p>
+            <p className="mt-3 text-[14px] leading-[1.6] text-[#5B6470] break-words">Replicated from <span className="text-[#0A1931] font-mono text-[12px] bg-[#F0E9DB] px-1.5 py-0.5 rounded">OnboardingCompanion.tsx</span> — Adapted for <span className="text-[#0A1931]">UPRM COMMAND CENTER DASHBOARD</span> — Collecting comprehensive users craft data for better user production. Touch of GOD in every stitch — craft as worship, not SaaS.</p>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
@@ -424,7 +424,7 @@ export default function OnboardingMarketingPage(){
             </div>
           </div>
 
-          <div className="mt-3 mono text-[10px] text-white/25 text-center break-words px-2">Mock LIVE DEMO — deterministic gating — same brain as VisaguideOS Companion • answers persist to records API</div>
+          <div className="mt-3 mono text-[10px] text-[#5B6470] text-center break-words px-2">Mock LIVE DEMO — deterministic gating — same brain as VisaguideOS Companion • answers persist to records API</div>
         </div>
       </section>
 
@@ -455,7 +455,7 @@ export default function OnboardingMarketingPage(){
                   <tr key={r.piece} className="hover:bg-white/[0.02]">
                     <td className="px-5 py-4 font-bold text-[13px] whitespace-nowrap"><span className="inline-flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-[#8FFF4A]" />{r.piece}</span></td>
                     <td className="px-5 py-4 mono text-[12px] text-[#00E5C0] break-words">{r.path}</td>
-                    <td className="px-5 py-4 text-[12px] leading-[1.5] text-white/65 max-w-[520px] break-words">{r.what}</td>
+                    <td className="px-5 py-4 text-[12px] leading-[1.5] text-[#5B6470] max-w-[520px] break-words">{r.what}</td>
                   </tr>
                 ))}
               </tbody>
@@ -543,7 +543,7 @@ export const CRAFT_STEPS: FieldDef[] = [
           <div className="glass rounded-[20px] p-1 overflow-hidden">
             <div className="rounded-[19px] bg-[#0D0D0D] p-4 md:p-6 overflow-x-auto">
               <div className="mono text-[10px] uppercase tracking-[0.2em] text-[#5B6470] mb-3">rules/fieldGating.ts — deterministic — no AI invents fields</div>
-              <pre className="text-[11px] leading-[1.7] text-white/75 whitespace-pre-wrap break-words">{`// rules/fieldGating.ts — My Face Profile adapted
+              <pre className="text-[11px] leading-[1.7] text-[#5B6470] whitespace-pre-wrap break-words">{`// rules/fieldGating.ts — My Face Profile adapted
 export function getEligibleFields(answers: Record<string,any>){
   const autoAnswered: Record<string,any> = {};
   if(!answers.workRadius) autoAnswered.workRadius = 10;
@@ -866,7 +866,7 @@ export async function handler(req: Request){
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 mono text-[10px] text-white/25 uppercase tracking-wide break-words">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 mono text-[10px] text-[#5B6470] uppercase tracking-wide break-words">
             <span className="break-words">Badge Page 25 UPRM Onboarding Companion — From VisaguideOS — Tailored for My Face Profile — Production-ready</span>
             <span className="break-words">Touch of GOD • Craft as worship • Not SaaS • Holy onboarding • Divine glow • Glassmorphism • QuantumBackground</span>
           </div>

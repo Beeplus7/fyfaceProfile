@@ -122,7 +122,7 @@
   scrollbar-width: none;
 }
 
-/* Pure white / near-white panels → dim sand */
+/* Pure white / near-white panels → dim sand (cards only — not dark CTAs) */
 .marketing-surface .bg-white,
 .marketing-surface .\bg-white\/90,
 .marketing-surface .\bg-white\/95,
@@ -136,88 +136,7 @@
   background-color: var(--mkt-card-2) !important;
 }
 
-/* Legacy dark shells → page cream (not card sand) */
-.marketing-surface .\bg-\[\#050505\],
-.marketing-surface .\bg-\[\#080808\],
-.marketing-surface .\bg-\[\#0a0a0a\],
-.marketing-surface .\bg-\[\#0A0A0A\],
-.marketing-surface .\bg-\[\#0e0e0e\],
-.marketing-surface .\bg-\[\#0f0f0f\],
-.marketing-surface .\bg-\[\#111111\],
-.marketing-surface .\bg-\[\#121212\],
-.marketing-surface .\bg-\[\#141414\],
-.marketing-surface .\bg-\[\#1E1E1E\] {
-  background-color: var(--mkt-surface) !important;
-}
-
-.marketing-surface .\bg-\[\#050505\]\/70,
-.marketing-surface .\bg-\[\#050505\]\/80,
-.marketing-surface .\bg-\[\#050505\]\/85,
-.marketing-surface .\bg-\[\#050505\]\/90 {
-  background-color: rgba(255, 253, 247, 0.92) !important;
-}
-
-.marketing-surface .\bg-black\/40,
-.marketing-surface .\bg-black\/50,
-.marketing-surface .\bg-black\/60,
-.marketing-surface .\bg-black\/70,
-.marketing-surface .\bg-black\/80 {
-  background-color: var(--mkt-card) !important;
-  color: var(--mkt-ink);
-}
-
-/* Sticky dark glass headers → cream */
-.marketing-surface [class*='bg-[rgba(5,5,5'],
-.marketing-surface [class*='bg-[rgba(10,10,10'],
-.marketing-surface [class*='bg-[rgba(0,0,0'] {
-  background-color: rgba(255, 253, 247, 0.92) !important;
-  border-color: var(--mkt-line) !important;
-  color: var(--mkt-ink);
-}
-
-.marketing-surface .\text-white {
-  color: var(--mkt-ink) !important;
-}
-
-.marketing-surface .\text-white\/90,
-.marketing-surface .\text-white\/80,
-.marketing-surface .\text-white\/70,
-.marketing-surface .\text-white\/60,
-.marketing-surface .\text-white\/55,
-.marketing-surface .\text-white\/50,
-.marketing-surface .\text-white\/45,
-.marketing-surface .\text-white\/40,
-.marketing-surface .\text-white\/35,
-.marketing-surface .\text-white\/30,
-.marketing-surface .\text-white\/20 {
-  color: var(--mkt-muted) !important;
-}
-
-/* Keep white type on intentional dark / vivid chips */
-.marketing-surface .\bg-\[\#0A1931\] .\text-white,
-.marketing-surface .\bg-\[\#0A1931\] .\text-white\/90,
-.marketing-surface .\bg-\[\#FF3B30\] .\text-white,
-.marketing-surface .\bg-\[\#FF2D55\] .\text-white,
-.marketing-surface .\bg-\[\#FF3B30\] .\text-white\/90,
-.marketing-surface .\bg-\[\#FF2D55\] .\text-white\/90,
-.marketing-surface .\bg-black .\text-white {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-
-.marketing-surface .\border-white\/5,
-.marketing-surface .\border-white\/10,
-.marketing-surface .\border-white\/12,
-.marketing-surface .\border-white\/15,
-.marketing-surface .\border-white\/20,
-.marketing-surface .\border-white\/\[0\.05\],
-.marketing-surface .\border-white\/\[0\.06\],
-.marketing-surface .\border-white\/\[0\.07\],
-.marketing-surface .\border-white\/\[0\.08\],
-.marketing-surface .\border-white\/\[0\.1\] {
-  border-color: var(--mkt-line) !important;
-}
-
+/* Soft translucent whites → sand cards */
 .marketing-surface .\bg-white\/\[0\.03\],
 .marketing-surface .\bg-white\/\[0\.04\],
 .marketing-surface .\bg-white\/\[0\.05\],
@@ -236,24 +155,107 @@
   background-color: var(--mkt-card-2) !important;
 }
 
-.marketing-surface .\hover\:text-white:hover {
-  color: var(--mkt-navy) !important;
+/* Soft borders that used to be white/10 on dark → cream line */
+.marketing-surface .\border-white\/5,
+.marketing-surface .\border-white\/10,
+.marketing-surface .\border-white\/12,
+.marketing-surface .\border-white\/15,
+.marketing-surface .\border-white\/20,
+.marketing-surface .\border-white\/\[0\.05\],
+.marketing-surface .\border-white\/\[0\.06\],
+.marketing-surface .\border-white\/\[0\.07\],
+.marketing-surface .\border-white\/\[0\.08\],
+.marketing-surface .\border-white\/\[0\.1\] {
+  border-color: var(--mkt-line) !important;
 }
 
-.marketing-surface .\divide-white\/10 > :not([hidden]) ~ :not([hidden]),
-.marketing-surface .\border-t,
-.marketing-surface .\border-b,
-.marketing-surface .\border-y {
-  border-color: var(--mkt-line);
+/*
+ * CRITICAL CONTRAST FIX
+ * Do NOT remap solid navy/black button fills to cream.
+ * Force readable light type on dark surfaces (same element + descendants).
+ */
+.marketing-surface .\bg-\[\#0A1931\],
+.marketing-surface .\bg-\[\#050505\],
+.marketing-surface .\bg-\[\#0A0A0A\],
+.marketing-surface .\bg-\[\#0a0a0a\],
+.marketing-surface .\bg-black,
+.marketing-surface .bg-black {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff;
 }
 
-/* Soft section bands under cream pages */
+.marketing-surface .\bg-\[\#0A1931\] .\text-\[\#0A1931\],
+.marketing-surface .\bg-\[\#0A1931\] .\text-\[\#5B6470\],
+.marketing-surface .\bg-\[\#050505\] .\text-\[\#0A1931\],
+.marketing-surface .\bg-\[\#050505\] .\text-\[\#5B6470\],
+.marketing-surface .\bg-\[\#0A0A0A\] .\text-\[\#0A1931\],
+.marketing-surface .\bg-\[\#0A0A0A\] .\text-\[\#5B6470\],
+.marketing-surface .\bg-black .\text-\[\#0A1931\],
+.marketing-surface .\bg-black .\text-\[\#5B6470\],
+.marketing-surface .bg-black .\text-\[\#0A1931\],
+.marketing-surface .bg-black .\text-\[\#5B6470\] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.marketing-surface .\bg-\[\#0A1931\].\text-\[\#0A1931\],
+.marketing-surface .\bg-\[\#0A1931\].\text-\[\#5B6470\],
+.marketing-surface .\bg-\[\#050505\].\text-\[\#0A1931\],
+.marketing-surface .\bg-\[\#050505\].\text-\[\#5B6470\],
+.marketing-surface .\bg-\[\#0A0A0A\].\text-\[\#0A1931\],
+.marketing-surface .\bg-black.\text-\[\#0A1931\],
+.marketing-surface .bg-black.\text-\[\#0A1931\] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.marketing-surface .\text-white,
+.marketing-surface .\text-white\/90,
+.marketing-surface .\text-white\/80,
+.marketing-surface .\text-white\/70 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.marketing-surface .\text-white\/60,
+.marketing-surface .\text-white\/55,
+.marketing-surface .\text-white\/50,
+.marketing-surface .\text-white\/45,
+.marketing-surface .\text-white\/40,
+.marketing-surface .\text-white\/35,
+.marketing-surface .\text-white\/30,
+.marketing-surface .\text-white\/20 {
+  color: rgba(255, 255, 255, 0.72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Soft overlay pills that should stay readable on photos */
+.marketing-surface .\bg-black\/40,
+.marketing-surface .\bg-black\/50,
+.marketing-surface .\bg-black\/60,
+.marketing-surface .\bg-black\/70,
+.marketing-surface .\bg-black\/80 {
+  background-color: rgba(10, 25, 49, 0.78) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.marketing-surface .\bg-\[\#FF3B30\],
+.marketing-surface .\bg-\[\#FF2D55\] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Hide per-page duplicate sticky headers — shared MarketingHeader is canonical */
+.marketing-surface header:not([data-marketing-chrome-header]) {
+  display: none !important;
+}
+
 .marketing-surface section[class*='border-t'],
 .marketing-surface footer {
   border-color: var(--mkt-line);
 }
 
-.marketing-surface .selection\:bg-\[\#8FFF4A\]\/30::selection,
 .marketing-surface ::selection {
   background: rgba(255, 195, 0, 0.35);
   color: var(--mkt-navy);

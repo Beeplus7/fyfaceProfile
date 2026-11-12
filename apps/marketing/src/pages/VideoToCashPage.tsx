@@ -292,39 +292,7 @@ export default function VideoToCashPage() {
           </p>
         </div>
       </div>
-
-      <header
-        data-safe-area-sticky-top
-        style={{ top: 'var(--safe-area-inset-top)' }}
-        className="sticky z-40 bg-[#FFFDF7]/90 backdrop-blur border-b border-[#D4CBB8]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-          <Link to="/" className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl overflow-hidden bg-[#0A1931] shrink-0 border border-[#D4CBB8]">
-              <img src={logoM} alt="M" className="h-full w-full object-cover scale-[1.6]" />
-            </div>
-            <div className="min-w-0">
-              <p className="font-display font-extrabold leading-none text-[17px] sm:text-lg truncate text-[#0A1931]">
-                Video → Cash <span className="rainbow-text">Capture Guide</span>
-              </p>
-              <p className="font-mono2 text-[10px] tracking-widest text-[#5B6470] mt-1">FILM LIKE THIS • EARN LIKE THIS</p>
-            </div>
-          </Link>
-          <div className="hidden md:flex items-center gap-2 text-[13px] font-semibold">
-            <span className="px-3 py-2 rounded-full bg-[#EFFAF6] border border-[#D4CBB8]">6 Trades</span>
-            <span className="px-3 py-2 rounded-full bg-[#FFF8E1] border border-[#D4CBB8]">Dual pay</span>
-            <span className="px-3 py-2 rounded-full bg-[#F0E9DB] border border-[#D4CBB8]">96% target</span>
-          </div>
-          <Link
-            to="/signup"
-            className="shrink-0 bg-[#FFC300] text-[#0A1931] px-4 py-2.5 rounded-full text-[13px] font-extrabold"
-          >
-            Go Live & Earn →
-          </Link>
-        </div>
-      </header>
-
-      <main>
+<main>
         {/* HERO */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-7 sm:pt-10 pb-6">
           <div className="grid lg:grid-cols-[1.15fr_.85fr] gap-6 items-start">
@@ -738,7 +706,7 @@ export default function VideoToCashPage() {
                 <p className="font-mono2 text-[11px] font-bold tracking-widest text-[#00A66A]">FIRST RECORDING CHECKLIST</p>
                 <h3 className="font-display font-black text-2xl mt-1 text-[#0A1931]">Ready? Check. Then go live.</h3>
               </div>
-              <span className="bg-[#0A1931] text-white px-3 py-1.5 rounded-full text-sm font-bold h-fit">
+              <span className="bg-[#0A1931] text-white px-3 py-1.5 rounded-full text-sm font-bold h-fit shadow-sm">
                 {checked.length}/8 ready
               </span>
             </div>

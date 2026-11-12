@@ -149,7 +149,7 @@ export default function LiveWorkshopPage(){
               </span>
             </h1>
 
-            <p className="mt-6 max-w-[560px] text-[16px] md:text-[18px] leading-[1.6] text-white/65">
+            <p className="mt-6 max-w-[560px] text-[16px] md:text-[18px] leading-[1.6] text-[#5B6470]">
               While you work, UPRM manages leads, quotes, bookings, gifts and trust — and <span className="text-[#0A1931] font-medium">Live Workshop turns your workshop into a storefront.</span> No dances. Just real craft, real people, real money.
             </p>
 

@@ -374,7 +374,7 @@ export default function HowItWorksPage() {
                   </div>
                 </div>
               </div>
-              <div className="mt-3 text-center font-mono text-[10px] tracking-[0.2em] text-white/25">WORK → CONTENT → DISCOVERY → TRUST → COMMERCE → REPEAT</div>
+              <div className="mt-3 text-center font-mono text-[10px] tracking-[0.2em] text-[#5B6470]">WORK → CONTENT → DISCOVERY → TRUST → COMMERCE → REPEAT</div>
             </div>
           </div>
 

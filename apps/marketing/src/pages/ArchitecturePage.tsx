@@ -272,7 +272,7 @@ function TreeRow({ node, depth, expanded, selected, onToggle, onSelect, search }
       <span className="font-mono text-[13px] tracking-tight truncate">{node.name}</span>
       {node.count !== undefined && <span className="ml-auto text-[11px] font-mono text-[#5B6470]">{node.count} files</span>}
       <StatusBadge status={node.status as Status} badge={node.badge} />
-      {node.desc && depth>0 && <span className="hidden xl:block ml-2 text-[11px] text-white/25 truncate max-w-[260px]">— {node.desc}</span>}
+      {node.desc && depth>0 && <span className="hidden xl:block ml-2 text-[11px] text-[#5B6470] truncate max-w-[260px]">— {node.desc}</span>}
     </div>
   );
 }
@@ -421,7 +421,7 @@ export default function ArchitecturePage(){
         <div className="flex flex-col md:flex-row gap-2 px-3 md:px-5 py-3">
           <div className="flex items-center gap-2 flex-1 glass rounded-xl px-3 py-2">
             <Search className="w-4 h-4 text-[#5B6470]" />
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search files: onboarding companion, uprm, projects, tailors, mechanic, trust..." className="flex-1 bg-transparent outline-none text-[13px] font-mono placeholder:text-white/25" />
+            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search files: onboarding companion, uprm, projects, tailors, mechanic, trust..." className="flex-1 bg-transparent outline-none text-[13px] font-mono placeholder:text-[#5B6470]" />
             {search && <button onClick={()=>setSearch("")} className="text-[11px] px-2 py-0.5 rounded bg-[#F0E9DB]">clear</button>}
           </div>
           <div className="flex gap-1.5 items-center overflow-x-auto">

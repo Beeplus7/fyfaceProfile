@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import MobileBottomNav from './MobileBottomNav';
 import GlobalPagesMenu from './GlobalPagesMenu';
+import MarketingHeader from './MarketingHeader';
 import MyFaceCompanionGuide from './companion/MyFaceCompanionGuide';
 
 function shouldShowGuide(pathname: string) {
@@ -21,6 +22,7 @@ export default function AppLayout() {
   const { pathname } = useLocation();
   return (
     <div className="marketing-surface app-shell app-shell--with-mobile-nav pb-[72px] md:pb-0">
+      <MarketingHeader />
       <Outlet />
       <MobileBottomNav />
       <GlobalPagesMenu />
