@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import GlobalPagesMenu from '../components/GlobalPagesMenu';
 
 type StaticHtmlFramePageProps = {
   src: string;
@@ -47,7 +46,6 @@ export default function StaticHtmlFramePage({
           All pages
         </Link>
       </div>
-      <GlobalPagesMenu />
     </div>
   );
 }
