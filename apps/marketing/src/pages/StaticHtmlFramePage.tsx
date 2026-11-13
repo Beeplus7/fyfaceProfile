@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 type StaticHtmlFramePageProps = {
   src: string;
@@ -39,12 +39,6 @@ export default function StaticHtmlFramePage({
         >
           ← Back
         </button>
-        <Link
-          to="/sitemap"
-          className="rounded-full glass px-4 py-2 text-xs font-semibold text-[#8FFF4A]"
-        >
-          All pages
-        </Link>
       </div>
     </div>
   );

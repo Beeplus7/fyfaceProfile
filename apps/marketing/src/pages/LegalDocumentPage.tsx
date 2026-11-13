@@ -148,7 +148,7 @@ export default function LegalDocumentPage({ kind }: { kind: 'privacy' | 'terms' 
             to="/sitemap"
             className="inline-flex h-11 items-center rounded-full border border-[#D4CBB8] bg-white px-5 text-[13px] font-semibold text-[#0A1931]"
           >
-            All pages
+            Sitemap
           </Link>
         </div>
       </main>
